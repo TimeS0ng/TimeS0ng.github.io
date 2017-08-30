@@ -4,9 +4,9 @@
   
   <link href="/atom.xml" rel="self"/>
   
-  <link href="http://yoursite.com/"/>
+  <link href="http://TimeS0ng.github.io/"/>
   <updated>2017-08-30T04:01:14.000Z</updated>
-  <id>http://yoursite.com/</id>
+  <id>http://TimeS0ng.github.io/</id>
   
   <author>
     <name>TimeS0ng</name>
@@ -17,8 +17,8 @@
   
   <entry>
     <title>Hello World</title>
-    <link href="http://yoursite.com/2017/08/30/hello-world/"/>
-    <id>http://yoursite.com/2017/08/30/hello-world/</id>
+    <link href="http://TimeS0ng.github.io/2017/08/30/hello-world/"/>
+    <id>http://TimeS0ng.github.io/2017/08/30/hello-world/</id>
     <published>2017-08-30T04:01:14.000Z</published>
     <updated>2017-08-30T04:01:14.000Z</updated>
     
