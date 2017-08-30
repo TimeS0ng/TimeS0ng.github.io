@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="TimeS0ng" />
+
+
+
+<meta name="description" content="0x00. 无线渗透简介&amp;emsp;&amp;emsp;在网络越来越发达的今天，相信家家户户都已经连上了无线Wi-Fi，然而在享受Wi-Fi带来的便捷性的同时，大家是否想过正是这小小的Wi-Fi却能成为黑客成功入侵计算机，盗取机密信息的踏板！？接下来笔者会写一个系列的无线渗透文章，为大家逐个分析Wi-Fi破解，破解之后黑客的攻击手段，无线AP的伪造以及中间人攻击，相信大家能在目睹Wi-Fi脆弱性的同时提高">
+<meta property="og:type" content="article">
+<meta property="og:title" content="无线渗透(上)--WPA加密">
+<meta property="og:url" content="http://TimeS0ng.github.io/2017/08/30/无线渗透-上-WPA加密/index.html">
+<meta property="og:site_name" content="TimeS0ng&#39;s blog">
+<meta property="og:description" content="0x00. 无线渗透简介&amp;emsp;&amp;emsp;在网络越来越发达的今天，相信家家户户都已经连上了无线Wi-Fi，然而在享受Wi-Fi带来的便捷性的同时，大家是否想过正是这小小的Wi-Fi却能成为黑客成功入侵计算机，盗取机密信息的踏板！？接下来笔者会写一个系列的无线渗透文章，为大家逐个分析Wi-Fi破解，破解之后黑客的攻击手段，无线AP的伪造以及中间人攻击，相信大家能在目睹Wi-Fi脆弱性的同时提高">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/1b76f7e1beb93f9e28e44bca46fca90a/xmlnote/9CB410665DDB4B4F98F1E69275D43BBB/699">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/1b76f7e1beb93f9e28e44bca46fca90a/xmlnote/5DD04579426246628D480168D104711B/748">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/1b76f7e1beb93f9e28e44bca46fca90a/xmlnote/003B6F229A3244159C233A04F3D76503/756">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/1b76f7e1beb93f9e28e44bca46fca90a/xmlnote/63067782993749B08166DC5D3FE8BEA2/883">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/1b76f7e1beb93f9e28e44bca46fca90a/xmlnote/135817F3256741E6A946E1B9706C27AD/913">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/1b76f7e1beb93f9e28e44bca46fca90a/xmlnote/F2E877559EA14CD9A3D22AF94B5DE207/891">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/1b76f7e1beb93f9e28e44bca46fca90a/xmlnote/95502CABB90F4DF79FA602AE292801C9/909">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/1b76f7e1beb93f9e28e44bca46fca90a/xmlnote/7DC28669142B44EEBFB4F75AD6887744/918">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/1b76f7e1beb93f9e28e44bca46fca90a/xmlnote/1AF5BBD248E54CB8AB60B5D4F144D421/926">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/1b76f7e1beb93f9e28e44bca46fca90a/xmlnote/3391248596AF4F8A923ADDE0CE28F2E4/936">
+<meta property="og:updated_time" content="2017-08-30T15:44:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="无线渗透(上)--WPA加密">
+<meta name="twitter:description" content="0x00. 无线渗透简介&amp;emsp;&amp;emsp;在网络越来越发达的今天，相信家家户户都已经连上了无线Wi-Fi，然而在享受Wi-Fi带来的便捷性的同时，大家是否想过正是这小小的Wi-Fi却能成为黑客成功入侵计算机，盗取机密信息的踏板！？接下来笔者会写一个系列的无线渗透文章，为大家逐个分析Wi-Fi破解，破解之后黑客的攻击手段，无线AP的伪造以及中间人攻击，相信大家能在目睹Wi-Fi脆弱性的同时提高">
+<meta name="twitter:image" content="http://note.youdao.com/yws/public/resource/1b76f7e1beb93f9e28e44bca46fca90a/xmlnote/9CB410665DDB4B4F98F1E69275D43BBB/699">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="TimeS0ng&#39;s blog" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>无线渗透(上)--WPA加密 | TimeS0ng&#39;s blog</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">TimeS0ng</a></h1>
+        </hgroup>
+
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="false" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:1102234142@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/TimeS0ng" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">专注技术，乐于分享</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">TimeS0ng</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">TimeS0ng</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:1102234142@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/TimeS0ng" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-无线渗透-上-WPA加密" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/08/30/无线渗透-上-WPA加密/" class="article-date">
+      <time datetime="2017-08-30T15:32:55.000Z" itemprop="datePublished">2017-08-30</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      无线渗透(上)--WPA加密
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="0x00-无线渗透简介"><a href="#0x00-无线渗透简介" class="headerlink" title="0x00. 无线渗透简介"></a><strong>0x00. 无线渗透简介</strong></h2><h3 id="emsp-emsp-在网络越来越发达的今天，相信家家户户都已经连上了无线Wi-Fi，然而在享受Wi-Fi带来的便捷性的同时，大家是否想过正是这小小的Wi-Fi却能成为黑客成功入侵计算机，盗取机密信息的踏板！？接下来笔者会写一个系列的无线渗透文章，为大家逐个分析Wi-Fi破解，破解之后黑客的攻击手段，无线AP的伪造以及中间人攻击，相信大家能在目睹Wi-Fi脆弱性的同时提高自我保护意识。此系列文章仅作技术研究，请勿他用"><a href="#emsp-emsp-在网络越来越发达的今天，相信家家户户都已经连上了无线Wi-Fi，然而在享受Wi-Fi带来的便捷性的同时，大家是否想过正是这小小的Wi-Fi却能成为黑客成功入侵计算机，盗取机密信息的踏板！？接下来笔者会写一个系列的无线渗透文章，为大家逐个分析Wi-Fi破解，破解之后黑客的攻击手段，无线AP的伪造以及中间人攻击，相信大家能在目睹Wi-Fi脆弱性的同时提高自我保护意识。此系列文章仅作技术研究，请勿他用" class="headerlink" title="&emsp;&emsp;在网络越来越发达的今天，相信家家户户都已经连上了无线Wi-Fi，然而在享受Wi-Fi带来的便捷性的同时，大家是否想过正是这小小的Wi-Fi却能成为黑客成功入侵计算机，盗取机密信息的踏板！？接下来笔者会写一个系列的无线渗透文章，为大家逐个分析Wi-Fi破解，破解之后黑客的攻击手段，无线AP的伪造以及中间人攻击，相信大家能在目睹Wi-Fi脆弱性的同时提高自我保护意识。此系列文章仅作技术研究，请勿他用!"></a>&emsp;&emsp;在网络越来越发达的今天，相信家家户户都已经连上了无线Wi-Fi，然而在享受Wi-Fi带来的便捷性的同时，大家是否想过正是这小小的Wi-Fi却能成为黑客成功入侵计算机，盗取机密信息的踏板！？接下来笔者会写一个系列的无线渗透文章，为大家逐个分析Wi-Fi破解，破解之后黑客的攻击手段，无线AP的伪造以及中间人攻击，相信大家能在目睹Wi-Fi脆弱性的同时提高自我保护意识。此系列文章仅作技术研究，请勿他用!</h3><a id="more"></a>
+<h2 id="0x01-协议分析"><a href="#0x01-协议分析" class="headerlink" title="0x01. 协议分析"></a><strong>0x01. 协议分析</strong></h2><p><img src="http://note.youdao.com/yws/public/resource/1b76f7e1beb93f9e28e44bca46fca90a/xmlnote/9CB410665DDB4B4F98F1E69275D43BBB/699" alt="image"></p>
+<h3 id="emsp-emsp-无线Wi-Fi能够传递、接受信号不仅依赖于物理硬件的支持（在物理层将数据信息转换为电子信号，通过无线电波传递到周围空气当中），更借助其上层数据链路层提供的逻辑标准来控制信息传递的有序进行。-而我们的Wi-Fi就是依赖数据链路层的802-11协议，经过多年的发展，IEEE组织已经制定了不同的协议族，正如上图所示，过去常用的是802-11b但是由于传输速度的限制现在大多数的网卡都已经开始支持802-11n-下面是笔者的Mac支持的协议。后面可能会涉及到数据包的传输过程，大家可以先去了解一下详细的802-11协议，以便更好理解后面内容。"><a href="#emsp-emsp-无线Wi-Fi能够传递、接受信号不仅依赖于物理硬件的支持（在物理层将数据信息转换为电子信号，通过无线电波传递到周围空气当中），更借助其上层数据链路层提供的逻辑标准来控制信息传递的有序进行。-而我们的Wi-Fi就是依赖数据链路层的802-11协议，经过多年的发展，IEEE组织已经制定了不同的协议族，正如上图所示，过去常用的是802-11b但是由于传输速度的限制现在大多数的网卡都已经开始支持802-11n-下面是笔者的Mac支持的协议。后面可能会涉及到数据包的传输过程，大家可以先去了解一下详细的802-11协议，以便更好理解后面内容。" class="headerlink" title="&emsp;&emsp;无线Wi-Fi能够传递、接受信号不仅依赖于物理硬件的支持（在物理层将数据信息转换为电子信号，通过无线电波传递到周围空气当中），更借助其上层数据链路层提供的逻辑标准来控制信息传递的有序进行。 而我们的Wi-Fi就是依赖数据链路层的802.11协议，经过多年的发展，IEEE组织已经制定了不同的协议族，正如上图所示，过去常用的是802.11b但是由于传输速度的限制现在大多数的网卡都已经开始支持802.11n,下面是笔者的Mac支持的协议。后面可能会涉及到数据包的传输过程，大家可以先去了解一下详细的802.11协议，以便更好理解后面内容。"></a>&emsp;&emsp;无线Wi-Fi能够传递、接受信号不仅依赖于物理硬件的支持（在物理层将数据信息转换为电子信号，通过无线电波传递到周围空气当中），更借助其上层数据链路层提供的逻辑标准来控制信息传递的有序进行。 而我们的Wi-Fi就是依赖数据链路层的802.11协议，经过多年的发展，IEEE组织已经制定了不同的协议族，正如上图所示，过去常用的是802.11b但是由于传输速度的限制现在大多数的网卡都已经开始支持802.11n,下面是笔者的Mac支持的协议。后面可能会涉及到数据包的传输过程，大家可以先去了解一下<a href="http://blog.csdn.net/cupidove/article/details/23122213" target="_blank" rel="external">详细的802.11协议</a>，以便更好理解后面内容。</h3><p><img src="http://note.youdao.com/yws/public/resource/1b76f7e1beb93f9e28e44bca46fca90a/xmlnote/5DD04579426246628D480168D104711B/748" alt="image"></p>
+<hr>
+<h2 id="0x02-WPA简介"><a href="#0x02-WPA简介" class="headerlink" title="0x02. WPA简介"></a><strong>0x02. WPA简介</strong></h2><h3 id="emsp-emsp-无线通信中WPA是目前个人用户用得最广的加密协议，企业用的最广的是WPA2，而WEP加密因为被认为很不安全，所以很少会有使用，但是也存在极少个例不太懂安全的人使用，后面的文章都会有介绍。本文笔者先从WPA的攻击开始介绍。"><a href="#emsp-emsp-无线通信中WPA是目前个人用户用得最广的加密协议，企业用的最广的是WPA2，而WEP加密因为被认为很不安全，所以很少会有使用，但是也存在极少个例不太懂安全的人使用，后面的文章都会有介绍。本文笔者先从WPA的攻击开始介绍。" class="headerlink" title="&emsp;&emsp;无线通信中WPA是目前个人用户用得最广的加密协议，企业用的最广的是WPA2，而WEP加密因为被认为很不安全，所以很少会有使用，但是也存在极少个例不太懂安全的人使用，后面的文章都会有介绍。本文笔者先从WPA的攻击开始介绍。"></a>&emsp;&emsp;无线通信中WPA是目前个人用户用得最广的加密协议，企业用的最广的是WPA2，而WEP加密因为被认为很不安全，所以很少会有使用，但是也存在极少个例不太懂安全的人使用，后面的文章都会有介绍。本文笔者先从WPA的攻击开始介绍。</h3><hr>
+<h2 id="0x03-WPA密钥交换流程"><a href="#0x03-WPA密钥交换流程" class="headerlink" title="0x03. WPA密钥交换流程"></a><strong>0x03. WPA密钥交换流程</strong></h2><p><img src="http://note.youdao.com/yws/public/resource/1b76f7e1beb93f9e28e44bca46fca90a/xmlnote/003B6F229A3244159C233A04F3D76503/756" alt="image"></p>
+<h3 id="emsp-emsp-虽然WPA加密算法十分安全可靠，但是在密钥交换时却不能保证握手过程不被黑客嗅探到。如上图所示，WPA密钥交换要经过四步握手过程，这和TCP握手类似。"><a href="#emsp-emsp-虽然WPA加密算法十分安全可靠，但是在密钥交换时却不能保证握手过程不被黑客嗅探到。如上图所示，WPA密钥交换要经过四步握手过程，这和TCP握手类似。" class="headerlink" title="&emsp;&emsp;虽然WPA加密算法十分安全可靠，但是在密钥交换时却不能保证握手过程不被黑客嗅探到。如上图所示，WPA密钥交换要经过四步握手过程，这和TCP握手类似。"></a>&emsp;&emsp;虽然WPA加密算法十分安全可靠，但是在密钥交换时却不能保证握手过程不被黑客嗅探到。如上图所示，WPA密钥交换要经过四步握手过程，这和TCP握手类似。</h3><h3 id="emsp-emsp-1-首先由AP-可以通俗理解为Wi-Fi-发送ANonce给STATION-客户端-；"><a href="#emsp-emsp-1-首先由AP-可以通俗理解为Wi-Fi-发送ANonce给STATION-客户端-；" class="headerlink" title="&emsp;&emsp;1.首先由AP(可以通俗理解为Wi-Fi)发送ANonce给STATION(客户端)；"></a>&emsp;&emsp;1.首先由AP(可以通俗理解为Wi-Fi)发送ANonce给STATION(客户端)；</h3><h3 id="emsp-emsp-2-STA接收到ANonce之后利用正确的Essid-Wi-Fi名称-和PSK-共享密钥，即密码-经过迭代算法计算出PMK，然后STA再自己生成一个SNonce，此时STA同时拥有ANonce、SNonce、PMK、AP-MAC、STA-MAC，利用这些已知信息STA经过散列算法就可以计算出PTK（密钥流，后续就用PTK来加密数据包），接下来STA就把SNonce和PTK的MIC值发送给AP；"><a href="#emsp-emsp-2-STA接收到ANonce之后利用正确的Essid-Wi-Fi名称-和PSK-共享密钥，即密码-经过迭代算法计算出PMK，然后STA再自己生成一个SNonce，此时STA同时拥有ANonce、SNonce、PMK、AP-MAC、STA-MAC，利用这些已知信息STA经过散列算法就可以计算出PTK（密钥流，后续就用PTK来加密数据包），接下来STA就把SNonce和PTK的MIC值发送给AP；" class="headerlink" title="&emsp;&emsp;2.STA接收到ANonce之后利用正确的Essid(Wi-Fi名称)和PSK(共享密钥，即密码)经过迭代算法计算出PMK，然后STA再自己生成一个SNonce，此时STA同时拥有ANonce、SNonce、PMK、AP MAC、STA MAC，利用这些已知信息STA经过散列算法就可以计算出PTK（密钥流，后续就用PTK来加密数据包），接下来STA就把SNonce和PTK的MIC值发送给AP；"></a>&emsp;&emsp;2.STA接收到ANonce之后利用正确的Essid(Wi-Fi名称)和PSK(共享密钥，即密码)经过迭代算法计算出PMK，然后STA再自己生成一个SNonce，此时STA同时拥有ANonce、SNonce、PMK、AP MAC、STA MAC，利用这些已知信息STA经过散列算法就可以计算出PTK（密钥流，后续就用PTK来加密数据包），接下来STA就把SNonce和PTK的MIC值发送给AP；</h3><h3 id="emsp-emsp-3-AP拿到SNonce之后也拥有了ANonce、SNonce、PMK、AP-MAC、STA-MAC（AP也可以生成PMK），得到这些信息之后AP也计算出PTK，通过比较PTK的MIC值来判断密码是否正确和数据是否被篡改，接下来由AP发送GTK和MIC值给STA；"><a href="#emsp-emsp-3-AP拿到SNonce之后也拥有了ANonce、SNonce、PMK、AP-MAC、STA-MAC（AP也可以生成PMK），得到这些信息之后AP也计算出PTK，通过比较PTK的MIC值来判断密码是否正确和数据是否被篡改，接下来由AP发送GTK和MIC值给STA；" class="headerlink" title="&emsp;&emsp;3.AP拿到SNonce之后也拥有了ANonce、SNonce、PMK、AP MAC、STA MAC（AP也可以生成PMK），得到这些信息之后AP也计算出PTK，通过比较PTK的MIC值来判断密码是否正确和数据是否被篡改，接下来由AP发送GTK和MIC值给STA；"></a>&emsp;&emsp;3.AP拿到SNonce之后也拥有了ANonce、SNonce、PMK、AP MAC、STA MAC（AP也可以生成PMK），得到这些信息之后AP也计算出PTK，通过比较PTK的MIC值来判断密码是否正确和数据是否被篡改，接下来由AP发送GTK和MIC值给STA；</h3><h3 id="emsp-emsp-4-STA也要通过比对MIC值来判断数据是否被篡改，如果MIC值相同则回送一个用密钥加密过的ACK给AP确定，此时密钥交换完成。"><a href="#emsp-emsp-4-STA也要通过比对MIC值来判断数据是否被篡改，如果MIC值相同则回送一个用密钥加密过的ACK给AP确定，此时密钥交换完成。" class="headerlink" title="&emsp;&emsp;4.STA也要通过比对MIC值来判断数据是否被篡改，如果MIC值相同则回送一个用密钥加密过的ACK给AP确定，此时密钥交换完成。"></a>&emsp;&emsp;4.STA也要通过比对MIC值来判断数据是否被篡改，如果MIC值相同则回送一个用密钥加密过的ACK给AP确定，此时密钥交换完成。</h3><hr>
+<h2 id="0x04-WPA-PSK攻击原理"><a href="#0x04-WPA-PSK攻击原理" class="headerlink" title="0x04. WPA PSK攻击原理"></a><strong>0x04. WPA PSK攻击原理</strong></h2><h3 id="emsp-emsp-上面介绍了WPA密钥交换原理，而我们的攻击过程正是要利用这个原理来实现的，所以笔者希望大家能够试图看懂上面介绍的原理流程。"><a href="#emsp-emsp-上面介绍了WPA密钥交换原理，而我们的攻击过程正是要利用这个原理来实现的，所以笔者希望大家能够试图看懂上面介绍的原理流程。" class="headerlink" title="&emsp;&emsp;上面介绍了WPA密钥交换原理，而我们的攻击过程正是要利用这个原理来实现的，所以笔者希望大家能够试图看懂上面介绍的原理流程。"></a>&emsp;&emsp;上面介绍了WPA密钥交换原理，而我们的攻击过程正是要利用这个原理来实现的，所以笔者希望大家能够试图看懂上面介绍的原理流程。</h3><h3 id="攻击原理："><a href="#攻击原理：" class="headerlink" title="攻击原理："></a>攻击原理：</h3><h3 id="emsp-1-利用抓包工具抓取四步握手过程；"><a href="#emsp-1-利用抓包工具抓取四步握手过程；" class="headerlink" title="&emsp;1.利用抓包工具抓取四步握手过程；"></a>&emsp;1.利用抓包工具抓取四步握手过程；</h3><h3 id="emsp-2-抓取到四步握手之后我们便得到了ANonce、SNonce、Essid、AP-MAC、STA-MAC、MIC-因为PMK-Essid-PSK-迭代计算，所以我们可以尝试用字典来计算出各种PMK，然后生成PTK-MIC值-PTK-MIC-ANonce-SNonce-PMK-AP-MAC-STA-MAC-散列计算-比较抓取到的MIC值，其实这个过程和破解hash是一个道理，主要依赖字典。"><a href="#emsp-2-抓取到四步握手之后我们便得到了ANonce、SNonce、Essid、AP-MAC、STA-MAC、MIC-因为PMK-Essid-PSK-迭代计算，所以我们可以尝试用字典来计算出各种PMK，然后生成PTK-MIC值-PTK-MIC-ANonce-SNonce-PMK-AP-MAC-STA-MAC-散列计算-比较抓取到的MIC值，其实这个过程和破解hash是一个道理，主要依赖字典。" class="headerlink" title="&emsp;2.抓取到四步握手之后我们便得到了ANonce、SNonce、Essid、AP MAC、STA MAC、MIC,因为PMK=Essid + PSK + 迭代计算，所以我们可以尝试用字典来计算出各种PMK，然后生成PTK MIC值(PTK MIC = ANonce + SNonce + PMK + AP MAC + STA MAC + 散列计算)比较抓取到的MIC值，其实这个过程和破解hash是一个道理，主要依赖字典。"></a>&emsp;2.抓取到四步握手之后我们便得到了ANonce、SNonce、Essid、AP MAC、STA MAC、MIC,因为PMK=Essid + PSK + 迭代计算，所以我们可以尝试用字典来计算出各种PMK，然后生成PTK MIC值(PTK MIC = ANonce + SNonce + PMK + AP MAC + STA MAC + 散列计算)比较抓取到的MIC值，其实这个过程和破解hash是一个道理，主要依赖字典。</h3><hr>
+<h2 id="0x05-WPA攻击实战"><a href="#0x05-WPA攻击实战" class="headerlink" title="0x05. WPA攻击实战"></a><strong>0x05. WPA攻击实战</strong></h2><h3 id="emsp-emsp-介绍了这么多，相信大家已经摩拳擦掌，准备拿自己的Wi-Fi下手了，下面笔者演示实操攻破自己的Wi-Fi。"><a href="#emsp-emsp-介绍了这么多，相信大家已经摩拳擦掌，准备拿自己的Wi-Fi下手了，下面笔者演示实操攻破自己的Wi-Fi。" class="headerlink" title="&emsp;&emsp;介绍了这么多，相信大家已经摩拳擦掌，准备拿自己的Wi-Fi下手了，下面笔者演示实操攻破自己的Wi-Fi。"></a>&emsp;&emsp;介绍了这么多，相信大家已经摩拳擦掌，准备拿自己的Wi-Fi下手了，下面笔者演示实操攻破自己的Wi-Fi。</h3><h3 id="环境准备："><a href="#环境准备：" class="headerlink" title="环境准备："></a>环境准备：</h3><h3 id="emsp-1-kali-Linux虚拟机"><a href="#emsp-1-kali-Linux虚拟机" class="headerlink" title="&emsp;1.kali Linux虚拟机"></a>&emsp;1.kali Linux虚拟机</h3><h3 id="emsp-2-TL-WN722N网卡"><a href="#emsp-2-TL-WN722N网卡" class="headerlink" title="&emsp;2.TL-WN722N网卡"></a>&emsp;2.TL-WN722N网卡</h3><h3 id="emsp-3-Wi-Fi密码为admin123的路由器"><a href="#emsp-3-Wi-Fi密码为admin123的路由器" class="headerlink" title="&emsp;3.Wi-Fi密码为admin123的路由器"></a>&emsp;3.Wi-Fi密码为admin123的路由器</h3><p><img src="http://note.youdao.com/yws/public/resource/1b76f7e1beb93f9e28e44bca46fca90a/xmlnote/63067782993749B08166DC5D3FE8BEA2/883" alt="image"><br><img src="http://note.youdao.com/yws/public/resource/1b76f7e1beb93f9e28e44bca46fca90a/xmlnote/135817F3256741E6A946E1B9706C27AD/913" alt="image"></p>
+<h3 id="操作流程："><a href="#操作流程：" class="headerlink" title="操作流程："></a>操作流程：</h3><h3 id="emsp-1-启动kali-Linux虚拟机，映射网卡"><a href="#emsp-1-启动kali-Linux虚拟机，映射网卡" class="headerlink" title="&emsp;1.启动kali Linux虚拟机，映射网卡"></a>&emsp;1.启动kali Linux虚拟机，映射网卡</h3><p><img src="http://note.youdao.com/yws/public/resource/1b76f7e1beb93f9e28e44bca46fca90a/xmlnote/F2E877559EA14CD9A3D22AF94B5DE207/891" alt="image"></p>
+<h3 id="emsp-2-启动网卡，设置为monitor模式"><a href="#emsp-2-启动网卡，设置为monitor模式" class="headerlink" title="&emsp;2.启动网卡，设置为monitor模式"></a>&emsp;2.启动网卡，设置为monitor模式</h3><p><img src="http://note.youdao.com/yws/public/resource/1b76f7e1beb93f9e28e44bca46fca90a/xmlnote/95502CABB90F4DF79FA602AE292801C9/909" alt="image"></p>
+<h3 id="emsp-3-启动airodump-ng进行抓包侦听-airodump-ng-c-–essid-w-wpa"><a href="#emsp-3-启动airodump-ng进行抓包侦听-airodump-ng-c-–essid-w-wpa" class="headerlink" title="&emsp;3.启动airodump-ng进行抓包侦听(airodump-ng  -c  –essid  -w wpa)"></a>&emsp;3.启动airodump-ng进行抓包侦听(airodump-ng <interface> -c <channel> –essid <essid name=""> -w wpa)</essid></channel></interface></h3><p><img src="http://note.youdao.com/yws/public/resource/1b76f7e1beb93f9e28e44bca46fca90a/xmlnote/7DC28669142B44EEBFB4F75AD6887744/918" alt="image"></p>
+<h3 id="emsp-4-利用aireplay-ng-aireplay-0-3-a-c-迫使MAC为-98-01-A7-C5-F7-6D的主机下线重连Wi-Fi，以便抓取四步握手"><a href="#emsp-4-利用aireplay-ng-aireplay-0-3-a-c-迫使MAC为-98-01-A7-C5-F7-6D的主机下线重连Wi-Fi，以便抓取四步握手" class="headerlink" title="&emsp;4.利用aireplay-ng(aireplay -0 3 -a  -c  迫使MAC为 98:01:A7:C5:F7:6D的主机下线重连Wi-Fi，以便抓取四步握手"></a>&emsp;4.利用aireplay-ng(aireplay -0 3 -a <ap mac=""> -c <sta mac=""> <interface>迫使MAC为 98:01:A7:C5:F7:6D的主机下线重连Wi-Fi，以便抓取四步握手</interface></sta></ap></h3><p><img src="http://note.youdao.com/yws/public/resource/1b76f7e1beb93f9e28e44bca46fca90a/xmlnote/1AF5BBD248E54CB8AB60B5D4F144D421/926" alt="image"></p>
+<h3 id="emsp-5-调用aircrack-ng破解密码-aircrack-ng-w-wpa-01-cap"><a href="#emsp-5-调用aircrack-ng破解密码-aircrack-ng-w-wpa-01-cap" class="headerlink" title="&emsp;5.调用aircrack-ng破解密码(aircrack-ng -w  wpa-01.cap)"></a>&emsp;5.调用aircrack-ng破解密码(aircrack-ng -w <wordlist.txt> wpa-01.cap)</wordlist.txt></h3><p><img src="http://note.youdao.com/yws/public/resource/1b76f7e1beb93f9e28e44bca46fca90a/xmlnote/3391248596AF4F8A923ADDE0CE28F2E4/936" alt="image"></p>
+<hr>
+<h2 id="0x06-防御"><a href="#0x06-防御" class="headerlink" title="0x06. 防御"></a><strong>0x06. 防御</strong></h2><h3 id="emsp-emsp-其实基于WPA加密的Wi-Fi是很不容易破解的，只要密码设的足够复杂，就算是黑客也不是那么轻松就能攻破的，所以大家还是尽早放弃弱密码吧，免得江湖上又一轮腥风血雨。"><a href="#emsp-emsp-其实基于WPA加密的Wi-Fi是很不容易破解的，只要密码设的足够复杂，就算是黑客也不是那么轻松就能攻破的，所以大家还是尽早放弃弱密码吧，免得江湖上又一轮腥风血雨。" class="headerlink" title="&emsp;&emsp;其实基于WPA加密的Wi-Fi是很不容易破解的，只要密码设的足够复杂，就算是黑客也不是那么轻松就能攻破的，所以大家还是尽早放弃弱密码吧，免得江湖上又一轮腥风血雨。"></a>&emsp;&emsp;其实基于WPA加密的Wi-Fi是很不容易破解的，只要密码设的足够复杂，就算是黑客也不是那么轻松就能攻破的，所以大家还是尽早放弃弱密码吧，免得江湖上又一轮腥风血雨。</h3><hr>
+<h2 id="0x06-后续"><a href="#0x06-后续" class="headerlink" title="0x06. 后续"></a><strong>0x06. 后续</strong></h2><h3 id="emsp-emsp-大家也可以实战试试能否破解自己家的Wi-Fi，接下来会推出wps和wep的密码破解，关于破解Wi-Fi密码之后的攻击手法也会在后面陆续推出，感兴趣的朋友可以关注公众号动态，喜欢的朋友可以分享到朋友圈帮忙将知识分享给更多的人！！"><a href="#emsp-emsp-大家也可以实战试试能否破解自己家的Wi-Fi，接下来会推出wps和wep的密码破解，关于破解Wi-Fi密码之后的攻击手法也会在后面陆续推出，感兴趣的朋友可以关注公众号动态，喜欢的朋友可以分享到朋友圈帮忙将知识分享给更多的人！！" class="headerlink" title="&emsp;&emsp;大家也可以实战试试能否破解自己家的Wi-Fi，接下来会推出wps和wep的密码破解，关于破解Wi-Fi密码之后的攻击手法也会在后面陆续推出，感兴趣的朋友可以关注公众号动态，喜欢的朋友可以分享到朋友圈帮忙将知识分享给更多的人！！"></a>&emsp;&emsp;大家也可以实战试试能否破解自己家的Wi-Fi，接下来会推出wps和wep的密码破解，关于破解Wi-Fi密码之后的攻击手法也会在后面陆续推出，感兴趣的朋友可以关注公众号动态，喜欢的朋友可以分享到朋友圈帮忙将知识分享给更多的人！！</h3>
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/08/30/无线渗透-上-WPA加密/">无线渗透(上)--WPA加密</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">TimeS0ng</a></p>
+        <p><span>发布时间:</span>2017-08-30, 23:32:55</p>
+        <p><span>最后更新:</span>2017-08-30, 23:44:13</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/08/30/无线渗透-上-WPA加密/" title="无线渗透(上)--WPA加密">http://TimeS0ng.github.io/2017/08/30/无线渗透-上-WPA加密/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2017/08/30/无线渗透-上-WPA加密/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/08/30/无线渗透-中-WPS破解/">
+                    无线渗透(中)--WPS破解
+                </a>
+            </div>
+        
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00-无线渗透简介"><span class="toc-number">1.</span> <span class="toc-text">0x00. 无线渗透简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-emsp-在网络越来越发达的今天，相信家家户户都已经连上了无线Wi-Fi，然而在享受Wi-Fi带来的便捷性的同时，大家是否想过正是这小小的Wi-Fi却能成为黑客成功入侵计算机，盗取机密信息的踏板！？接下来笔者会写一个系列的无线渗透文章，为大家逐个分析Wi-Fi破解，破解之后黑客的攻击手段，无线AP的伪造以及中间人攻击，相信大家能在目睹Wi-Fi脆弱性的同时提高自我保护意识。此系列文章仅作技术研究，请勿他用"><span class="toc-number">1.1.</span> <span class="toc-text">  在网络越来越发达的今天，相信家家户户都已经连上了无线Wi-Fi，然而在享受Wi-Fi带来的便捷性的同时，大家是否想过正是这小小的Wi-Fi却能成为黑客成功入侵计算机，盗取机密信息的踏板！？接下来笔者会写一个系列的无线渗透文章，为大家逐个分析Wi-Fi破解，破解之后黑客的攻击手段，无线AP的伪造以及中间人攻击，相信大家能在目睹Wi-Fi脆弱性的同时提高自我保护意识。此系列文章仅作技术研究，请勿他用!</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-协议分析"><span class="toc-number">2.</span> <span class="toc-text">0x01. 协议分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-emsp-无线Wi-Fi能够传递、接受信号不仅依赖于物理硬件的支持（在物理层将数据信息转换为电子信号，通过无线电波传递到周围空气当中），更借助其上层数据链路层提供的逻辑标准来控制信息传递的有序进行。-而我们的Wi-Fi就是依赖数据链路层的802-11协议，经过多年的发展，IEEE组织已经制定了不同的协议族，正如上图所示，过去常用的是802-11b但是由于传输速度的限制现在大多数的网卡都已经开始支持802-11n-下面是笔者的Mac支持的协议。后面可能会涉及到数据包的传输过程，大家可以先去了解一下详细的802-11协议，以便更好理解后面内容。"><span class="toc-number">2.1.</span> <span class="toc-text">  无线Wi-Fi能够传递、接受信号不仅依赖于物理硬件的支持（在物理层将数据信息转换为电子信号，通过无线电波传递到周围空气当中），更借助其上层数据链路层提供的逻辑标准来控制信息传递的有序进行。 而我们的Wi-Fi就是依赖数据链路层的802.11协议，经过多年的发展，IEEE组织已经制定了不同的协议族，正如上图所示，过去常用的是802.11b但是由于传输速度的限制现在大多数的网卡都已经开始支持802.11n,下面是笔者的Mac支持的协议。后面可能会涉及到数据包的传输过程，大家可以先去了解一下详细的802.11协议，以便更好理解后面内容。</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-WPA简介"><span class="toc-number">3.</span> <span class="toc-text">0x02. WPA简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-emsp-无线通信中WPA是目前个人用户用得最广的加密协议，企业用的最广的是WPA2，而WEP加密因为被认为很不安全，所以很少会有使用，但是也存在极少个例不太懂安全的人使用，后面的文章都会有介绍。本文笔者先从WPA的攻击开始介绍。"><span class="toc-number">3.1.</span> <span class="toc-text">  无线通信中WPA是目前个人用户用得最广的加密协议，企业用的最广的是WPA2，而WEP加密因为被认为很不安全，所以很少会有使用，但是也存在极少个例不太懂安全的人使用，后面的文章都会有介绍。本文笔者先从WPA的攻击开始介绍。</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-WPA密钥交换流程"><span class="toc-number">4.</span> <span class="toc-text">0x03. WPA密钥交换流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-emsp-虽然WPA加密算法十分安全可靠，但是在密钥交换时却不能保证握手过程不被黑客嗅探到。如上图所示，WPA密钥交换要经过四步握手过程，这和TCP握手类似。"><span class="toc-number">4.1.</span> <span class="toc-text">  虽然WPA加密算法十分安全可靠，但是在密钥交换时却不能保证握手过程不被黑客嗅探到。如上图所示，WPA密钥交换要经过四步握手过程，这和TCP握手类似。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-emsp-1-首先由AP-可以通俗理解为Wi-Fi-发送ANonce给STATION-客户端-；"><span class="toc-number">4.2.</span> <span class="toc-text">  1.首先由AP(可以通俗理解为Wi-Fi)发送ANonce给STATION(客户端)；</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-emsp-2-STA接收到ANonce之后利用正确的Essid-Wi-Fi名称-和PSK-共享密钥，即密码-经过迭代算法计算出PMK，然后STA再自己生成一个SNonce，此时STA同时拥有ANonce、SNonce、PMK、AP-MAC、STA-MAC，利用这些已知信息STA经过散列算法就可以计算出PTK（密钥流，后续就用PTK来加密数据包），接下来STA就把SNonce和PTK的MIC值发送给AP；"><span class="toc-number">4.3.</span> <span class="toc-text">  2.STA接收到ANonce之后利用正确的Essid(Wi-Fi名称)和PSK(共享密钥，即密码)经过迭代算法计算出PMK，然后STA再自己生成一个SNonce，此时STA同时拥有ANonce、SNonce、PMK、AP MAC、STA MAC，利用这些已知信息STA经过散列算法就可以计算出PTK（密钥流，后续就用PTK来加密数据包），接下来STA就把SNonce和PTK的MIC值发送给AP；</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-emsp-3-AP拿到SNonce之后也拥有了ANonce、SNonce、PMK、AP-MAC、STA-MAC（AP也可以生成PMK），得到这些信息之后AP也计算出PTK，通过比较PTK的MIC值来判断密码是否正确和数据是否被篡改，接下来由AP发送GTK和MIC值给STA；"><span class="toc-number">4.4.</span> <span class="toc-text">  3.AP拿到SNonce之后也拥有了ANonce、SNonce、PMK、AP MAC、STA MAC（AP也可以生成PMK），得到这些信息之后AP也计算出PTK，通过比较PTK的MIC值来判断密码是否正确和数据是否被篡改，接下来由AP发送GTK和MIC值给STA；</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-emsp-4-STA也要通过比对MIC值来判断数据是否被篡改，如果MIC值相同则回送一个用密钥加密过的ACK给AP确定，此时密钥交换完成。"><span class="toc-number">4.5.</span> <span class="toc-text">  4.STA也要通过比对MIC值来判断数据是否被篡改，如果MIC值相同则回送一个用密钥加密过的ACK给AP确定，此时密钥交换完成。</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-WPA-PSK攻击原理"><span class="toc-number">5.</span> <span class="toc-text">0x04. WPA PSK攻击原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-emsp-上面介绍了WPA密钥交换原理，而我们的攻击过程正是要利用这个原理来实现的，所以笔者希望大家能够试图看懂上面介绍的原理流程。"><span class="toc-number">5.1.</span> <span class="toc-text">  上面介绍了WPA密钥交换原理，而我们的攻击过程正是要利用这个原理来实现的，所以笔者希望大家能够试图看懂上面介绍的原理流程。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#攻击原理："><span class="toc-number">5.2.</span> <span class="toc-text">攻击原理：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-1-利用抓包工具抓取四步握手过程；"><span class="toc-number">5.3.</span> <span class="toc-text"> 1.利用抓包工具抓取四步握手过程；</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-2-抓取到四步握手之后我们便得到了ANonce、SNonce、Essid、AP-MAC、STA-MAC、MIC-因为PMK-Essid-PSK-迭代计算，所以我们可以尝试用字典来计算出各种PMK，然后生成PTK-MIC值-PTK-MIC-ANonce-SNonce-PMK-AP-MAC-STA-MAC-散列计算-比较抓取到的MIC值，其实这个过程和破解hash是一个道理，主要依赖字典。"><span class="toc-number">5.4.</span> <span class="toc-text"> 2.抓取到四步握手之后我们便得到了ANonce、SNonce、Essid、AP MAC、STA MAC、MIC,因为PMK=Essid + PSK + 迭代计算，所以我们可以尝试用字典来计算出各种PMK，然后生成PTK MIC值(PTK MIC = ANonce + SNonce + PMK + AP MAC + STA MAC + 散列计算)比较抓取到的MIC值，其实这个过程和破解hash是一个道理，主要依赖字典。</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x05-WPA攻击实战"><span class="toc-number">6.</span> <span class="toc-text">0x05. WPA攻击实战</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-emsp-介绍了这么多，相信大家已经摩拳擦掌，准备拿自己的Wi-Fi下手了，下面笔者演示实操攻破自己的Wi-Fi。"><span class="toc-number">6.1.</span> <span class="toc-text">  介绍了这么多，相信大家已经摩拳擦掌，准备拿自己的Wi-Fi下手了，下面笔者演示实操攻破自己的Wi-Fi。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#环境准备："><span class="toc-number">6.2.</span> <span class="toc-text">环境准备：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-1-kali-Linux虚拟机"><span class="toc-number">6.3.</span> <span class="toc-text"> 1.kali Linux虚拟机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-2-TL-WN722N网卡"><span class="toc-number">6.4.</span> <span class="toc-text"> 2.TL-WN722N网卡</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-3-Wi-Fi密码为admin123的路由器"><span class="toc-number">6.5.</span> <span class="toc-text"> 3.Wi-Fi密码为admin123的路由器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#操作流程："><span class="toc-number">6.6.</span> <span class="toc-text">操作流程：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-1-启动kali-Linux虚拟机，映射网卡"><span class="toc-number">6.7.</span> <span class="toc-text"> 1.启动kali Linux虚拟机，映射网卡</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-2-启动网卡，设置为monitor模式"><span class="toc-number">6.8.</span> <span class="toc-text"> 2.启动网卡，设置为monitor模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-3-启动airodump-ng进行抓包侦听-airodump-ng-c-–essid-w-wpa"><span class="toc-number">6.9.</span> <span class="toc-text"> 3.启动airodump-ng进行抓包侦听(airodump-ng  -c  –essid  -w wpa)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-4-利用aireplay-ng-aireplay-0-3-a-c-迫使MAC为-98-01-A7-C5-F7-6D的主机下线重连Wi-Fi，以便抓取四步握手"><span class="toc-number">6.10.</span> <span class="toc-text"> 4.利用aireplay-ng(aireplay -0 3 -a  -c  迫使MAC为 98:01:A7:C5:F7:6D的主机下线重连Wi-Fi，以便抓取四步握手</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-5-调用aircrack-ng破解密码-aircrack-ng-w-wpa-01-cap"><span class="toc-number">6.11.</span> <span class="toc-text"> 5.调用aircrack-ng破解密码(aircrack-ng -w  wpa-01.cap)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x06-防御"><span class="toc-number">7.</span> <span class="toc-text">0x06. 防御</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-emsp-其实基于WPA加密的Wi-Fi是很不容易破解的，只要密码设的足够复杂，就算是黑客也不是那么轻松就能攻破的，所以大家还是尽早放弃弱密码吧，免得江湖上又一轮腥风血雨。"><span class="toc-number">7.1.</span> <span class="toc-text">  其实基于WPA加密的Wi-Fi是很不容易破解的，只要密码设的足够复杂，就算是黑客也不是那么轻松就能攻破的，所以大家还是尽早放弃弱密码吧，免得江湖上又一轮腥风血雨。</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x06-后续"><span class="toc-number">8.</span> <span class="toc-text">0x06. 后续</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-emsp-大家也可以实战试试能否破解自己家的Wi-Fi，接下来会推出wps和wep的密码破解，关于破解Wi-Fi密码之后的攻击手法也会在后面陆续推出，感兴趣的朋友可以关注公众号动态，喜欢的朋友可以分享到朋友圈帮忙将知识分享给更多的人！！"><span class="toc-number">8.1.</span> <span class="toc-text">  大家也可以实战试试能否破解自己家的Wi-Fi，接下来会推出wps和wep的密码破解，关于破解Wi-Fi密码之后的攻击手法也会在后面陆续推出，感兴趣的朋友可以关注公众号动态，喜欢的朋友可以分享到朋友圈帮忙将知识分享给更多的人！！</span></a></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"无线渗透(上)--WPA加密　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section id="comments">
+    <style> aside.comment-bar { margin: auto 30px; }</style>
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function(){
+            this.page.url = 'http://TimeS0ng.github.io/2017/08/30/无线渗透-上-WPA加密/';
+            this.page.identifier = '2017/08/30/无线渗透-上-WPA加密/';
+        };
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = '//.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <script> loadComment(); </script>
+
+</section>
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/08/30/无线渗透-中-WPS破解/" title="上一篇: 无线渗透(中)--WPS破解">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/08/30/无线渗透-中-WPS破解/">无线渗透(中)--WPS破解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/30/无线渗透-上-WPA加密/">无线渗透(上)--WPA加密</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2017 TimeS0ng
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
