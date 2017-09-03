@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="TimeS0ng" />
+
+
+
+<meta name="description" content="0x00. 企业级WPA/WPA2简介&amp;emsp;&amp;emsp;WPA/WPA2企业版：在大型企业网络中，通常采用802.1X的接入认证方式。802.1X认证是一种基于接口的网络接入控制，用户提供认证所需的凭证，如用户名和密码，通过特定的用户认证服务器（一般是RADIUS服务器）和可扩展认证协议EAP（Extensible Authentication Protocol）实现对用户的认证。WPA/W">
+<meta property="og:type" content="article">
+<meta property="og:title" content="无线渗透(下)—企业级WPA破解">
+<meta property="og:url" content="http://TimeS0ng.github.io/2017/09/03/无线渗透(下)—企业级WPA破解/index.html">
+<meta property="og:site_name" content="TimeS0ng&#39;s blog">
+<meta property="og:description" content="0x00. 企业级WPA/WPA2简介&amp;emsp;&amp;emsp;WPA/WPA2企业版：在大型企业网络中，通常采用802.1X的接入认证方式。802.1X认证是一种基于接口的网络接入控制，用户提供认证所需的凭证，如用户名和密码，通过特定的用户认证服务器（一般是RADIUS服务器）和可扩展认证协议EAP（Extensible Authentication Protocol）实现对用户的认证。WPA/W">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/54F51F9A7FAF47E2A10C6B88AFE7B07B/1150">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/6B43F1B59EF54B5BA8B0E9E615D324D6/1240">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/76DD94DE395047BF91BD72C8DD30AFE0/1248">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/F125FC9E885443BB9836165B24FF07E7/1255">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/8A64997CEACA44EFB81293587A6A6268/1266">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/9CFFF7452B2240BBA16C45875C888B1B/1277">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/ED1BAA2EBFC747A299AD411C6C758A3A/1282">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/1EA0DEE4A1034E15AED92EC39C01928F/1292">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/317A6ACB39EA468EABAB971E9038A33E/1299">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/4D28868782C4468393CEEAB02EB4B2FE/1312">
+<meta property="og:updated_time" content="2017-09-03T06:01:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="无线渗透(下)—企业级WPA破解">
+<meta name="twitter:description" content="0x00. 企业级WPA/WPA2简介&amp;emsp;&amp;emsp;WPA/WPA2企业版：在大型企业网络中，通常采用802.1X的接入认证方式。802.1X认证是一种基于接口的网络接入控制，用户提供认证所需的凭证，如用户名和密码，通过特定的用户认证服务器（一般是RADIUS服务器）和可扩展认证协议EAP（Extensible Authentication Protocol）实现对用户的认证。WPA/W">
+<meta name="twitter:image" content="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/54F51F9A7FAF47E2A10C6B88AFE7B07B/1150">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="TimeS0ng&#39;s blog" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>无线渗透(下)—企业级WPA破解 | TimeS0ng&#39;s blog</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">TimeS0ng</a></h1>
+        </hgroup>
+
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="false" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:1102234142@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/TimeS0ng" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">专注技术，乐于分享</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">TimeS0ng</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">TimeS0ng</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:1102234142@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/TimeS0ng" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-无线渗透(下)—企业级WPA破解" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/09/03/无线渗透(下)—企业级WPA破解/" class="article-date">
+      <time datetime="2017-09-03T05:56:20.000Z" itemprop="datePublished">2017-09-03</time>
+</a>
+
+ 
+    <a href="/2017/09/03/无线渗透(下)—企业级WPA破解/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/09/03/无线渗透(下)—企业级WPA破解/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      无线渗透(下)—企业级WPA破解
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="0x00-企业级WPA-WPA2简介"><a href="#0x00-企业级WPA-WPA2简介" class="headerlink" title="0x00. 企业级WPA/WPA2简介"></a><strong>0x00. 企业级WPA/WPA2简介</strong></h2><h4 id="emsp-emsp-WPA-WPA2企业版：在大型企业网络中，通常采用802-1X的接入认证方式。802-1X认证是一种基于接口的网络接入控制，用户提供认证所需的凭证，如用户名和密码，通过特定的用户认证服务器（一般是RADIUS服务器）和可扩展认证协议EAP（Extensible-Authentication-Protocol）实现对用户的认证。WPA-WPA2支持基于EAP-TLS（Transport-Layer-Security）和EAP-PEAP（Protected-EAP）的802-1X认证方式。"><a href="#emsp-emsp-WPA-WPA2企业版：在大型企业网络中，通常采用802-1X的接入认证方式。802-1X认证是一种基于接口的网络接入控制，用户提供认证所需的凭证，如用户名和密码，通过特定的用户认证服务器（一般是RADIUS服务器）和可扩展认证协议EAP（Extensible-Authentication-Protocol）实现对用户的认证。WPA-WPA2支持基于EAP-TLS（Transport-Layer-Security）和EAP-PEAP（Protected-EAP）的802-1X认证方式。" class="headerlink" title="&emsp;&emsp;WPA/WPA2企业版：在大型企业网络中，通常采用802.1X的接入认证方式。802.1X认证是一种基于接口的网络接入控制，用户提供认证所需的凭证，如用户名和密码，通过特定的用户认证服务器（一般是RADIUS服务器）和可扩展认证协议EAP（Extensible Authentication Protocol）实现对用户的认证。WPA/WPA2支持基于EAP-TLS（Transport Layer Security）和EAP-PEAP（Protected EAP）的802.1X认证方式。"></a>&emsp;&emsp;WPA/WPA2企业版：在大型企业网络中，通常采用802.1X的接入认证方式。802.1X认证是一种基于接口的网络接入控制，用户提供认证所需的凭证，如用户名和密码，通过特定的用户认证服务器（一般是RADIUS服务器）和可扩展认证协议EAP（Extensible Authentication Protocol）实现对用户的认证。WPA/WPA2支持基于EAP-TLS（Transport Layer Security）和EAP-PEAP（Protected EAP）的802.1X认证方式。</h4><a id="more"></a>
+<h2 id="0x01-WPA-WPA2企业版认证原理"><a href="#0x01-WPA-WPA2企业版认证原理" class="headerlink" title="0x01. WPA/WPA2企业版认证原理"></a><strong>0x01. WPA/WPA2企业版认证原理</strong></h2><p><img src="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/54F51F9A7FAF47E2A10C6B88AFE7B07B/1150" alt="image"></p>
+<h3 id="上图详细介绍了基于EAP-PEAP的802-1x认证方式（图片出自这里）"><a href="#上图详细介绍了基于EAP-PEAP的802-1x认证方式（图片出自这里）" class="headerlink" title="上图详细介绍了基于EAP-PEAP的802.1x认证方式（图片出自这里）"></a>上图详细介绍了基于EAP-PEAP的802.1x认证方式（<a href="http://blog.sina.com.cn/s/blog_afd4c4ef0102w4bz.html" target="_blank" rel="external">图片出自这里</a>）</h3><h4 id="emsp-emsp-1-首先STA向周围发送PROBE-REQUEST帧，等待应答"><a href="#emsp-emsp-1-首先STA向周围发送PROBE-REQUEST帧，等待应答" class="headerlink" title="&emsp;&emsp;1.首先STA向周围发送PROBE REQUEST帧，等待应答"></a>&emsp;&emsp;1.首先STA向周围发送PROBE REQUEST帧，等待应答</h4><h4 id="emsp-emsp-2-AP收到之后回应一个PROBE-RESPONSE帧给STA（AC连接多个AP）"><a href="#emsp-emsp-2-AP收到之后回应一个PROBE-RESPONSE帧给STA（AC连接多个AP）" class="headerlink" title="&emsp;&emsp;2.AP收到之后回应一个PROBE RESPONSE帧给STA（AC连接多个AP）"></a>&emsp;&emsp;2.AP收到之后回应一个PROBE RESPONSE帧给STA（AC连接多个AP）</h4><h4 id="emsp-emsp-3-认证开始，AP本身不会进行认证过程，而是将STA发送过来的认证信息转发给后端的RADIUS服务器，由RADIUS服务器控制整个认证过程"><a href="#emsp-emsp-3-认证开始，AP本身不会进行认证过程，而是将STA发送过来的认证信息转发给后端的RADIUS服务器，由RADIUS服务器控制整个认证过程" class="headerlink" title="&emsp;&emsp;3.认证开始，AP本身不会进行认证过程，而是将STA发送过来的认证信息转发给后端的RADIUS服务器，由RADIUS服务器控制整个认证过程"></a>&emsp;&emsp;3.认证开始，AP本身不会进行认证过程，而是将STA发送过来的认证信息转发给后端的RADIUS服务器，由RADIUS服务器控制整个认证过程</h4><h4 id="emsp-emsp-4-认证成功，连接上AP（具体交换的数据信息我在WPA加密那篇说过了，这里不再累赘）"><a href="#emsp-emsp-4-认证成功，连接上AP（具体交换的数据信息我在WPA加密那篇说过了，这里不再累赘）" class="headerlink" title="&emsp;&emsp;4.认证成功，连接上AP（具体交换的数据信息我在WPA加密那篇说过了，这里不再累赘）"></a>&emsp;&emsp;4.认证成功，连接上AP（具体交换的数据信息我在<a href="https://times0ng.github.io/2017/08/30/无线渗透-上-WPA加密/">WPA加密</a>那篇说过了，这里不再累赘）</h4><h2 id="0x02-WPA-WPA2企业版攻击原理"><a href="#0x02-WPA-WPA2企业版攻击原理" class="headerlink" title="0x02. WPA/WPA2企业版攻击原理"></a><strong>0x02. WPA/WPA2企业版攻击原理</strong></h2><h4 id="emsp-emsp-在企业级的WPA认证过程中会需要账号密码来登陆AP，我们所需要做的就是伪造一个相同ESSID的AP，同样在后端也伪造RADIUS服务器，如果STA来连接伪造的AP，那么它就会将加密后的密钥传输给我们的RADIUS服务器，离线破解密钥就能得到密码，账号是明文传输的。"><a href="#emsp-emsp-在企业级的WPA认证过程中会需要账号密码来登陆AP，我们所需要做的就是伪造一个相同ESSID的AP，同样在后端也伪造RADIUS服务器，如果STA来连接伪造的AP，那么它就会将加密后的密钥传输给我们的RADIUS服务器，离线破解密钥就能得到密码，账号是明文传输的。" class="headerlink" title="&emsp;&emsp;在企业级的WPA认证过程中会需要账号密码来登陆AP，我们所需要做的就是伪造一个相同ESSID的AP，同样在后端也伪造RADIUS服务器，如果STA来连接伪造的AP，那么它就会将加密后的密钥传输给我们的RADIUS服务器，离线破解密钥就能得到密码，账号是明文传输的。"></a>&emsp;&emsp;在企业级的WPA认证过程中会需要账号密码来登陆AP，我们所需要做的就是伪造一个相同ESSID的AP，同样在后端也伪造RADIUS服务器，如果STA来连接伪造的AP，那么它就会将加密后的密钥传输给我们的RADIUS服务器，离线破解密钥就能得到密码，账号是明文传输的。</h4><h3 id="攻击原理"><a href="#攻击原理" class="headerlink" title="攻击原理"></a>攻击原理</h3><h4 id="emsp-emsp-1-伪造一个企业级的AP"><a href="#emsp-emsp-1-伪造一个企业级的AP" class="headerlink" title="&emsp;&emsp;1.伪造一个企业级的AP"></a>&emsp;&emsp;1.伪造一个企业级的AP</h4><h4 id="emsp-emsp-2-诱使目标连接AP，获取加密后的密钥"><a href="#emsp-emsp-2-诱使目标连接AP，获取加密后的密钥" class="headerlink" title="&emsp;&emsp;2.诱使目标连接AP，获取加密后的密钥"></a>&emsp;&emsp;2.诱使目标连接AP，获取加密后的密钥</h4><h4 id="emsp-emsp-3-离线破解，获取明文密钥"><a href="#emsp-emsp-3-离线破解，获取明文密钥" class="headerlink" title="&emsp;&emsp;3.离线破解，获取明文密钥"></a>&emsp;&emsp;3.离线破解，获取明文密钥</h4><h2 id="0x03-攻击实战"><a href="#0x03-攻击实战" class="headerlink" title="0x03. 攻击实战"></a><strong>0x03. 攻击实战</strong></h2><h4 id="下面给大家介绍一下攻击的操作步骤："><a href="#下面给大家介绍一下攻击的操作步骤：" class="headerlink" title="下面给大家介绍一下攻击的操作步骤："></a>下面给大家介绍一下攻击的操作步骤：</h4><h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><h4 id="emsp-emsp-1-kali-Linux虚拟机"><a href="#emsp-emsp-1-kali-Linux虚拟机" class="headerlink" title="&emsp;&emsp;1.kali Linux虚拟机"></a>&emsp;&emsp;1.kali Linux虚拟机</h4><h4 id="emsp-emsp-2-TL-WN722N网卡"><a href="#emsp-emsp-2-TL-WN722N网卡" class="headerlink" title="&emsp;&emsp;2.TL-WN722N网卡"></a>&emsp;&emsp;2.TL-WN722N网卡</h4><h3 id="环境布置与实战"><a href="#环境布置与实战" class="headerlink" title="环境布置与实战"></a>环境布置与实战</h3><h4 id="1-为了伪造企业级的AP，我们需要先给kali中的hostapd打上hostapd-wpe补丁"><a href="#1-为了伪造企业级的AP，我们需要先给kali中的hostapd打上hostapd-wpe补丁" class="headerlink" title="1.为了伪造企业级的AP，我们需要先给kali中的hostapd打上hostapd-wpe补丁"></a>1.为了伪造企业级的AP，我们需要先给kali中的hostapd打上hostapd-wpe补丁</h4><blockquote>
+<p>git clone <a href="https://github.com/OpenSecurityResearch/hostapd-wpe" target="_blank" rel="external">https://github.com/OpenSecurityResearch/hostapd-wpe</a></p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/6B43F1B59EF54B5BA8B0E9E615D324D6/1240" alt="image"></p>
+<h4 id="2-下载最新版的hostpad，安装依赖包"><a href="#2-下载最新版的hostpad，安装依赖包" class="headerlink" title="2.下载最新版的hostpad，安装依赖包"></a>2.下载最新版的hostpad，安装依赖包</h4><blockquote>
+<p>wget <a href="http://w1.fi/releases/hostapd-2.6.tar.gz" target="_blank" rel="external">http://w1.fi/releases/hostapd-2.6.tar.gz</a> &amp;&amp; apt-get install libssl-dev libnl-genl-3-dev libssl1.0-dev</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/76DD94DE395047BF91BD72C8DD30AFE0/1248" alt="image"></p>
+<h4 id="3-解开tar包，给hostpad-2-6打补丁"><a href="#3-解开tar包，给hostpad-2-6打补丁" class="headerlink" title="3.解开tar包，给hostpad-2.6打补丁"></a>3.解开tar包，给hostpad-2.6打补丁</h4><blockquote>
+<p>tar zxvf hostapd-2.6.tar.gz &amp;&amp; cd hostapd-2.6 &amp;&amp; patch -p1 &lt; ../hostapd-wpe/hostapd-wpe.patch</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/F125FC9E885443BB9836165B24FF07E7/1255" alt="image"></p>
+<h4 id="4-编译hostpad"><a href="#4-编译hostpad" class="headerlink" title="4.编译hostpad"></a>4.编译hostpad</h4><blockquote>
+<p>cd hostpad/ &amp;&amp; make</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/8A64997CEACA44EFB81293587A6A6268/1266" alt="image"></p>
+<h4 id="5-生成伪造证书"><a href="#5-生成伪造证书" class="headerlink" title="5.生成伪造证书"></a>5.生成伪造证书</h4><blockquote>
+<p>cd ../../hostapd-wpe/certs/ &amp;&amp; ./bootstrap</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/9CFFF7452B2240BBA16C45875C888B1B/1277" alt="image"></p>
+<h4 id="6-配置hostapd-wpe-conf文件-ssid改为想要伪造的AP名字-我用的是wifi-free"><a href="#6-配置hostapd-wpe-conf文件-ssid改为想要伪造的AP名字-我用的是wifi-free" class="headerlink" title="6.配置hostapd-wpe.conf文件,ssid改为想要伪造的AP名字(我用的是wifi-free)"></a>6.配置hostapd-wpe.conf文件,ssid改为想要伪造的AP名字(我用的是wifi-free)</h4><blockquote>
+<p>cd ../../hostapd-2.6/hostapd/ &amp;&amp; vim hostapd-wpe.conf</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/ED1BAA2EBFC747A299AD411C6C758A3A/1282" alt="image"></p>
+<h4 id="7-启动无线网卡-不用开启monitor模式"><a href="#7-启动无线网卡-不用开启monitor模式" class="headerlink" title="7.启动无线网卡,不用开启monitor模式"></a>7.启动无线网卡,不用开启monitor模式</h4><blockquote>
+<p>service network-manager stop &amp;&amp; airmon-ng check kill &amp;&amp; ifconfig wlan0 up</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/1EA0DEE4A1034E15AED92EC39C01928F/1292" alt="image"></p>
+<h4 id="8-伪造AP-诱使目标连接"><a href="#8-伪造AP-诱使目标连接" class="headerlink" title="8.伪造AP,诱使目标连接"></a>8.伪造AP,诱使目标连接</h4><blockquote>
+<p>./hostapd-wpe hostapd-wpe.conf</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/317A6ACB39EA468EABAB971E9038A33E/1299" alt="image"></p>
+<h4 id="9-可以看到目标正在连接我们伪造的AP，用的username是admin，password经过了加密的，但是我们依然可以利用asleap来解密-C指定challenge，-R指定response，-W指定字典文件-下面是破解出来的密码password"><a href="#9-可以看到目标正在连接我们伪造的AP，用的username是admin，password经过了加密的，但是我们依然可以利用asleap来解密-C指定challenge，-R指定response，-W指定字典文件-下面是破解出来的密码password" class="headerlink" title="9.可以看到目标正在连接我们伪造的AP，用的username是admin，password经过了加密的，但是我们依然可以利用asleap来解密, -C指定challenge，-R指定response，-W指定字典文件.下面是破解出来的密码password"></a>9.可以看到目标正在连接我们伪造的AP，用的username是admin，password经过了加密的，但是我们依然可以利用asleap来解密, -C指定challenge，-R指定response，-W指定字典文件.下面是破解出来的密码password</h4><blockquote>
+<p>asleap -C 8d:a9:83:98:98:f4:34:a6 -R e5:24:78:69:2e:29:9f:ee:42:d8c:d7:4e:d3:f5:65:22:da:7d:57:24:14:da:14 -W ../../sqlmap.txt</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/4D28868782C4468393CEEAB02EB4B2FE/1312" alt="image"></p>
+<h2 id="0x04-防御"><a href="#0x04-防御" class="headerlink" title="0x04. 防御"></a><strong>0x04. 防御</strong></h2><h4 id="emsp-emsp-和WPA个人级的防御策略一样，不要随意在任何地方连接Wi-Fi，尽量将密码设置复杂一点，再安全的加密措施也会被弱密码毁于一旦。"><a href="#emsp-emsp-和WPA个人级的防御策略一样，不要随意在任何地方连接Wi-Fi，尽量将密码设置复杂一点，再安全的加密措施也会被弱密码毁于一旦。" class="headerlink" title="&emsp;&emsp;和WPA个人级的防御策略一样，不要随意在任何地方连接Wi-Fi，尽量将密码设置复杂一点，再安全的加密措施也会被弱密码毁于一旦。"></a>&emsp;&emsp;和WPA个人级的防御策略一样，不要随意在任何地方连接Wi-Fi，尽量将密码设置复杂一点，再安全的加密措施也会被弱密码毁于一旦。</h4><h2 id="0x05-结语"><a href="#0x05-结语" class="headerlink" title="0x05. 结语"></a><strong>0x05. 结语</strong></h2><h4 id="emsp-emsp-关于密码破解的文章就写到这里了，下篇文章笔者会教大家如果伪造AP，其实本篇文章已经通过hostapd伪造过一个AP了，笔者不过是想多介绍几种方法，大家挑喜欢的去用吧！另外最近笔者创建了自己的博客，欢迎大家访问。"><a href="#emsp-emsp-关于密码破解的文章就写到这里了，下篇文章笔者会教大家如果伪造AP，其实本篇文章已经通过hostapd伪造过一个AP了，笔者不过是想多介绍几种方法，大家挑喜欢的去用吧！另外最近笔者创建了自己的博客，欢迎大家访问。" class="headerlink" title="&emsp;&emsp;关于密码破解的文章就写到这里了，下篇文章笔者会教大家如果伪造AP，其实本篇文章已经通过hostapd伪造过一个AP了，笔者不过是想多介绍几种方法，大家挑喜欢的去用吧！另外最近笔者创建了自己的博客，欢迎大家访问。"></a>&emsp;&emsp;关于密码破解的文章就写到这里了，下篇文章笔者会教大家如果伪造AP，其实本篇文章已经通过hostapd伪造过一个AP了，笔者不过是想多介绍几种方法，大家挑喜欢的去用吧！另外最近笔者创建了自己的博客，欢迎大家<a href="https://times0ng.github.io">访问</a>。</h4>
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/09/03/无线渗透(下)—企业级WPA破解/">无线渗透(下)—企业级WPA破解</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">TimeS0ng</a></p>
+        <p><span>发布时间:</span>2017-09-03, 13:56:20</p>
+        <p><span>最后更新:</span>2017-09-03, 14:01:48</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/09/03/无线渗透(下)—企业级WPA破解/" title="无线渗透(下)—企业级WPA破解">http://TimeS0ng.github.io/2017/09/03/无线渗透(下)—企业级WPA破解/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2017/09/03/无线渗透(下)—企业级WPA破解/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/08/30/信息收集—-僵尸扫描/">
+                    信息收集— 僵尸扫描
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00-企业级WPA-WPA2简介"><span class="toc-number">1.</span> <span class="toc-text">0x00. 企业级WPA/WPA2简介</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-WPA-WPA2企业版：在大型企业网络中，通常采用802-1X的接入认证方式。802-1X认证是一种基于接口的网络接入控制，用户提供认证所需的凭证，如用户名和密码，通过特定的用户认证服务器（一般是RADIUS服务器）和可扩展认证协议EAP（Extensible-Authentication-Protocol）实现对用户的认证。WPA-WPA2支持基于EAP-TLS（Transport-Layer-Security）和EAP-PEAP（Protected-EAP）的802-1X认证方式。"><span class="toc-number">1.0.1.</span> <span class="toc-text">  WPA/WPA2企业版：在大型企业网络中，通常采用802.1X的接入认证方式。802.1X认证是一种基于接口的网络接入控制，用户提供认证所需的凭证，如用户名和密码，通过特定的用户认证服务器（一般是RADIUS服务器）和可扩展认证协议EAP（Extensible Authentication Protocol）实现对用户的认证。WPA/WPA2支持基于EAP-TLS（Transport Layer Security）和EAP-PEAP（Protected EAP）的802.1X认证方式。</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-WPA-WPA2企业版认证原理"><span class="toc-number">2.</span> <span class="toc-text">0x01. WPA/WPA2企业版认证原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#上图详细介绍了基于EAP-PEAP的802-1x认证方式（图片出自这里）"><span class="toc-number">2.1.</span> <span class="toc-text">上图详细介绍了基于EAP-PEAP的802.1x认证方式（图片出自这里）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-1-首先STA向周围发送PROBE-REQUEST帧，等待应答"><span class="toc-number">2.1.1.</span> <span class="toc-text">  1.首先STA向周围发送PROBE REQUEST帧，等待应答</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-2-AP收到之后回应一个PROBE-RESPONSE帧给STA（AC连接多个AP）"><span class="toc-number">2.1.2.</span> <span class="toc-text">  2.AP收到之后回应一个PROBE RESPONSE帧给STA（AC连接多个AP）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-3-认证开始，AP本身不会进行认证过程，而是将STA发送过来的认证信息转发给后端的RADIUS服务器，由RADIUS服务器控制整个认证过程"><span class="toc-number">2.1.3.</span> <span class="toc-text">  3.认证开始，AP本身不会进行认证过程，而是将STA发送过来的认证信息转发给后端的RADIUS服务器，由RADIUS服务器控制整个认证过程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-4-认证成功，连接上AP（具体交换的数据信息我在WPA加密那篇说过了，这里不再累赘）"><span class="toc-number">2.1.4.</span> <span class="toc-text">  4.认证成功，连接上AP（具体交换的数据信息我在WPA加密那篇说过了，这里不再累赘）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-WPA-WPA2企业版攻击原理"><span class="toc-number">3.</span> <span class="toc-text">0x02. WPA/WPA2企业版攻击原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-在企业级的WPA认证过程中会需要账号密码来登陆AP，我们所需要做的就是伪造一个相同ESSID的AP，同样在后端也伪造RADIUS服务器，如果STA来连接伪造的AP，那么它就会将加密后的密钥传输给我们的RADIUS服务器，离线破解密钥就能得到密码，账号是明文传输的。"><span class="toc-number">3.0.1.</span> <span class="toc-text">  在企业级的WPA认证过程中会需要账号密码来登陆AP，我们所需要做的就是伪造一个相同ESSID的AP，同样在后端也伪造RADIUS服务器，如果STA来连接伪造的AP，那么它就会将加密后的密钥传输给我们的RADIUS服务器，离线破解密钥就能得到密码，账号是明文传输的。</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#攻击原理"><span class="toc-number">3.1.</span> <span class="toc-text">攻击原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-1-伪造一个企业级的AP"><span class="toc-number">3.1.1.</span> <span class="toc-text">  1.伪造一个企业级的AP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-2-诱使目标连接AP，获取加密后的密钥"><span class="toc-number">3.1.2.</span> <span class="toc-text">  2.诱使目标连接AP，获取加密后的密钥</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-3-离线破解，获取明文密钥"><span class="toc-number">3.1.3.</span> <span class="toc-text">  3.离线破解，获取明文密钥</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-攻击实战"><span class="toc-number">4.</span> <span class="toc-text">0x03. 攻击实战</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#下面给大家介绍一下攻击的操作步骤："><span class="toc-number">4.0.1.</span> <span class="toc-text">下面给大家介绍一下攻击的操作步骤：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#环境准备"><span class="toc-number">4.1.</span> <span class="toc-text">环境准备</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-1-kali-Linux虚拟机"><span class="toc-number">4.1.1.</span> <span class="toc-text">  1.kali Linux虚拟机</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-2-TL-WN722N网卡"><span class="toc-number">4.1.2.</span> <span class="toc-text">  2.TL-WN722N网卡</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#环境布置与实战"><span class="toc-number">4.2.</span> <span class="toc-text">环境布置与实战</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-为了伪造企业级的AP，我们需要先给kali中的hostapd打上hostapd-wpe补丁"><span class="toc-number">4.2.1.</span> <span class="toc-text">1.为了伪造企业级的AP，我们需要先给kali中的hostapd打上hostapd-wpe补丁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-下载最新版的hostpad，安装依赖包"><span class="toc-number">4.2.2.</span> <span class="toc-text">2.下载最新版的hostpad，安装依赖包</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-解开tar包，给hostpad-2-6打补丁"><span class="toc-number">4.2.3.</span> <span class="toc-text">3.解开tar包，给hostpad-2.6打补丁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-编译hostpad"><span class="toc-number">4.2.4.</span> <span class="toc-text">4.编译hostpad</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-生成伪造证书"><span class="toc-number">4.2.5.</span> <span class="toc-text">5.生成伪造证书</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-配置hostapd-wpe-conf文件-ssid改为想要伪造的AP名字-我用的是wifi-free"><span class="toc-number">4.2.6.</span> <span class="toc-text">6.配置hostapd-wpe.conf文件,ssid改为想要伪造的AP名字(我用的是wifi-free)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-启动无线网卡-不用开启monitor模式"><span class="toc-number">4.2.7.</span> <span class="toc-text">7.启动无线网卡,不用开启monitor模式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-伪造AP-诱使目标连接"><span class="toc-number">4.2.8.</span> <span class="toc-text">8.伪造AP,诱使目标连接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#9-可以看到目标正在连接我们伪造的AP，用的username是admin，password经过了加密的，但是我们依然可以利用asleap来解密-C指定challenge，-R指定response，-W指定字典文件-下面是破解出来的密码password"><span class="toc-number">4.2.9.</span> <span class="toc-text">9.可以看到目标正在连接我们伪造的AP，用的username是admin，password经过了加密的，但是我们依然可以利用asleap来解密, -C指定challenge，-R指定response，-W指定字典文件.下面是破解出来的密码password</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-防御"><span class="toc-number">5.</span> <span class="toc-text">0x04. 防御</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-和WPA个人级的防御策略一样，不要随意在任何地方连接Wi-Fi，尽量将密码设置复杂一点，再安全的加密措施也会被弱密码毁于一旦。"><span class="toc-number">5.0.1.</span> <span class="toc-text">  和WPA个人级的防御策略一样，不要随意在任何地方连接Wi-Fi，尽量将密码设置复杂一点，再安全的加密措施也会被弱密码毁于一旦。</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x05-结语"><span class="toc-number">6.</span> <span class="toc-text">0x05. 结语</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-关于密码破解的文章就写到这里了，下篇文章笔者会教大家如果伪造AP，其实本篇文章已经通过hostapd伪造过一个AP了，笔者不过是想多介绍几种方法，大家挑喜欢的去用吧！另外最近笔者创建了自己的博客，欢迎大家访问。"><span class="toc-number">6.0.1.</span> <span class="toc-text">  关于密码破解的文章就写到这里了，下篇文章笔者会教大家如果伪造AP，其实本篇文章已经通过hostapd伪造过一个AP了，笔者不过是想多介绍几种方法，大家挑喜欢的去用吧！另外最近笔者创建了自己的博客，欢迎大家访问。</span></a></li></ol></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"无线渗透(下)—企业级WPA破解　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section class="youyan" id="comments">
+    <script>
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = 'http://v2.uyan.cc/code/uyan.js?uid=2142877';
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <aside class="comment-bar">
+        <a href="javascript:void(0);">
+            <i class="fa fa-commenting-o animated infinite pulse"></i>
+            <i class="fa fa-spinner fa-pulse"></i>
+            <span class="count-comment"></span>
+        </a>
+    </aside>
+    <script>
+        var $commentBar = $("#comments aside.comment-bar");
+        var load$hide = function(){
+            $commentBar.find("a > i").toggle();
+            loadComment();
+            $commentBar.fadeOut(800);
+        }
+        $commentBar.click(function(){
+            load$hide();
+        })
+        $commentBar.children("a").hover(function(){
+            load$hide();
+        })
+        if (window.location.hash === "#comments") {
+            load$hide();
+        }
+    </script>
+
+    <div id="uyan_frame"></div>
+</section>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/08/30/信息收集—-僵尸扫描/" title="下一篇: 信息收集— 僵尸扫描">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/09/03/无线渗透(下)—企业级WPA破解/">无线渗透(下)—企业级WPA破解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/30/信息收集—-僵尸扫描/">信息收集— 僵尸扫描</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/30/无线渗透-中-WPS破解/">无线渗透(中)--WPS破解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/30/无线渗透-上-WPA加密/">无线渗透(上)--WPA加密</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2017 TimeS0ng
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>

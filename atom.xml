@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://TimeS0ng.github.io/"/>
-  <updated>2017-08-31T01:58:39.000Z</updated>
+  <updated>2017-09-03T06:01:48.000Z</updated>
   <id>http://TimeS0ng.github.io/</id>
   
   <author>
@@ -14,6 +14,62 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>无线渗透(下)—企业级WPA破解</title>
+    <link href="http://TimeS0ng.github.io/2017/09/03/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F(%E4%B8%8B)%E2%80%94%E4%BC%81%E4%B8%9A%E7%BA%A7WPA%E7%A0%B4%E8%A7%A3/"/>
+    <id>http://TimeS0ng.github.io/2017/09/03/无线渗透(下)—企业级WPA破解/</id>
+    <published>2017-09-03T05:56:20.000Z</published>
+    <updated>2017-09-03T06:01:48.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="0x00-企业级WPA-WPA2简介"><a href="#0x00-企业级WPA-WPA2简介" class="headerlink" title="0x00. 企业级WPA/WPA2简介"></a><strong>0x00. 企业级WPA/WPA2简介</strong></h2><h4 id="emsp-emsp-WPA-WPA2企业版：在大型企业网络中，通常采用802-1X的接入认证方式。802-1X认证是一种基于接口的网络接入控制，用户提供认证所需的凭证，如用户名和密码，通过特定的用户认证服务器（一般是RADIUS服务器）和可扩展认证协议EAP（Extensible-Authentication-Protocol）实现对用户的认证。WPA-WPA2支持基于EAP-TLS（Transport-Layer-Security）和EAP-PEAP（Protected-EAP）的802-1X认证方式。"><a href="#emsp-emsp-WPA-WPA2企业版：在大型企业网络中，通常采用802-1X的接入认证方式。802-1X认证是一种基于接口的网络接入控制，用户提供认证所需的凭证，如用户名和密码，通过特定的用户认证服务器（一般是RADIUS服务器）和可扩展认证协议EAP（Extensible-Authentication-Protocol）实现对用户的认证。WPA-WPA2支持基于EAP-TLS（Transport-Layer-Security）和EAP-PEAP（Protected-EAP）的802-1X认证方式。" class="headerlink" title="&emsp;&emsp;WPA/WPA2企业版：在大型企业网络中，通常采用802.1X的接入认证方式。802.1X认证是一种基于接口的网络接入控制，用户提供认证所需的凭证，如用户名和密码，通过特定的用户认证服务器（一般是RADIUS服务器）和可扩展认证协议EAP（Extensible Authentication Protocol）实现对用户的认证。WPA/WPA2支持基于EAP-TLS（Transport Layer Security）和EAP-PEAP（Protected EAP）的802.1X认证方式。"></a>&emsp;&emsp;WPA/WPA2企业版：在大型企业网络中，通常采用802.1X的接入认证方式。802.1X认证是一种基于接口的网络接入控制，用户提供认证所需的凭证，如用户名和密码，通过特定的用户认证服务器（一般是RADIUS服务器）和可扩展认证协议EAP（Extensible Authentication Protocol）实现对用户的认证。WPA/WPA2支持基于EAP-TLS（Transport Layer Security）和EAP-PEAP（Protected EAP）的802.1X认证方式。</h4><a id="more"></a>
+<h2 id="0x01-WPA-WPA2企业版认证原理"><a href="#0x01-WPA-WPA2企业版认证原理" class="headerlink" title="0x01. WPA/WPA2企业版认证原理"></a><strong>0x01. WPA/WPA2企业版认证原理</strong></h2><p><img src="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/54F51F9A7FAF47E2A10C6B88AFE7B07B/1150" alt="image"></p>
+<h3 id="上图详细介绍了基于EAP-PEAP的802-1x认证方式（图片出自这里）"><a href="#上图详细介绍了基于EAP-PEAP的802-1x认证方式（图片出自这里）" class="headerlink" title="上图详细介绍了基于EAP-PEAP的802.1x认证方式（图片出自这里）"></a>上图详细介绍了基于EAP-PEAP的802.1x认证方式（<a href="http://blog.sina.com.cn/s/blog_afd4c4ef0102w4bz.html" target="_blank" rel="external">图片出自这里</a>）</h3><h4 id="emsp-emsp-1-首先STA向周围发送PROBE-REQUEST帧，等待应答"><a href="#emsp-emsp-1-首先STA向周围发送PROBE-REQUEST帧，等待应答" class="headerlink" title="&emsp;&emsp;1.首先STA向周围发送PROBE REQUEST帧，等待应答"></a>&emsp;&emsp;1.首先STA向周围发送PROBE REQUEST帧，等待应答</h4><h4 id="emsp-emsp-2-AP收到之后回应一个PROBE-RESPONSE帧给STA（AC连接多个AP）"><a href="#emsp-emsp-2-AP收到之后回应一个PROBE-RESPONSE帧给STA（AC连接多个AP）" class="headerlink" title="&emsp;&emsp;2.AP收到之后回应一个PROBE RESPONSE帧给STA（AC连接多个AP）"></a>&emsp;&emsp;2.AP收到之后回应一个PROBE RESPONSE帧给STA（AC连接多个AP）</h4><h4 id="emsp-emsp-3-认证开始，AP本身不会进行认证过程，而是将STA发送过来的认证信息转发给后端的RADIUS服务器，由RADIUS服务器控制整个认证过程"><a href="#emsp-emsp-3-认证开始，AP本身不会进行认证过程，而是将STA发送过来的认证信息转发给后端的RADIUS服务器，由RADIUS服务器控制整个认证过程" class="headerlink" title="&emsp;&emsp;3.认证开始，AP本身不会进行认证过程，而是将STA发送过来的认证信息转发给后端的RADIUS服务器，由RADIUS服务器控制整个认证过程"></a>&emsp;&emsp;3.认证开始，AP本身不会进行认证过程，而是将STA发送过来的认证信息转发给后端的RADIUS服务器，由RADIUS服务器控制整个认证过程</h4><h4 id="emsp-emsp-4-认证成功，连接上AP（具体交换的数据信息我在WPA加密那篇说过了，这里不再累赘）"><a href="#emsp-emsp-4-认证成功，连接上AP（具体交换的数据信息我在WPA加密那篇说过了，这里不再累赘）" class="headerlink" title="&emsp;&emsp;4.认证成功，连接上AP（具体交换的数据信息我在WPA加密那篇说过了，这里不再累赘）"></a>&emsp;&emsp;4.认证成功，连接上AP（具体交换的数据信息我在<a href="https://times0ng.github.io/2017/08/30/无线渗透-上-WPA加密/">WPA加密</a>那篇说过了，这里不再累赘）</h4><h2 id="0x02-WPA-WPA2企业版攻击原理"><a href="#0x02-WPA-WPA2企业版攻击原理" class="headerlink" title="0x02. WPA/WPA2企业版攻击原理"></a><strong>0x02. WPA/WPA2企业版攻击原理</strong></h2><h4 id="emsp-emsp-在企业级的WPA认证过程中会需要账号密码来登陆AP，我们所需要做的就是伪造一个相同ESSID的AP，同样在后端也伪造RADIUS服务器，如果STA来连接伪造的AP，那么它就会将加密后的密钥传输给我们的RADIUS服务器，离线破解密钥就能得到密码，账号是明文传输的。"><a href="#emsp-emsp-在企业级的WPA认证过程中会需要账号密码来登陆AP，我们所需要做的就是伪造一个相同ESSID的AP，同样在后端也伪造RADIUS服务器，如果STA来连接伪造的AP，那么它就会将加密后的密钥传输给我们的RADIUS服务器，离线破解密钥就能得到密码，账号是明文传输的。" class="headerlink" title="&emsp;&emsp;在企业级的WPA认证过程中会需要账号密码来登陆AP，我们所需要做的就是伪造一个相同ESSID的AP，同样在后端也伪造RADIUS服务器，如果STA来连接伪造的AP，那么它就会将加密后的密钥传输给我们的RADIUS服务器，离线破解密钥就能得到密码，账号是明文传输的。"></a>&emsp;&emsp;在企业级的WPA认证过程中会需要账号密码来登陆AP，我们所需要做的就是伪造一个相同ESSID的AP，同样在后端也伪造RADIUS服务器，如果STA来连接伪造的AP，那么它就会将加密后的密钥传输给我们的RADIUS服务器，离线破解密钥就能得到密码，账号是明文传输的。</h4><h3 id="攻击原理"><a href="#攻击原理" class="headerlink" title="攻击原理"></a>攻击原理</h3><h4 id="emsp-emsp-1-伪造一个企业级的AP"><a href="#emsp-emsp-1-伪造一个企业级的AP" class="headerlink" title="&emsp;&emsp;1.伪造一个企业级的AP"></a>&emsp;&emsp;1.伪造一个企业级的AP</h4><h4 id="emsp-emsp-2-诱使目标连接AP，获取加密后的密钥"><a href="#emsp-emsp-2-诱使目标连接AP，获取加密后的密钥" class="headerlink" title="&emsp;&emsp;2.诱使目标连接AP，获取加密后的密钥"></a>&emsp;&emsp;2.诱使目标连接AP，获取加密后的密钥</h4><h4 id="emsp-emsp-3-离线破解，获取明文密钥"><a href="#emsp-emsp-3-离线破解，获取明文密钥" class="headerlink" title="&emsp;&emsp;3.离线破解，获取明文密钥"></a>&emsp;&emsp;3.离线破解，获取明文密钥</h4><h2 id="0x03-攻击实战"><a href="#0x03-攻击实战" class="headerlink" title="0x03. 攻击实战"></a><strong>0x03. 攻击实战</strong></h2><h4 id="下面给大家介绍一下攻击的操作步骤："><a href="#下面给大家介绍一下攻击的操作步骤：" class="headerlink" title="下面给大家介绍一下攻击的操作步骤："></a>下面给大家介绍一下攻击的操作步骤：</h4><h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><h4 id="emsp-emsp-1-kali-Linux虚拟机"><a href="#emsp-emsp-1-kali-Linux虚拟机" class="headerlink" title="&emsp;&emsp;1.kali Linux虚拟机"></a>&emsp;&emsp;1.kali Linux虚拟机</h4><h4 id="emsp-emsp-2-TL-WN722N网卡"><a href="#emsp-emsp-2-TL-WN722N网卡" class="headerlink" title="&emsp;&emsp;2.TL-WN722N网卡"></a>&emsp;&emsp;2.TL-WN722N网卡</h4><h3 id="环境布置与实战"><a href="#环境布置与实战" class="headerlink" title="环境布置与实战"></a>环境布置与实战</h3><h4 id="1-为了伪造企业级的AP，我们需要先给kali中的hostapd打上hostapd-wpe补丁"><a href="#1-为了伪造企业级的AP，我们需要先给kali中的hostapd打上hostapd-wpe补丁" class="headerlink" title="1.为了伪造企业级的AP，我们需要先给kali中的hostapd打上hostapd-wpe补丁"></a>1.为了伪造企业级的AP，我们需要先给kali中的hostapd打上hostapd-wpe补丁</h4><blockquote>
+<p>git clone <a href="https://github.com/OpenSecurityResearch/hostapd-wpe" target="_blank" rel="external">https://github.com/OpenSecurityResearch/hostapd-wpe</a></p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/6B43F1B59EF54B5BA8B0E9E615D324D6/1240" alt="image"></p>
+<h4 id="2-下载最新版的hostpad，安装依赖包"><a href="#2-下载最新版的hostpad，安装依赖包" class="headerlink" title="2.下载最新版的hostpad，安装依赖包"></a>2.下载最新版的hostpad，安装依赖包</h4><blockquote>
+<p>wget <a href="http://w1.fi/releases/hostapd-2.6.tar.gz" target="_blank" rel="external">http://w1.fi/releases/hostapd-2.6.tar.gz</a> &amp;&amp; apt-get install libssl-dev libnl-genl-3-dev libssl1.0-dev</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/76DD94DE395047BF91BD72C8DD30AFE0/1248" alt="image"></p>
+<h4 id="3-解开tar包，给hostpad-2-6打补丁"><a href="#3-解开tar包，给hostpad-2-6打补丁" class="headerlink" title="3.解开tar包，给hostpad-2.6打补丁"></a>3.解开tar包，给hostpad-2.6打补丁</h4><blockquote>
+<p>tar zxvf hostapd-2.6.tar.gz &amp;&amp; cd hostapd-2.6 &amp;&amp; patch -p1 &lt; ../hostapd-wpe/hostapd-wpe.patch</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/F125FC9E885443BB9836165B24FF07E7/1255" alt="image"></p>
+<h4 id="4-编译hostpad"><a href="#4-编译hostpad" class="headerlink" title="4.编译hostpad"></a>4.编译hostpad</h4><blockquote>
+<p>cd hostpad/ &amp;&amp; make</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/8A64997CEACA44EFB81293587A6A6268/1266" alt="image"></p>
+<h4 id="5-生成伪造证书"><a href="#5-生成伪造证书" class="headerlink" title="5.生成伪造证书"></a>5.生成伪造证书</h4><blockquote>
+<p>cd ../../hostapd-wpe/certs/ &amp;&amp; ./bootstrap</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/9CFFF7452B2240BBA16C45875C888B1B/1277" alt="image"></p>
+<h4 id="6-配置hostapd-wpe-conf文件-ssid改为想要伪造的AP名字-我用的是wifi-free"><a href="#6-配置hostapd-wpe-conf文件-ssid改为想要伪造的AP名字-我用的是wifi-free" class="headerlink" title="6.配置hostapd-wpe.conf文件,ssid改为想要伪造的AP名字(我用的是wifi-free)"></a>6.配置hostapd-wpe.conf文件,ssid改为想要伪造的AP名字(我用的是wifi-free)</h4><blockquote>
+<p>cd ../../hostapd-2.6/hostapd/ &amp;&amp; vim hostapd-wpe.conf</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/ED1BAA2EBFC747A299AD411C6C758A3A/1282" alt="image"></p>
+<h4 id="7-启动无线网卡-不用开启monitor模式"><a href="#7-启动无线网卡-不用开启monitor模式" class="headerlink" title="7.启动无线网卡,不用开启monitor模式"></a>7.启动无线网卡,不用开启monitor模式</h4><blockquote>
+<p>service network-manager stop &amp;&amp; airmon-ng check kill &amp;&amp; ifconfig wlan0 up</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/1EA0DEE4A1034E15AED92EC39C01928F/1292" alt="image"></p>
+<h4 id="8-伪造AP-诱使目标连接"><a href="#8-伪造AP-诱使目标连接" class="headerlink" title="8.伪造AP,诱使目标连接"></a>8.伪造AP,诱使目标连接</h4><blockquote>
+<p>./hostapd-wpe hostapd-wpe.conf</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/317A6ACB39EA468EABAB971E9038A33E/1299" alt="image"></p>
+<h4 id="9-可以看到目标正在连接我们伪造的AP，用的username是admin，password经过了加密的，但是我们依然可以利用asleap来解密-C指定challenge，-R指定response，-W指定字典文件-下面是破解出来的密码password"><a href="#9-可以看到目标正在连接我们伪造的AP，用的username是admin，password经过了加密的，但是我们依然可以利用asleap来解密-C指定challenge，-R指定response，-W指定字典文件-下面是破解出来的密码password" class="headerlink" title="9.可以看到目标正在连接我们伪造的AP，用的username是admin，password经过了加密的，但是我们依然可以利用asleap来解密, -C指定challenge，-R指定response，-W指定字典文件.下面是破解出来的密码password"></a>9.可以看到目标正在连接我们伪造的AP，用的username是admin，password经过了加密的，但是我们依然可以利用asleap来解密, -C指定challenge，-R指定response，-W指定字典文件.下面是破解出来的密码password</h4><blockquote>
+<p>asleap -C 8d:a9:83:98:98:f4:34:a6 -R e5:24:78:69:2e:29:9f:ee:42:d8c:d7:4e:d3:f5:65:22:da:7d:57:24:14:da:14 -W ../../sqlmap.txt</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/4D28868782C4468393CEEAB02EB4B2FE/1312" alt="image"></p>
+<h2 id="0x04-防御"><a href="#0x04-防御" class="headerlink" title="0x04. 防御"></a><strong>0x04. 防御</strong></h2><h4 id="emsp-emsp-和WPA个人级的防御策略一样，不要随意在任何地方连接Wi-Fi，尽量将密码设置复杂一点，再安全的加密措施也会被弱密码毁于一旦。"><a href="#emsp-emsp-和WPA个人级的防御策略一样，不要随意在任何地方连接Wi-Fi，尽量将密码设置复杂一点，再安全的加密措施也会被弱密码毁于一旦。" class="headerlink" title="&emsp;&emsp;和WPA个人级的防御策略一样，不要随意在任何地方连接Wi-Fi，尽量将密码设置复杂一点，再安全的加密措施也会被弱密码毁于一旦。"></a>&emsp;&emsp;和WPA个人级的防御策略一样，不要随意在任何地方连接Wi-Fi，尽量将密码设置复杂一点，再安全的加密措施也会被弱密码毁于一旦。</h4><h2 id="0x05-结语"><a href="#0x05-结语" class="headerlink" title="0x05. 结语"></a><strong>0x05. 结语</strong></h2><h4 id="emsp-emsp-关于密码破解的文章就写到这里了，下篇文章笔者会教大家如果伪造AP，其实本篇文章已经通过hostapd伪造过一个AP了，笔者不过是想多介绍几种方法，大家挑喜欢的去用吧！另外最近笔者创建了自己的博客，欢迎大家访问。"><a href="#emsp-emsp-关于密码破解的文章就写到这里了，下篇文章笔者会教大家如果伪造AP，其实本篇文章已经通过hostapd伪造过一个AP了，笔者不过是想多介绍几种方法，大家挑喜欢的去用吧！另外最近笔者创建了自己的博客，欢迎大家访问。" class="headerlink" title="&emsp;&emsp;关于密码破解的文章就写到这里了，下篇文章笔者会教大家如果伪造AP，其实本篇文章已经通过hostapd伪造过一个AP了，笔者不过是想多介绍几种方法，大家挑喜欢的去用吧！另外最近笔者创建了自己的博客，欢迎大家访问。"></a>&emsp;&emsp;关于密码破解的文章就写到这里了，下篇文章笔者会教大家如果伪造AP，其实本篇文章已经通过hostapd伪造过一个AP了，笔者不过是想多介绍几种方法，大家挑喜欢的去用吧！另外最近笔者创建了自己的博客，欢迎大家<a href="https://times0ng.github.io">访问</a>。</h4>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;0x00-企业级WPA-WPA2简介&quot;&gt;&lt;a href=&quot;#0x00-企业级WPA-WPA2简介&quot; class=&quot;headerlink&quot; title=&quot;0x00. 企业级WPA/WPA2简介&quot;&gt;&lt;/a&gt;&lt;strong&gt;0x00. 企业级WPA/WPA2简介&lt;/strong&gt;&lt;/h2&gt;&lt;h4 id=&quot;emsp-emsp-WPA-WPA2企业版：在大型企业网络中，通常采用802-1X的接入认证方式。802-1X认证是一种基于接口的网络接入控制，用户提供认证所需的凭证，如用户名和密码，通过特定的用户认证服务器（一般是RADIUS服务器）和可扩展认证协议EAP（Extensible-Authentication-Protocol）实现对用户的认证。WPA-WPA2支持基于EAP-TLS（Transport-Layer-Security）和EAP-PEAP（Protected-EAP）的802-1X认证方式。&quot;&gt;&lt;a href=&quot;#emsp-emsp-WPA-WPA2企业版：在大型企业网络中，通常采用802-1X的接入认证方式。802-1X认证是一种基于接口的网络接入控制，用户提供认证所需的凭证，如用户名和密码，通过特定的用户认证服务器（一般是RADIUS服务器）和可扩展认证协议EAP（Extensible-Authentication-Protocol）实现对用户的认证。WPA-WPA2支持基于EAP-TLS（Transport-Layer-Security）和EAP-PEAP（Protected-EAP）的802-1X认证方式。&quot; class=&quot;headerlink&quot; title=&quot;&amp;emsp;&amp;emsp;WPA/WPA2企业版：在大型企业网络中，通常采用802.1X的接入认证方式。802.1X认证是一种基于接口的网络接入控制，用户提供认证所需的凭证，如用户名和密码，通过特定的用户认证服务器（一般是RADIUS服务器）和可扩展认证协议EAP（Extensible Authentication Protocol）实现对用户的认证。WPA/WPA2支持基于EAP-TLS（Transport Layer Security）和EAP-PEAP（Protected EAP）的802.1X认证方式。&quot;&gt;&lt;/a&gt;&amp;emsp;&amp;emsp;WPA/WPA2企业版：在大型企业网络中，通常采用802.1X的接入认证方式。802.1X认证是一种基于接口的网络接入控制，用户提供认证所需的凭证，如用户名和密码，通过特定的用户认证服务器（一般是RADIUS服务器）和可扩展认证协议EAP（Extensible Authentication Protocol）实现对用户的认证。WPA/WPA2支持基于EAP-TLS（Transport Layer Security）和EAP-PEAP（Protected EAP）的802.1X认证方式。&lt;/h4&gt;
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>信息收集— 僵尸扫描</title>
