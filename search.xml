@@ -20,7 +20,7 @@
 </blockquote>
 <p><img src="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/F125FC9E885443BB9836165B24FF07E7/1255" alt="image"></p>
 <h4 id="4-编译hostpad"><a href="#4-编译hostpad" class="headerlink" title="4.编译hostpad"></a>4.编译hostpad</h4><blockquote>
-<p>cd hostpad/ &amp;&amp; make</p>
+<p>cd hostapd/ &amp;&amp; make</p>
 </blockquote>
 <p><img src="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/8A64997CEACA44EFB81293587A6A6268/1266" alt="image"></p>
 <h4 id="5-生成伪造证书"><a href="#5-生成伪造证书" class="headerlink" title="5.生成伪造证书"></a>5.生成伪造证书</h4><blockquote>

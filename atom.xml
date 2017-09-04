@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://TimeS0ng.github.io/"/>
-  <updated>2017-09-03T06:01:48.000Z</updated>
+  <updated>2017-09-04T10:13:09.000Z</updated>
   <id>http://TimeS0ng.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://TimeS0ng.github.io/2017/09/03/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F(%E4%B8%8B)%E2%80%94%E4%BC%81%E4%B8%9A%E7%BA%A7WPA%E7%A0%B4%E8%A7%A3/"/>
     <id>http://TimeS0ng.github.io/2017/09/03/无线渗透(下)—企业级WPA破解/</id>
     <published>2017-09-03T05:56:20.000Z</published>
-    <updated>2017-09-03T06:01:48.000Z</updated>
+    <updated>2017-09-04T10:13:09.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="0x00-企业级WPA-WPA2简介"><a href="#0x00-企业级WPA-WPA2简介" class="headerlink" title="0x00. 企业级WPA/WPA2简介"></a><strong>0x00. 企业级WPA/WPA2简介</strong></h2><h4 id="emsp-emsp-WPA-WPA2企业版：在大型企业网络中，通常采用802-1X的接入认证方式。802-1X认证是一种基于接口的网络接入控制，用户提供认证所需的凭证，如用户名和密码，通过特定的用户认证服务器（一般是RADIUS服务器）和可扩展认证协议EAP（Extensible-Authentication-Protocol）实现对用户的认证。WPA-WPA2支持基于EAP-TLS（Transport-Layer-Security）和EAP-PEAP（Protected-EAP）的802-1X认证方式。"><a href="#emsp-emsp-WPA-WPA2企业版：在大型企业网络中，通常采用802-1X的接入认证方式。802-1X认证是一种基于接口的网络接入控制，用户提供认证所需的凭证，如用户名和密码，通过特定的用户认证服务器（一般是RADIUS服务器）和可扩展认证协议EAP（Extensible-Authentication-Protocol）实现对用户的认证。WPA-WPA2支持基于EAP-TLS（Transport-Layer-Security）和EAP-PEAP（Protected-EAP）的802-1X认证方式。" class="headerlink" title="&emsp;&emsp;WPA/WPA2企业版：在大型企业网络中，通常采用802.1X的接入认证方式。802.1X认证是一种基于接口的网络接入控制，用户提供认证所需的凭证，如用户名和密码，通过特定的用户认证服务器（一般是RADIUS服务器）和可扩展认证协议EAP（Extensible Authentication Protocol）实现对用户的认证。WPA/WPA2支持基于EAP-TLS（Transport Layer Security）和EAP-PEAP（Protected EAP）的802.1X认证方式。"></a>&emsp;&emsp;WPA/WPA2企业版：在大型企业网络中，通常采用802.1X的接入认证方式。802.1X认证是一种基于接口的网络接入控制，用户提供认证所需的凭证，如用户名和密码，通过特定的用户认证服务器（一般是RADIUS服务器）和可扩展认证协议EAP（Extensible Authentication Protocol）实现对用户的认证。WPA/WPA2支持基于EAP-TLS（Transport Layer Security）和EAP-PEAP（Protected EAP）的802.1X认证方式。</h4><a id="more"></a>
 <h2 id="0x01-WPA-WPA2企业版认证原理"><a href="#0x01-WPA-WPA2企业版认证原理" class="headerlink" title="0x01. WPA/WPA2企业版认证原理"></a><strong>0x01. WPA/WPA2企业版认证原理</strong></h2><p><img src="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/54F51F9A7FAF47E2A10C6B88AFE7B07B/1150" alt="image"></p>
@@ -37,7 +37,7 @@
 </blockquote>
 <p><img src="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/F125FC9E885443BB9836165B24FF07E7/1255" alt="image"></p>
 <h4 id="4-编译hostpad"><a href="#4-编译hostpad" class="headerlink" title="4.编译hostpad"></a>4.编译hostpad</h4><blockquote>
-<p>cd hostpad/ &amp;&amp; make</p>
+<p>cd hostapd/ &amp;&amp; make</p>
 </blockquote>
 <p><img src="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/8A64997CEACA44EFB81293587A6A6268/1266" alt="image"></p>
 <h4 id="5-生成伪造证书"><a href="#5-生成伪造证书" class="headerlink" title="5.生成伪造证书"></a>5.生成伪造证书</h4><blockquote>
