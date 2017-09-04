@@ -12,7 +12,7 @@
 </blockquote>
 <p><img src="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/6B43F1B59EF54B5BA8B0E9E615D324D6/1240" alt="image"></p>
 <h4 id="2-下载最新版的hostpad，安装依赖包"><a href="#2-下载最新版的hostpad，安装依赖包" class="headerlink" title="2.下载最新版的hostpad，安装依赖包"></a>2.下载最新版的hostpad，安装依赖包</h4><blockquote>
-<p>wget <a href="http://w1.fi/releases/hostapd-2.6.tar.gz" target="_blank" rel="external">http://w1.fi/releases/hostapd-2.6.tar.gz</a> &amp;&amp; apt-get install libssl-dev libnl-genl-3-dev libssl1.0-dev</p>
+<p>wget <a href="http://w1.fi/releases/hostapd-2.6.tar.gz" target="_blank" rel="external">http://w1.fi/releases/hostapd-2.6.tar.gz</a> &amp;&amp; apt-get install libssl-dev libnl-genl-3-dev &amp;&amp;apt-get install libssl1.0-dev</p>
 </blockquote>
 <p><img src="http://note.youdao.com/yws/public/resource/5f4d0dd0aca33002f020b77347d73f51/xmlnote/76DD94DE395047BF91BD72C8DD30AFE0/1248" alt="image"></p>
 <h4 id="3-解开tar包，给hostpad-2-6打补丁"><a href="#3-解开tar包，给hostpad-2-6打补丁" class="headerlink" title="3.解开tar包，给hostpad-2.6打补丁"></a>3.解开tar包，给hostpad-2.6打补丁</h4><blockquote>
