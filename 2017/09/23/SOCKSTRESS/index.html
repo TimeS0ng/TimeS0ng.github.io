@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="TimeS0ng" />
+
+
+
+<meta name="description" content="0x00. SOCKSTRESS攻击简介&amp;emsp;&amp;emsp;SockStress攻击正好与Syn-Flood攻击原理相悖，它正是利用建立TCP/IP三次握手连接来实现拒绝服务攻击，而且与Syn-Flood不同它并非通过耗尽服务器的TCP连接数来让正常用户的正常请求无法响应，而是直接耗尽服务端的内存、CPU等资源让受害者宕机，属于非对称的资源消耗攻击，这种攻击方式的危害性极大，而且一旦遭受分布式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SOCKSTRESS">
+<meta property="og:url" content="http://TimeS0ng.github.io/2017/09/23/SOCKSTRESS/index.html">
+<meta property="og:site_name" content="TimeS0ng&#39;s blog">
+<meta property="og:description" content="0x00. SOCKSTRESS攻击简介&amp;emsp;&amp;emsp;SockStress攻击正好与Syn-Flood攻击原理相悖，它正是利用建立TCP/IP三次握手连接来实现拒绝服务攻击，而且与Syn-Flood不同它并非通过耗尽服务器的TCP连接数来让正常用户的正常请求无法响应，而是直接耗尽服务端的内存、CPU等资源让受害者宕机，属于非对称的资源消耗攻击，这种攻击方式的危害性极大，而且一旦遭受分布式">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/0fd8fe6989a486a029c4141abf5ebe4a/xmlnote/WEBRESOURCE8d0ba39bc433eeb905b6ad6db08ee003/1559">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/0fd8fe6989a486a029c4141abf5ebe4a/xmlnote/3AA80062D00C4DB7BC40609FB312723E/1691">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/0fd8fe6989a486a029c4141abf5ebe4a/xmlnote/BEC0232B6B914CE38A3331BCCBE51018/1612">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/0fd8fe6989a486a029c4141abf5ebe4a/xmlnote/406BA39543DB482FB7FBBEAF43381AE2/1627">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/0fd8fe6989a486a029c4141abf5ebe4a/xmlnote/A6C4BCBC67454DCBB7C54DAD971815D8/1635">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/0fd8fe6989a486a029c4141abf5ebe4a/xmlnote/8E823BF4397E4832A5CD0610084DCFE8/1637">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/0fd8fe6989a486a029c4141abf5ebe4a/xmlnote/4EF59A94649B42AA8AF65632AEFC9EBC/1664">
+<meta property="og:updated_time" content="2017-09-23T12:45:23.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SOCKSTRESS">
+<meta name="twitter:description" content="0x00. SOCKSTRESS攻击简介&amp;emsp;&amp;emsp;SockStress攻击正好与Syn-Flood攻击原理相悖，它正是利用建立TCP/IP三次握手连接来实现拒绝服务攻击，而且与Syn-Flood不同它并非通过耗尽服务器的TCP连接数来让正常用户的正常请求无法响应，而是直接耗尽服务端的内存、CPU等资源让受害者宕机，属于非对称的资源消耗攻击，这种攻击方式的危害性极大，而且一旦遭受分布式">
+<meta name="twitter:image" content="http://note.youdao.com/yws/public/resource/0fd8fe6989a486a029c4141abf5ebe4a/xmlnote/WEBRESOURCE8d0ba39bc433eeb905b6ad6db08ee003/1559">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="TimeS0ng&#39;s blog" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>SOCKSTRESS | TimeS0ng&#39;s blog</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">TimeS0ng</a></h1>
+        </hgroup>
+
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="false" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:1102234142@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/TimeS0ng" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">专注技术，乐于分享</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">TimeS0ng</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">TimeS0ng</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:1102234142@qq.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/TimeS0ng" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-SOCKSTRESS" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/09/23/SOCKSTRESS/" class="article-date">
+      <time datetime="2017-09-23T12:44:35.000Z" itemprop="datePublished">2017-09-23</time>
+</a>
+
+ 
+    <a href="/2017/09/23/SOCKSTRESS/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/09/23/SOCKSTRESS/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      SOCKSTRESS
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="0x00-SOCKSTRESS攻击简介"><a href="#0x00-SOCKSTRESS攻击简介" class="headerlink" title="0x00. SOCKSTRESS攻击简介"></a>0x00. SOCKSTRESS攻击简介</h2><h3 id="emsp-emsp-SockStress攻击正好与Syn-Flood攻击原理相悖，它正是利用建立TCP-IP三次握手连接来实现拒绝服务攻击，而且与Syn-Flood不同它并非通过耗尽服务器的TCP连接数来让正常用户的正常请求无法响应，而是直接耗尽服务端的内存、CPU等资源让受害者宕机，属于非对称的资源消耗攻击，这种攻击方式的危害性极大，而且一旦遭受分布式攻击是几乎不能被抵御的。"><a href="#emsp-emsp-SockStress攻击正好与Syn-Flood攻击原理相悖，它正是利用建立TCP-IP三次握手连接来实现拒绝服务攻击，而且与Syn-Flood不同它并非通过耗尽服务器的TCP连接数来让正常用户的正常请求无法响应，而是直接耗尽服务端的内存、CPU等资源让受害者宕机，属于非对称的资源消耗攻击，这种攻击方式的危害性极大，而且一旦遭受分布式攻击是几乎不能被抵御的。" class="headerlink" title="&emsp;&emsp;SockStress攻击正好与Syn-Flood攻击原理相悖，它正是利用建立TCP/IP三次握手连接来实现拒绝服务攻击，而且与Syn-Flood不同它并非通过耗尽服务器的TCP连接数来让正常用户的正常请求无法响应，而是直接耗尽服务端的内存、CPU等资源让受害者宕机，属于非对称的资源消耗攻击，这种攻击方式的危害性极大，而且一旦遭受分布式攻击是几乎不能被抵御的。"></a>&emsp;&emsp;SockStress攻击正好与Syn-Flood攻击原理相悖，它正是利用建立TCP/IP三次握手连接来实现拒绝服务攻击，而且与Syn-Flood不同它并非通过耗尽服务器的TCP连接数来让正常用户的正常请求无法响应，而是直接耗尽服务端的内存、CPU等资源让受害者宕机，属于非对称的资源消耗攻击，这种攻击方式的危害性极大，而且一旦遭受分布式攻击是几乎不能被抵御的。</h3><a id="more"></a>
+<hr>
+<h2 id="0x01-SOCKSTRESS攻击原理"><a href="#0x01-SOCKSTRESS攻击原理" class="headerlink" title="0x01. SOCKSTRESS攻击原理"></a>0x01. SOCKSTRESS攻击原理</h2><p><img src="http://note.youdao.com/yws/public/resource/0fd8fe6989a486a029c4141abf5ebe4a/xmlnote/WEBRESOURCE8d0ba39bc433eeb905b6ad6db08ee003/1559" alt="image"></p>
+<h3 id="emsp-emsp-上篇文章已经给大家介绍过TCP-IP的握手过程了，所以这里就只讲一下SOCKSTRESS的攻击原理。"><a href="#emsp-emsp-上篇文章已经给大家介绍过TCP-IP的握手过程了，所以这里就只讲一下SOCKSTRESS的攻击原理。" class="headerlink" title="&emsp;&emsp;上篇文章已经给大家介绍过TCP/IP的握手过程了，所以这里就只讲一下SOCKSTRESS的攻击原理。"></a>&emsp;&emsp;上篇文章已经给大家介绍过TCP/IP的握手过程了，所以这里就只讲一下SOCKSTRESS的攻击原理。</h3><h3 id="emsp-emsp-1-首先，攻击者大量请求建立三次握手连接"><a href="#emsp-emsp-1-首先，攻击者大量请求建立三次握手连接" class="headerlink" title="&emsp;&emsp;1.首先，攻击者大量请求建立三次握手连接"></a>&emsp;&emsp;1.首先，攻击者大量请求建立三次握手连接</h3><h3 id="emsp-emsp-2-成功建立ESTABLISHED之后，攻击者会将数据包中window的值置为0（window的意思代表client这边一次可以接受的数据大小，置为0之后表示client没有window来接受server发来的数据，然后server就会分配内存来维持TCP连接直到client有空闲的window与之通信），然而攻击者可不会维持什么连接，他只会不断的请求TCP连接耗尽server的资源"><a href="#emsp-emsp-2-成功建立ESTABLISHED之后，攻击者会将数据包中window的值置为0（window的意思代表client这边一次可以接受的数据大小，置为0之后表示client没有window来接受server发来的数据，然后server就会分配内存来维持TCP连接直到client有空闲的window与之通信），然而攻击者可不会维持什么连接，他只会不断的请求TCP连接耗尽server的资源" class="headerlink" title="&emsp;&emsp;2.成功建立ESTABLISHED之后，攻击者会将数据包中window的值置为0（window的意思代表client这边一次可以接受的数据大小，置为0之后表示client没有window来接受server发来的数据，然后server就会分配内存来维持TCP连接直到client有空闲的window与之通信），然而攻击者可不会维持什么连接，他只会不断的请求TCP连接耗尽server的资源"></a>&emsp;&emsp;2.成功建立ESTABLISHED之后，攻击者会将数据包中window的值置为0（window的意思代表client这边一次可以接受的数据大小，置为0之后表示client没有window来接受server发来的数据，然后server就会分配内存来维持TCP连接直到client有空闲的window与之通信），然而攻击者可不会维持什么连接，他只会不断的请求TCP连接耗尽server的资源</h3><h3 id="emsp-emsp-3-当server这端维持连接达到一定数量之后，内存、CPU甚至是SWAP分区都会被耗尽，系统命令不能正常执行，想要恢复server唯一的办法就是断网"><a href="#emsp-emsp-3-当server这端维持连接达到一定数量之后，内存、CPU甚至是SWAP分区都会被耗尽，系统命令不能正常执行，想要恢复server唯一的办法就是断网" class="headerlink" title="&emsp;&emsp;3.当server这端维持连接达到一定数量之后，内存、CPU甚至是SWAP分区都会被耗尽，系统命令不能正常执行，想要恢复server唯一的办法就是断网"></a>&emsp;&emsp;3.当server这端维持连接达到一定数量之后，内存、CPU甚至是SWAP分区都会被耗尽，系统命令不能正常执行，想要恢复server唯一的办法就是断网</h3><h3 id="下面是attacker发向server的一个ACK包，window被置为了0"><a href="#下面是attacker发向server的一个ACK包，window被置为了0" class="headerlink" title="[*]下面是attacker发向server的一个ACK包，window被置为了0"></a>[*]下面是attacker发向server的一个ACK包，window被置为了0</h3><p><img src="http://note.youdao.com/yws/public/resource/0fd8fe6989a486a029c4141abf5ebe4a/xmlnote/3AA80062D00C4DB7BC40609FB312723E/1691" alt="image"></p>
+<hr>
+<h2 id="0x02-SOCKSTRESS攻击实战"><a href="#0x02-SOCKSTRESS攻击实战" class="headerlink" title="0x02. SOCKSTRESS攻击实战"></a>0x02. SOCKSTRESS攻击实战</h2><h3 id="emsp-emsp-这次的实战步骤比较简单，但是危害巨大，笔者会用自己的靶机演示，大家不要去攻击网络上的任何服务器。"><a href="#emsp-emsp-这次的实战步骤比较简单，但是危害巨大，笔者会用自己的靶机演示，大家不要去攻击网络上的任何服务器。" class="headerlink" title="&emsp;&emsp;这次的实战步骤比较简单，但是危害巨大，笔者会用自己的靶机演示，大家不要去攻击网络上的任何服务器。"></a>&emsp;&emsp;这次的实战步骤比较简单，但是危害巨大，笔者会用自己的靶机演示，大家不要去攻击网络上的任何服务器。</h3><h3 id="环境准备："><a href="#环境准备：" class="headerlink" title="环境准备："></a>环境准备：</h3><h3 id="emsp-emsp-1-SOCKSTRESS攻击脚本"><a href="#emsp-emsp-1-SOCKSTRESS攻击脚本" class="headerlink" title="&emsp;&emsp;1. SOCKSTRESS攻击脚本"></a>&emsp;&emsp;1. SOCKSTRESS攻击脚本</h3><h3 id="emsp-emsp-2-kali-linux"><a href="#emsp-emsp-2-kali-linux" class="headerlink" title="&emsp;&emsp;2. kali linux"></a>&emsp;&emsp;2. kali linux</h3><h3 id="emsp-emsp-3-metasploit靶机-IP-192-168-1-104"><a href="#emsp-emsp-3-metasploit靶机-IP-192-168-1-104" class="headerlink" title="&emsp;&emsp;3. metasploit靶机 IP=192.168.1.104"></a>&emsp;&emsp;3. metasploit靶机 IP=192.168.1.104</h3><h2 id="攻击流程："><a href="#攻击流程：" class="headerlink" title="攻击流程："></a>攻击流程：</h2><h3 id="1-下载Github上面的SOCKSTRESS攻击脚本并安装"><a href="#1-下载Github上面的SOCKSTRESS攻击脚本并安装" class="headerlink" title="1.下载Github上面的SOCKSTRESS攻击脚本并安装"></a>1.下载Github上面的SOCKSTRESS攻击脚本并安装</h3><blockquote>
+<p>git clone <a href="https://github.com/defuse/sockstress" target="_blank" rel="external">https://github.com/defuse/sockstress</a> &amp;&amp; cd sockstress/ &amp;&amp; make</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/0fd8fe6989a486a029c4141abf5ebe4a/xmlnote/BEC0232B6B914CE38A3331BCCBE51018/1612" alt="image"></p>
+<h3 id="2-设置防火墙规则，过滤发送给server的REST包（不过滤的话server就会断开连接）"><a href="#2-设置防火墙规则，过滤发送给server的REST包（不过滤的话server就会断开连接）" class="headerlink" title="2.设置防火墙规则，过滤发送给server的REST包（不过滤的话server就会断开连接）"></a>2.设置防火墙规则，过滤发送给server的REST包（不过滤的话server就会断开连接）</h3><blockquote>
+<p>iptables -A OUTPUT -p TCP –tcp-flags rst rst -d xx.xx.xx.xx -j DROP</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/0fd8fe6989a486a029c4141abf5ebe4a/xmlnote/406BA39543DB482FB7FBBEAF43381AE2/1627" alt="image"></p>
+<h3 id="3-运行SOCKSTRESS攻击脚本，攻击靶机的80端口"><a href="#3-运行SOCKSTRESS攻击脚本，攻击靶机的80端口" class="headerlink" title="3.运行SOCKSTRESS攻击脚本，攻击靶机的80端口"></a>3.运行SOCKSTRESS攻击脚本，攻击靶机的80端口</h3><blockquote>
+<p>./sockstress xx.xx.xx.xx:80 eth0 -p payloads/http -d 100</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/0fd8fe6989a486a029c4141abf5ebe4a/xmlnote/A6C4BCBC67454DCBB7C54DAD971815D8/1635" alt="image"></p>
+<h3 id="4-查看一下靶机可以看到内存和CPU已经被耗得差不多了，靶机的web服务已经访问不了，如果再多攻击一会可能就直接宕机"><a href="#4-查看一下靶机可以看到内存和CPU已经被耗得差不多了，靶机的web服务已经访问不了，如果再多攻击一会可能就直接宕机" class="headerlink" title="4.查看一下靶机可以看到内存和CPU已经被耗得差不多了，靶机的web服务已经访问不了，如果再多攻击一会可能就直接宕机"></a>4.查看一下靶机可以看到内存和CPU已经被耗得差不多了，靶机的web服务已经访问不了，如果再多攻击一会可能就直接宕机</h3><p><img src="http://note.youdao.com/yws/public/resource/0fd8fe6989a486a029c4141abf5ebe4a/xmlnote/8E823BF4397E4832A5CD0610084DCFE8/1637" alt="image"></p>
+<hr>
+<h2 id="0x03-防御措施"><a href="#0x03-防御措施" class="headerlink" title="0x03. 防御措施"></a>0x03. 防御措施</h2><h3 id="emsp-emsp-对于SOCKSTRESS这种攻击方式我们可以设置防火墙规则，限制server在一定时间内与同一个IP建立TCP连接的数量，这样即使有大量的连接发过来也不会对server有太大的影响，但是这仅限于DoS，如果是DDoS的话那么就只有升级server的性能了。"><a href="#emsp-emsp-对于SOCKSTRESS这种攻击方式我们可以设置防火墙规则，限制server在一定时间内与同一个IP建立TCP连接的数量，这样即使有大量的连接发过来也不会对server有太大的影响，但是这仅限于DoS，如果是DDoS的话那么就只有升级server的性能了。" class="headerlink" title="&emsp;&emsp;对于SOCKSTRESS这种攻击方式我们可以设置防火墙规则，限制server在一定时间内与同一个IP建立TCP连接的数量，这样即使有大量的连接发过来也不会对server有太大的影响，但是这仅限于DoS，如果是DDoS的话那么就只有升级server的性能了。"></a>&emsp;&emsp;对于SOCKSTRESS这种攻击方式我们可以设置防火墙规则，限制server在一定时间内与同一个IP建立TCP连接的数量，这样即使有大量的连接发过来也不会对server有太大的影响，但是这仅限于DoS，如果是DDoS的话那么就只有升级server的性能了。</h3><blockquote>
+<p>iptables -I INPUT -p tcp –dport 80 -m state –state NEW -m recent –set &amp;&amp; iptables -I INPUT -p tcp –dport 80 -m state –state NEW -m recent  –update –seconds 30 –hitcount 10 -j DROP</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/0fd8fe6989a486a029c4141abf5ebe4a/xmlnote/4EF59A94649B42AA8AF65632AEFC9EBC/1664" alt="image"></p>
+<h3 id="可以看到由于我们设置了防火墙规则，一台kali对靶机的攻击效果微乎其微（因为30秒内server只与kali建立10个TCP连接），但是如果是DDoS那么结果也是可想而知。"><a href="#可以看到由于我们设置了防火墙规则，一台kali对靶机的攻击效果微乎其微（因为30秒内server只与kali建立10个TCP连接），但是如果是DDoS那么结果也是可想而知。" class="headerlink" title="可以看到由于我们设置了防火墙规则，一台kali对靶机的攻击效果微乎其微（因为30秒内server只与kali建立10个TCP连接），但是如果是DDoS那么结果也是可想而知。"></a>可以看到由于我们设置了防火墙规则，一台kali对靶机的攻击效果微乎其微（因为30秒内server只与kali建立10个TCP连接），但是如果是DDoS那么结果也是可想而知。</h3><hr>
+<h2 id="0x04-结语"><a href="#0x04-结语" class="headerlink" title="0x04. 结语"></a>0x04. 结语</h2><h3 id="emsp-emsp-不太懂安全的人会认为发布攻击方法是在破坏互联网的稳定性，但这实在是片面的态度，理解攻击原理才是防御攻击最好的方式。让我再引用一句SOCKSTRESS作者的话：Pretending-a-problem-doesn’t-exist-won’t-make-it-go-away"><a href="#emsp-emsp-不太懂安全的人会认为发布攻击方法是在破坏互联网的稳定性，但这实在是片面的态度，理解攻击原理才是防御攻击最好的方式。让我再引用一句SOCKSTRESS作者的话：Pretending-a-problem-doesn’t-exist-won’t-make-it-go-away" class="headerlink" title="&emsp;&emsp;不太懂安全的人会认为发布攻击方法是在破坏互联网的稳定性，但这实在是片面的态度，理解攻击原理才是防御攻击最好的方式。让我再引用一句SOCKSTRESS作者的话：Pretending a problem doesn’t exist won’t make it go away."></a>&emsp;&emsp;不太懂安全的人会认为发布攻击方法是在破坏互联网的稳定性，但这实在是片面的态度，理解攻击原理才是防御攻击最好的方式。让我再引用一句SOCKSTRESS作者的话：Pretending a problem doesn’t exist won’t make it go away.</h3>
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/09/23/SOCKSTRESS/">SOCKSTRESS</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">TimeS0ng</a></p>
+        <p><span>发布时间:</span>2017-09-23, 20:44:35</p>
+        <p><span>最后更新:</span>2017-09-23, 20:45:23</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/09/23/SOCKSTRESS/" title="SOCKSTRESS">http://TimeS0ng.github.io/2017/09/23/SOCKSTRESS/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2017/09/23/SOCKSTRESS/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/09/21/Syn-Flood/">
+                    Syn-Flood
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00-SOCKSTRESS攻击简介"><span class="toc-number">1.</span> <span class="toc-text">0x00. SOCKSTRESS攻击简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-emsp-SockStress攻击正好与Syn-Flood攻击原理相悖，它正是利用建立TCP-IP三次握手连接来实现拒绝服务攻击，而且与Syn-Flood不同它并非通过耗尽服务器的TCP连接数来让正常用户的正常请求无法响应，而是直接耗尽服务端的内存、CPU等资源让受害者宕机，属于非对称的资源消耗攻击，这种攻击方式的危害性极大，而且一旦遭受分布式攻击是几乎不能被抵御的。"><span class="toc-number">1.1.</span> <span class="toc-text">  SockStress攻击正好与Syn-Flood攻击原理相悖，它正是利用建立TCP/IP三次握手连接来实现拒绝服务攻击，而且与Syn-Flood不同它并非通过耗尽服务器的TCP连接数来让正常用户的正常请求无法响应，而是直接耗尽服务端的内存、CPU等资源让受害者宕机，属于非对称的资源消耗攻击，这种攻击方式的危害性极大，而且一旦遭受分布式攻击是几乎不能被抵御的。</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-SOCKSTRESS攻击原理"><span class="toc-number">2.</span> <span class="toc-text">0x01. SOCKSTRESS攻击原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-emsp-上篇文章已经给大家介绍过TCP-IP的握手过程了，所以这里就只讲一下SOCKSTRESS的攻击原理。"><span class="toc-number">2.1.</span> <span class="toc-text">  上篇文章已经给大家介绍过TCP/IP的握手过程了，所以这里就只讲一下SOCKSTRESS的攻击原理。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-emsp-1-首先，攻击者大量请求建立三次握手连接"><span class="toc-number">2.2.</span> <span class="toc-text">  1.首先，攻击者大量请求建立三次握手连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-emsp-2-成功建立ESTABLISHED之后，攻击者会将数据包中window的值置为0（window的意思代表client这边一次可以接受的数据大小，置为0之后表示client没有window来接受server发来的数据，然后server就会分配内存来维持TCP连接直到client有空闲的window与之通信），然而攻击者可不会维持什么连接，他只会不断的请求TCP连接耗尽server的资源"><span class="toc-number">2.3.</span> <span class="toc-text">  2.成功建立ESTABLISHED之后，攻击者会将数据包中window的值置为0（window的意思代表client这边一次可以接受的数据大小，置为0之后表示client没有window来接受server发来的数据，然后server就会分配内存来维持TCP连接直到client有空闲的window与之通信），然而攻击者可不会维持什么连接，他只会不断的请求TCP连接耗尽server的资源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-emsp-3-当server这端维持连接达到一定数量之后，内存、CPU甚至是SWAP分区都会被耗尽，系统命令不能正常执行，想要恢复server唯一的办法就是断网"><span class="toc-number">2.4.</span> <span class="toc-text">  3.当server这端维持连接达到一定数量之后，内存、CPU甚至是SWAP分区都会被耗尽，系统命令不能正常执行，想要恢复server唯一的办法就是断网</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下面是attacker发向server的一个ACK包，window被置为了0"><span class="toc-number">2.5.</span> <span class="toc-text">[*]下面是attacker发向server的一个ACK包，window被置为了0</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-SOCKSTRESS攻击实战"><span class="toc-number">3.</span> <span class="toc-text">0x02. SOCKSTRESS攻击实战</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-emsp-这次的实战步骤比较简单，但是危害巨大，笔者会用自己的靶机演示，大家不要去攻击网络上的任何服务器。"><span class="toc-number">3.1.</span> <span class="toc-text">  这次的实战步骤比较简单，但是危害巨大，笔者会用自己的靶机演示，大家不要去攻击网络上的任何服务器。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#环境准备："><span class="toc-number">3.2.</span> <span class="toc-text">环境准备：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-emsp-1-SOCKSTRESS攻击脚本"><span class="toc-number">3.3.</span> <span class="toc-text">  1. SOCKSTRESS攻击脚本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-emsp-2-kali-linux"><span class="toc-number">3.4.</span> <span class="toc-text">  2. kali linux</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-emsp-3-metasploit靶机-IP-192-168-1-104"><span class="toc-number">3.5.</span> <span class="toc-text">  3. metasploit靶机 IP=192.168.1.104</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#攻击流程："><span class="toc-number">4.</span> <span class="toc-text">攻击流程：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-下载Github上面的SOCKSTRESS攻击脚本并安装"><span class="toc-number">4.1.</span> <span class="toc-text">1.下载Github上面的SOCKSTRESS攻击脚本并安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-设置防火墙规则，过滤发送给server的REST包（不过滤的话server就会断开连接）"><span class="toc-number">4.2.</span> <span class="toc-text">2.设置防火墙规则，过滤发送给server的REST包（不过滤的话server就会断开连接）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-运行SOCKSTRESS攻击脚本，攻击靶机的80端口"><span class="toc-number">4.3.</span> <span class="toc-text">3.运行SOCKSTRESS攻击脚本，攻击靶机的80端口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-查看一下靶机可以看到内存和CPU已经被耗得差不多了，靶机的web服务已经访问不了，如果再多攻击一会可能就直接宕机"><span class="toc-number">4.4.</span> <span class="toc-text">4.查看一下靶机可以看到内存和CPU已经被耗得差不多了，靶机的web服务已经访问不了，如果再多攻击一会可能就直接宕机</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-防御措施"><span class="toc-number">5.</span> <span class="toc-text">0x03. 防御措施</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-emsp-对于SOCKSTRESS这种攻击方式我们可以设置防火墙规则，限制server在一定时间内与同一个IP建立TCP连接的数量，这样即使有大量的连接发过来也不会对server有太大的影响，但是这仅限于DoS，如果是DDoS的话那么就只有升级server的性能了。"><span class="toc-number">5.1.</span> <span class="toc-text">  对于SOCKSTRESS这种攻击方式我们可以设置防火墙规则，限制server在一定时间内与同一个IP建立TCP连接的数量，这样即使有大量的连接发过来也不会对server有太大的影响，但是这仅限于DoS，如果是DDoS的话那么就只有升级server的性能了。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#可以看到由于我们设置了防火墙规则，一台kali对靶机的攻击效果微乎其微（因为30秒内server只与kali建立10个TCP连接），但是如果是DDoS那么结果也是可想而知。"><span class="toc-number">5.2.</span> <span class="toc-text">可以看到由于我们设置了防火墙规则，一台kali对靶机的攻击效果微乎其微（因为30秒内server只与kali建立10个TCP连接），但是如果是DDoS那么结果也是可想而知。</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-结语"><span class="toc-number">6.</span> <span class="toc-text">0x04. 结语</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-emsp-不太懂安全的人会认为发布攻击方法是在破坏互联网的稳定性，但这实在是片面的态度，理解攻击原理才是防御攻击最好的方式。让我再引用一句SOCKSTRESS作者的话：Pretending-a-problem-doesn’t-exist-won’t-make-it-go-away"><span class="toc-number">6.1.</span> <span class="toc-text">  不太懂安全的人会认为发布攻击方法是在破坏互联网的稳定性，但这实在是片面的态度，理解攻击原理才是防御攻击最好的方式。让我再引用一句SOCKSTRESS作者的话：Pretending a problem doesn’t exist won’t make it go away.</span></a></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"SOCKSTRESS　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section class="youyan" id="comments">
+    <script>
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = 'http://v2.uyan.cc/code/uyan.js?uid=2142877';
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <aside class="comment-bar">
+        <a href="javascript:void(0);">
+            <i class="fa fa-commenting-o animated infinite pulse"></i>
+            <i class="fa fa-spinner fa-pulse"></i>
+            <span class="count-comment"></span>
+        </a>
+    </aside>
+    <script>
+        var $commentBar = $("#comments aside.comment-bar");
+        var load$hide = function(){
+            $commentBar.find("a > i").toggle();
+            loadComment();
+            $commentBar.fadeOut(800);
+        }
+        $commentBar.click(function(){
+            load$hide();
+        })
+        $commentBar.children("a").hover(function(){
+            load$hide();
+        })
+        if (window.location.hash === "#comments") {
+            load$hide();
+        }
+    </script>
+
+    <div id="uyan_frame"></div>
+</section>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/09/21/Syn-Flood/" title="下一篇: Syn-Flood">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/09/23/SOCKSTRESS/">SOCKSTRESS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/21/Syn-Flood/">Syn-Flood</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/03/无线渗透(下)—企业级WPA破解/">无线渗透(下)—企业级WPA破解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/30/无线渗透(中)--WPS破解/">无线渗透(中)--WPS破解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/30/无线渗透(上)--WPA加密/">无线渗透(上)--WPA加密</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/29/信息收集— 僵尸扫描/">信息收集— 僵尸扫描</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2017 TimeS0ng
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
