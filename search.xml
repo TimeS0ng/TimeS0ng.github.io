@@ -3,6 +3,36 @@
   
     
     <entry>
+      <title><![CDATA[kali使用入坑指南]]></title>
+      <url>/2018/03/01/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97/</url>
+      <content type="html"><![CDATA[<h2 id="0x00-序言"><a href="#0x00-序言" class="headerlink" title="0x00. 序言"></a>0x00. 序言</h2><h4 id="emsp-emsp-用了快一年的kali了，使用过里面上百种工具，对kali有种莫名的好感，不过以前都是在虚拟机里面使用kali的，这样不太过瘾，所以这学期将家里积灰多年的老式台式电脑搬到了寝室，换了CPU添了内存条拆了电源箱插了无线网卡才装了kali。就想好好体验一把不一样的感觉！以后的文章我会将平时使用kali的心得技巧都记录在案，让各位能像熟悉windows一样熟悉kali，同时也希望将网上一些以讹传讹的操作重新梳理一遍！"><a href="#emsp-emsp-用了快一年的kali了，使用过里面上百种工具，对kali有种莫名的好感，不过以前都是在虚拟机里面使用kali的，这样不太过瘾，所以这学期将家里积灰多年的老式台式电脑搬到了寝室，换了CPU添了内存条拆了电源箱插了无线网卡才装了kali。就想好好体验一把不一样的感觉！以后的文章我会将平时使用kali的心得技巧都记录在案，让各位能像熟悉windows一样熟悉kali，同时也希望将网上一些以讹传讹的操作重新梳理一遍！" class="headerlink" title="&emsp;&emsp;用了快一年的kali了，使用过里面上百种工具，对kali有种莫名的好感，不过以前都是在虚拟机里面使用kali的，这样不太过瘾，所以这学期将家里积灰多年的老式台式电脑搬到了寝室，换了CPU添了内存条拆了电源箱插了无线网卡才装了kali。就想好好体验一把不一样的感觉！以后的文章我会将平时使用kali的心得技巧都记录在案，让各位能像熟悉windows一样熟悉kali，同时也希望将网上一些以讹传讹的操作重新梳理一遍！"></a>&emsp;&emsp;用了快一年的kali了，使用过里面上百种工具，对kali有种莫名的好感，不过以前都是在虚拟机里面使用kali的，这样不太过瘾，所以这学期将家里积灰多年的老式台式电脑搬到了寝室，换了CPU添了内存条拆了电源箱插了无线网卡才装了kali。就想好好体验一把不一样的感觉！以后的文章我会将平时使用kali的心得技巧都记录在案，让各位能像熟悉windows一样熟悉kali，同时也希望将网上一些以讹传讹的操作重新梳理一遍！</h4><a id="more"></a>
+<h2 id="0x01-kali安装中文输入法"><a href="#0x01-kali安装中文输入法" class="headerlink" title="0x01. kali安装中文输入法"></a>0x01. kali安装中文输入法</h2><blockquote>
+<ol>
+<li>下载ibus</li>
+</ol>
+<p>apt-get install ibus ibus-pinyin</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301093227_Bi7qWn_Screenshot.jpeg" alt=""></p>
+<blockquote>
+<ol>
+<li>设置language，之后重启系统就能使用中文，不必太麻烦</li>
+</ol>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301093613_rmRK04_Screenshot.jpeg" alt=""></p>
+<h2 id="0x02-kali中安装截图软件-shutter"><a href="#0x02-kali中安装截图软件-shutter" class="headerlink" title="0x02. kali中安装截图软件 shutter"></a>0x02. kali中安装截图软件 shutter</h2><blockquote>
+<p>apt-get install shutter</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301201713_O1AXhi_Screenshot.jpeg" alt=""></p>
+<blockquote>
+<p>下面就是我用shutter截的桌面图片</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301201931_pWfnu9_Screenshot.jpeg" alt=""></p>
+<h2 id="0x03-关于kali的小技巧"><a href="#0x03-关于kali的小技巧" class="headerlink" title="0x03. 关于kali的小技巧"></a>0x03. 关于kali的小技巧</h2><h4 id="emsp-emsp-笔者在使用kali的过程中有时候会很郁闷的出现屏幕突然卡死，鼠标直接动不了的情况，过去常用的的做法是直接断电源强制关机重启，百试不爽-o-。可这毕竟不是长久之际，如此暴力的做法不仅会损坏磁道，更会令内存中正在运行的任务直接关闭，所以我采取了下列做法能够很好的解决问题。"><a href="#emsp-emsp-笔者在使用kali的过程中有时候会很郁闷的出现屏幕突然卡死，鼠标直接动不了的情况，过去常用的的做法是直接断电源强制关机重启，百试不爽-o-。可这毕竟不是长久之际，如此暴力的做法不仅会损坏磁道，更会令内存中正在运行的任务直接关闭，所以我采取了下列做法能够很好的解决问题。" class="headerlink" title="&emsp;&emsp;笔者在使用kali的过程中有时候会很郁闷的出现屏幕突然卡死，鼠标直接动不了的情况，过去常用的的做法是直接断电源强制关机重启，百试不爽 \^o^。可这毕竟不是长久之际，如此暴力的做法不仅会损坏磁道，更会令内存中正在运行的任务直接关闭，所以我采取了下列做法能够很好的解决问题。"></a>&emsp;&emsp;笔者在使用kali的过程中有时候会很郁闷的出现屏幕突然卡死，鼠标直接动不了的情况，过去常用的的做法是直接断电源强制关机重启，百试不爽 \^o^。可这毕竟不是长久之际，如此暴力的做法不仅会损坏磁道，更会令内存中正在运行的任务直接关闭，所以我采取了下列做法能够很好的解决问题。</h4><h4 id="emsp-emsp-1-利用组合键-CTRL-ALT-F6-进入kali的命令行模式"><a href="#emsp-emsp-1-利用组合键-CTRL-ALT-F6-进入kali的命令行模式" class="headerlink" title="&emsp;&emsp;1. 利用组合键 CTRL+ALT+F6 进入kali的命令行模式"></a>&emsp;&emsp;1. 利用组合键 CTRL+ALT+F6 进入kali的命令行模式</h4><h4 id="emsp-emsp-2-top命令查看当前CPU占用率最大的任务"><a href="#emsp-emsp-2-top命令查看当前CPU占用率最大的任务" class="headerlink" title="&emsp;&emsp;2. top命令查看当前CPU占用率最大的任务"></a>&emsp;&emsp;2. top命令查看当前CPU占用率最大的任务</h4><h4 id="emsp-emsp-3-pkill或者kill-掉该任务"><a href="#emsp-emsp-3-pkill或者kill-掉该任务" class="headerlink" title="&emsp;&emsp;3. pkill或者kill 掉该任务"></a>&emsp;&emsp;3. pkill或者kill 掉该任务</h4><h4 id="emsp-emsp-4-利用组合键-CTRL-ALT-F2-回到桌面环境，这样就有效的解决了桌面卡死的问题"><a href="#emsp-emsp-4-利用组合键-CTRL-ALT-F2-回到桌面环境，这样就有效的解决了桌面卡死的问题" class="headerlink" title="&emsp;&emsp;4. 利用组合键 CTRL+ALT+F2 回到桌面环境，这样就有效的解决了桌面卡死的问题"></a>&emsp;&emsp;4. 利用组合键 CTRL+ALT+F2 回到桌面环境，这样就有效的解决了桌面卡死的问题</h4>]]></content>
+      
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[kali安装KVM入坑笔记]]></title>
       <url>/2018/03/01/kali%E5%AE%89%E8%A3%85KVM%E5%85%A5%E5%9D%91%E7%AC%94%E8%AE%B0/</url>
       <content type="html"><![CDATA[<h2 id="0x00-序言"><a href="#0x00-序言" class="headerlink" title="0x00. 序言"></a>0x00. 序言</h2><h4 id="emsp-emsp-今天莫名奇妙的把自己的KVM和kali都搞崩了，心塞塞。趁着重装系统之余将安装kali和KVM的详细过程介绍给大家，下面笔者将用U盘在台式机上安装kali和KVM-…"><a href="#emsp-emsp-今天莫名奇妙的把自己的KVM和kali都搞崩了，心塞塞。趁着重装系统之余将安装kali和KVM的详细过程介绍给大家，下面笔者将用U盘在台式机上安装kali和KVM-…" class="headerlink" title="&emsp;&emsp;今天莫名奇妙的把自己的KVM和kali都搞崩了，心塞塞。趁着重装系统之余将安装kali和KVM的详细过程介绍给大家，下面笔者将用U盘在台式机上安装kali和KVM …"></a>&emsp;&emsp;今天莫名奇妙的把自己的KVM和kali都搞崩了，心塞塞。趁着重装系统之余将安装kali和KVM的详细过程介绍给大家，下面笔者将用U盘在台式机上安装kali和KVM …</h4><a id="more"></a>
@@ -100,20 +130,7 @@
 <p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301094845_S7Zuib_Screenshot.jpeg" alt=""></p>
 <p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301095052_jL9mvJ_Screenshot.jpeg" alt=""></p>
 <p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301095118_iosA7r_Screenshot.jpeg" alt=""></p>
-<h2 id="0x04-给kali安装中文输入法"><a href="#0x04-给kali安装中文输入法" class="headerlink" title="0x04. 给kali安装中文输入法"></a>0x04. 给kali安装中文输入法</h2><blockquote>
-<ol>
-<li>下载ibus</li>
-</ol>
-<p>apt-get install ibus ibus-pinyin</p>
-</blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301093227_Bi7qWn_Screenshot.jpeg" alt=""></p>
-<blockquote>
-<ol>
-<li>设置language，之后重启系统就能使用中文，不必太麻烦</li>
-</ol>
-</blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301093613_rmRK04_Screenshot.jpeg" alt=""></p>
-<h2 id="0x05-关于kali的小技巧"><a href="#0x05-关于kali的小技巧" class="headerlink" title="0x05. 关于kali的小技巧"></a>0x05. 关于kali的小技巧</h2><h4 id="emsp-emsp-笔者在使用kali的过程中有时候会很郁闷的出现屏幕突然卡死，鼠标直接动不了的情况，过去常用的的做法是直接断电源强制关机重启，百试不爽-o-。可这毕竟不是长久之际，如此暴力的做法不仅会损坏磁道，更会令内存中正在运行的任务直接关闭，所以我采取了下列做法能够很好的解决问题。"><a href="#emsp-emsp-笔者在使用kali的过程中有时候会很郁闷的出现屏幕突然卡死，鼠标直接动不了的情况，过去常用的的做法是直接断电源强制关机重启，百试不爽-o-。可这毕竟不是长久之际，如此暴力的做法不仅会损坏磁道，更会令内存中正在运行的任务直接关闭，所以我采取了下列做法能够很好的解决问题。" class="headerlink" title="&emsp;&emsp;笔者在使用kali的过程中有时候会很郁闷的出现屏幕突然卡死，鼠标直接动不了的情况，过去常用的的做法是直接断电源强制关机重启，百试不爽 \^o^。可这毕竟不是长久之际，如此暴力的做法不仅会损坏磁道，更会令内存中正在运行的任务直接关闭，所以我采取了下列做法能够很好的解决问题。"></a>&emsp;&emsp;笔者在使用kali的过程中有时候会很郁闷的出现屏幕突然卡死，鼠标直接动不了的情况，过去常用的的做法是直接断电源强制关机重启，百试不爽 \^o^。可这毕竟不是长久之际，如此暴力的做法不仅会损坏磁道，更会令内存中正在运行的任务直接关闭，所以我采取了下列做法能够很好的解决问题。</h4><h4 id="emsp-emsp-1-利用组合键-CTRL-ALT-F6-进入kali的命令行模式"><a href="#emsp-emsp-1-利用组合键-CTRL-ALT-F6-进入kali的命令行模式" class="headerlink" title="&emsp;&emsp;1. 利用组合键 CTRL+ALT+F6 进入kali的命令行模式"></a>&emsp;&emsp;1. 利用组合键 CTRL+ALT+F6 进入kali的命令行模式</h4><h4 id="emsp-emsp-2-top命令查看当前CPU占用率最大的任务"><a href="#emsp-emsp-2-top命令查看当前CPU占用率最大的任务" class="headerlink" title="&emsp;&emsp;2. top命令查看当前CPU占用率最大的任务"></a>&emsp;&emsp;2. top命令查看当前CPU占用率最大的任务</h4><h4 id="emsp-emsp-3-pkill或者kill-掉该任务"><a href="#emsp-emsp-3-pkill或者kill-掉该任务" class="headerlink" title="&emsp;&emsp;3. pkill或者kill 掉该任务"></a>&emsp;&emsp;3. pkill或者kill 掉该任务</h4><h4 id="emsp-emsp-4-利用组合键-CTRL-ALT-F2-回到桌面环境，这样就有效的解决了桌面卡死的问题"><a href="#emsp-emsp-4-利用组合键-CTRL-ALT-F2-回到桌面环境，这样就有效的解决了桌面卡死的问题" class="headerlink" title="&emsp;&emsp;4. 利用组合键 CTRL+ALT+F2 回到桌面环境，这样就有效的解决了桌面卡死的问题"></a>&emsp;&emsp;4. 利用组合键 CTRL+ALT+F2 回到桌面环境，这样就有效的解决了桌面卡死的问题</h4><h2 id="0x06-结语"><a href="#0x06-结语" class="headerlink" title="0x06. 结语"></a>0x06. 结语</h2><h4 id="emsp-emsp-网上很多教程实际去操作时感觉都有些许瑕疵，很多时候达不到自己的要求，所以自己记录一下平时配置环境的过程下次遇到时看自己的文章就可以了，哇咔咔！！"><a href="#emsp-emsp-网上很多教程实际去操作时感觉都有些许瑕疵，很多时候达不到自己的要求，所以自己记录一下平时配置环境的过程下次遇到时看自己的文章就可以了，哇咔咔！！" class="headerlink" title="&emsp;&emsp;网上很多教程实际去操作时感觉都有些许瑕疵，很多时候达不到自己的要求，所以自己记录一下平时配置环境的过程下次遇到时看自己的文章就可以了，哇咔咔！！"></a>&emsp;&emsp;网上很多教程实际去操作时感觉都有些许瑕疵，很多时候达不到自己的要求，所以自己记录一下平时配置环境的过程下次遇到时看自己的文章就可以了，哇咔咔！！</h4>]]></content>
+<h2 id="0x04-结语"><a href="#0x04-结语" class="headerlink" title="0x04. 结语"></a>0x04. 结语</h2><h4 id="emsp-emsp-网上很多教程实际去操作时感觉都有些许瑕疵，很多时候达不到自己的要求，所以自己记录一下平时配置环境的过程下次遇到时看自己的文章就可以了，哇咔咔！！"><a href="#emsp-emsp-网上很多教程实际去操作时感觉都有些许瑕疵，很多时候达不到自己的要求，所以自己记录一下平时配置环境的过程下次遇到时看自己的文章就可以了，哇咔咔！！" class="headerlink" title="&emsp;&emsp;网上很多教程实际去操作时感觉都有些许瑕疵，很多时候达不到自己的要求，所以自己记录一下平时配置环境的过程下次遇到时看自己的文章就可以了，哇咔咔！！"></a>&emsp;&emsp;网上很多教程实际去操作时感觉都有些许瑕疵，很多时候达不到自己的要求，所以自己记录一下平时配置环境的过程下次遇到时看自己的文章就可以了，哇咔咔！！</h4>]]></content>
       
         
     </entry>
