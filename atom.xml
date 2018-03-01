@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://TimeS0ng.github.io/"/>
-  <updated>2018-03-01T12:28:32.430Z</updated>
+  <updated>2018-03-01T14:19:57.791Z</updated>
   <id>http://TimeS0ng.github.io/</id>
   
   <author>
@@ -14,6 +14,94 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>利用iodine绕过防火墙</title>
+    <link href="http://TimeS0ng.github.io/2018/03/01/%E5%88%A9%E7%94%A8iodine%E7%BB%95%E8%BF%87%E9%98%B2%E7%81%AB%E5%A2%99/"/>
+    <id>http://TimeS0ng.github.io/2018/03/01/利用iodine绕过防火墙/</id>
+    <published>2018-03-01T14:18:39.000Z</published>
+    <updated>2018-03-01T14:19:57.791Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="0x00-iodine简介"><a href="#0x00-iodine简介" class="headerlink" title="0x00. iodine简介"></a>0x00. iodine简介</h2><h4 id="emsp-emsp-当渗透内网时发现目标主机只开有-DNS-必要的端口时会不会很懵逼，此时连ssh都用不了，更别说后续留后门、抓密码咯。不过iodine完美的解决了这种问题，它仅仅通过UDP-53端口就能与目标建立一条点到点的流量隧道，并模拟出一块物理网卡让自己和目标可以基于该网卡提供的IP进行网络通信，简直是居家必备、出门在外之必备神器！下面的配置是自己学习iodine的学习笔记，配置细节不会具体说明！"><a href="#emsp-emsp-当渗透内网时发现目标主机只开有-DNS-必要的端口时会不会很懵逼，此时连ssh都用不了，更别说后续留后门、抓密码咯。不过iodine完美的解决了这种问题，它仅仅通过UDP-53端口就能与目标建立一条点到点的流量隧道，并模拟出一块物理网卡让自己和目标可以基于该网卡提供的IP进行网络通信，简直是居家必备、出门在外之必备神器！下面的配置是自己学习iodine的学习笔记，配置细节不会具体说明！" class="headerlink" title="&emsp;&emsp;当渗透内网时发现目标主机只开有 DNS 必要的端口时会不会很懵逼，此时连ssh都用不了，更别说后续留后门、抓密码咯。不过iodine完美的解决了这种问题，它仅仅通过UDP 53端口就能与目标建立一条点到点的流量隧道，并模拟出一块物理网卡让自己和目标可以基于该网卡提供的IP进行网络通信，简直是居家必备、出门在外之必备神器！下面的配置是自己学习iodine的学习笔记，配置细节不会具体说明！"></a>&emsp;&emsp;当渗透内网时发现目标主机只开有 DNS 必要的端口时会不会很懵逼，此时连ssh都用不了，更别说后续留后门、抓密码咯。不过iodine完美的解决了这种问题，它仅仅通过UDP 53端口就能与目标建立一条点到点的流量隧道，并模拟出一块物理网卡让自己和目标可以基于该网卡提供的IP进行网络通信，简直是居家必备、出门在外之必备神器！下面的配置是自己学习iodine的学习笔记，配置细节不会具体说明！</h4><a id="more"></a>
+<h2 id="0x01-环境配置"><a href="#0x01-环境配置" class="headerlink" title="0x01. 环境配置"></a>0x01. 环境配置</h2><h4 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h4><h4 id="emsp-emsp-ubuntu-emsp-IP-1-1-1-10"><a href="#emsp-emsp-ubuntu-emsp-IP-1-1-1-10" class="headerlink" title="&emsp;&emsp;ubuntu&emsp;IP=1.1.1.10"></a>&emsp;&emsp;ubuntu&emsp;IP=1.1.1.10</h4><h4 id="emsp-emsp-monowall-emsp-LAN-IP-1-1-1-1-emsp-WAN-IP-192-168-1-109"><a href="#emsp-emsp-monowall-emsp-LAN-IP-1-1-1-1-emsp-WAN-IP-192-168-1-109" class="headerlink" title="&emsp;&emsp;monowall&emsp;LAN IP=1.1.1.1&emsp;WAN IP=192.168.1.109"></a>&emsp;&emsp;monowall&emsp;LAN IP=1.1.1.1&emsp;WAN IP=192.168.1.109</h4><h4 id="emsp-emsp-w2k3-emsp-IP-192-168-1-108"><a href="#emsp-emsp-w2k3-emsp-IP-192-168-1-108" class="headerlink" title="&emsp;&emsp;w2k3&emsp;IP=192.168.1.108"></a>&emsp;&emsp;w2k3&emsp;IP=192.168.1.108</h4><h4 id="emsp-emsp-kali-linux-emsp-IP-192-168-1-107"><a href="#emsp-emsp-kali-linux-emsp-IP-192-168-1-107" class="headerlink" title="&emsp;&emsp;kali linux&emsp;IP=192.168.1.107"></a>&emsp;&emsp;kali linux&emsp;IP=192.168.1.107</h4><h4 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h4><blockquote>
+<p>[*] 接下来我将按照下图配置实验环境，通过iodine绕过防火墙限制.</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301210737_kS5adL_Screenshot.jpeg" alt=""></p>
+<blockquote>
+<ol>
+<li>首先配置firewall，限制ubuntu的上网能力，让它只能通过 UDP 53端口访问DNS 服务器w2k3</li>
+</ol>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301211815_oLwE6D_Screenshot.jpeg" alt=""></p>
+<blockquote>
+<ol>
+<li>修改 ubuntu 的/etc/resolv.conf 文件，指定自己的 DNS 解析服务器为w2k3（192.168.1.108）</li>
+</ol>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301212345_NrgJ35_Screenshot.jpeg" alt=""></p>
+<blockquote>
+<ol>
+<li>配置 DNS 服务器w2k3，并委派二级域名给 kali 主机</li>
+</ol>
+<p>[*] _1. 设置静态IP</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301213258_iefU0H_Screenshot.jpeg" alt=""></p>
+<blockquote>
+<p>[*] _2. 创建主域 times0ng.org</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301213519_oaBMz2_Screenshot.jpeg" alt=""></p>
+<blockquote>
+<p>[*] _3. 添加 kali 的主机记录</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301213738_mUUxyM_Screenshot.jpeg" alt=""></p>
+<blockquote>
+<p>[*] _4. 配置转发器，这样让w2k3可以解析公网域名</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301214158_olvW8g_Screenshot.jpeg" alt=""></p>
+<blockquote>
+<p>[*] _5. 委派二级域名</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301214431_F4tb8U_Screenshot.jpeg" alt=""></p>
+<blockquote>
+<p>[*] _6. 查看ubuntu上的域名解析记录，可以看到 ubuntu 已经能正确解析我们的 w2k3 和 kali 了</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301214910_bBF3h9_Screenshot.jpeg" alt=""></p>
+<blockquote>
+<ol>
+<li>启动 kali 服务器端 iodined 和 ubuntu 的客户端 iodine</li>
+</ol>
+<p>iodined -f -c 2.2.2.2 www.times0ng.org</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301215803_FRK2Ke_Screenshot.jpeg" alt=""></p>
+<blockquote>
+<p>iodine -f www.times0ng.org</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301215953_KMndUT_Screenshot.jpeg" alt=""></p>
+<blockquote>
+<ol>
+<li>ubuntu 已经通过UDP 53 端口成功和 kali 建立隧道，可以利用之前设置的IP 2.2.2.2 进行网络通信了</li>
+</ol>
+<p>ssh -X root@2.2.2.2</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301220633_FX4p67_Screenshot.jpeg" alt=""></p>
+<blockquote>
+<ol>
+<li>因为ubuntu 本身被防火墙限制不能上网，但我们可以将流量通过kali转发出去进行上网通信</li>
+</ol>
+<p>ssh -CNfg -D 8080 root@2.2.2.2</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301220853_0ex9Bc_Screenshot.jpeg" alt=""></p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301220923_sIRb8G_Screenshot.jpeg" alt=""></p>
+<h2 id="0x02-结语"><a href="#0x02-结语" class="headerlink" title="0x02. 结语"></a>0x02. 结语</h2><h4 id="emsp-emsp-真实环境中的操作更简单，不过笔者买不起域名和VPS，自己没亲自尝试过！以后就可以利用这个方法绕过各种防火墙限制啦，哇咔咔咔咔咔。"><a href="#emsp-emsp-真实环境中的操作更简单，不过笔者买不起域名和VPS，自己没亲自尝试过！以后就可以利用这个方法绕过各种防火墙限制啦，哇咔咔咔咔咔。" class="headerlink" title="&emsp;&emsp;真实环境中的操作更简单，不过笔者买不起域名和VPS，自己没亲自尝试过！以后就可以利用这个方法绕过各种防火墙限制啦，哇咔咔咔咔咔。"></a>&emsp;&emsp;真实环境中的操作更简单，不过笔者买不起域名和VPS，自己没亲自尝试过！以后就可以利用这个方法绕过各种防火墙限制啦，哇咔咔咔咔咔。</h4>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;0x00-iodine简介&quot;&gt;&lt;a href=&quot;#0x00-iodine简介&quot; class=&quot;headerlink&quot; title=&quot;0x00. iodine简介&quot;&gt;&lt;/a&gt;0x00. iodine简介&lt;/h2&gt;&lt;h4 id=&quot;emsp-emsp-当渗透内网时发现目标主机只开有-DNS-必要的端口时会不会很懵逼，此时连ssh都用不了，更别说后续留后门、抓密码咯。不过iodine完美的解决了这种问题，它仅仅通过UDP-53端口就能与目标建立一条点到点的流量隧道，并模拟出一块物理网卡让自己和目标可以基于该网卡提供的IP进行网络通信，简直是居家必备、出门在外之必备神器！下面的配置是自己学习iodine的学习笔记，配置细节不会具体说明！&quot;&gt;&lt;a href=&quot;#emsp-emsp-当渗透内网时发现目标主机只开有-DNS-必要的端口时会不会很懵逼，此时连ssh都用不了，更别说后续留后门、抓密码咯。不过iodine完美的解决了这种问题，它仅仅通过UDP-53端口就能与目标建立一条点到点的流量隧道，并模拟出一块物理网卡让自己和目标可以基于该网卡提供的IP进行网络通信，简直是居家必备、出门在外之必备神器！下面的配置是自己学习iodine的学习笔记，配置细节不会具体说明！&quot; class=&quot;headerlink&quot; title=&quot;&amp;emsp;&amp;emsp;当渗透内网时发现目标主机只开有 DNS 必要的端口时会不会很懵逼，此时连ssh都用不了，更别说后续留后门、抓密码咯。不过iodine完美的解决了这种问题，它仅仅通过UDP 53端口就能与目标建立一条点到点的流量隧道，并模拟出一块物理网卡让自己和目标可以基于该网卡提供的IP进行网络通信，简直是居家必备、出门在外之必备神器！下面的配置是自己学习iodine的学习笔记，配置细节不会具体说明！&quot;&gt;&lt;/a&gt;&amp;emsp;&amp;emsp;当渗透内网时发现目标主机只开有 DNS 必要的端口时会不会很懵逼，此时连ssh都用不了，更别说后续留后门、抓密码咯。不过iodine完美的解决了这种问题，它仅仅通过UDP 53端口就能与目标建立一条点到点的流量隧道，并模拟出一块物理网卡让自己和目标可以基于该网卡提供的IP进行网络通信，简直是居家必备、出门在外之必备神器！下面的配置是自己学习iodine的学习笔记，配置细节不会具体说明！&lt;/h4&gt;
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>kali使用入坑指南</title>
@@ -169,47 +257,6 @@
   </entry>
   
   <entry>
-    <title>JOBSS反序列化漏洞复现</title>
-    <link href="http://TimeS0ng.github.io/2017/12/27/JBOSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    <id>http://TimeS0ng.github.io/2017/12/27/JBOSS反序列化漏洞复现/</id>
-    <published>2017-12-27T02:39:14.000Z</published>
-    <updated>2017-12-27T11:47:55.653Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="0x00-漏洞描述"><a href="#0x00-漏洞描述" class="headerlink" title="0x00. 漏洞描述"></a>0x00. 漏洞描述</h2><h4 id="2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。"><a href="#2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。" class="headerlink" title="2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。"></a>2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。</h4><a id="more"></a>
-<h2 id="0x01-漏洞复现"><a href="#0x01-漏洞复现" class="headerlink" title="0x01. 漏洞复现"></a>0x01. 漏洞复现</h2><h3 id="1-环境准备"><a href="#1-环境准备" class="headerlink" title="1). 环境准备"></a>1). 环境准备</h3><h4 id="1-JBOSS下载地址：http-download-jboss-org-jbossas-6-1-jboss-as-distribution-6-1-0-Final-zip"><a href="#1-JBOSS下载地址：http-download-jboss-org-jbossas-6-1-jboss-as-distribution-6-1-0-Final-zip" class="headerlink" title="1. JBOSS下载地址：http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip"></a>1. JBOSS下载地址：<a href="http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip" target="_blank" rel="external">http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</a></h4><h4 id="2-EXP下载地址：https-github-com-yunxu1-jboss-CVE-2017-12149"><a href="#2-EXP下载地址：https-github-com-yunxu1-jboss-CVE-2017-12149" class="headerlink" title="2. EXP下载地址：https://github.com/yunxu1/jboss-_CVE-2017-12149"></a>2. EXP下载地址：<a href="https://github.com/yunxu1/jboss-_CVE-2017-12149" target="_blank" rel="external">https://github.com/yunxu1/jboss-_CVE-2017-12149</a></h4><h3 id="2-环境搭建"><a href="#2-环境搭建" class="headerlink" title="2). 环境搭建"></a>2). 环境搭建</h3><h4 id="第一步：下载JBOSS环境，并解压"><a href="#第一步：下载JBOSS环境，并解压" class="headerlink" title="第一步：下载JBOSS环境，并解压"></a>第一步：下载JBOSS环境，并解压</h4><blockquote>
-<p>wget <a href="http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip" target="_blank" rel="external">http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</a> </p>
-</blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227180801_LeUN0c_6293.jpeg" alt=""></p>
-<h4 id="第二步：修改配置文件，使网络中的主机都能访问JBOSS"><a href="#第二步：修改配置文件，使网络中的主机都能访问JBOSS" class="headerlink" title="第二步：修改配置文件，使网络中的主机都能访问JBOSS"></a>第二步：修改配置文件，使网络中的主机都能访问JBOSS</h4><blockquote>
-<p>vim ~/jboss-6.1.0.Final/server/default/deploy/jbossweb.sar/server.xml</p>
-</blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227180817_sOlp2c_6301.jpeg" alt=""></p>
-<h4 id="第三步：启动JBOSS"><a href="#第三步：启动JBOSS" class="headerlink" title="第三步：启动JBOSS"></a>第三步：启动JBOSS</h4><blockquote>
-<p>./jboss-6.1.0.Final/bin/run.sh</p>
-</blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227180832_WE4CD3_6309.jpeg" alt=""></p>
-<h4 id="第四步：下载EXP"><a href="#第四步：下载EXP" class="headerlink" title="第四步：下载EXP"></a>第四步：下载EXP</h4><blockquote>
-<p>git clone <a href="https://github.com/yunxu1/jboss-_CVE-2017-12149" target="_blank" rel="external">https://github.com/yunxu1/jboss-_CVE-2017-12149</a></p>
-</blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227180843_FQh3jJ_6316.jpeg" alt=""></p>
-<h3 id="3-信息收集"><a href="#3-信息收集" class="headerlink" title="3). 信息收集"></a>3). 信息收集</h3><h4 id="第一步：利用nmap对目标主机进行常用端口扫描"><a href="#第一步：利用nmap对目标主机进行常用端口扫描" class="headerlink" title="第一步：利用nmap对目标主机进行常用端口扫描"></a>第一步：利用nmap对目标主机进行常用端口扫描</h4><blockquote>
-<p>nmap 192.168.1.111 -A </p>
-</blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227180855_12YJ7L_6329.jpeg" alt=""></p>
-<h4 id="第二步：访问目标主机的8080端口，看看能否正常访问"><a href="#第二步：访问目标主机的8080端口，看看能否正常访问" class="headerlink" title="第二步：访问目标主机的8080端口，看看能否正常访问"></a>第二步：访问目标主机的8080端口，看看能否正常访问</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227180912_UQjhJU_6322.jpeg" alt=""></p>
-<h3 id="4-漏洞利用"><a href="#4-漏洞利用" class="headerlink" title="4). 漏洞利用"></a>4). 漏洞利用</h3><h4 id="利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化-CVE-2017-12149-jar"><a href="#利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化-CVE-2017-12149-jar" class="headerlink" title="利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化_CVE-2017-12149.jar"></a>利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化_CVE-2017-12149.jar</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227180923_jatTku_6333.jpeg" alt=""></p>
-<h2 id="0x02-总结"><a href="#0x02-总结" class="headerlink" title="0x02. 总结"></a>0x02. 总结</h2><h4 id="emsp-emsp-行千里路，不如读万卷书…"><a href="#emsp-emsp-行千里路，不如读万卷书…" class="headerlink" title="&emsp;&emsp;行千里路，不如读万卷书…"></a>&emsp;&emsp;行千里路，不如读万卷书…</h4>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;0x00-漏洞描述&quot;&gt;&lt;a href=&quot;#0x00-漏洞描述&quot; class=&quot;headerlink&quot; title=&quot;0x00. 漏洞描述&quot;&gt;&lt;/a&gt;0x00. 漏洞描述&lt;/h2&gt;&lt;h4 id=&quot;2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。&quot;&gt;&lt;a href=&quot;#2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。&quot; class=&quot;headerlink&quot; title=&quot;2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。&quot;&gt;&lt;/a&gt;2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。&lt;/h4&gt;
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
     <title>花式钓鱼法</title>
     <link href="http://TimeS0ng.github.io/2017/12/27/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/"/>
     <id>http://TimeS0ng.github.io/2017/12/27/花式钓鱼法/</id>
@@ -337,6 +384,47 @@
     <summary type="html">
     
       &lt;h2 id=&quot;0x00-闲谈&quot;&gt;&lt;a href=&quot;#0x00-闲谈&quot; class=&quot;headerlink&quot; title=&quot;0x00. 闲谈&quot;&gt;&lt;/a&gt;0x00. 闲谈&lt;/h2&gt;&lt;h4 id=&quot;emsp-emsp-最近我们小组招新群里居然有人利用邮箱群发功能进行社工钓鱼，最奇葩的是居然还有人中招了，是可忍孰不可忍，千钧一发之际正当我准备祭出珍藏已久的Nmap打算搞死幕后黑手的时候，他她它居然把服务器关了，看来还是有准备的。如果不是没有酿成严重后果，我们绝对不会善罢甘休，光他暴露的IP就足够我们溯源追踪了，下面我也来给大家演示一下如何钓鱼和预防钓鱼陷阱。&quot;&gt;&lt;a href=&quot;#emsp-emsp-最近我们小组招新群里居然有人利用邮箱群发功能进行社工钓鱼，最奇葩的是居然还有人中招了，是可忍孰不可忍，千钧一发之际正当我准备祭出珍藏已久的Nmap打算搞死幕后黑手的时候，他她它居然把服务器关了，看来还是有准备的。如果不是没有酿成严重后果，我们绝对不会善罢甘休，光他暴露的IP就足够我们溯源追踪了，下面我也来给大家演示一下如何钓鱼和预防钓鱼陷阱。&quot; class=&quot;headerlink&quot; title=&quot;&amp;emsp;&amp;emsp;最近我们小组招新群里居然有人利用邮箱群发功能进行社工钓鱼，最奇葩的是居然还有人中招了，是可忍孰不可忍，千钧一发之际正当我准备祭出珍藏已久的Nmap打算搞死幕后黑手的时候，他她它居然把服务器关了，看来还是有准备的。如果不是没有酿成严重后果，我们绝对不会善罢甘休，光他暴露的IP就足够我们溯源追踪了，下面我也来给大家演示一下如何钓鱼和预防钓鱼陷阱。&quot;&gt;&lt;/a&gt;&amp;emsp;&amp;emsp;最近我们小组招新群里居然有人利用邮箱群发功能进行社工钓鱼，最奇葩的是居然还有人中招了，是可忍孰不可忍，千钧一发之际正当我准备祭出珍藏已久的Nmap打算搞死幕后黑手的时候，他她它居然把服务器关了，看来还是有准备的。如果不是没有酿成严重后果，我们绝对不会善罢甘休，光他暴露的IP就足够我们溯源追踪了，下面我也来给大家演示一下如何钓鱼和预防钓鱼陷阱。&lt;/h4&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>JOBSS反序列化漏洞复现</title>
+    <link href="http://TimeS0ng.github.io/2017/12/27/JBOSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    <id>http://TimeS0ng.github.io/2017/12/27/JBOSS反序列化漏洞复现/</id>
+    <published>2017-12-27T02:39:14.000Z</published>
+    <updated>2017-12-27T11:47:55.653Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="0x00-漏洞描述"><a href="#0x00-漏洞描述" class="headerlink" title="0x00. 漏洞描述"></a>0x00. 漏洞描述</h2><h4 id="2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。"><a href="#2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。" class="headerlink" title="2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。"></a>2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。</h4><a id="more"></a>
+<h2 id="0x01-漏洞复现"><a href="#0x01-漏洞复现" class="headerlink" title="0x01. 漏洞复现"></a>0x01. 漏洞复现</h2><h3 id="1-环境准备"><a href="#1-环境准备" class="headerlink" title="1). 环境准备"></a>1). 环境准备</h3><h4 id="1-JBOSS下载地址：http-download-jboss-org-jbossas-6-1-jboss-as-distribution-6-1-0-Final-zip"><a href="#1-JBOSS下载地址：http-download-jboss-org-jbossas-6-1-jboss-as-distribution-6-1-0-Final-zip" class="headerlink" title="1. JBOSS下载地址：http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip"></a>1. JBOSS下载地址：<a href="http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip" target="_blank" rel="external">http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</a></h4><h4 id="2-EXP下载地址：https-github-com-yunxu1-jboss-CVE-2017-12149"><a href="#2-EXP下载地址：https-github-com-yunxu1-jboss-CVE-2017-12149" class="headerlink" title="2. EXP下载地址：https://github.com/yunxu1/jboss-_CVE-2017-12149"></a>2. EXP下载地址：<a href="https://github.com/yunxu1/jboss-_CVE-2017-12149" target="_blank" rel="external">https://github.com/yunxu1/jboss-_CVE-2017-12149</a></h4><h3 id="2-环境搭建"><a href="#2-环境搭建" class="headerlink" title="2). 环境搭建"></a>2). 环境搭建</h3><h4 id="第一步：下载JBOSS环境，并解压"><a href="#第一步：下载JBOSS环境，并解压" class="headerlink" title="第一步：下载JBOSS环境，并解压"></a>第一步：下载JBOSS环境，并解压</h4><blockquote>
+<p>wget <a href="http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip" target="_blank" rel="external">http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</a> </p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227180801_LeUN0c_6293.jpeg" alt=""></p>
+<h4 id="第二步：修改配置文件，使网络中的主机都能访问JBOSS"><a href="#第二步：修改配置文件，使网络中的主机都能访问JBOSS" class="headerlink" title="第二步：修改配置文件，使网络中的主机都能访问JBOSS"></a>第二步：修改配置文件，使网络中的主机都能访问JBOSS</h4><blockquote>
+<p>vim ~/jboss-6.1.0.Final/server/default/deploy/jbossweb.sar/server.xml</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227180817_sOlp2c_6301.jpeg" alt=""></p>
+<h4 id="第三步：启动JBOSS"><a href="#第三步：启动JBOSS" class="headerlink" title="第三步：启动JBOSS"></a>第三步：启动JBOSS</h4><blockquote>
+<p>./jboss-6.1.0.Final/bin/run.sh</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227180832_WE4CD3_6309.jpeg" alt=""></p>
+<h4 id="第四步：下载EXP"><a href="#第四步：下载EXP" class="headerlink" title="第四步：下载EXP"></a>第四步：下载EXP</h4><blockquote>
+<p>git clone <a href="https://github.com/yunxu1/jboss-_CVE-2017-12149" target="_blank" rel="external">https://github.com/yunxu1/jboss-_CVE-2017-12149</a></p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227180843_FQh3jJ_6316.jpeg" alt=""></p>
+<h3 id="3-信息收集"><a href="#3-信息收集" class="headerlink" title="3). 信息收集"></a>3). 信息收集</h3><h4 id="第一步：利用nmap对目标主机进行常用端口扫描"><a href="#第一步：利用nmap对目标主机进行常用端口扫描" class="headerlink" title="第一步：利用nmap对目标主机进行常用端口扫描"></a>第一步：利用nmap对目标主机进行常用端口扫描</h4><blockquote>
+<p>nmap 192.168.1.111 -A </p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227180855_12YJ7L_6329.jpeg" alt=""></p>
+<h4 id="第二步：访问目标主机的8080端口，看看能否正常访问"><a href="#第二步：访问目标主机的8080端口，看看能否正常访问" class="headerlink" title="第二步：访问目标主机的8080端口，看看能否正常访问"></a>第二步：访问目标主机的8080端口，看看能否正常访问</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227180912_UQjhJU_6322.jpeg" alt=""></p>
+<h3 id="4-漏洞利用"><a href="#4-漏洞利用" class="headerlink" title="4). 漏洞利用"></a>4). 漏洞利用</h3><h4 id="利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化-CVE-2017-12149-jar"><a href="#利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化-CVE-2017-12149-jar" class="headerlink" title="利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化_CVE-2017-12149.jar"></a>利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化_CVE-2017-12149.jar</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227180923_jatTku_6333.jpeg" alt=""></p>
+<h2 id="0x02-总结"><a href="#0x02-总结" class="headerlink" title="0x02. 总结"></a>0x02. 总结</h2><h4 id="emsp-emsp-行千里路，不如读万卷书…"><a href="#emsp-emsp-行千里路，不如读万卷书…" class="headerlink" title="&emsp;&emsp;行千里路，不如读万卷书…"></a>&emsp;&emsp;行千里路，不如读万卷书…</h4>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;0x00-漏洞描述&quot;&gt;&lt;a href=&quot;#0x00-漏洞描述&quot; class=&quot;headerlink&quot; title=&quot;0x00. 漏洞描述&quot;&gt;&lt;/a&gt;0x00. 漏洞描述&lt;/h2&gt;&lt;h4 id=&quot;2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。&quot;&gt;&lt;a href=&quot;#2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。&quot; class=&quot;headerlink&quot; title=&quot;2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。&quot;&gt;&lt;/a&gt;2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。&lt;/h4&gt;
     
     </summary>
     
