@@ -29,7 +29,7 @@
 <meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180303170704_ALlIlf_Screenshot.jpeg">
 <meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180303170842_Vw0EnH_Screenshot.jpeg">
 <meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180303171817_6QKqw8_Screenshot.jpeg">
-<meta property="og:updated_time" content="2018-03-03T09:19:31.744Z">
+<meta property="og:updated_time" content="2018-03-03T09:21:44.223Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kali使用入坑指南(一)">
 <meta name="twitter:description" content="0x00. 序言&amp;emsp;&amp;emsp;用了快一年的kali了，使用过里面上百种工具，对kali有种莫名的好感，不过以前都是在虚拟机里面使用kali的，这样不太过瘾，所以这学期将家里积灰多年的老式台式电脑搬到了寝室，换了CPU添了内存条拆了电源箱插了无线网卡才装了kali。就想好好体验一把不一样的感觉！以后的文章我会将平时使用kali的心得技巧都记录在案，让各位能像熟悉windows一样熟悉kal">
@@ -309,7 +309,8 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h2 id="0x00-序言"><a href="#0x00-序言" class="headerlink" title="0x00. 序言"></a>0x00. 序言</h2><h4 id="emsp-emsp-用了快一年的kali了，使用过里面上百种工具，对kali有种莫名的好感，不过以前都是在虚拟机里面使用kali的，这样不太过瘾，所以这学期将家里积灰多年的老式台式电脑搬到了寝室，换了CPU添了内存条拆了电源箱插了无线网卡才装了kali。就想好好体验一把不一样的感觉！以后的文章我会将平时使用kali的心得技巧都记录在案，让各位能像熟悉windows一样熟悉kali，同时也希望将网上一些以讹传讹的操作重新梳理一遍！"><a href="#emsp-emsp-用了快一年的kali了，使用过里面上百种工具，对kali有种莫名的好感，不过以前都是在虚拟机里面使用kali的，这样不太过瘾，所以这学期将家里积灰多年的老式台式电脑搬到了寝室，换了CPU添了内存条拆了电源箱插了无线网卡才装了kali。就想好好体验一把不一样的感觉！以后的文章我会将平时使用kali的心得技巧都记录在案，让各位能像熟悉windows一样熟悉kali，同时也希望将网上一些以讹传讹的操作重新梳理一遍！" class="headerlink" title="&emsp;&emsp;用了快一年的kali了，使用过里面上百种工具，对kali有种莫名的好感，不过以前都是在虚拟机里面使用kali的，这样不太过瘾，所以这学期将家里积灰多年的老式台式电脑搬到了寝室，换了CPU添了内存条拆了电源箱插了无线网卡才装了kali。就想好好体验一把不一样的感觉！以后的文章我会将平时使用kali的心得技巧都记录在案，让各位能像熟悉windows一样熟悉kali，同时也希望将网上一些以讹传讹的操作重新梳理一遍！"></a>&emsp;&emsp;用了快一年的kali了，使用过里面上百种工具，对kali有种莫名的好感，不过以前都是在虚拟机里面使用kali的，这样不太过瘾，所以这学期将家里积灰多年的老式台式电脑搬到了寝室，换了CPU添了内存条拆了电源箱插了无线网卡才装了kali。就想好好体验一把不一样的感觉！以后的文章我会将平时使用kali的心得技巧都记录在案，让各位能像熟悉windows一样熟悉kali，同时也希望将网上一些以讹传讹的操作重新梳理一遍！</h4><h2 id="0x01-kali安装中文输入法"><a href="#0x01-kali安装中文输入法" class="headerlink" title="0x01. kali安装中文输入法"></a>0x01. kali安装中文输入法</h2><blockquote>
+        <h2 id="0x00-序言"><a href="#0x00-序言" class="headerlink" title="0x00. 序言"></a>0x00. 序言</h2><h4 id="emsp-emsp-用了快一年的kali了，使用过里面上百种工具，对kali有种莫名的好感，不过以前都是在虚拟机里面使用kali的，这样不太过瘾，所以这学期将家里积灰多年的老式台式电脑搬到了寝室，换了CPU添了内存条拆了电源箱插了无线网卡才装了kali。就想好好体验一把不一样的感觉！以后的文章我会将平时使用kali的心得技巧都记录在案，让各位能像熟悉windows一样熟悉kali，同时也希望将网上一些以讹传讹的操作重新梳理一遍！"><a href="#emsp-emsp-用了快一年的kali了，使用过里面上百种工具，对kali有种莫名的好感，不过以前都是在虚拟机里面使用kali的，这样不太过瘾，所以这学期将家里积灰多年的老式台式电脑搬到了寝室，换了CPU添了内存条拆了电源箱插了无线网卡才装了kali。就想好好体验一把不一样的感觉！以后的文章我会将平时使用kali的心得技巧都记录在案，让各位能像熟悉windows一样熟悉kali，同时也希望将网上一些以讹传讹的操作重新梳理一遍！" class="headerlink" title="&emsp;&emsp;用了快一年的kali了，使用过里面上百种工具，对kali有种莫名的好感，不过以前都是在虚拟机里面使用kali的，这样不太过瘾，所以这学期将家里积灰多年的老式台式电脑搬到了寝室，换了CPU添了内存条拆了电源箱插了无线网卡才装了kali。就想好好体验一把不一样的感觉！以后的文章我会将平时使用kali的心得技巧都记录在案，让各位能像熟悉windows一样熟悉kali，同时也希望将网上一些以讹传讹的操作重新梳理一遍！"></a>&emsp;&emsp;用了快一年的kali了，使用过里面上百种工具，对kali有种莫名的好感，不过以前都是在虚拟机里面使用kali的，这样不太过瘾，所以这学期将家里积灰多年的老式台式电脑搬到了寝室，换了CPU添了内存条拆了电源箱插了无线网卡才装了kali。就想好好体验一把不一样的感觉！以后的文章我会将平时使用kali的心得技巧都记录在案，让各位能像熟悉windows一样熟悉kali，同时也希望将网上一些以讹传讹的操作重新梳理一遍！</h4><a id="more"></a>
+<h2 id="0x01-kali安装中文输入法"><a href="#0x01-kali安装中文输入法" class="headerlink" title="0x01. kali安装中文输入法"></a>0x01. kali安装中文输入法</h2><blockquote>
 <ol>
 <li>下载ibus</li>
 </ol>
@@ -353,7 +354,7 @@
         <p><span>本文标题:</span><a href="/2018/03/01/kali使用入坑指南(一)/">kali使用入坑指南(一)</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">TimeS0ng</a></p>
         <p><span>发布时间:</span>2018-03-01, 20:25:58</p>
-        <p><span>最后更新:</span>2018-03-03, 17:19:31</p>
+        <p><span>最后更新:</span>2018-03-03, 17:21:44</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2018/03/01/kali使用入坑指南(一)/" title="kali使用入坑指南(一)">http://TimeS0ng.github.io/2018/03/01/kali使用入坑指南(一)/</a>
             <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2018/03/01/kali使用入坑指南(一)/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
