@@ -891,7 +891,7 @@
 </blockquote>
 <p><img src="http://note.youdao.com/yws/public/resource/1b76f7e1beb93f9e28e44bca46fca90a/xmlnote/1AF5BBD248E54CB8AB60B5D4F144D421/926" alt="image"></p>
 <h4 id="emsp-6-调用aircrack-ng破解密码-aircrack-ng-w-wordlist-txt-wpa-01-cap"><a href="#emsp-6-调用aircrack-ng破解密码-aircrack-ng-w-wordlist-txt-wpa-01-cap" class="headerlink" title="&emsp;6.调用aircrack-ng破解密码(aircrack-ng -w [wordlist.txt] wpa-01.cap)"></a>&emsp;6.调用aircrack-ng破解密码(aircrack-ng -w [wordlist.txt] wpa-01.cap)</h4><blockquote>
-<p>aircrack-ng -w /usr/share/sqlmap/txt/wordlist.txt</p>
+<p>aircrack-ng -w /usr/share/sqlmap/txt/wordlist.txt wifi_TimeS0ng-01.cap</p>
 </blockquote>
 <p><img src="http://note.youdao.com/yws/public/resource/1b76f7e1beb93f9e28e44bca46fca90a/xmlnote/3391248596AF4F8A923ADDE0CE28F2E4/936" alt="image"></p>
 <hr>
