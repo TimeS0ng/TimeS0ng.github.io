@@ -152,6 +152,16 @@
 </blockquote>
 <p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180305180011_6T2Daa_Screenshot.jpeg" alt=""></p>
 <p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180305180036_Uxee4d_Screenshot.jpeg" alt=""></p>
+<h2 id="0x09-kali-安装翻译字典"><a href="#0x09-kali-安装翻译字典" class="headerlink" title="0x09. kali 安装翻译字典"></a>0x09. kali 安装翻译字典</h2><blockquote>
+<p>goldendict 是Linux 中字典的不二选择，同时它还支持选词翻译，这是一个相当不错的功能。笔者因为给自己定了个目标要看kali 官网的教程，所以只有去读英文资料，而goldendict 帮了我不小的忙！</p>
+<p>下载好goldendict 之后需要稍稍配置一下词典Edict-&gt;dict-&gt;website，增加youdao 的翻译网址 <a href="http://dict.youdao.com/search?q=%GDWORD%&amp;ue=utf8" target="_blank" rel="external">http://dict.youdao.com/search?q=%GDWORD%&amp;ue=utf8</a></p>
+<p>之后我们选中单词按 CTRL+C+C 就可以随时翻译了</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180305231416_6b8vJS_Screenshot.jpeg" alt=""></p>
+<h2 id="0x10-kali-安装插件"><a href="#0x10-kali-安装插件" class="headerlink" title="0x10. kali 安装插件"></a>0x10. kali 安装插件</h2><blockquote>
+<p>使用浏览器访问 <a href="http://extensions.gnome.org" target="_blank" rel="external">http://extensions.gnome.org</a> 就可以给kali 安装扩展，安装netspeed 插件之后就可以监控网络流量</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180305235955_Y7cZTJ_Screenshot.jpeg" alt=""></p>
 <h2 id="0xFF-关于kali的小技巧"><a href="#0xFF-关于kali的小技巧" class="headerlink" title="0xFF. 关于kali的小技巧"></a>0xFF. 关于kali的小技巧</h2><h4 id="emsp-emsp-笔者在使用kali的过程中有时候会很郁闷的出现屏幕突然卡死，鼠标直接动不了的情况，过去常用的的做法是直接断电源强制关机重启，百试不爽-o-。可这毕竟不是长久之际，如此暴力的做法不仅会损坏磁道，更会令内存中正在运行的任务直接关闭，所以我采取了下列做法能够很好的解决问题。"><a href="#emsp-emsp-笔者在使用kali的过程中有时候会很郁闷的出现屏幕突然卡死，鼠标直接动不了的情况，过去常用的的做法是直接断电源强制关机重启，百试不爽-o-。可这毕竟不是长久之际，如此暴力的做法不仅会损坏磁道，更会令内存中正在运行的任务直接关闭，所以我采取了下列做法能够很好的解决问题。" class="headerlink" title="&emsp;&emsp;笔者在使用kali的过程中有时候会很郁闷的出现屏幕突然卡死，鼠标直接动不了的情况，过去常用的的做法是直接断电源强制关机重启，百试不爽 \^o^。可这毕竟不是长久之际，如此暴力的做法不仅会损坏磁道，更会令内存中正在运行的任务直接关闭，所以我采取了下列做法能够很好的解决问题。"></a>&emsp;&emsp;笔者在使用kali的过程中有时候会很郁闷的出现屏幕突然卡死，鼠标直接动不了的情况，过去常用的的做法是直接断电源强制关机重启，百试不爽 \^o^。可这毕竟不是长久之际，如此暴力的做法不仅会损坏磁道，更会令内存中正在运行的任务直接关闭，所以我采取了下列做法能够很好的解决问题。</h4><h4 id="emsp-emsp-1-利用组合键-CTRL-ALT-F6-进入kali的命令行模式"><a href="#emsp-emsp-1-利用组合键-CTRL-ALT-F6-进入kali的命令行模式" class="headerlink" title="&emsp;&emsp;1. 利用组合键 CTRL+ALT+F6 进入kali的命令行模式"></a>&emsp;&emsp;1. 利用组合键 CTRL+ALT+F6 进入kali的命令行模式</h4><h4 id="emsp-emsp-2-top命令查看当前CPU占用率最大的任务"><a href="#emsp-emsp-2-top命令查看当前CPU占用率最大的任务" class="headerlink" title="&emsp;&emsp;2. top命令查看当前CPU占用率最大的任务"></a>&emsp;&emsp;2. top命令查看当前CPU占用率最大的任务</h4><h4 id="emsp-emsp-3-pkill或者kill-掉该任务"><a href="#emsp-emsp-3-pkill或者kill-掉该任务" class="headerlink" title="&emsp;&emsp;3. pkill或者kill 掉该任务"></a>&emsp;&emsp;3. pkill或者kill 掉该任务</h4><h4 id="emsp-emsp-4-利用组合键-CTRL-ALT-F2-回到桌面环境，这样就有效的解决了桌面卡死的问题"><a href="#emsp-emsp-4-利用组合键-CTRL-ALT-F2-回到桌面环境，这样就有效的解决了桌面卡死的问题" class="headerlink" title="&emsp;&emsp;4. 利用组合键 CTRL+ALT+F2 回到桌面环境，这样就有效的解决了桌面卡死的问题"></a>&emsp;&emsp;4. 利用组合键 CTRL+ALT+F2 回到桌面环境，这样就有效的解决了桌面卡死的问题</h4>]]></content>
       
         
