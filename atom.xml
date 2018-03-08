@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://TimeS0ng.github.io/"/>
-  <updated>2018-03-01T14:23:18.061Z</updated>
+  <updated>2018-03-08T15:19:45.181Z</updated>
   <id>http://TimeS0ng.github.io/</id>
   
   <author>
@@ -14,6 +14,43 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>kali使用入坑指南（二）</title>
+    <link href="http://TimeS0ng.github.io/2018/03/08/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/"/>
+    <id>http://TimeS0ng.github.io/2018/03/08/kali使用入坑指南（二）/</id>
+    <published>2018-03-08T15:19:13.000Z</published>
+    <updated>2018-03-08T15:19:45.181Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="0x00-序言"><a href="#0x00-序言" class="headerlink" title="0x00. 序言"></a>0x00. 序言</h2><h4 id="emsp-emsp-决定以后每篇入坑指南都会写满十个以上kali-中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali-、入坑kali-的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。"><a href="#emsp-emsp-决定以后每篇入坑指南都会写满十个以上kali-中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali-、入坑kali-的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。" class="headerlink" title="&emsp;&emsp;决定以后每篇入坑指南都会写满十个以上kali 中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali 、入坑kali 的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。"></a>&emsp;&emsp;决定以后每篇入坑指南都会写满十个以上kali 中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali 、入坑kali 的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。</h4><a id="more"></a>
+<h2 id="0x01-DNS-爆破工具–fierce"><a href="#0x01-DNS-爆破工具–fierce" class="headerlink" title="0x01. DNS 爆破工具–fierce"></a>0x01. DNS 爆破工具–fierce</h2><blockquote>
+<p>fierce 专用于爆破 DNS 域名，就像它的名字一样纯粹，平时msf 用的多了也喜欢用点简单小巧又功能实用的工具。在渗透测试时，偶尔会碰到某些域名的主站被做成了全静态页面，神仙也难渗透。此时从旁站渗透是必然的选择，这时候就需要用到 fierce 爆破二级域名对旁站下黑手了。再给大家推荐一篇<a href="http://cms.pengyueisos.com/wp/2017/12/一次web渗透测试的经历与分析（上）【鹏越·学霸专/" target="_blank" rel="external">渗透旁站的文章</a></p>
+<p>爆破二级域名</p>
+<p>fierce -dns kali.org -threads 10</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180308222717_PXjw12_Screenshot.jpeg" alt=""><br><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180308222753_JKcqYH_Screenshot.jpeg" alt=""></p>
+<h2 id="0x02-SMB-爆破工具–acccheck"><a href="#0x02-SMB-爆破工具–acccheck" class="headerlink" title="0x02. SMB 爆破工具–acccheck"></a>0x02. SMB 爆破工具–acccheck</h2><blockquote>
+<p>acccheck是用于探测远程目标主机是否开放smb服务,并尝试连接目标默认IPC$、ADMIN$共享,并通过字典文件尝试爆破 smb 服务的账号密码。有些工具比较简单，所以命令我就不一一介绍了，大家直接用 acccheck -h 就能查看具体的参数介绍。</p>
+<p>acccheck -t 192.168.122.140 -u times0ng -P /usr/share/wordlists/wfuzz/general/common.txt -v</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180308225313_sPwpVJ_Screenshot.jpeg" alt=""></p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180308225518_JesTGg_Screenshot.jpeg" alt=""></p>
+<h2 id="0x03-SNMP-信息枚举工具–-snmp-check"><a href="#0x03-SNMP-信息枚举工具–-snmp-check" class="headerlink" title="0x03. SNMP 信息枚举工具– snmp-check"></a>0x03. SNMP 信息枚举工具– snmp-check</h2><blockquote>
+<p>简单网络管理协议（SNMP）是TCP／IP协议簇的一个应用层协议，工作在UDP 161端口，用于监控目标设备的操作系统、硬件设备、服务应用、软硬件配置、网络协议状态、设备性能及资源利用率、设备报错事件信息、应用程序状态等软硬件信息。对于渗透测试者来说简直就是信息宝藏，一旦这个服务协议被利用，那么目标的大部分配置信息都会暴露无遗，对于企业来说这是致命的，而想要利用这个协议的弱点只需要服务器管理员缺乏安全意识做一些默认配置即可。</p>
+<p>这个工具并不支持对 public 的爆破，但如果使用 hydra 爆破public 之后再使用snmp-check 获取 SNMP 协议提供的海量信息的话简直是 perfect</p>
+<p>snmp-check 192.168.1.109 -c public -v 2c</p>
+</blockquote>
+<p><img src="http://note.youdao.com/yws/public/resource/911ea4f2fd7ee502e967a3c99fb7163b/xmlnote/1B20B5FDF95B4D3E8A2AA48AB71D9D46/3879" alt="image"></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;0x00-序言&quot;&gt;&lt;a href=&quot;#0x00-序言&quot; class=&quot;headerlink&quot; title=&quot;0x00. 序言&quot;&gt;&lt;/a&gt;0x00. 序言&lt;/h2&gt;&lt;h4 id=&quot;emsp-emsp-决定以后每篇入坑指南都会写满十个以上kali-中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali-、入坑kali-的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。&quot;&gt;&lt;a href=&quot;#emsp-emsp-决定以后每篇入坑指南都会写满十个以上kali-中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali-、入坑kali-的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。&quot; class=&quot;headerlink&quot; title=&quot;&amp;emsp;&amp;emsp;决定以后每篇入坑指南都会写满十个以上kali 中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali 、入坑kali 的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。&quot;&gt;&lt;/a&gt;&amp;emsp;&amp;emsp;决定以后每篇入坑指南都会写满十个以上kali 中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali 、入坑kali 的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。&lt;/h4&gt;
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>利用iodine绕过防火墙</title>
