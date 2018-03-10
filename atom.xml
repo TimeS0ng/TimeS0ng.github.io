@@ -63,7 +63,7 @@
     <link href="http://TimeS0ng.github.io/2018/03/08/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/"/>
     <id>http://TimeS0ng.github.io/2018/03/08/kali使用入坑指南（二）/</id>
     <published>2018-03-08T15:19:13.000Z</published>
-    <updated>2018-03-08T15:19:45.181Z</updated>
+    <updated>2018-03-10T11:54:44.544Z</updated>
     
     <content type="html"><![CDATA[<h2 id="0x00-序言"><a href="#0x00-序言" class="headerlink" title="0x00. 序言"></a>0x00. 序言</h2><h4 id="emsp-emsp-决定以后每篇入坑指南都会写满十个以上kali-中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali-、入坑kali-的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。"><a href="#emsp-emsp-决定以后每篇入坑指南都会写满十个以上kali-中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali-、入坑kali-的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。" class="headerlink" title="&emsp;&emsp;决定以后每篇入坑指南都会写满十个以上kali 中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali 、入坑kali 的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。"></a>&emsp;&emsp;决定以后每篇入坑指南都会写满十个以上kali 中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali 、入坑kali 的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。</h4><a id="more"></a>
 <h2 id="0x01-DNS-爆破工具–fierce"><a href="#0x01-DNS-爆破工具–fierce" class="headerlink" title="0x01. DNS 爆破工具–fierce"></a>0x01. DNS 爆破工具–fierce</h2><blockquote>
@@ -84,6 +84,12 @@
 <p>snmp-check 192.168.1.109 -c public -v 2c</p>
 </blockquote>
 <p><img src="http://note.youdao.com/yws/public/resource/911ea4f2fd7ee502e967a3c99fb7163b/xmlnote/1B20B5FDF95B4D3E8A2AA48AB71D9D46/3879" alt="image"></p>
+<h2 id="0x04-路由策略探测工具–Firewalk"><a href="#0x04-路由策略探测工具–Firewalk" class="headerlink" title="0x04. 路由策略探测工具–Firewalk"></a>0x04. 路由策略探测工具–Firewalk</h2><blockquote>
+<p>Firewalk 是一个主动侦察的网络安全工具，它试图判断出路由器或防火墙在第四层TCP/UDP  配置的策略规则，因此在内网中使用 Firewalk 将是我们最理想的选择。如果想了解 firewalk 的原理请 <a href="https://times0ng.github.io/2018/03/10/Firewalk-原理/">点击这里</a></p>
+<p>首先apt-get 安装firewalk，然后启动 firewalk 进行探察（ 参数都很简单，不懂的可以通过 man 手册自行查看 ）</p>
+<p>firewalk -S21,22,53,80,139,445 -i eth0 -n -pTCP 192.168.1.1 8.8.8.8</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180310192754_kdeWFt_Screenshot.jpeg" alt=""></p>
 ]]></content>
     
     <summary type="html">

@@ -27,7 +27,8 @@
 <meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180308225313_sPwpVJ_Screenshot.jpeg">
 <meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180308225518_JesTGg_Screenshot.jpeg">
 <meta property="og:image" content="http://note.youdao.com/yws/public/resource/911ea4f2fd7ee502e967a3c99fb7163b/xmlnote/1B20B5FDF95B4D3E8A2AA48AB71D9D46/3879">
-<meta property="og:updated_time" content="2018-03-08T15:19:45.181Z">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180310192754_kdeWFt_Screenshot.jpeg">
+<meta property="og:updated_time" content="2018-03-10T11:54:44.544Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kali使用入坑指南（二）">
 <meta name="twitter:description" content="0x00. 序言&amp;emsp;&amp;emsp;决定以后每篇入坑指南都会写满十个以上kali 中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali 、入坑kali 的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。">
@@ -326,6 +327,12 @@
 <p>snmp-check 192.168.1.109 -c public -v 2c</p>
 </blockquote>
 <p><img src="http://note.youdao.com/yws/public/resource/911ea4f2fd7ee502e967a3c99fb7163b/xmlnote/1B20B5FDF95B4D3E8A2AA48AB71D9D46/3879" alt="image"></p>
+<h2 id="0x04-路由策略探测工具–Firewalk"><a href="#0x04-路由策略探测工具–Firewalk" class="headerlink" title="0x04. 路由策略探测工具–Firewalk"></a>0x04. 路由策略探测工具–Firewalk</h2><blockquote>
+<p>Firewalk 是一个主动侦察的网络安全工具，它试图判断出路由器或防火墙在第四层TCP/UDP  配置的策略规则，因此在内网中使用 Firewalk 将是我们最理想的选择。如果想了解 firewalk 的原理请 <a href="https://times0ng.github.io/2018/03/10/Firewalk-原理/">点击这里</a></p>
+<p>首先apt-get 安装firewalk，然后启动 firewalk 进行探察（ 参数都很简单，不懂的可以通过 man 手册自行查看 ）</p>
+<p>firewalk -S21,22,53,80,139,445 -i eth0 -n -pTCP 192.168.1.1 8.8.8.8</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180310192754_kdeWFt_Screenshot.jpeg" alt=""></p>
 
       
     </div>
@@ -337,7 +344,7 @@
         <p><span>本文标题:</span><a href="/2018/03/08/kali使用入坑指南（二）/">kali使用入坑指南（二）</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">TimeS0ng</a></p>
         <p><span>发布时间:</span>2018-03-08, 23:19:13</p>
-        <p><span>最后更新:</span>2018-03-08, 23:19:45</p>
+        <p><span>最后更新:</span>2018-03-10, 19:54:44</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2018/03/08/kali使用入坑指南（二）/" title="kali使用入坑指南（二）">http://TimeS0ng.github.io/2018/03/08/kali使用入坑指南（二）/</a>
             <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2018/03/08/kali使用入坑指南（二）/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
@@ -373,7 +380,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00-序言"><span class="toc-number">1.</span> <span class="toc-text">0x00. 序言</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-决定以后每篇入坑指南都会写满十个以上kali-中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali-、入坑kali-的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。"><span class="toc-number">1.0.1.</span> <span class="toc-text">  决定以后每篇入坑指南都会写满十个以上kali 中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali 、入坑kali 的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-DNS-爆破工具–fierce"><span class="toc-number">2.</span> <span class="toc-text">0x01. DNS 爆破工具–fierce</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-SMB-爆破工具–acccheck"><span class="toc-number">3.</span> <span class="toc-text">0x02. SMB 爆破工具–acccheck</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-SNMP-信息枚举工具–-snmp-check"><span class="toc-number">4.</span> <span class="toc-text">0x03. SNMP 信息枚举工具– snmp-check</span></a></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00-序言"><span class="toc-number">1.</span> <span class="toc-text">0x00. 序言</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-决定以后每篇入坑指南都会写满十个以上kali-中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali-、入坑kali-的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。"><span class="toc-number">1.0.1.</span> <span class="toc-text">  决定以后每篇入坑指南都会写满十个以上kali 中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali 、入坑kali 的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-DNS-爆破工具–fierce"><span class="toc-number">2.</span> <span class="toc-text">0x01. DNS 爆破工具–fierce</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-SMB-爆破工具–acccheck"><span class="toc-number">3.</span> <span class="toc-text">0x02. SMB 爆破工具–acccheck</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-SNMP-信息枚举工具–-snmp-check"><span class="toc-number">4.</span> <span class="toc-text">0x03. SNMP 信息枚举工具– snmp-check</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-路由策略探测工具–Firewalk"><span class="toc-number">5.</span> <span class="toc-text">0x04. 路由策略探测工具–Firewalk</span></a></li></ol>
         
     </div>
     <style>
