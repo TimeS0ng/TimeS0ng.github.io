@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="TimeS0ng" />
+
+
+
+<meta name="description" content="0x00. 序言&amp;emsp;&amp;emsp;最近和朋友合租了一台vps ，我搭好ss + bbr 之后居然不知道如何给kali 配置代理，真是可耻，果然Mac 用惯了之后人都会变懒！找了很久发现好多关于kali 代理的文章都失效，不过我还是在网上找到了这篇文章，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="kali 代理之shadowsocks &amp; proxychains">
+<meta property="og:url" content="http://TimeS0ng.github.io/2018/03/30/kali-代理之shadowsocks-proxychains/index.html">
+<meta property="og:site_name" content="TimeS0ng&#39;s blog">
+<meta property="og:description" content="0x00. 序言&amp;emsp;&amp;emsp;最近和朋友合租了一台vps ，我搭好ss + bbr 之后居然不知道如何给kali 配置代理，真是可耻，果然Mac 用惯了之后人都会变懒！找了很久发现好多关于kali 代理的文章都失效，不过我还是在网上找到了这篇文章，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180330161820_C3BORx_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180330163334_xF5VwI_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180330164846_7aMRN6_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180330165005_QFOnfG_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180330165447_bwVCOz_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180330165823_L4SdgT_Screenshot.jpeg">
+<meta property="og:updated_time" content="2018-03-30T09:15:40.739Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="kali 代理之shadowsocks &amp; proxychains">
+<meta name="twitter:description" content="0x00. 序言&amp;emsp;&amp;emsp;最近和朋友合租了一台vps ，我搭好ss + bbr 之后居然不知道如何给kali 配置代理，真是可耻，果然Mac 用惯了之后人都会变懒！找了很久发现好多关于kali 代理的文章都失效，不过我还是在网上找到了这篇文章，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！">
+<meta name="twitter:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180330161820_C3BORx_Screenshot.jpeg">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="TimeS0ng&#39;s blog" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>kali 代理之shadowsocks &amp; proxychains | TimeS0ng&#39;s blog</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">TimeS0ng</a></h1>
+        </hgroup>
+
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="false" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:TimeS0ng@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/TimeS0ng" title="GitHub"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://03i0.com">sn00py&#39;s blog</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://edvison.cn">Edvison&#39;s blog</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://ph0rse.me/">ph0rse&#39;s blog</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">专注技术，乐于分享</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">TimeS0ng</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">TimeS0ng</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:TimeS0ng@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/TimeS0ng" title="GitHub"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-kali-代理之shadowsocks-proxychains" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/03/30/kali-代理之shadowsocks-proxychains/" class="article-date">
+      <time datetime="2018-03-30T09:14:16.000Z" itemprop="datePublished">2018-03-30</time>
+</a>
+
+ 
+    <a href="/2018/03/30/kali-代理之shadowsocks-proxychains/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2018/03/30/kali-代理之shadowsocks-proxychains/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      kali 代理之shadowsocks &amp; proxychains
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="0x00-序言"><a href="#0x00-序言" class="headerlink" title="0x00. 序言"></a>0x00. 序言</h2><h4 id="emsp-emsp-最近和朋友合租了一台vps-，我搭好ss-bbr-之后居然不知道如何给kali-配置代理，真是可耻，果然Mac-用惯了之后人都会变懒！找了很久发现好多关于kali-代理的文章都失效，不过我还是在网上找到了这篇文章，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！"><a href="#emsp-emsp-最近和朋友合租了一台vps-，我搭好ss-bbr-之后居然不知道如何给kali-配置代理，真是可耻，果然Mac-用惯了之后人都会变懒！找了很久发现好多关于kali-代理的文章都失效，不过我还是在网上找到了这篇文章，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！" class="headerlink" title="&emsp;&emsp;最近和朋友合租了一台vps ，我搭好ss + bbr 之后居然不知道如何给kali 配置代理，真是可耻，果然Mac 用惯了之后人都会变懒！找了很久发现好多关于kali 代理的文章都失效，不过我还是在网上找到了这篇文章，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！"></a>&emsp;&emsp;最近和朋友合租了一台vps ，我搭好ss + bbr 之后居然不知道如何给kali 配置代理，真是可耻，果然Mac 用惯了之后人都会变懒！找了很久发现好多关于kali 代理的文章都失效，不过我还是在网上找到了<a href="https://blog.csdn.net/qq_27766969/article/details/71593611" target="_blank" rel="external">这篇文章</a>，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！</h4><a id="more"></a>
+<h2 id="0x01-代理流程"><a href="#0x01-代理流程" class="headerlink" title="0x01. 代理流程"></a>0x01. 代理流程</h2><p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180330161820_C3BORx_Screenshot.jpeg" alt=""></p>
+<h4 id="好多人都用过代理，但可能大部分却都不太了解代理是如何工作的，我在这里给大家简单介绍一下，不涉及底层知识，相信很容易理解！"><a href="#好多人都用过代理，但可能大部分却都不太了解代理是如何工作的，我在这里给大家简单介绍一下，不涉及底层知识，相信很容易理解！" class="headerlink" title="好多人都用过代理，但可能大部分却都不太了解代理是如何工作的，我在这里给大家简单介绍一下，不涉及底层知识，相信很容易理解！"></a>好多人都用过代理，但可能大部分却都不太了解代理是如何工作的，我在这里给大家简单介绍一下，不涉及底层知识，相信很容易理解！</h4><ul>
+<li>首先通过proxychains 将本地流量发往localhost 的 1080 端口</li>
+<li>localhost 的1080 端口和VPS 的8080 端口通过shadowsocks 建立 ss 连接</li>
+<li>本地流量 -&gt; localhost 1080 -&gt; VPS 8080 -&gt; 目标站点</li>
+</ul>
+<h4 id="以上就是ss-代理的流程，是不是感觉很简单，下面我给大家演示一下如何配置"><a href="#以上就是ss-代理的流程，是不是感觉很简单，下面我给大家演示一下如何配置" class="headerlink" title="以上就是ss 代理的流程，是不是感觉很简单，下面我给大家演示一下如何配置"></a>以上就是ss 代理的流程，是不是感觉很简单，下面我给大家演示一下如何配置</h4><h2 id="0x02-配置-proxychains"><a href="#0x02-配置-proxychains" class="headerlink" title="0x02. 配置 proxychains"></a>0x02. 配置 proxychains</h2><blockquote>
+<p>vim /etc/proxychains.conf</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180330163334_xF5VwI_Screenshot.jpeg" alt=""></p>
+<h2 id="0x03-配置shadowsocks"><a href="#0x03-配置shadowsocks" class="headerlink" title="0x03. 配置shadowsocks"></a>0x03. 配置shadowsocks</h2><h4 id="1-安装shadowsocks"><a href="#1-安装shadowsocks" class="headerlink" title="1. 安装shadowsocks"></a>1. 安装shadowsocks</h4><blockquote>
+<p>apt-get install python-pip &amp;&amp; pip install shadowsocks</p>
+</blockquote>
+<h4 id="2-优化shadowsocks-，这里我也不懂优化策略"><a href="#2-优化shadowsocks-，这里我也不懂优化策略" class="headerlink" title="2. 优化shadowsocks ，这里我也不懂优化策略"></a>2. 优化shadowsocks ，这里我也不懂优化策略</h4><blockquote>
+<p>vim  /etc/sysctl.d/local.conf</p>
+<p>sysctl –system  &emsp; # 优化文件保存之后执行这条命令生效 </p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"># max open files</div><div class="line">fs.file-max = 51200  </div><div class="line"># max read buffer</div><div class="line">net.core.rmem_max = 67108864  </div><div class="line"># max write buffer</div><div class="line">net.core.wmem_max = 67108864  </div><div class="line"># default read buffer</div><div class="line">net.core.rmem_default = 65536  </div><div class="line"># default write buffer</div><div class="line">net.core.wmem_default = 65536  </div><div class="line"># max processor input queue</div><div class="line">net.core.netdev_max_backlog = 4096  </div><div class="line"># max backlog</div><div class="line">net.core.somaxconn = 4096</div><div class="line"></div><div class="line"># resist SYN flood attacks</div><div class="line">net.ipv4.tcp_syncookies = 1  </div><div class="line"># reuse timewait sockets when safe</div><div class="line">net.ipv4.tcp_tw_reuse = 1  </div><div class="line"># turn off fast timewait sockets recycling</div><div class="line">net.ipv4.tcp_tw_recycle = 0  </div><div class="line"># short FIN timeout</div><div class="line">net.ipv4.tcp_fin_timeout = 30  </div><div class="line"># short keepalive time</div><div class="line">net.ipv4.tcp_keepalive_time = 1200  </div><div class="line"># outbound port range</div><div class="line">net.ipv4.ip_local_port_range = 10000 65000  </div><div class="line"># max SYN backlog</div><div class="line">net.ipv4.tcp_max_syn_backlog = 4096  </div><div class="line"># max timewait sockets held by system simultaneously</div><div class="line">net.ipv4.tcp_max_tw_buckets = 5000  </div><div class="line"># turn on TCP Fast Open on both client and server side</div><div class="line">net.ipv4.tcp_fastopen = 3  </div><div class="line"># TCP receive buffer</div><div class="line">net.ipv4.tcp_rmem = 4096 87380 67108864  </div><div class="line"># TCP write buffer</div><div class="line">net.ipv4.tcp_wmem = 4096 65536 67108864  </div><div class="line"># turn on path MTU discovery</div><div class="line">net.ipv4.tcp_mtu_probing = 1</div><div class="line"></div><div class="line"># for high-latency network</div><div class="line">net.ipv4.tcp_congestion_control = hybla</div><div class="line"></div><div class="line"># for low-latency network, use cubic instead</div><div class="line"># net.ipv4.tcp_congestion_control = cubic</div></pre></td></tr></table></figure>
+<h4 id="3-配置Shadowsocks配置文件"><a href="#3-配置Shadowsocks配置文件" class="headerlink" title="3. 配置Shadowsocks配置文件"></a>3. 配置Shadowsocks配置文件</h4><blockquote>
+<p>mkdir /root/ss &amp;&amp; cd /root/ss &amp;&amp; vim ssserver.json</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&#123;</div><div class="line">    &quot;server&quot;: &quot;my_server_ip&quot;, // 这里输入墙外服务器地址</div><div class="line">    &quot;server_port&quot;: 8080, // 墙外服务器的端口</div><div class="line">    &quot;local_address&quot;: &quot;127.0.0.1&quot;,</div><div class="line">    &quot;local_port&quot;: 1080, // 为了安全，可修改为大于 1024 的数字</div><div class="line">    &quot;password&quot;: &quot;mypassword&quot;, // 设置一个密码</div><div class="line">    &quot;timeout&quot;: 300,</div><div class="line">    &quot;method&quot;: &quot;aes-256-cfb&quot;,//要和服务端的加密方式相同</div><div class="line">    &quot;fast_open&quot;: false</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="4-修改-python-配置文件，不然运行不了-ss"><a href="#4-修改-python-配置文件，不然运行不了-ss" class="headerlink" title="4. 修改 python 配置文件，不然运行不了 ss"></a>4. 修改 python 配置文件，不然运行不了 ss</h4><blockquote>
+<p>vim /usr/local/lib/python2.7/dist-packages/shadowsocks/crypto/openssl.py &emsp; # 修改成如下所示</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180330164846_7aMRN6_Screenshot.jpeg" alt=""></p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180330165005_QFOnfG_Screenshot.jpeg" alt=""></p>
+<h4 id="5-现在可以启动-ss-使用代理，在要使用代理的应用前加proxychains-即可"><a href="#5-现在可以启动-ss-使用代理，在要使用代理的应用前加proxychains-即可" class="headerlink" title="5. 现在可以启动 ss 使用代理，在要使用代理的应用前加proxychains 即可"></a>5. 现在可以启动 ss 使用代理，在要使用代理的应用前加proxychains 即可</h4><blockquote>
+<p>sslocal -c /root/ss/ssserver.json -d start &emsp; # 重启之后需要再次运行该命令启动 ss</p>
+<p>proxychains curl ip.cn</p>
+<p>proxychains firefox</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180330165447_bwVCOz_Screenshot.jpeg" alt=""></p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180330165823_L4SdgT_Screenshot.jpeg" alt=""></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/03/30/kali-代理之shadowsocks-proxychains/">kali 代理之shadowsocks &amp; proxychains</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">TimeS0ng</a></p>
+        <p><span>发布时间:</span>2018-03-30, 17:14:16</p>
+        <p><span>最后更新:</span>2018-03-30, 17:15:40</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/03/30/kali-代理之shadowsocks-proxychains/" title="kali 代理之shadowsocks &amp; proxychains">http://TimeS0ng.github.io/2018/03/30/kali-代理之shadowsocks-proxychains/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2018/03/30/kali-代理之shadowsocks-proxychains/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/03/28/bash-伪多进程/">
+                    bash 伪多进程
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00-序言"><span class="toc-number">1.</span> <span class="toc-text">0x00. 序言</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-最近和朋友合租了一台vps-，我搭好ss-bbr-之后居然不知道如何给kali-配置代理，真是可耻，果然Mac-用惯了之后人都会变懒！找了很久发现好多关于kali-代理的文章都失效，不过我还是在网上找到了这篇文章，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！"><span class="toc-number">1.0.1.</span> <span class="toc-text">  最近和朋友合租了一台vps ，我搭好ss + bbr 之后居然不知道如何给kali 配置代理，真是可耻，果然Mac 用惯了之后人都会变懒！找了很久发现好多关于kali 代理的文章都失效，不过我还是在网上找到了这篇文章，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-代理流程"><span class="toc-number">2.</span> <span class="toc-text">0x01. 代理流程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#好多人都用过代理，但可能大部分却都不太了解代理是如何工作的，我在这里给大家简单介绍一下，不涉及底层知识，相信很容易理解！"><span class="toc-number">2.0.1.</span> <span class="toc-text">好多人都用过代理，但可能大部分却都不太了解代理是如何工作的，我在这里给大家简单介绍一下，不涉及底层知识，相信很容易理解！</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#以上就是ss-代理的流程，是不是感觉很简单，下面我给大家演示一下如何配置"><span class="toc-number">2.0.2.</span> <span class="toc-text">以上就是ss 代理的流程，是不是感觉很简单，下面我给大家演示一下如何配置</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-配置-proxychains"><span class="toc-number">3.</span> <span class="toc-text">0x02. 配置 proxychains</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-配置shadowsocks"><span class="toc-number">4.</span> <span class="toc-text">0x03. 配置shadowsocks</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-安装shadowsocks"><span class="toc-number">4.0.1.</span> <span class="toc-text">1. 安装shadowsocks</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-优化shadowsocks-，这里我也不懂优化策略"><span class="toc-number">4.0.2.</span> <span class="toc-text">2. 优化shadowsocks ，这里我也不懂优化策略</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-配置Shadowsocks配置文件"><span class="toc-number">4.0.3.</span> <span class="toc-text">3. 配置Shadowsocks配置文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-修改-python-配置文件，不然运行不了-ss"><span class="toc-number">4.0.4.</span> <span class="toc-text">4. 修改 python 配置文件，不然运行不了 ss</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-现在可以启动-ss-使用代理，在要使用代理的应用前加proxychains-即可"><span class="toc-number">4.0.5.</span> <span class="toc-text">5. 现在可以启动 ss 使用代理，在要使用代理的应用前加proxychains 即可</span></a></li></ol></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"kali 代理之shadowsocks & proxychains　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section class="youyan" id="comments">
+    <script>
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = 'http://v2.uyan.cc/code/uyan.js?uid=2142877';
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <aside class="comment-bar">
+        <a href="javascript:void(0);">
+            <i class="fa fa-commenting-o animated infinite pulse"></i>
+            <i class="fa fa-spinner fa-pulse"></i>
+            <span class="count-comment"></span>
+        </a>
+    </aside>
+    <script>
+        var $commentBar = $("#comments aside.comment-bar");
+        var load$hide = function(){
+            $commentBar.find("a > i").toggle();
+            loadComment();
+            $commentBar.fadeOut(800);
+        }
+        $commentBar.click(function(){
+            load$hide();
+        })
+        $commentBar.children("a").hover(function(){
+            load$hide();
+        })
+        if (window.location.hash === "#comments") {
+            load$hide();
+        }
+    </script>
+
+    <div id="uyan_frame"></div>
+</section>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/03/28/bash-伪多进程/" title="下一篇: bash 伪多进程">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/03/30/kali-代理之shadowsocks-proxychains/">kali 代理之shadowsocks & proxychains</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/28/bash-伪多进程/">bash 伪多进程</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/10/Firewalk-原理/">Firewalk 原理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/08/kali使用入坑指南（二）/">kali使用入坑指南（二）</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/01/利用iodine绕过防火墙/">利用iodine绕过防火墙</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/01/kali使用入坑指南(一)/">kali使用入坑指南(一)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/01/kali安装KVM入坑笔记/">kali安装KVM入坑笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/27/花式钓鱼法/">花式钓鱼法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/27/JBOSS反序列化漏洞复现/">JOBSS反序列化漏洞复现</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/RINETD 的妙用/">RINET 的妙用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/HTTPS攻击/">HTTPS攻击</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/13/The-Backdoor-Factory/">The-Backdoor-Factory</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/08/Metasploit/">Metasploit</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/02/MITMF/">MITMF</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/02/无线渗透-序章-中间人攻击/">无线渗透(序章)--中间人攻击</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/Slowhttptest/">Slowhttptest</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/24/TearDrop/">TearDrop</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/23/SOCKSTRESS/">SOCKSTRESS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/21/Syn-Flood/">Syn-Flood</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/03/无线渗透(下)—企业级WPA破解/">无线渗透(下)—企业级WPA破解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/30/无线渗透(中)--WPS破解/">无线渗透(中)--WPS破解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/30/无线渗透(上)--WPA加密/">无线渗透(上)--WPA加密</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/29/信息收集— 僵尸扫描/">信息收集— 僵尸扫描</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2017-2018 TimeS0ng
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
