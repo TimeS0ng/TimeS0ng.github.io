@@ -60,7 +60,7 @@
 <p>“””</p>
 <p>LoadModule php5_module “C:/apm/php5/php5apache2_2.dll”</p>
 <p>AddType application/x-httpd-php .php</p>
-<p>PHPIniDir “D:/amp/php5/php.ini”</p>
+<p>PHPIniDir “D:/apm/php5/php.ini”</p>
 <p>“””</p>
 <p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515170629_zXk59X_Screenshot.jpeg" alt=""></p>
 <blockquote>
