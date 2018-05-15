@@ -15,25 +15,32 @@
 
 
 
-<meta name="description" content="0x00. 闲言&amp;emsp;&amp;emsp;最近期末考试的时候，考试室内网络完全被屏蔽，根本访问不了外网，就连同是校园网的网络都访问不了，只能访问学校指定的考试网页，但是页面使用的是域名访问而不是IP，也就是说DNS服务的53端口的流量应该能出去，这样就能开始我们的骚操作了，下面纯属“猜测”，毕竟考试的时候不敢这么做。">
+<meta name="description" content="0x00. 前言&amp;emsp;&amp;emsp;这两天在学习总结域渗透相关知识，也搭建了一套域环境，但是在域成员中无法启动phpstudy，xlion大佬建议我自己搭建一套web环境，尽量模拟公司的真实环境，于是就有了这篇文章，希望给大家填坑吧，我也会把相关软件传到我的云盘  密码:8r5k，节约大家搜集软件的时间！">
 <meta property="og:type" content="article">
-<meta property="og:title" content="RINET 的妙用">
-<meta property="og:url" content="http://TimeS0ng.github.io/2017/12/23/RINETD 的妙用/index.html">
+<meta property="og:title" content="win2003 下搭建Apache2 + PHP5 + Mysql + phpMyAdmin">
+<meta property="og:url" content="http://TimeS0ng.github.io/2018/05/15/win2003-下搭建Apache2-PHP5-Mysql-phpMyAdmin/index.html">
 <meta property="og:site_name" content="TimeS0ng&#39;s blog">
-<meta property="og:description" content="0x00. 闲言&amp;emsp;&amp;emsp;最近期末考试的时候，考试室内网络完全被屏蔽，根本访问不了外网，就连同是校园网的网络都访问不了，只能访问学校指定的考试网页，但是页面使用的是域名访问而不是IP，也就是说DNS服务的53端口的流量应该能出去，这样就能开始我们的骚操作了，下面纯属“猜测”，毕竟考试的时候不敢这么做。">
+<meta property="og:description" content="0x00. 前言&amp;emsp;&amp;emsp;这两天在学习总结域渗透相关知识，也搭建了一套域环境，但是在域成员中无法启动phpstudy，xlion大佬建议我自己搭建一套web环境，尽量模拟公司的真实环境，于是就有了这篇文章，希望给大家填坑吧，我也会把相关软件传到我的云盘  密码:8r5k，节约大家搜集软件的时间！">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227181026_6raRvt_6724.jpeg">
-<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227181041_6P6SB8_6728.jpeg">
-<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227181054_YeYibU_6744.jpeg">
-<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227181106_543GvN_6763.jpeg">
-<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227181117_VhwPW6_6758.jpeg">
-<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227181129_87n6je_6771.jpeg">
-<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227181142_MFoUyV_6773.jpeg">
-<meta property="og:updated_time" content="2017-12-27T11:47:13.236Z">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515161655_XsJ6cp_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515162134_VYC3ZY_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515162424_q4MzyV_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515163752_P2zqe4_Screenshot.jpeg">
+<meta property="og:image" content="http://times0ng.github.io/var/folders/h6/yz14hfcn0z77w4__htfp48hh0000gn/T/abnerworks.Typora/image-20180515163124635.png">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515163959_KVEfGb_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515164353_J0zlrX_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515164814_CEmJ79_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515172545_QSyuFx_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515170629_zXk59X_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515170927_ajfy4v_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515171051_ibNpr4_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515172728_TN0Ix7_Screenshot.jpeg">
+<meta property="og:image" content="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515172205_F4qTTj_Screenshot.jpeg">
+<meta property="og:updated_time" content="2018-05-15T10:28:25.816Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="RINET 的妙用">
-<meta name="twitter:description" content="0x00. 闲言&amp;emsp;&amp;emsp;最近期末考试的时候，考试室内网络完全被屏蔽，根本访问不了外网，就连同是校园网的网络都访问不了，只能访问学校指定的考试网页，但是页面使用的是域名访问而不是IP，也就是说DNS服务的53端口的流量应该能出去，这样就能开始我们的骚操作了，下面纯属“猜测”，毕竟考试的时候不敢这么做。">
-<meta name="twitter:image" content="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227181026_6raRvt_6724.jpeg">
+<meta name="twitter:title" content="win2003 下搭建Apache2 + PHP5 + Mysql + phpMyAdmin">
+<meta name="twitter:description" content="0x00. 前言&amp;emsp;&amp;emsp;这两天在学习总结域渗透相关知识，也搭建了一套域环境，但是在域成员中无法启动phpstudy，xlion大佬建议我自己搭建一套web环境，尽量模拟公司的真实环境，于是就有了这篇文章，希望给大家填坑吧，我也会把相关软件传到我的云盘  密码:8r5k，节约大家搜集软件的时间！">
+<meta name="twitter:image" content="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515161655_XsJ6cp_Screenshot.jpeg">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -65,7 +72,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>RINET 的妙用 | TimeS0ng&#39;s blog</title>
+<title>win2003 下搭建Apache2 + PHP5 + Mysql + phpMyAdmin | TimeS0ng&#39;s blog</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -266,20 +273,20 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-RINETD 的妙用" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-win2003-下搭建Apache2-PHP5-Mysql-phpMyAdmin" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/12/23/RINETD 的妙用/" class="article-date">
-      <time datetime="2017-12-23T02:07:44.000Z" itemprop="datePublished">2017-12-23</time>
+      <a href="/2018/05/15/win2003-下搭建Apache2-PHP5-Mysql-phpMyAdmin/" class="article-date">
+      <time datetime="2018-05-15T10:26:18.000Z" itemprop="datePublished">2018-05-15</time>
 </a>
 
  
-    <a href="/2017/12/23/RINETD 的妙用/#comments" title="查看评论">
+    <a href="/2018/05/15/win2003-下搭建Apache2-PHP5-Mysql-phpMyAdmin/#comments" title="查看评论">
         <i class="fa fa-comments-o" aria-hidden="true"></i>
         <span class="count-comment"></span>
         
         
-            <span class="disqus-comment-count" data-disqus-identifier="2017/12/23/RINETD 的妙用/"></span>
+            <span class="disqus-comment-count" data-disqus-identifier="2018/05/15/win2003-下搭建Apache2-PHP5-Mysql-phpMyAdmin/"></span>
         
     </a>
 
@@ -294,7 +301,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      RINET 的妙用
+      win2003 下搭建Apache2 + PHP5 + Mysql + phpMyAdmin
     </h1>
   
 
@@ -311,30 +318,87 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h2 id="0x00-闲言"><a href="#0x00-闲言" class="headerlink" title="0x00. 闲言"></a>0x00. 闲言</h2><h4 id="emsp-emsp-最近期末考试的时候，考试室内网络完全被屏蔽，根本访问不了外网，就连同是校园网的网络都访问不了，只能访问学校指定的考试网页，但是页面使用的是域名访问而不是IP，也就是说DNS服务的53端口的流量应该能出去，这样就能开始我们的骚操作了，下面纯属“猜测”，毕竟考试的时候不敢这么做。"><a href="#emsp-emsp-最近期末考试的时候，考试室内网络完全被屏蔽，根本访问不了外网，就连同是校园网的网络都访问不了，只能访问学校指定的考试网页，但是页面使用的是域名访问而不是IP，也就是说DNS服务的53端口的流量应该能出去，这样就能开始我们的骚操作了，下面纯属“猜测”，毕竟考试的时候不敢这么做。" class="headerlink" title="&emsp;&emsp;最近期末考试的时候，考试室内网络完全被屏蔽，根本访问不了外网，就连同是校园网的网络都访问不了，只能访问学校指定的考试网页，但是页面使用的是域名访问而不是IP，也就是说DNS服务的53端口的流量应该能出去，这样就能开始我们的骚操作了，下面纯属“猜测”，毕竟考试的时候不敢这么做。"></a>&emsp;&emsp;最近期末考试的时候，考试室内网络完全被屏蔽，根本访问不了外网，就连同是校园网的网络都访问不了，只能访问学校指定的考试网页，但是页面使用的是域名访问而不是IP，也就是说DNS服务的53端口的流量应该能出去，这样就能开始我们的骚操作了，下面纯属“猜测”，毕竟考试的时候不敢这么做。</h4><a id="more"></a>
-<h2 id="0x01-环境搭建"><a href="#0x01-环境搭建" class="headerlink" title="0x01. 环境搭建"></a>0x01. 环境搭建</h2><h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备:"></a><strong>环境准备:</strong></h3><h4 id="emsp-emsp-1-kali-linux-（-工具：rinetd-IP-192-168-1-104"><a href="#emsp-emsp-1-kali-linux-（-工具：rinetd-IP-192-168-1-104" class="headerlink" title="&emsp;&emsp;1. kali linux （ 工具：rinetd )  IP = 192.168.1.104"></a>&emsp;&emsp;1. kali linux （ 工具：rinetd )  IP = 192.168.1.104</h4><h4 id="emsp-emsp-2-win-xp-emsp-IP-1-1-1-103"><a href="#emsp-emsp-2-win-xp-emsp-IP-1-1-1-103" class="headerlink" title="&emsp;&emsp;2. win xp &emsp; IP = 1.1.1.103"></a>&emsp;&emsp;2. win xp &emsp; IP = 1.1.1.103</h4><h4 id="emsp-emsp-3-win-xp-emsp-IP-192-168-1-109"><a href="#emsp-emsp-3-win-xp-emsp-IP-192-168-1-109" class="headerlink" title="&emsp;&emsp;3. win xp &emsp; IP = 192.168.1.109"></a>&emsp;&emsp;3. win xp &emsp; IP = 192.168.1.109</h4><h4 id="emsp-emsp-4-monowall-emsp-LAN-IP-1-1-1-1-emsp-WAN-IP-192-168-1-112"><a href="#emsp-emsp-4-monowall-emsp-LAN-IP-1-1-1-1-emsp-WAN-IP-192-168-1-112" class="headerlink" title="&emsp;&emsp;4. monowall &emsp; LAN IP = 1.1.1.1 &emsp; WAN IP = 192.168.1.112"></a>&emsp;&emsp;4. monowall &emsp; LAN IP = 1.1.1.1 &emsp; WAN IP = 192.168.1.112</h4><blockquote>
-<p>[*]这里有monowall的简单<a href="http://www.heminjie.com/network/567.html" target="_blank" rel="external">配置方法</a></p>
+        <h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00. 前言"></a>0x00. 前言</h2><h4 id="emsp-emsp-这两天在学习总结域渗透相关知识，也搭建了一套域环境，但是在域成员中无法启动phpstudy，xlion大佬建议我自己搭建一套web环境，尽量模拟公司的真实环境，于是就有了这篇文章，希望给大家填坑吧，我也会把相关软件传到我的云盘-密码-8r5k，节约大家搜集软件的时间！"><a href="#emsp-emsp-这两天在学习总结域渗透相关知识，也搭建了一套域环境，但是在域成员中无法启动phpstudy，xlion大佬建议我自己搭建一套web环境，尽量模拟公司的真实环境，于是就有了这篇文章，希望给大家填坑吧，我也会把相关软件传到我的云盘-密码-8r5k，节约大家搜集软件的时间！" class="headerlink" title="&emsp;&emsp;这两天在学习总结域渗透相关知识，也搭建了一套域环境，但是在域成员中无法启动phpstudy，xlion大佬建议我自己搭建一套web环境，尽量模拟公司的真实环境，于是就有了这篇文章，希望给大家填坑吧，我也会把相关软件传到我的云盘  密码:8r5k，节约大家搜集软件的时间！"></a>&emsp;&emsp;这两天在学习总结域渗透相关知识，也搭建了一套域环境，但是在域成员中无法启动phpstudy，xlion大佬建议我自己搭建一套web环境，尽量模拟公司的真实环境，于是就有了这篇文章，希望给大家填坑吧，我也会把相关软件传到<a href="https://pan.baidu.com/s/1BnB2zr5hxbLRY1yHzX18rA" target="_blank" rel="external">我的云盘</a>  密码:8r5k，节约大家搜集软件的时间！</h4><a id="more"></a>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515161655_XsJ6cp_Screenshot.jpeg" alt=""></p>
+<h2 id="0x01-搭建Apache2-2"><a href="#0x01-搭建Apache2-2" class="headerlink" title="0x01. 搭建Apache2_2"></a>0x01. 搭建Apache2_2</h2><blockquote>
+<ol>
+<li>运行apache2.2.10-win32-x86-no_ssl.msi</li>
+</ol>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227181026_6raRvt_6724.jpeg" alt=""></p>
-<h3 id="配置路由表"><a href="#配置路由表" class="headerlink" title="配置路由表:"></a><strong>配置路由表:</strong></h3><h4 id="emsp-emsp-在xp中访问1-1-1-1进入防火墙配置页面，账号admin-密码mono，添加一条路由规则仅允许内网主机的流量通过DNS的53端口出外网（通过这条路由规则模拟学校限制网络之后的网络环境）"><a href="#emsp-emsp-在xp中访问1-1-1-1进入防火墙配置页面，账号admin-密码mono，添加一条路由规则仅允许内网主机的流量通过DNS的53端口出外网（通过这条路由规则模拟学校限制网络之后的网络环境）" class="headerlink" title="&emsp;&emsp;在xp中访问1.1.1.1进入防火墙配置页面，账号admin 密码mono，添加一条路由规则仅允许内网主机的流量通过DNS的53端口出外网（通过这条路由规则模拟学校限制网络之后的网络环境）"></a>&emsp;&emsp;在xp中访问1.1.1.1进入防火墙配置页面，账号admin 密码mono，添加一条路由规则仅允许内网主机的流量通过DNS的53端口出外网（通过这条路由规则模拟学校限制网络之后的网络环境）</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227181041_6P6SB8_6728.jpeg" alt=""></p>
-<h2 id="0x02-实验步骤"><a href="#0x02-实验步骤" class="headerlink" title="0x02. 实验步骤"></a>0x02. 实验步骤</h2><h4 id="emsp-emsp-上面搭建的环境已经基本相似于学校考试室的网络环境，下面我们来实现仅通过53端口进行远程桌面连接外网192-168-1-109的xp。"><a href="#emsp-emsp-上面搭建的环境已经基本相似于学校考试室的网络环境，下面我们来实现仅通过53端口进行远程桌面连接外网192-168-1-109的xp。" class="headerlink" title="&emsp;&emsp;上面搭建的环境已经基本相似于学校考试室的网络环境，下面我们来实现仅通过53端口进行远程桌面连接外网192.168.1.109的xp。"></a>&emsp;&emsp;上面搭建的环境已经基本相似于学校考试室的网络环境，下面我们来实现仅通过53端口进行远程桌面连接外网192.168.1.109的xp。</h4><h4 id="1-首先，在kali中下载安装-rinetd-用于转发流量"><a href="#1-首先，在kali中下载安装-rinetd-用于转发流量" class="headerlink" title="1. 首先，在kali中下载安装 rinetd 用于转发流量"></a>1. 首先，在kali中下载安装 rinetd 用于转发流量</h4><blockquote>
-<p>apt-get install rinetd </p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515162134_VYC3ZY_Screenshot.jpeg" alt=""></p>
+<blockquote>
+<ol>
+<li>一路下一步，到了域名那里随便填一个域名就可以了，接着下一步选择Custom 模式自定义安装</li>
+</ol>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227181054_YeYibU_6744.jpeg" alt=""></p>
-<h4 id="2-然后，修改-rinetd-的配置文件，指定转发规则"><a href="#2-然后，修改-rinetd-的配置文件，指定转发规则" class="headerlink" title="2. 然后，修改 rinetd 的配置文件，指定转发规则"></a>2. 然后，修改 rinetd 的配置文件，指定转发规则</h4><blockquote>
-<p>vim /etc/rinetd.conf</p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515162424_q4MzyV_Screenshot.jpeg" alt=""></p>
+<blockquote>
+<ol>
+<li>然后选择Apache Http Server 2.2.10，再点击change改变安装目录为C:\apm\apache2</li>
+</ol>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227181106_543GvN_6763.jpeg" alt=""></p>
-<h4 id="3-启动rinetd"><a href="#3-启动rinetd" class="headerlink" title="3. 启动rinetd"></a>3. 启动rinetd</h4><blockquote>
-<p>rinetd</p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515163752_P2zqe4_Screenshot.jpeg" alt=""></p>
+<blockquote>
+<ol>
+<li>再一路默认就安装好了，在右下角有apache的图标，到目前为止apache就安装好了</li>
+</ol>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227181117_VhwPW6_6758.jpeg" alt=""></p>
-<h4 id="4-启动远程桌面连接xp"><a href="#4-启动远程桌面连接xp" class="headerlink" title="4. 启动远程桌面连接xp"></a>4. 启动远程桌面连接xp</h4><blockquote>
-<p>mstsc</p>
+<p><img src="/var/folders/h6/yz14hfcn0z77w4__htfp48hh0000gn/T/abnerworks.Typora/image-20180515163124635.png" alt="image-20180515163124635"></p>
+<h2 id="0x02-安装PHP5"><a href="#0x02-安装PHP5" class="headerlink" title="0x02. 安装PHP5"></a>0x02. 安装PHP5</h2><blockquote>
+<ol>
+<li>将PHP5 文件夹拖到C:\apm\ 文件夹下</li>
+</ol>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227181129_87n6je_6771.jpeg" alt=""></p>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227181142_MFoUyV_6773.jpeg" alt=""></p>
-<h2 id="0x03-结语"><a href="#0x03-结语" class="headerlink" title="0x03. 结语"></a>0x03. 结语</h2><h4 id="emsp-emsp-现在我们已经成功突破学校的路由限制控制了外网的XP，不知道这种姿势能否帮助大家更好的理解网络环境-o"><a href="#emsp-emsp-现在我们已经成功突破学校的路由限制控制了外网的XP，不知道这种姿势能否帮助大家更好的理解网络环境-o" class="headerlink" title="&emsp;&emsp;现在我们已经成功突破学校的路由限制控制了外网的XP，不知道这种姿势能否帮助大家更好的理解网络环境\^o^"></a>&emsp;&emsp;现在我们已经成功突破学校的路由限制控制了外网的XP，不知道这种姿势能否帮助大家更好的理解网络环境\^o^</h4>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515163959_KVEfGb_Screenshot.jpeg" alt=""></p>
+<blockquote>
+<ol>
+<li>将php5 文件下面的php.ini-development 文件修改为php.ini</li>
+</ol>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515164353_J0zlrX_Screenshot.jpeg" alt=""></p>
+<blockquote>
+<ol>
+<li>（1）打开php.ini 将 ; extension_dir = “./“ 修改为； extension_dir = “c:\apm\php5\ext”  ; </li>
+</ol>
+<p>（2）去掉 extension=php_gd2.dll，extension=php_mbstring.dll，extension=php_mysql.dll, extension=php_mysqli.dll 前面的 ; </p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515164814_CEmJ79_Screenshot.jpeg" alt=""></p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515172545_QSyuFx_Screenshot.jpeg" alt=""></p>
+<blockquote>
+<ol>
+<li>（1）打开c:\apm\apache2\conf\httpd.conf 配置文件，找到DirectoryIndex index.html，修改为DirectoryIndex index.html index.php login.php</li>
+</ol>
+<p>（2）找到 #LoadModule vhost_alias_module modules/mod_vhost_alias.so 在这行的后面添加以下内容：</p>
+</blockquote>
+<p>“””</p>
+<p>LoadModule php5_module “C:/apm/php5/php5apache2_2.dll”</p>
+<p>AddType application/x-httpd-php .php</p>
+<p>PHPIniDir “D:/amp/php5/php.ini”</p>
+<p>“””</p>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515170629_zXk59X_Screenshot.jpeg" alt=""></p>
+<blockquote>
+<ol>
+<li>添加系统环境变量，将 ;c:\apm\php5;c:\apm\php5\ext 加到环境变量后面</li>
+</ol>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515170927_ajfy4v_Screenshot.jpeg" alt=""></p>
+<blockquote>
+<ol>
+<li>重启计算机就能看到已经将PHP整合到Apache中了，此时已经可以解析php文件</li>
+</ol>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515171051_ibNpr4_Screenshot.jpeg" alt=""></p>
+<h2 id="0x03-安装phpMyAdmin"><a href="#0x03-安装phpMyAdmin" class="headerlink" title="0x03. 安装phpMyAdmin"></a>0x03. 安装phpMyAdmin</h2><blockquote>
+<p>将phpMyAdmin 文件夹放到c:\apm\apache2\htdocs 文件夹下面，在目录中找到一个名为config.sample.inc.php的文件，将此文件复制一份并命名为config.inc.php，这个文件就是phpMyAdmin的配置文件了，重启apache就可以了</p>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515172728_TN0Ix7_Screenshot.jpeg" alt=""></p>
+<h2 id="0x04-安装Mysql"><a href="#0x04-安装Mysql" class="headerlink" title="0x04. 安装Mysql"></a>0x04. 安装Mysql</h2><blockquote>
+<ol>
+<li>打开mysql-5.5.60-win32.msi ，一路下一步，大致步骤和Apache相似，在“Developer Components（开发者部分）”上左键单击，选择“This feature, and all subfeatures, will be installed on local hard drive.”</li>
+</ol>
+</blockquote>
+<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515172205_F4qTTj_Screenshot.jpeg" alt=""></p>
+<h2 id="0x05-结语"><a href="#0x05-结语" class="headerlink" title="0x05. 结语"></a>0x05. 结语</h2><h4 id="其中有部分内容我并没有详细截图，主要是觉得这里很简单，谷歌一下就能搜到。"><a href="#其中有部分内容我并没有详细截图，主要是觉得这里很简单，谷歌一下就能搜到。" class="headerlink" title="其中有部分内容我并没有详细截图，主要是觉得这里很简单，谷歌一下就能搜到。"></a>其中有部分内容我并没有详细截图，主要是觉得这里很简单，谷歌一下就能搜到。</h4>
       
     </div>
     
@@ -342,13 +406,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2017/12/23/RINETD 的妙用/">RINET 的妙用</a></p>
+        <p><span>本文标题:</span><a href="/2018/05/15/win2003-下搭建Apache2-PHP5-Mysql-phpMyAdmin/">win2003 下搭建Apache2 + PHP5 + Mysql + phpMyAdmin</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">TimeS0ng</a></p>
-        <p><span>发布时间:</span>2017-12-23, 10:07:44</p>
-        <p><span>最后更新:</span>2017-12-27, 19:47:13</p>
+        <p><span>发布时间:</span>2018-05-15, 18:26:18</p>
+        <p><span>最后更新:</span>2018-05-15, 18:28:25</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2017/12/23/RINETD 的妙用/" title="RINET 的妙用">http://TimeS0ng.github.io/2017/12/23/RINETD 的妙用/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2017/12/23/RINETD 的妙用/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2018/05/15/win2003-下搭建Apache2-PHP5-Mysql-phpMyAdmin/" title="win2003 下搭建Apache2 + PHP5 + Mysql + phpMyAdmin">http://TimeS0ng.github.io/2018/05/15/win2003-下搭建Apache2-PHP5-Mysql-phpMyAdmin/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2018/05/15/win2003-下搭建Apache2-PHP5-Mysql-phpMyAdmin/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -360,16 +424,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2017/12/27/花式钓鱼法/">
-                    花式钓鱼法
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2017/10/27/HTTPS攻击/">
-                    HTTPS攻击
+                <a href="/2018/04/20/Windows密码抓取总结/">
+                    Windows密码抓取总结
                 </a>
             </div>
         
@@ -381,7 +439,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00-闲言"><span class="toc-number">1.</span> <span class="toc-text">0x00. 闲言</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-最近期末考试的时候，考试室内网络完全被屏蔽，根本访问不了外网，就连同是校园网的网络都访问不了，只能访问学校指定的考试网页，但是页面使用的是域名访问而不是IP，也就是说DNS服务的53端口的流量应该能出去，这样就能开始我们的骚操作了，下面纯属“猜测”，毕竟考试的时候不敢这么做。"><span class="toc-number">1.0.1.</span> <span class="toc-text">  最近期末考试的时候，考试室内网络完全被屏蔽，根本访问不了外网，就连同是校园网的网络都访问不了，只能访问学校指定的考试网页，但是页面使用的是域名访问而不是IP，也就是说DNS服务的53端口的流量应该能出去，这样就能开始我们的骚操作了，下面纯属“猜测”，毕竟考试的时候不敢这么做。</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-环境搭建"><span class="toc-number">2.</span> <span class="toc-text">0x01. 环境搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#环境准备"><span class="toc-number">2.1.</span> <span class="toc-text">环境准备:</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-1-kali-linux-（-工具：rinetd-IP-192-168-1-104"><span class="toc-number">2.1.1.</span> <span class="toc-text">  1. kali linux （ 工具：rinetd )  IP = 192.168.1.104</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-2-win-xp-emsp-IP-1-1-1-103"><span class="toc-number">2.1.2.</span> <span class="toc-text">  2. win xp   IP = 1.1.1.103</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-3-win-xp-emsp-IP-192-168-1-109"><span class="toc-number">2.1.3.</span> <span class="toc-text">  3. win xp   IP = 192.168.1.109</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-4-monowall-emsp-LAN-IP-1-1-1-1-emsp-WAN-IP-192-168-1-112"><span class="toc-number">2.1.4.</span> <span class="toc-text">  4. monowall   LAN IP = 1.1.1.1   WAN IP = 192.168.1.112</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置路由表"><span class="toc-number">2.2.</span> <span class="toc-text">配置路由表:</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-在xp中访问1-1-1-1进入防火墙配置页面，账号admin-密码mono，添加一条路由规则仅允许内网主机的流量通过DNS的53端口出外网（通过这条路由规则模拟学校限制网络之后的网络环境）"><span class="toc-number">2.2.1.</span> <span class="toc-text">  在xp中访问1.1.1.1进入防火墙配置页面，账号admin 密码mono，添加一条路由规则仅允许内网主机的流量通过DNS的53端口出外网（通过这条路由规则模拟学校限制网络之后的网络环境）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-实验步骤"><span class="toc-number">3.</span> <span class="toc-text">0x02. 实验步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-上面搭建的环境已经基本相似于学校考试室的网络环境，下面我们来实现仅通过53端口进行远程桌面连接外网192-168-1-109的xp。"><span class="toc-number">3.0.1.</span> <span class="toc-text">  上面搭建的环境已经基本相似于学校考试室的网络环境，下面我们来实现仅通过53端口进行远程桌面连接外网192.168.1.109的xp。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-首先，在kali中下载安装-rinetd-用于转发流量"><span class="toc-number">3.0.2.</span> <span class="toc-text">1. 首先，在kali中下载安装 rinetd 用于转发流量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-然后，修改-rinetd-的配置文件，指定转发规则"><span class="toc-number">3.0.3.</span> <span class="toc-text">2. 然后，修改 rinetd 的配置文件，指定转发规则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-启动rinetd"><span class="toc-number">3.0.4.</span> <span class="toc-text">3. 启动rinetd</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-启动远程桌面连接xp"><span class="toc-number">3.0.5.</span> <span class="toc-text">4. 启动远程桌面连接xp</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-结语"><span class="toc-number">4.</span> <span class="toc-text">0x03. 结语</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-现在我们已经成功突破学校的路由限制控制了外网的XP，不知道这种姿势能否帮助大家更好的理解网络环境-o"><span class="toc-number">4.0.1.</span> <span class="toc-text">  现在我们已经成功突破学校的路由限制控制了外网的XP，不知道这种姿势能否帮助大家更好的理解网络环境\^o^</span></a></li></ol></li></ol></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00-前言"><span class="toc-number">1.</span> <span class="toc-text">0x00. 前言</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-这两天在学习总结域渗透相关知识，也搭建了一套域环境，但是在域成员中无法启动phpstudy，xlion大佬建议我自己搭建一套web环境，尽量模拟公司的真实环境，于是就有了这篇文章，希望给大家填坑吧，我也会把相关软件传到我的云盘-密码-8r5k，节约大家搜集软件的时间！"><span class="toc-number">1.0.1.</span> <span class="toc-text">  这两天在学习总结域渗透相关知识，也搭建了一套域环境，但是在域成员中无法启动phpstudy，xlion大佬建议我自己搭建一套web环境，尽量模拟公司的真实环境，于是就有了这篇文章，希望给大家填坑吧，我也会把相关软件传到我的云盘  密码:8r5k，节约大家搜集软件的时间！</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-搭建Apache2-2"><span class="toc-number">2.</span> <span class="toc-text">0x01. 搭建Apache2_2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-安装PHP5"><span class="toc-number">3.</span> <span class="toc-text">0x02. 安装PHP5</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-安装phpMyAdmin"><span class="toc-number">4.</span> <span class="toc-text">0x03. 安装phpMyAdmin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-安装Mysql"><span class="toc-number">5.</span> <span class="toc-text">0x04. 安装Mysql</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x05-结语"><span class="toc-number">6.</span> <span class="toc-text">0x05. 结语</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#其中有部分内容我并没有详细截图，主要是觉得这里很简单，谷歌一下就能搜到。"><span class="toc-number">6.0.1.</span> <span class="toc-text">其中有部分内容我并没有详细截图，主要是觉得这里很简单，谷歌一下就能搜到。</span></a></li></ol></li></ol></li></ol>
         
     </div>
     <style>
@@ -417,7 +475,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"RINET 的妙用　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"win2003 下搭建Apache2 + PHP5 + Mysql + phpMyAdmin　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -474,15 +532,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2017/12/27/花式钓鱼法/" title="上一篇: 花式钓鱼法">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2017/10/27/HTTPS攻击/" title="下一篇: HTTPS攻击">
+            <a href="/2018/04/20/Windows密码抓取总结/" title="下一篇: Windows密码抓取总结">
                 <i class="fa fa-angle-right"></i>
             </a>
         
