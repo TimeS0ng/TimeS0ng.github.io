@@ -45,7 +45,7 @@
 <p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515164353_J0zlrX_Screenshot.jpeg" alt=""></p>
 <blockquote>
 <ol>
-<li>（1）打开php.ini 将 ; extension_dir = “./“ 修改为； extension_dir = “c:\apm\php5\ext”  ; </li>
+<li>（1）打开php.ini 将 ; extension_dir = “./“ 修改为extension_dir = “c:\apm\php5\ext”  ; </li>
 </ol>
 <p>（2）去掉 extension=php_gd2.dll，extension=php_mbstring.dll，extension=php_mysql.dll, extension=php_mysqli.dll 前面的 ; </p>
 </blockquote>
