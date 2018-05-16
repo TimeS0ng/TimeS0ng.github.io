@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://TimeS0ng.github.io/"/>
-  <updated>2018-05-15T13:59:26.023Z</updated>
+  <updated>2018-05-16T02:49:02.840Z</updated>
   <id>http://TimeS0ng.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://TimeS0ng.github.io/2018/05/15/win2003-%E4%B8%8B%E6%90%AD%E5%BB%BAApache2-PHP5-Mysql-phpMyAdmin/"/>
     <id>http://TimeS0ng.github.io/2018/05/15/win2003-下搭建Apache2-PHP5-Mysql-phpMyAdmin/</id>
     <published>2018-05-15T10:26:18.000Z</published>
-    <updated>2018-05-15T13:59:26.023Z</updated>
+    <updated>2018-05-16T02:49:02.840Z</updated>
     
     <content type="html"><![CDATA[<h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00. 前言"></a>0x00. 前言</h2><h4 id="emsp-emsp-这两天在学习总结域渗透相关知识，也搭建了一套域环境，但是在域成员中无法启动phpstudy，xlion大佬建议我自己搭建一套web环境，尽量模拟公司的真实环境，于是就有了这篇文章，希望给大家填坑吧，我也会把相关软件传到我的云盘-密码-8r5k，节约大家搜集软件的时间！"><a href="#emsp-emsp-这两天在学习总结域渗透相关知识，也搭建了一套域环境，但是在域成员中无法启动phpstudy，xlion大佬建议我自己搭建一套web环境，尽量模拟公司的真实环境，于是就有了这篇文章，希望给大家填坑吧，我也会把相关软件传到我的云盘-密码-8r5k，节约大家搜集软件的时间！" class="headerlink" title="&emsp;&emsp;这两天在学习总结域渗透相关知识，也搭建了一套域环境，但是在域成员中无法启动phpstudy，xlion大佬建议我自己搭建一套web环境，尽量模拟公司的真实环境，于是就有了这篇文章，希望给大家填坑吧，我也会把相关软件传到我的云盘  密码:8r5k，节约大家搜集软件的时间！"></a>&emsp;&emsp;这两天在学习总结域渗透相关知识，也搭建了一套域环境，但是在域成员中无法启动phpstudy，xlion大佬建议我自己搭建一套web环境，尽量模拟公司的真实环境，于是就有了这篇文章，希望给大家填坑吧，我也会把相关软件传到<a href="https://pan.baidu.com/s/1BnB2zr5hxbLRY1yHzX18rA" target="_blank" rel="external">我的云盘</a>  密码:8r5k，节约大家搜集软件的时间！</h4><a id="more"></a>
 <p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515161655_XsJ6cp_Screenshot.jpeg" alt=""></p>
@@ -102,7 +102,7 @@
 </ol>
 </blockquote>
 <p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515172205_F4qTTj_Screenshot.jpeg" alt=""></p>
-<h2 id="0x05-结语"><a href="#0x05-结语" class="headerlink" title="0x05. 结语"></a>0x05. 结语</h2><h4 id="其中有部分内容我并没有详细截图，主要是觉得这里很简单，谷歌一下就能搜到。"><a href="#其中有部分内容我并没有详细截图，主要是觉得这里很简单，谷歌一下就能搜到。" class="headerlink" title="其中有部分内容我并没有详细截图，主要是觉得这里很简单，谷歌一下就能搜到。"></a>其中有部分内容我并没有详细截图，主要是觉得这里很简单，谷歌一下就能搜到。</h4>]]></content>
+<h2 id="0x05-结语"><a href="#0x05-结语" class="headerlink" title="0x05. 结语"></a>0x05. 结语</h2><h4 id="其中有部分内容我并没有详细截图，主要是觉得这里很简单，谷歌一下就能搜到。另外，因为Apache默认是system权限运行的，如果想要降权运行的话需要将Apache安装到除c盘外的其它盘符，还需要修改logs文件夹的权限。"><a href="#其中有部分内容我并没有详细截图，主要是觉得这里很简单，谷歌一下就能搜到。另外，因为Apache默认是system权限运行的，如果想要降权运行的话需要将Apache安装到除c盘外的其它盘符，还需要修改logs文件夹的权限。" class="headerlink" title="其中有部分内容我并没有详细截图，主要是觉得这里很简单，谷歌一下就能搜到。另外，因为Apache默认是system权限运行的，如果想要降权运行的话需要将Apache安装到除c盘外的其它盘符，还需要修改logs文件夹的权限。"></a>其中有部分内容我并没有详细截图，主要是觉得这里很简单，谷歌一下就能搜到。另外，因为Apache默认是system权限运行的，如果想要降权运行的话需要将Apache安装到除c盘外的其它盘符，还需要修改logs文件夹的权限。</h4>]]></content>
     
     <summary type="html">
     
