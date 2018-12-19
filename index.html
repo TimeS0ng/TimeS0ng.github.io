@@ -261,6 +261,75 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-第二篇翻译：Developers-are-lazy-or-maybe-busy" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/12/19/第二篇翻译：Developers-are-lazy-or-maybe-busy/" class="article-date">
+      <time datetime="2018-12-19T09:35:11.000Z" itemprop="datePublished">2018-12-19</time>
+</a>
+
+ 
+    <a href="/2018/12/19/第二篇翻译：Developers-are-lazy-or-maybe-busy/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2018/12/19/第二篇翻译：Developers-are-lazy-or-maybe-busy/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/19/第二篇翻译：Developers-are-lazy-or-maybe-busy/">第二篇翻译：Developers are lazy(or maybe busy)</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h4 id="原文：Developers-are-lazy-or-maybe-busy"><a href="#原文：Developers-are-lazy-or-maybe-busy" class="headerlink" title="原文：Developers are lazy(or maybe busy)"></a>原文：<a href="https://medium.com/bugbountywriteup/open-redirect-developers-are-lazy-or-maybe-busy-6c51718b10e4" target="_blank" rel="external">Developers are lazy(or maybe busy)</a></h4><h4 id="漏洞：-符绕过造成URL重定向"><a href="#漏洞：-符绕过造成URL重定向" class="headerlink" title="漏洞：@符绕过造成URL重定向"></a>漏洞：@符绕过造成URL重定向</h4><h4 id="作者：KatsuragiCSL"><a href="#作者：KatsuragiCSL" class="headerlink" title="作者：KatsuragiCSL"></a>作者：KatsuragiCSL</h4><h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+      
+        <p class="article-more-link">
+          <a href="/2018/12/19/第二篇翻译：Developers-are-lazy-or-maybe-busy/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-第一篇翻译：Change-Anyone’s-profile-picture-Exploiting-IDOR" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -864,75 +933,6 @@
       
         <p class="article-more-link">
           <a href="/2018/03/30/kali-代理之shadowsocks-proxychains/#more">阅读全文 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-bash-伪多进程" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2018/03/28/bash-伪多进程/" class="article-date">
-      <time datetime="2018-03-28T13:57:03.000Z" itemprop="datePublished">2018-03-28</time>
-</a>
-
- 
-    <a href="/2018/03/28/bash-伪多进程/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2018/03/28/bash-伪多进程/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/28/bash-伪多进程/">bash 伪多进程</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h2 id="0x00-序言"><a href="#0x00-序言" class="headerlink" title="0x00. 序言"></a>0x00. 序言</h2><h4 id="emsp-emsp-最近研究ident-user-enum-这个工具的时候我不知道如何配置实验环境，所以打算在公网上找开着113-端口的主机，然而互联网实在是太大了，但是开着113-端口的主机是真的少之又少，如果用单进程一个一个试的话无疑大海捞针，所以今天打算将自己写脚本的心得总结一下，其实也很简单！"><a href="#emsp-emsp-最近研究ident-user-enum-这个工具的时候我不知道如何配置实验环境，所以打算在公网上找开着113-端口的主机，然而互联网实在是太大了，但是开着113-端口的主机是真的少之又少，如果用单进程一个一个试的话无疑大海捞针，所以今天打算将自己写脚本的心得总结一下，其实也很简单！" class="headerlink" title="&emsp;&emsp;最近研究ident-user-enum 这个工具的时候我不知道如何配置实验环境，所以打算在公网上找开着113 端口的主机，然而互联网实在是太大了，但是开着113 端口的主机是真的少之又少，如果用单进程一个一个试的话无疑大海捞针，所以今天打算将自己写脚本的心得总结一下，其实也很简单！"></a>&emsp;&emsp;最近研究ident-user-enum 这个工具的时候我不知道如何配置实验环境，所以打算在公网上找开着113 端口的主机，然而互联网实在是太大了，但是开着113 端口的主机是真的少之又少，如果用单进程一个一个试的话无疑大海捞针，所以今天打算将自己写脚本的心得总结一下，其实也很简单！</h4>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-      
-        <p class="article-more-link">
-          <a href="/2018/03/28/bash-伪多进程/#more">阅读全文 >></a>
         </p>
       
       <div class="clearfix"></div>

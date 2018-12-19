@@ -15,25 +15,20 @@
 
 
 
-<meta name="description" content="0x00. 漏洞描述2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。">
+<meta name="description" content="原文：Developers are lazy(or maybe busy)漏洞：@符绕过造成URL重定向作者：KatsuragiCSL难度：低">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JOBSS反序列化漏洞复现">
-<meta property="og:url" content="http://TimeS0ng.github.io/2017/12/27/JBOSS反序列化漏洞复现/index.html">
+<meta property="og:title" content="第二篇翻译：Developers are lazy(or maybe busy)">
+<meta property="og:url" content="http://TimeS0ng.github.io/2018/12/19/第二篇翻译：Developers-are-lazy-or-maybe-busy/index.html">
 <meta property="og:site_name" content="TimeS0ng&#39;s blog">
-<meta property="og:description" content="0x00. 漏洞描述2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。">
+<meta property="og:description" content="原文：Developers are lazy(or maybe busy)漏洞：@符绕过造成URL重定向作者：KatsuragiCSL难度：低">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180801_LeUN0c_6293.jpeg">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180817_sOlp2c_6301.jpeg">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180832_WE4CD3_6309.jpeg">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180843_FQh3jJ_6316.jpeg">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180855_12YJ7L_6329.jpeg">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180912_UQjhJU_6322.jpeg">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180923_jatTku_6333.jpeg">
-<meta property="og:updated_time" content="2018-12-18T15:17:49.240Z">
+<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/translate_2/1.gif">
+<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/translate_1/money.png">
+<meta property="og:updated_time" content="2018-12-19T09:35:30.058Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JOBSS反序列化漏洞复现">
-<meta name="twitter:description" content="0x00. 漏洞描述2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。">
-<meta name="twitter:image" content="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180801_LeUN0c_6293.jpeg">
+<meta name="twitter:title" content="第二篇翻译：Developers are lazy(or maybe busy)">
+<meta name="twitter:description" content="原文：Developers are lazy(or maybe busy)漏洞：@符绕过造成URL重定向作者：KatsuragiCSL难度：低">
+<meta name="twitter:image" content="http://tie.027cgb.com/612577/times0ng_blog/translate_2/1.gif">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -65,7 +60,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>JOBSS反序列化漏洞复现 | TimeS0ng&#39;s blog</title>
+<title>第二篇翻译：Developers are lazy(or maybe busy) | TimeS0ng&#39;s blog</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -266,20 +261,20 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-JBOSS反序列化漏洞复现" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-第二篇翻译：Developers-are-lazy-or-maybe-busy" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/12/27/JBOSS反序列化漏洞复现/" class="article-date">
-      <time datetime="2017-12-27T02:39:14.000Z" itemprop="datePublished">2017-12-27</time>
+      <a href="/2018/12/19/第二篇翻译：Developers-are-lazy-or-maybe-busy/" class="article-date">
+      <time datetime="2018-12-19T09:35:11.000Z" itemprop="datePublished">2018-12-19</time>
 </a>
 
  
-    <a href="/2017/12/27/JBOSS反序列化漏洞复现/#comments" title="查看评论">
+    <a href="/2018/12/19/第二篇翻译：Developers-are-lazy-or-maybe-busy/#comments" title="查看评论">
         <i class="fa fa-comments-o" aria-hidden="true"></i>
         <span class="count-comment"></span>
         
         
-            <span class="disqus-comment-count" data-disqus-identifier="2017/12/27/JBOSS反序列化漏洞复现/"></span>
+            <span class="disqus-comment-count" data-disqus-identifier="2018/12/19/第二篇翻译：Developers-are-lazy-or-maybe-busy/"></span>
         
     </a>
 
@@ -294,7 +289,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      JOBSS反序列化漏洞复现
+      第二篇翻译：Developers are lazy(or maybe busy)
     </h1>
   
 
@@ -311,30 +306,11 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h2 id="0x00-漏洞描述"><a href="#0x00-漏洞描述" class="headerlink" title="0x00. 漏洞描述"></a>0x00. 漏洞描述</h2><h4 id="2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。"><a href="#2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。" class="headerlink" title="2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。"></a>2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。</h4><a id="more"></a>
-<h2 id="0x01-漏洞复现"><a href="#0x01-漏洞复现" class="headerlink" title="0x01. 漏洞复现"></a>0x01. 漏洞复现</h2><h3 id="1-环境准备"><a href="#1-环境准备" class="headerlink" title="1). 环境准备"></a>1). 环境准备</h3><h4 id="1-JBOSS下载地址：http-download-jboss-org-jbossas-6-1-jboss-as-distribution-6-1-0-Final-zip"><a href="#1-JBOSS下载地址：http-download-jboss-org-jbossas-6-1-jboss-as-distribution-6-1-0-Final-zip" class="headerlink" title="1. JBOSS下载地址：http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip"></a>1. JBOSS下载地址：<a href="http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip" target="_blank" rel="external">http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</a></h4><h4 id="2-EXP下载地址：https-github-com-yunxu1-jboss-CVE-2017-12149"><a href="#2-EXP下载地址：https-github-com-yunxu1-jboss-CVE-2017-12149" class="headerlink" title="2. EXP下载地址：https://github.com/yunxu1/jboss-_CVE-2017-12149"></a>2. EXP下载地址：<a href="https://github.com/yunxu1/jboss-_CVE-2017-12149" target="_blank" rel="external">https://github.com/yunxu1/jboss-_CVE-2017-12149</a></h4><h3 id="2-环境搭建"><a href="#2-环境搭建" class="headerlink" title="2). 环境搭建"></a>2). 环境搭建</h3><h4 id="第一步：下载JBOSS环境，并解压"><a href="#第一步：下载JBOSS环境，并解压" class="headerlink" title="第一步：下载JBOSS环境，并解压"></a>第一步：下载JBOSS环境，并解压</h4><blockquote>
-<p>wget <a href="http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip" target="_blank" rel="external">http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</a> </p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180801_LeUN0c_6293.jpeg" alt=""></p>
-<h4 id="第二步：修改配置文件，使网络中的主机都能访问JBOSS"><a href="#第二步：修改配置文件，使网络中的主机都能访问JBOSS" class="headerlink" title="第二步：修改配置文件，使网络中的主机都能访问JBOSS"></a>第二步：修改配置文件，使网络中的主机都能访问JBOSS</h4><blockquote>
-<p>vim ~/jboss-6.1.0.Final/server/default/deploy/jbossweb.sar/server.xml</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180817_sOlp2c_6301.jpeg" alt=""></p>
-<h4 id="第三步：启动JBOSS"><a href="#第三步：启动JBOSS" class="headerlink" title="第三步：启动JBOSS"></a>第三步：启动JBOSS</h4><blockquote>
-<p>./jboss-6.1.0.Final/bin/run.sh</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180832_WE4CD3_6309.jpeg" alt=""></p>
-<h4 id="第四步：下载EXP"><a href="#第四步：下载EXP" class="headerlink" title="第四步：下载EXP"></a>第四步：下载EXP</h4><blockquote>
-<p>git clone <a href="https://github.com/yunxu1/jboss-_CVE-2017-12149" target="_blank" rel="external">https://github.com/yunxu1/jboss-_CVE-2017-12149</a></p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180843_FQh3jJ_6316.jpeg" alt=""></p>
-<h3 id="3-信息收集"><a href="#3-信息收集" class="headerlink" title="3). 信息收集"></a>3). 信息收集</h3><h4 id="第一步：利用nmap对目标主机进行常用端口扫描"><a href="#第一步：利用nmap对目标主机进行常用端口扫描" class="headerlink" title="第一步：利用nmap对目标主机进行常用端口扫描"></a>第一步：利用nmap对目标主机进行常用端口扫描</h4><blockquote>
-<p>nmap 192.168.1.111 -A </p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180855_12YJ7L_6329.jpeg" alt=""></p>
-<h4 id="第二步：访问目标主机的8080端口，看看能否正常访问"><a href="#第二步：访问目标主机的8080端口，看看能否正常访问" class="headerlink" title="第二步：访问目标主机的8080端口，看看能否正常访问"></a>第二步：访问目标主机的8080端口，看看能否正常访问</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180912_UQjhJU_6322.jpeg" alt=""></p>
-<h3 id="4-漏洞利用"><a href="#4-漏洞利用" class="headerlink" title="4). 漏洞利用"></a>4). 漏洞利用</h3><h4 id="利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化-CVE-2017-12149-jar"><a href="#利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化-CVE-2017-12149-jar" class="headerlink" title="利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化_CVE-2017-12149.jar"></a>利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化_CVE-2017-12149.jar</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180923_jatTku_6333.jpeg" alt=""></p>
-<h2 id="0x02-总结"><a href="#0x02-总结" class="headerlink" title="0x02. 总结"></a>0x02. 总结</h2><h4 id="emsp-emsp-行千里路，不如读万卷书…"><a href="#emsp-emsp-行千里路，不如读万卷书…" class="headerlink" title="&emsp;&emsp;行千里路，不如读万卷书…"></a>&emsp;&emsp;行千里路，不如读万卷书…</h4>
+        <h4 id="原文：Developers-are-lazy-or-maybe-busy"><a href="#原文：Developers-are-lazy-or-maybe-busy" class="headerlink" title="原文：Developers are lazy(or maybe busy)"></a>原文：<a href="https://medium.com/bugbountywriteup/open-redirect-developers-are-lazy-or-maybe-busy-6c51718b10e4" target="_blank" rel="external">Developers are lazy(or maybe busy)</a></h4><h4 id="漏洞：-符绕过造成URL重定向"><a href="#漏洞：-符绕过造成URL重定向" class="headerlink" title="漏洞：@符绕过造成URL重定向"></a>漏洞：@符绕过造成URL重定向</h4><h4 id="作者：KatsuragiCSL"><a href="#作者：KatsuragiCSL" class="headerlink" title="作者：KatsuragiCSL"></a>作者：KatsuragiCSL</h4><h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4><a id="more"></a>
+<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><h4 id="emsp-emsp-这次我要写一个我在私人程序中发现的开放重定向的BUG漏洞。尽管这个BUG的危害不太严重，但是去发现它的过程却很有趣！"><a href="#emsp-emsp-这次我要写一个我在私人程序中发现的开放重定向的BUG漏洞。尽管这个BUG的危害不太严重，但是去发现它的过程却很有趣！" class="headerlink" title="&emsp;&emsp;这次我要写一个我在私人程序中发现的开放重定向的BUG漏洞。尽管这个BUG的危害不太严重，但是去发现它的过程却很有趣！"></a>&emsp;&emsp;这次我要写一个我在私人程序中发现的开放重定向的BUG漏洞。尽管这个BUG的危害不太严重，但是去发现它的过程却很有趣！</h4><h4 id="emsp-emsp-我们暂且定义这个网站的域名为example-com，一开始我注册了一个测试账号，接着四处寻找可能存在漏洞的点，然后就发现了下面的URL链接："><a href="#emsp-emsp-我们暂且定义这个网站的域名为example-com，一开始我注册了一个测试账号，接着四处寻找可能存在漏洞的点，然后就发现了下面的URL链接：" class="headerlink" title="&emsp;&emsp;我们暂且定义这个网站的域名为example.com，一开始我注册了一个测试账号，接着四处寻找可能存在漏洞的点，然后就发现了下面的URL链接："></a>&emsp;&emsp;我们暂且定义这个网站的域名为example.com，一开始我注册了一个测试账号，接着四处寻找可能存在漏洞的点，然后就发现了下面的URL链接：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">https://www.example.com/account/login?next=https://www.example.com</div></pre></td></tr></table></figure>
+<h4 id="emsp-emsp-条件反射就想到了要去测试开放重定向这种类型的漏洞！"><a href="#emsp-emsp-条件反射就想到了要去测试开放重定向这种类型的漏洞！" class="headerlink" title="&emsp;&emsp;条件反射就想到了要去测试开放重定向这种类型的漏洞！"></a>&emsp;&emsp;条件反射就想到了要去测试开放重定向这种类型的漏洞！</h4><h4 id="emsp-emsp-首先，我尝试了最常规的payload：https-www-example-com-account-login-next-https-google-com-遗憾的是这个payload并没有生效，我没有被重定向到Google去！"><a href="#emsp-emsp-首先，我尝试了最常规的payload：https-www-example-com-account-login-next-https-google-com-遗憾的是这个payload并没有生效，我没有被重定向到Google去！" class="headerlink" title="&emsp;&emsp;首先，我尝试了最常规的payload：https://www.example.com/account/login?next=https://google.com   遗憾的是这个payload并没有生效，我没有被重定向到Google去！"></a>&emsp;&emsp;首先，我尝试了最常规的payload：<a href="https://www.example.com/account/login?next=https://google.com" target="_blank" rel="external">https://www.example.com/account/login?next=https://google.com</a>   遗憾的是这个payload并没有生效，我没有被重定向到Google去！</h4><h4 id="emsp-emsp-然后，我又尝试另一个payload：https-www-example-com-account-login-next-https-example-com-google-com-google-com-javascript-alert-1-不过这些花里胡哨的东西并没有任何作用"><a href="#emsp-emsp-然后，我又尝试另一个payload：https-www-example-com-account-login-next-https-example-com-google-com-google-com-javascript-alert-1-不过这些花里胡哨的东西并没有任何作用" class="headerlink" title="&emsp;&emsp;然后，我又尝试另一个payload：https://www.example.com/account/login?next=https://example.com@google.com , //google.com , javascript:alert(1)  不过这些花里胡哨的东西并没有任何作用"></a>&emsp;&emsp;然后，我又尝试另一个payload：<a href="https://www.example.com/account/login?next=https://example.com@google.com" target="_blank" rel="external">https://www.example.com/account/login?next=https://example.com@google.com</a> , //google.com , javascript:alert(1)  不过这些花里胡哨的东西并没有任何作用</h4><h4 id="emsp-emsp-最后灵犀一点，我换成这个payload之后终于有了一点反应：https-www-example-com-account-login-next-https-www-example-com-amp-next-https-google-com-但这也仅仅只是有点反应而已，并没有实现真正的跳转，回车之后我的URL变成了：https-example-com-2Cgoogle-com-并且浏览器还提示错误"><a href="#emsp-emsp-最后灵犀一点，我换成这个payload之后终于有了一点反应：https-www-example-com-account-login-next-https-www-example-com-amp-next-https-google-com-但这也仅仅只是有点反应而已，并没有实现真正的跳转，回车之后我的URL变成了：https-example-com-2Cgoogle-com-并且浏览器还提示错误" class="headerlink" title="&emsp;&emsp;最后灵犀一点，我换成这个payload之后终于有了一点反应：https://www.example.com/account/login?next=https://www.example.com&amp;next=https://google.com 但这也仅仅只是有点反应而已，并没有实现真正的跳转，回车之后我的URL变成了：https://example.com%2Cgoogle.com 并且浏览器还提示错误"></a>&emsp;&emsp;最后灵犀一点，我换成这个payload之后终于有了一点反应：<a href="https://www.example.com/account/login?next=https://www.example.com&amp;next=https://google.com" target="_blank" rel="external">https://www.example.com/account/login?next=https://www.example.com&amp;next=https://google.com</a> 但这也仅仅只是有点反应而已，并没有实现真正的跳转，回车之后我的URL变成了：<a href="https://example.com%2Cgoogle.com" target="_blank" rel="external">https://example.com%2Cgoogle.com</a> 并且浏览器还提示错误</h4><h4 id="emsp-emsp-尽管又失败了，但是此时我相信自己能够利用这个点！从上面浏览器URL的变化可以发现服务器只是过滤了第一个参数，第二个参数中的值被保留了，只不过是用了一个逗号-2C-连接而已"><a href="#emsp-emsp-尽管又失败了，但是此时我相信自己能够利用这个点！从上面浏览器URL的变化可以发现服务器只是过滤了第一个参数，第二个参数中的值被保留了，只不过是用了一个逗号-2C-连接而已" class="headerlink" title="&emsp;&emsp;尽管又失败了，但是此时我相信自己能够利用这个点！从上面浏览器URL的变化可以发现服务器只是过滤了第一个参数，第二个参数中的值被保留了，只不过是用了一个逗号(%2C)连接而已"></a>&emsp;&emsp;尽管又失败了，但是此时我相信自己能够利用这个点！从上面浏览器URL的变化可以发现服务器只是过滤了第一个参数，第二个参数中的值被保留了，只不过是用了一个逗号(%2C)连接而已</h4><h4 id="emsp-emsp-所以我又构造了最终的payload：https-www-example-com-account-login-next-https-www-example-com-amp-next-google-com"><a href="#emsp-emsp-所以我又构造了最终的payload：https-www-example-com-account-login-next-https-www-example-com-amp-next-google-com" class="headerlink" title="&emsp;&emsp;所以我又构造了最终的payload：https://www.example.com/account/login?next=https://www.example.com&amp;next=@google.com"></a>&emsp;&emsp;所以我又构造了最终的payload：<a href="https://www.example.com/account/login?next=https://www.example.com&amp;next=@google.com" target="_blank" rel="external">https://www.example.com/account/login?next=https://www.example.com&amp;next=@google.com</a></h4><h4 id="emsp-emsp-并且得到URL：https-example-com-google-com-这其实就已经将我重定向到https-www-google-com了，不信你可以访问看看"><a href="#emsp-emsp-并且得到URL：https-example-com-google-com-这其实就已经将我重定向到https-www-google-com了，不信你可以访问看看" class="headerlink" title="&emsp;&emsp;并且得到URL：https://example.com,@google.com 这其实就已经将我重定向到https://www.google.com了，不信你可以访问看看"></a>&emsp;&emsp;并且得到URL：<a href="https://example.com,@google.com" target="_blank" rel="external">https://example.com,@google.com</a> 这其实就已经将我重定向到<a href="https://www.google.com了，不信你可以访问看看" target="_blank" rel="external">https://www.google.com了，不信你可以访问看看</a></h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_2/1.gif" alt=""></p>
+<h4 id="emsp-emsp-最后让作者很郁闷的是虽然登陆页面的重定向漏洞被修复了，但是当他来到注册页面，bom一模一样的漏洞依然存在，此处省略n个单词…"><a href="#emsp-emsp-最后让作者很郁闷的是虽然登陆页面的重定向漏洞被修复了，但是当他来到注册页面，bom一模一样的漏洞依然存在，此处省略n个单词…" class="headerlink" title="&emsp;&emsp;最后让作者很郁闷的是虽然登陆页面的重定向漏洞被修复了，但是当他来到注册页面，bom一模一样的漏洞依然存在，此处省略n个单词…."></a>&emsp;&emsp;最后让作者很郁闷的是虽然登陆页面的重定向漏洞被修复了，但是当他来到注册页面，bom一模一样的漏洞依然存在，此处省略n个单词….</h4><h2 id="打赏译者"><a href="#打赏译者" class="headerlink" title="打赏译者"></a>打赏译者</h2><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/money.png" alt=""></p>
+
       
     </div>
     
@@ -342,13 +318,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2017/12/27/JBOSS反序列化漏洞复现/">JOBSS反序列化漏洞复现</a></p>
+        <p><span>本文标题:</span><a href="/2018/12/19/第二篇翻译：Developers-are-lazy-or-maybe-busy/">第二篇翻译：Developers are lazy(or maybe busy)</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">TimeS0ng</a></p>
-        <p><span>发布时间:</span>2017-12-27, 10:39:14</p>
-        <p><span>最后更新:</span>2018-12-18, 23:17:49</p>
+        <p><span>发布时间:</span>2018-12-19, 17:35:11</p>
+        <p><span>最后更新:</span>2018-12-19, 17:35:30</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2017/12/27/JBOSS反序列化漏洞复现/" title="JOBSS反序列化漏洞复现">http://TimeS0ng.github.io/2017/12/27/JBOSS反序列化漏洞复现/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2017/12/27/JBOSS反序列化漏洞复现/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2018/12/19/第二篇翻译：Developers-are-lazy-or-maybe-busy/" title="第二篇翻译：Developers are lazy(or maybe busy)">http://TimeS0ng.github.io/2018/12/19/第二篇翻译：Developers-are-lazy-or-maybe-busy/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2018/12/19/第二篇翻译：Developers-are-lazy-or-maybe-busy/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -360,16 +336,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2018/03/01/kali安装KVM入坑笔记/">
-                    kali安装KVM入坑笔记
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2017/12/27/花式钓鱼法/">
-                    花式钓鱼法
+                <a href="/2018/12/19/第一篇翻译：Change-Anyone’s-profile-picture-Exploiting-IDOR/">
+                    第一篇翻译：Change Anyone’s profile picture-Exploiting IDOR
                 </a>
             </div>
         
@@ -381,7 +351,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00-漏洞描述"><span class="toc-number">1.</span> <span class="toc-text">0x00. 漏洞描述</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。"><span class="toc-number">1.0.1.</span> <span class="toc-text">2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-漏洞复现"><span class="toc-number">2.</span> <span class="toc-text">0x01. 漏洞复现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-环境准备"><span class="toc-number">2.1.</span> <span class="toc-text">1). 环境准备</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-JBOSS下载地址：http-download-jboss-org-jbossas-6-1-jboss-as-distribution-6-1-0-Final-zip"><span class="toc-number">2.1.1.</span> <span class="toc-text">1. JBOSS下载地址：http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-EXP下载地址：https-github-com-yunxu1-jboss-CVE-2017-12149"><span class="toc-number">2.1.2.</span> <span class="toc-text">2. EXP下载地址：https://github.com/yunxu1/jboss-_CVE-2017-12149</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-环境搭建"><span class="toc-number">2.2.</span> <span class="toc-text">2). 环境搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#第一步：下载JBOSS环境，并解压"><span class="toc-number">2.2.1.</span> <span class="toc-text">第一步：下载JBOSS环境，并解压</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#第二步：修改配置文件，使网络中的主机都能访问JBOSS"><span class="toc-number">2.2.2.</span> <span class="toc-text">第二步：修改配置文件，使网络中的主机都能访问JBOSS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#第三步：启动JBOSS"><span class="toc-number">2.2.3.</span> <span class="toc-text">第三步：启动JBOSS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#第四步：下载EXP"><span class="toc-number">2.2.4.</span> <span class="toc-text">第四步：下载EXP</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-信息收集"><span class="toc-number">2.3.</span> <span class="toc-text">3). 信息收集</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#第一步：利用nmap对目标主机进行常用端口扫描"><span class="toc-number">2.3.1.</span> <span class="toc-text">第一步：利用nmap对目标主机进行常用端口扫描</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#第二步：访问目标主机的8080端口，看看能否正常访问"><span class="toc-number">2.3.2.</span> <span class="toc-text">第二步：访问目标主机的8080端口，看看能否正常访问</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-漏洞利用"><span class="toc-number">2.4.</span> <span class="toc-text">4). 漏洞利用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化-CVE-2017-12149-jar"><span class="toc-number">2.4.1.</span> <span class="toc-text">利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化_CVE-2017-12149.jar</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-总结"><span class="toc-number">3.</span> <span class="toc-text">0x02. 总结</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-行千里路，不如读万卷书…"><span class="toc-number">3.0.1.</span> <span class="toc-text">  行千里路，不如读万卷书…</span></a></li></ol></li></ol></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#原文：Developers-are-lazy-or-maybe-busy"><span class="toc-number">1.</span> <span class="toc-text">原文：Developers are lazy(or maybe busy)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#漏洞：-符绕过造成URL重定向"><span class="toc-number">2.</span> <span class="toc-text">漏洞：@符绕过造成URL重定向</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#作者：KatsuragiCSL"><span class="toc-number">3.</span> <span class="toc-text">作者：KatsuragiCSL</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#难度：低"><span class="toc-number">4.</span> <span class="toc-text">难度：低</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#正文"><span class="toc-number"></span> <span class="toc-text">正文</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-这次我要写一个我在私人程序中发现的开放重定向的BUG漏洞。尽管这个BUG的危害不太严重，但是去发现它的过程却很有趣！"><span class="toc-number">1.</span> <span class="toc-text">  这次我要写一个我在私人程序中发现的开放重定向的BUG漏洞。尽管这个BUG的危害不太严重，但是去发现它的过程却很有趣！</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-我们暂且定义这个网站的域名为example-com，一开始我注册了一个测试账号，接着四处寻找可能存在漏洞的点，然后就发现了下面的URL链接："><span class="toc-number">2.</span> <span class="toc-text">  我们暂且定义这个网站的域名为example.com，一开始我注册了一个测试账号，接着四处寻找可能存在漏洞的点，然后就发现了下面的URL链接：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-条件反射就想到了要去测试开放重定向这种类型的漏洞！"><span class="toc-number">3.</span> <span class="toc-text">  条件反射就想到了要去测试开放重定向这种类型的漏洞！</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-首先，我尝试了最常规的payload：https-www-example-com-account-login-next-https-google-com-遗憾的是这个payload并没有生效，我没有被重定向到Google去！"><span class="toc-number">4.</span> <span class="toc-text">  首先，我尝试了最常规的payload：https://www.example.com/account/login?next=https://google.com   遗憾的是这个payload并没有生效，我没有被重定向到Google去！</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-然后，我又尝试另一个payload：https-www-example-com-account-login-next-https-example-com-google-com-google-com-javascript-alert-1-不过这些花里胡哨的东西并没有任何作用"><span class="toc-number">5.</span> <span class="toc-text">  然后，我又尝试另一个payload：https://www.example.com/account/login?next=https://example.com@google.com , //google.com , javascript:alert(1)  不过这些花里胡哨的东西并没有任何作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-最后灵犀一点，我换成这个payload之后终于有了一点反应：https-www-example-com-account-login-next-https-www-example-com-amp-next-https-google-com-但这也仅仅只是有点反应而已，并没有实现真正的跳转，回车之后我的URL变成了：https-example-com-2Cgoogle-com-并且浏览器还提示错误"><span class="toc-number">6.</span> <span class="toc-text">  最后灵犀一点，我换成这个payload之后终于有了一点反应：https://www.example.com/account/login?next=https://www.example.com&next=https://google.com 但这也仅仅只是有点反应而已，并没有实现真正的跳转，回车之后我的URL变成了：https://example.com%2Cgoogle.com 并且浏览器还提示错误</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-尽管又失败了，但是此时我相信自己能够利用这个点！从上面浏览器URL的变化可以发现服务器只是过滤了第一个参数，第二个参数中的值被保留了，只不过是用了一个逗号-2C-连接而已"><span class="toc-number">7.</span> <span class="toc-text">  尽管又失败了，但是此时我相信自己能够利用这个点！从上面浏览器URL的变化可以发现服务器只是过滤了第一个参数，第二个参数中的值被保留了，只不过是用了一个逗号(%2C)连接而已</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-所以我又构造了最终的payload：https-www-example-com-account-login-next-https-www-example-com-amp-next-google-com"><span class="toc-number">8.</span> <span class="toc-text">  所以我又构造了最终的payload：https://www.example.com/account/login?next=https://www.example.com&next=@google.com</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-并且得到URL：https-example-com-google-com-这其实就已经将我重定向到https-www-google-com了，不信你可以访问看看"><span class="toc-number">9.</span> <span class="toc-text">  并且得到URL：https://example.com,@google.com 这其实就已经将我重定向到https://www.google.com了，不信你可以访问看看</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-最后让作者很郁闷的是虽然登陆页面的重定向漏洞被修复了，但是当他来到注册页面，bom一模一样的漏洞依然存在，此处省略n个单词…"><span class="toc-number">10.</span> <span class="toc-text">  最后让作者很郁闷的是虽然登陆页面的重定向漏洞被修复了，但是当他来到注册页面，bom一模一样的漏洞依然存在，此处省略n个单词….</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#打赏译者"><span class="toc-number"></span> <span class="toc-text">打赏译者</span></a>
         
     </div>
     <style>
@@ -417,7 +387,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"JOBSS反序列化漏洞复现　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"第二篇翻译：Developers are lazy(or maybe busy)　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -474,15 +444,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2018/03/01/kali安装KVM入坑笔记/" title="上一篇: kali安装KVM入坑笔记">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2017/12/27/花式钓鱼法/" title="下一篇: 花式钓鱼法">
+            <a href="/2018/12/19/第一篇翻译：Change-Anyone’s-profile-picture-Exploiting-IDOR/" title="下一篇: 第一篇翻译：Change Anyone’s profile picture-Exploiting IDOR">
                 <i class="fa fa-angle-right"></i>
             </a>
         
