@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://TimeS0ng.github.io/"/>
-  <updated>2018-12-19T09:35:30.058Z</updated>
+  <updated>2018-12-19T10:58:18.860Z</updated>
   <id>http://TimeS0ng.github.io/</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>第二篇翻译：Developers are lazy(or maybe busy)</title>
+    <title>第二篇翻译：URL重定向</title>
     <link href="http://TimeS0ng.github.io/2018/12/19/%E7%AC%AC%E4%BA%8C%E7%AF%87%E7%BF%BB%E8%AF%91%EF%BC%9ADevelopers-are-lazy-or-maybe-busy/"/>
     <id>http://TimeS0ng.github.io/2018/12/19/第二篇翻译：Developers-are-lazy-or-maybe-busy/</id>
     <published>2018-12-19T09:35:11.000Z</published>
-    <updated>2018-12-19T09:35:30.058Z</updated>
+    <updated>2018-12-19T10:58:18.860Z</updated>
     
     <content type="html"><![CDATA[<h4 id="原文：Developers-are-lazy-or-maybe-busy"><a href="#原文：Developers-are-lazy-or-maybe-busy" class="headerlink" title="原文：Developers are lazy(or maybe busy)"></a>原文：<a href="https://medium.com/bugbountywriteup/open-redirect-developers-are-lazy-or-maybe-busy-6c51718b10e4" target="_blank" rel="external">Developers are lazy(or maybe busy)</a></h4><h4 id="漏洞：-符绕过造成URL重定向"><a href="#漏洞：-符绕过造成URL重定向" class="headerlink" title="漏洞：@符绕过造成URL重定向"></a>漏洞：@符绕过造成URL重定向</h4><h4 id="作者：KatsuragiCSL"><a href="#作者：KatsuragiCSL" class="headerlink" title="作者：KatsuragiCSL"></a>作者：KatsuragiCSL</h4><h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4><a id="more"></a>
 <h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><h4 id="emsp-emsp-这次我要写一个我在私人程序中发现的开放重定向的BUG漏洞。尽管这个BUG的危害不太严重，但是去发现它的过程却很有趣！"><a href="#emsp-emsp-这次我要写一个我在私人程序中发现的开放重定向的BUG漏洞。尽管这个BUG的危害不太严重，但是去发现它的过程却很有趣！" class="headerlink" title="&emsp;&emsp;这次我要写一个我在私人程序中发现的开放重定向的BUG漏洞。尽管这个BUG的危害不太严重，但是去发现它的过程却很有趣！"></a>&emsp;&emsp;这次我要写一个我在私人程序中发现的开放重定向的BUG漏洞。尽管这个BUG的危害不太严重，但是去发现它的过程却很有趣！</h4><h4 id="emsp-emsp-我们暂且定义这个网站的域名为example-com，一开始我注册了一个测试账号，接着四处寻找可能存在漏洞的点，然后就发现了下面的URL链接："><a href="#emsp-emsp-我们暂且定义这个网站的域名为example-com，一开始我注册了一个测试账号，接着四处寻找可能存在漏洞的点，然后就发现了下面的URL链接：" class="headerlink" title="&emsp;&emsp;我们暂且定义这个网站的域名为example.com，一开始我注册了一个测试账号，接着四处寻找可能存在漏洞的点，然后就发现了下面的URL链接："></a>&emsp;&emsp;我们暂且定义这个网站的域名为example.com，一开始我注册了一个测试账号，接着四处寻找可能存在漏洞的点，然后就发现了下面的URL链接：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">https://www.example.com/account/login?next=https://www.example.com</div></pre></td></tr></table></figure>
@@ -38,11 +38,11 @@
   </entry>
   
   <entry>
-    <title>第一篇翻译：Change Anyone’s profile picture-Exploiting IDOR</title>
+    <title>第一篇翻译：越权漏洞</title>
     <link href="http://TimeS0ng.github.io/2018/12/19/%E7%AC%AC%E4%B8%80%E7%AF%87%E7%BF%BB%E8%AF%91%EF%BC%9AChange-Anyone%E2%80%99s-profile-picture-Exploiting-IDOR/"/>
     <id>http://TimeS0ng.github.io/2018/12/19/第一篇翻译：Change-Anyone’s-profile-picture-Exploiting-IDOR/</id>
     <published>2018-12-19T02:13:22.000Z</published>
-    <updated>2018-12-19T02:27:43.418Z</updated>
+    <updated>2018-12-19T10:58:30.361Z</updated>
     
     <content type="html"><![CDATA[<h4 id="原文：Change-Anyone’s-profile-picture-Exploiting-IDOR"><a href="#原文：Change-Anyone’s-profile-picture-Exploiting-IDOR" class="headerlink" title="原文：Change Anyone’s profile picture-Exploiting IDOR"></a>原文：<a href="https://medium.com/@rupika.luhach/change-anyones-profile-picture-exploiting-idor-41369f5acf75" target="_blank" rel="external">Change Anyone’s profile picture-Exploiting IDOR</a></h4><h4 id="漏洞：未授权更改用户信息"><a href="#漏洞：未授权更改用户信息" class="headerlink" title="漏洞：未授权更改用户信息"></a>漏洞：未授权更改用户信息</h4><h4 id="作者：Rupika-Luhach"><a href="#作者：Rupika-Luhach" class="headerlink" title="作者：Rupika Luhach"></a>作者：Rupika Luhach</h4><h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4><a id="more"></a>
 <h2 id="Hello-Guys"><a href="#Hello-Guys" class="headerlink" title="Hello Guys!!"></a>Hello Guys!!</h2><h4 id="emsp-emsp-这是我的第一篇博客文章，接下来我将给大家介绍一个在印度的Bug赏金平台官网发现的IDOR漏洞—它允许我修改任意用户的头像信息！"><a href="#emsp-emsp-这是我的第一篇博客文章，接下来我将给大家介绍一个在印度的Bug赏金平台官网发现的IDOR漏洞—它允许我修改任意用户的头像信息！" class="headerlink" title="&emsp;&emsp;这是我的第一篇博客文章，接下来我将给大家介绍一个在印度的Bug赏金平台官网发现的IDOR漏洞—它允许我修改任意用户的头像信息！"></a>&emsp;&emsp;这是我的第一篇博客文章，接下来我将给大家介绍一个在印度的Bug赏金平台官网发现的IDOR漏洞—它允许我修改任意用户的头像信息！</h4><h2 id="IDOR漏洞："><a href="#IDOR漏洞：" class="headerlink" title="IDOR漏洞："></a>IDOR漏洞：</h2><h4 id="emsp-emsp-IDOR将允许一名授权用户获取其他用户的信息，意指一个已经授权的用户通过更改访问时的一个参数，从而访问到了原本其并没有得到授权的对象。"><a href="#emsp-emsp-IDOR将允许一名授权用户获取其他用户的信息，意指一个已经授权的用户通过更改访问时的一个参数，从而访问到了原本其并没有得到授权的对象。" class="headerlink" title="&emsp;&emsp;IDOR将允许一名授权用户获取其他用户的信息，意指一个已经授权的用户通过更改访问时的一个参数，从而访问到了原本其并没有得到授权的对象。"></a>&emsp;&emsp;IDOR将允许一名授权用户获取其他用户的信息，意指一个已经授权的用户通过更改访问时的一个参数，从而访问到了原本其并没有得到授权的对象。</h4><h4 id="上面是专业解释，看完接下来的漏洞复现流程自然就懂了！"><a href="#上面是专业解释，看完接下来的漏洞复现流程自然就懂了！" class="headerlink" title="[*] 上面是专业解释，看完接下来的漏洞复现流程自然就懂了！"></a>[*] 上面是专业解释，看完接下来的漏洞复现流程自然就懂了！</h4><h2 id="漏洞复现："><a href="#漏洞复现：" class="headerlink" title="漏洞复现："></a>漏洞复现：</h2><h4 id="emsp-emsp-1-首先我创建了两个账号，Rupika-Luhach-作为攻击者账号，Test-User-充当受害者"><a href="#emsp-emsp-1-首先我创建了两个账号，Rupika-Luhach-作为攻击者账号，Test-User-充当受害者" class="headerlink" title="&emsp;&emsp;1. 首先我创建了两个账号，Rupika Luhach 作为攻击者账号，Test User 充当受害者"></a>&emsp;&emsp;1. 首先我创建了两个账号，<strong>Rupika Luhach</strong> 作为攻击者账号，<strong>Test User</strong> 充当受害者</h4><h4 id="emsp-emsp-2-接下来我在攻击者-Rupika-Luhach-个人首页上传一张头像，然后用burpsuit-抓包观察传递的参数信息，可以发现攻击者的ID-84。同样的方法得到受害者的ID-85"><a href="#emsp-emsp-2-接下来我在攻击者-Rupika-Luhach-个人首页上传一张头像，然后用burpsuit-抓包观察传递的参数信息，可以发现攻击者的ID-84。同样的方法得到受害者的ID-85" class="headerlink" title="&emsp;&emsp;2. 接下来我在攻击者 Rupika Luhach 个人首页上传一张头像，然后用burpsuit 抓包观察传递的参数信息，可以发现攻击者的ID=84。同样的方法得到受害者的ID=85"></a>&emsp;&emsp;2. 接下来我在攻击者 Rupika Luhach 个人首页上传一张头像，然后用burpsuit 抓包观察传递的参数信息，可以发现攻击者的ID=84。同样的方法得到受害者的ID=85</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/1.png" alt=""></p>
