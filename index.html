@@ -288,17 +288,8 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h3 id="原文：Change-Anyone’s-profile-picture-Exploiting-IDOR"><a href="#原文：Change-Anyone’s-profile-picture-Exploiting-IDOR" class="headerlink" title="原文：Change Anyone’s profile picture-Exploiting IDOR"></a>原文：<a href="https://medium.com/@rupika.luhach/change-anyones-profile-picture-exploiting-idor-41369f5acf75" target="_blank" rel="external">Change Anyone’s profile picture-Exploiting IDOR</a></h3><h3 id="漏洞：未授权更改用户信息"><a href="#漏洞：未授权更改用户信息" class="headerlink" title="漏洞：未授权更改用户信息"></a>漏洞：未授权更改用户信息</h3><h3 id="作者：Rupika-Luhach"><a href="#作者：Rupika-Luhach" class="headerlink" title="作者：Rupika Luhach"></a>作者：Rupika Luhach</h3><h3 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h3><h2 id="Hello-Guys"><a href="#Hello-Guys" class="headerlink" title="Hello Guys!!"></a>Hello Guys!!</h2><h4 id="emsp-emsp-这是我的第一篇博客文章，接下来我将给大家介绍一个在印度的Bug赏金平台官网发现的IDOR漏洞—它允许我修改任意用户的头像信息！"><a href="#emsp-emsp-这是我的第一篇博客文章，接下来我将给大家介绍一个在印度的Bug赏金平台官网发现的IDOR漏洞—它允许我修改任意用户的头像信息！" class="headerlink" title="&emsp;&emsp;这是我的第一篇博客文章，接下来我将给大家介绍一个在印度的Bug赏金平台官网发现的IDOR漏洞—它允许我修改任意用户的头像信息！"></a>&emsp;&emsp;这是我的第一篇博客文章，接下来我将给大家介绍一个在印度的Bug赏金平台官网发现的IDOR漏洞—它允许我修改任意用户的头像信息！</h4><h2 id="IDOR漏洞："><a href="#IDOR漏洞：" class="headerlink" title="IDOR漏洞："></a>IDOR漏洞：</h2><h4 id="emsp-emsp-IDOR将允许一名授权用户获取其他用户的信息，意指一个已经授权的用户通过更改访问时的一个参数，从而访问到了原本其并没有得到授权的对象。"><a href="#emsp-emsp-IDOR将允许一名授权用户获取其他用户的信息，意指一个已经授权的用户通过更改访问时的一个参数，从而访问到了原本其并没有得到授权的对象。" class="headerlink" title="&emsp;&emsp;IDOR将允许一名授权用户获取其他用户的信息，意指一个已经授权的用户通过更改访问时的一个参数，从而访问到了原本其并没有得到授权的对象。"></a>&emsp;&emsp;IDOR将允许一名授权用户获取其他用户的信息，意指一个已经授权的用户通过更改访问时的一个参数，从而访问到了原本其并没有得到授权的对象。</h4><h4 id="上面是专业解释，看完接下来的漏洞复现流程自然就懂了！"><a href="#上面是专业解释，看完接下来的漏洞复现流程自然就懂了！" class="headerlink" title="[*] 上面是专业解释，看完接下来的漏洞复现流程自然就懂了！"></a>[*] 上面是专业解释，看完接下来的漏洞复现流程自然就懂了！</h4><h2 id="漏洞复现："><a href="#漏洞复现：" class="headerlink" title="漏洞复现："></a>漏洞复现：</h2><h4 id="emsp-emsp-1-首先我创建了两个账号，Rupika-Luhach-作为攻击者账号，Test-User-充当受害者"><a href="#emsp-emsp-1-首先我创建了两个账号，Rupika-Luhach-作为攻击者账号，Test-User-充当受害者" class="headerlink" title="&emsp;&emsp;1. 首先我创建了两个账号，Rupika Luhach 作为攻击者账号，Test User 充当受害者"></a>&emsp;&emsp;1. 首先我创建了两个账号，<strong>Rupika Luhach</strong> 作为攻击者账号，<strong>Test User</strong> 充当受害者</h4><h4 id="emsp-emsp-2-接下来我在攻击者-Rupika-Luhach-个人首页上传一张头像，然后用burpsuit-抓包观察传递的参数信息，可以发现攻击者的ID-84。同样的方法得到受害者的ID-85"><a href="#emsp-emsp-2-接下来我在攻击者-Rupika-Luhach-个人首页上传一张头像，然后用burpsuit-抓包观察传递的参数信息，可以发现攻击者的ID-84。同样的方法得到受害者的ID-85" class="headerlink" title="&emsp;&emsp;2. 接下来我在攻击者 Rupika Luhach 个人首页上传一张头像，然后用burpsuit 抓包观察传递的参数信息，可以发现攻击者的ID=84。同样的方法得到受害者的ID=85"></a>&emsp;&emsp;2. 接下来我在攻击者 Rupika Luhach 个人首页上传一张头像，然后用burpsuit 抓包观察传递的参数信息，可以发现攻击者的ID=84。同样的方法得到受害者的ID=85</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/1.png" alt=""></p>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/2.png" alt=""></p>
-<h4 id="emsp-emsp"><a href="#emsp-emsp" class="headerlink" title="&emsp;&emsp;"></a>&emsp;&emsp;</h4><h4 id="emsp-emsp-3-重新上传攻击者的头像，然后burpsuit-抓包，将ID参数的值更改为受害者的ID–85"><a href="#emsp-emsp-3-重新上传攻击者的头像，然后burpsuit-抓包，将ID参数的值更改为受害者的ID–85" class="headerlink" title="&emsp;&emsp;3. 重新上传攻击者的头像，然后burpsuit 抓包，将ID参数的值更改为受害者的ID–85"></a>&emsp;&emsp;3. 重新上传攻击者的头像，然后burpsuit 抓包，将ID参数的值更改为受害者的ID–85</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/3.png" alt=""></p>
-<h4 id="emsp-emsp-4-最后可以看到受害者Test-User的头像被篡改了"><a href="#emsp-emsp-4-最后可以看到受害者Test-User的头像被篡改了" class="headerlink" title="&emsp;&emsp;4. 最后可以看到受害者Test User的头像被篡改了"></a>&emsp;&emsp;4. 最后可以看到受害者Test User的头像被篡改了</h4><h4 id="初始头像"><a href="#初始头像" class="headerlink" title="[*] 初始头像"></a>[*] 初始头像</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/4.png" alt=""></p>
-<h4 id="篡改后的头像"><a href="#篡改后的头像" class="headerlink" title="[*] 篡改后的头像"></a>[*] 篡改后的头像</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/5.png" alt=""></p>
-<h2 id="视屏演示："><a href="#视屏演示：" class="headerlink" title="视屏演示："></a>视屏演示：</h2><iframe width="560" height="315" src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/videoplayback.mp4" frameborder="0" allowfullscreen></iframe>
-
-
-
-<h2 id="打赏译者"><a href="#打赏译者" class="headerlink" title="打赏译者"></a>打赏译者</h2><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/money.png" alt=""></p>
-
+              <h3 id="原文：Change-Anyone’s-profile-picture-Exploiting-IDOR"><a href="#原文：Change-Anyone’s-profile-picture-Exploiting-IDOR" class="headerlink" title="原文：Change Anyone’s profile picture-Exploiting IDOR"></a>原文：<a href="https://medium.com/@rupika.luhach/change-anyones-profile-picture-exploiting-idor-41369f5acf75" target="_blank" rel="external">Change Anyone’s profile picture-Exploiting IDOR</a></h3><h3 id="漏洞：未授权更改用户信息"><a href="#漏洞：未授权更改用户信息" class="headerlink" title="漏洞：未授权更改用户信息"></a>漏洞：未授权更改用户信息</h3><h3 id="作者：Rupika-Luhach"><a href="#作者：Rupika-Luhach" class="headerlink" title="作者：Rupika Luhach"></a>作者：Rupika Luhach</h3><h3 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h3>
+          
       
     </div>
     
@@ -307,6 +298,10 @@
       
 
       
+      
+        <p class="article-more-link">
+          <a href="/2018/12/18/第一篇翻译：Change Anyone’s profile picture-Exploiting IDOR/#more">阅读全文 >></a>
+        </p>
       
       <div class="clearfix"></div>
     </div>
