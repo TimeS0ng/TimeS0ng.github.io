@@ -261,6 +261,75 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-第三篇翻译：XXE漏洞" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/12/20/第三篇翻译：XXE漏洞/" class="article-date">
+      <time datetime="2018-12-20T12:54:30.000Z" itemprop="datePublished">2018-12-20</time>
+</a>
+
+ 
+    <a href="/2018/12/20/第三篇翻译：XXE漏洞/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2018/12/20/第三篇翻译：XXE漏洞/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/20/第三篇翻译：XXE漏洞/">第三篇翻译：XXE漏洞</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h4 id="原文：From-blind-XXE-to-root-level-file-read-access"><a href="#原文：From-blind-XXE-to-root-level-file-read-access" class="headerlink" title="原文：From blind XXE to root-level file read access"></a>原文：<a href="https://www.honoki.net/2018/12/from-blind-xxe-to-root-level-file-read-access/" target="_blank" rel="external">From blind XXE to root-level file read access</a></h4><h4 id="漏洞："><a href="#漏洞：" class="headerlink" title="漏洞："></a>漏洞：</h4><h4 id="作者：Pieter"><a href="#作者：Pieter" class="headerlink" title="作者：Pieter"></a>作者：Pieter</h4><h4 id="难度：高"><a href="#难度：高" class="headerlink" title="难度：高"></a>难度：高</h4>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+      
+        <p class="article-more-link">
+          <a href="/2018/12/20/第三篇翻译：XXE漏洞/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-第二篇翻译：Developers-are-lazy-or-maybe-busy" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -864,75 +933,6 @@
       
         <p class="article-more-link">
           <a href="/2018/04/13/Windows-提权基础（上）/#more">阅读全文 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-kali-代理之shadowsocks-proxychains" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2018/03/30/kali-代理之shadowsocks-proxychains/" class="article-date">
-      <time datetime="2018-03-30T09:14:16.000Z" itemprop="datePublished">2018-03-30</time>
-</a>
-
- 
-    <a href="/2018/03/30/kali-代理之shadowsocks-proxychains/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2018/03/30/kali-代理之shadowsocks-proxychains/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/30/kali-代理之shadowsocks-proxychains/">kali 代理之shadowsocks &amp; proxychains</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h2 id="0x00-序言"><a href="#0x00-序言" class="headerlink" title="0x00. 序言"></a>0x00. 序言</h2><h4 id="emsp-emsp-最近和朋友合租了一台vps-，我搭好ss-bbr-之后居然不知道如何给kali-配置代理，真是可耻，果然Mac-用惯了之后人都会变懒！找了很久发现好多关于kali-代理的文章都失效，不过我还是在网上找到了这篇文章，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！"><a href="#emsp-emsp-最近和朋友合租了一台vps-，我搭好ss-bbr-之后居然不知道如何给kali-配置代理，真是可耻，果然Mac-用惯了之后人都会变懒！找了很久发现好多关于kali-代理的文章都失效，不过我还是在网上找到了这篇文章，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！" class="headerlink" title="&emsp;&emsp;最近和朋友合租了一台vps ，我搭好ss + bbr 之后居然不知道如何给kali 配置代理，真是可耻，果然Mac 用惯了之后人都会变懒！找了很久发现好多关于kali 代理的文章都失效，不过我还是在网上找到了这篇文章，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！"></a>&emsp;&emsp;最近和朋友合租了一台vps ，我搭好ss + bbr 之后居然不知道如何给kali 配置代理，真是可耻，果然Mac 用惯了之后人都会变懒！找了很久发现好多关于kali 代理的文章都失效，不过我还是在网上找到了<a href="https://blog.csdn.net/qq_27766969/article/details/71593611" target="_blank" rel="external">这篇文章</a>，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！</h4>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-      
-        <p class="article-more-link">
-          <a href="/2018/03/30/kali-代理之shadowsocks-proxychains/#more">阅读全文 >></a>
         </p>
       
       <div class="clearfix"></div>

