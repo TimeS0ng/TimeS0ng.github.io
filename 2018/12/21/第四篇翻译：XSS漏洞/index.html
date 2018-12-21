@@ -15,24 +15,22 @@
 
 
 
-<meta name="description" content="原文：Change Anyone’s profile picture-Exploiting IDOR漏洞：未授权更改用户信息作者：Rupika Luhach难度：低">
+<meta name="description" content="原文：Dom Based XSS in ucweb.com漏洞：XSS作者：Sudhanshu Rajbhar难度：低">
 <meta property="og:type" content="article">
-<meta property="og:title" content="第一篇翻译：越权漏洞">
-<meta property="og:url" content="http://TimeS0ng.github.io/2018/12/19/第一篇翻译：Change-Anyone’s-profile-picture-Exploiting-IDOR/index.html">
+<meta property="og:title" content="第四篇翻译：XSS漏洞">
+<meta property="og:url" content="http://TimeS0ng.github.io/2018/12/21/第四篇翻译：XSS漏洞/index.html">
 <meta property="og:site_name" content="TimeS0ng&#39;s blog">
-<meta property="og:description" content="原文：Change Anyone’s profile picture-Exploiting IDOR漏洞：未授权更改用户信息作者：Rupika Luhach难度：低">
+<meta property="og:description" content="原文：Dom Based XSS in ucweb.com漏洞：XSS作者：Sudhanshu Rajbhar难度：低">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/translate_1/1.png">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/translate_1/2.png">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/translate_1/3.png">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/translate_1/4.png">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/translate_1/5.png">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/translate_1/money.png">
-<meta property="og:updated_time" content="2018-12-21T04:12:45.688Z">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/1.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/2.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/3.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/4.png">
+<meta property="og:updated_time" content="2018-12-21T08:30:41.793Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="第一篇翻译：越权漏洞">
-<meta name="twitter:description" content="原文：Change Anyone’s profile picture-Exploiting IDOR漏洞：未授权更改用户信息作者：Rupika Luhach难度：低">
-<meta name="twitter:image" content="http://tie.027cgb.com/612577/times0ng_blog/translate_1/1.png">
+<meta name="twitter:title" content="第四篇翻译：XSS漏洞">
+<meta name="twitter:description" content="原文：Dom Based XSS in ucweb.com漏洞：XSS作者：Sudhanshu Rajbhar难度：低">
+<meta name="twitter:image" content="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/1.png">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -64,7 +62,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>第一篇翻译：越权漏洞 | TimeS0ng&#39;s blog</title>
+<title>第四篇翻译：XSS漏洞 | TimeS0ng&#39;s blog</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -265,20 +263,20 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-第一篇翻译：Change-Anyone’s-profile-picture-Exploiting-IDOR" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-第四篇翻译：XSS漏洞" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2018/12/19/第一篇翻译：Change-Anyone’s-profile-picture-Exploiting-IDOR/" class="article-date">
-      <time datetime="2018-12-19T02:13:22.000Z" itemprop="datePublished">2018-12-19</time>
+      <a href="/2018/12/21/第四篇翻译：XSS漏洞/" class="article-date">
+      <time datetime="2018-12-21T08:30:09.000Z" itemprop="datePublished">2018-12-21</time>
 </a>
 
  
-    <a href="/2018/12/19/第一篇翻译：Change-Anyone’s-profile-picture-Exploiting-IDOR/#comments" title="查看评论">
+    <a href="/2018/12/21/第四篇翻译：XSS漏洞/#comments" title="查看评论">
         <i class="fa fa-comments-o" aria-hidden="true"></i>
         <span class="count-comment"></span>
         
         
-            <span class="disqus-comment-count" data-disqus-identifier="2018/12/19/第一篇翻译：Change-Anyone’s-profile-picture-Exploiting-IDOR/"></span>
+            <span class="disqus-comment-count" data-disqus-identifier="2018/12/21/第四篇翻译：XSS漏洞/"></span>
         
     </a>
 
@@ -293,7 +291,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      第一篇翻译：越权漏洞
+      第四篇翻译：XSS漏洞
     </h1>
   
 
@@ -310,16 +308,13 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h4 id="原文：Change-Anyone’s-profile-picture-Exploiting-IDOR"><a href="#原文：Change-Anyone’s-profile-picture-Exploiting-IDOR" class="headerlink" title="原文：Change Anyone’s profile picture-Exploiting IDOR"></a>原文：<a href="https://medium.com/@rupika.luhach/change-anyones-profile-picture-exploiting-idor-41369f5acf75" target="_blank" rel="external">Change Anyone’s profile picture-Exploiting IDOR</a></h4><h4 id="漏洞：未授权更改用户信息"><a href="#漏洞：未授权更改用户信息" class="headerlink" title="漏洞：未授权更改用户信息"></a>漏洞：未授权更改用户信息</h4><h4 id="作者：Rupika-Luhach"><a href="#作者：Rupika-Luhach" class="headerlink" title="作者：Rupika Luhach"></a>作者：Rupika Luhach</h4><h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4><a id="more"></a>
-<h2 id="Hello-Guys"><a href="#Hello-Guys" class="headerlink" title="Hello Guys!!"></a>Hello Guys!!</h2><h4 id="emsp-emsp-这是我的第一篇博客文章，接下来我将给大家介绍一个在印度的Bug赏金平台官网发现的IDOR漏洞—它允许我修改任意用户的头像信息！"><a href="#emsp-emsp-这是我的第一篇博客文章，接下来我将给大家介绍一个在印度的Bug赏金平台官网发现的IDOR漏洞—它允许我修改任意用户的头像信息！" class="headerlink" title="&emsp;&emsp;这是我的第一篇博客文章，接下来我将给大家介绍一个在印度的Bug赏金平台官网发现的IDOR漏洞—它允许我修改任意用户的头像信息！"></a>&emsp;&emsp;这是我的第一篇博客文章，接下来我将给大家介绍一个在印度的Bug赏金平台官网发现的IDOR漏洞—它允许我修改任意用户的头像信息！</h4><h2 id="IDOR漏洞："><a href="#IDOR漏洞：" class="headerlink" title="IDOR漏洞："></a>IDOR漏洞：</h2><h4 id="emsp-emsp-IDOR将允许一名授权用户获取其他用户的信息，意指一个已经授权的用户通过更改访问时的一个参数，从而访问到了原本其并没有得到授权的对象。"><a href="#emsp-emsp-IDOR将允许一名授权用户获取其他用户的信息，意指一个已经授权的用户通过更改访问时的一个参数，从而访问到了原本其并没有得到授权的对象。" class="headerlink" title="&emsp;&emsp;IDOR将允许一名授权用户获取其他用户的信息，意指一个已经授权的用户通过更改访问时的一个参数，从而访问到了原本其并没有得到授权的对象。"></a>&emsp;&emsp;IDOR将允许一名授权用户获取其他用户的信息，意指一个已经授权的用户通过更改访问时的一个参数，从而访问到了原本其并没有得到授权的对象。</h4><h4 id="上面是专业解释，看完接下来的漏洞复现流程自然就懂了！"><a href="#上面是专业解释，看完接下来的漏洞复现流程自然就懂了！" class="headerlink" title="[*] 上面是专业解释，看完接下来的漏洞复现流程自然就懂了！"></a>[*] 上面是专业解释，看完接下来的漏洞复现流程自然就懂了！</h4><h2 id="漏洞复现："><a href="#漏洞复现：" class="headerlink" title="漏洞复现："></a>漏洞复现：</h2><h4 id="emsp-emsp-1-首先我创建了两个账号，Rupika-Luhach-作为攻击者账号，Test-User-充当受害者"><a href="#emsp-emsp-1-首先我创建了两个账号，Rupika-Luhach-作为攻击者账号，Test-User-充当受害者" class="headerlink" title="&emsp;&emsp;1. 首先我创建了两个账号，Rupika Luhach 作为攻击者账号，Test User 充当受害者"></a>&emsp;&emsp;1. 首先我创建了两个账号，<strong>Rupika Luhach</strong> 作为攻击者账号，<strong>Test User</strong> 充当受害者</h4><h4 id="emsp-emsp-2-接下来我在攻击者-Rupika-Luhach-个人首页上传一张头像，然后用burpsuit-抓包观察传递的参数信息，可以发现攻击者的ID-84。同样的方法得到受害者的ID-85"><a href="#emsp-emsp-2-接下来我在攻击者-Rupika-Luhach-个人首页上传一张头像，然后用burpsuit-抓包观察传递的参数信息，可以发现攻击者的ID-84。同样的方法得到受害者的ID-85" class="headerlink" title="&emsp;&emsp;2. 接下来我在攻击者 Rupika Luhach 个人首页上传一张头像，然后用burpsuit 抓包观察传递的参数信息，可以发现攻击者的ID=84。同样的方法得到受害者的ID=85"></a>&emsp;&emsp;2. 接下来我在攻击者 Rupika Luhach 个人首页上传一张头像，然后用burpsuit 抓包观察传递的参数信息，可以发现攻击者的ID=84。同样的方法得到受害者的ID=85</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/1.png" alt=""></p>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/2.png" alt=""></p>
-<h4 id="emsp-emsp"><a href="#emsp-emsp" class="headerlink" title="&emsp;&emsp;"></a>&emsp;&emsp;</h4><h4 id="emsp-emsp-3-重新上传攻击者的头像，然后burpsuit-抓包，将ID参数的值更改为受害者的ID–85"><a href="#emsp-emsp-3-重新上传攻击者的头像，然后burpsuit-抓包，将ID参数的值更改为受害者的ID–85" class="headerlink" title="&emsp;&emsp;3. 重新上传攻击者的头像，然后burpsuit 抓包，将ID参数的值更改为受害者的ID–85"></a>&emsp;&emsp;3. 重新上传攻击者的头像，然后burpsuit 抓包，将ID参数的值更改为受害者的ID–85</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/3.png" alt=""></p>
-<h4 id="emsp-emsp-4-最后可以看到受害者Test-User的头像被篡改了"><a href="#emsp-emsp-4-最后可以看到受害者Test-User的头像被篡改了" class="headerlink" title="&emsp;&emsp;4. 最后可以看到受害者Test User的头像被篡改了"></a>&emsp;&emsp;4. 最后可以看到受害者Test User的头像被篡改了</h4><h4 id="初始头像"><a href="#初始头像" class="headerlink" title="[*] 初始头像"></a>[*] 初始头像</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/4.png" alt=""></p>
-<h4 id="篡改后的头像"><a href="#篡改后的头像" class="headerlink" title="[*] 篡改后的头像"></a>[*] 篡改后的头像</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/5.png" alt=""></p>
-<h2 id="视屏演示："><a href="#视屏演示：" class="headerlink" title="视屏演示："></a>视屏演示：</h2><p><video id="video" controls preload="none" poster="http://img5.imgtn.bdimg.com/it/u=750248180,3726006403&fm=26&gp=0.jpg"></video></p>
-<p><source id="mp4" src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/videoplayback.mp4" type="video/mp4"><br></p>
-<h2 id="打赏译者"><a href="#打赏译者" class="headerlink" title="打赏译者"></a>打赏译者</h2><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/money.png" alt=""></p>
-
+        <h4 id="原文：Dom-Based-XSS-in-ucweb-com"><a href="#原文：Dom-Based-XSS-in-ucweb-com" class="headerlink" title="原文：Dom Based XSS in ucweb.com"></a>原文：<a href="https://medium.com/@sudhanshur705/story-about-my-first-bug-bounty-9fe710be8241" target="_blank" rel="external">Dom Based XSS in ucweb.com</a></h4><h4 id="漏洞：XSS"><a href="#漏洞：XSS" class="headerlink" title="漏洞：XSS"></a>漏洞：XSS</h4><h4 id="作者：Sudhanshu-Rajbhar"><a href="#作者：Sudhanshu-Rajbhar" class="headerlink" title="作者：Sudhanshu Rajbhar"></a>作者：Sudhanshu Rajbhar</h4><h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4><a id="more"></a>
+<h2 id="现在开始…"><a href="#现在开始…" class="headerlink" title="现在开始…."></a>现在开始….</h2><h4 id="emsp-emsp-首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb-com的子域名时，我发现了这个子域-samsung-ucweb-com-，samsung-三星？似乎有点意思，所以我尝试用浏览器去访问它"><a href="#emsp-emsp-首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb-com的子域名时，我发现了这个子域-samsung-ucweb-com-，samsung-三星？似乎有点意思，所以我尝试用浏览器去访问它" class="headerlink" title="&emsp;&emsp;首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb.com的子域名时，我发现了这个子域 samsung.ucweb.com ，samsung 三星？似乎有点意思，所以我尝试用浏览器去访问它"></a>&emsp;&emsp;首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb.com的子域名时，我发现了这个子域 samsung.ucweb.com ，samsung 三星？似乎有点意思，所以我尝试用浏览器去访问它</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/1.png" alt=""></p>
+<h4 id="emsp-emsp-很不幸，这是一个403-禁用的网站，如果是你碰见了下一步会怎么做？很显然，大多数人都会忽略它，然后测试其它子域。不过我曾读过一篇文章，它说如果你遇到这样的网站，尝试用Google-搜索一下相关站点信息，或许会有惊喜发现"><a href="#emsp-emsp-很不幸，这是一个403-禁用的网站，如果是你碰见了下一步会怎么做？很显然，大多数人都会忽略它，然后测试其它子域。不过我曾读过一篇文章，它说如果你遇到这样的网站，尝试用Google-搜索一下相关站点信息，或许会有惊喜发现" class="headerlink" title="&emsp;&emsp;很不幸，这是一个403 禁用的网站，如果是你碰见了下一步会怎么做？很显然，大多数人都会忽略它，然后测试其它子域。不过我曾读过一篇文章，它说如果你遇到这样的网站，尝试用Google 搜索一下相关站点信息，或许会有惊喜发现"></a>&emsp;&emsp;很不幸，这是一个403 禁用的网站，如果是你碰见了下一步会怎么做？很显然，大多数人都会忽略它，然后测试其它子域。不过我曾读过一篇文章，它说如果你遇到这样的网站，尝试用Google 搜索一下相关站点信息，或许会有惊喜发现</h4><h4 id="emsp-emsp-所以我是用谷歌语法简单的看了一下，site-samsung-ucweb-com-结果真的有惊喜"><a href="#emsp-emsp-所以我是用谷歌语法简单的看了一下，site-samsung-ucweb-com-结果真的有惊喜" class="headerlink" title="&emsp;&emsp;所以我是用谷歌语法简单的看了一下，site:samsung.ucweb.com  结果真的有惊喜"></a>&emsp;&emsp;所以我是用谷歌语法简单的看了一下，<strong>site:samsung.ucweb.com </strong> 结果真的有惊喜</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/2.png" alt=""></p>
+<h4 id="emsp-emsp-我打开了这个URL：http-samsung-ucweb-com-webstore-classify-html-dataKey-LifeStyle-amp-title-LifeStyle-并开始测试相关参数，当我测试title参数时，发现服务端并没有过滤title参数的值就将其打印出来了"><a href="#emsp-emsp-我打开了这个URL：http-samsung-ucweb-com-webstore-classify-html-dataKey-LifeStyle-amp-title-LifeStyle-并开始测试相关参数，当我测试title参数时，发现服务端并没有过滤title参数的值就将其打印出来了" class="headerlink" title="&emsp;&emsp;我打开了这个URL：http://samsung.ucweb.com/webstore/classify.html?dataKey=LifeStyle&amp;title=LifeStyle 并开始测试相关参数，当我测试title参数时，发现服务端并没有过滤title参数的值就将其打印出来了"></a>&emsp;&emsp;我打开了这个URL：<a href="http://samsung.ucweb.com/webstore/classify.html?dataKey=LifeStyle&amp;title=LifeStyle" target="_blank" rel="external">http://samsung.ucweb.com/webstore/classify.html?dataKey=LifeStyle&amp;title=LifeStyle</a> 并开始测试相关参数，当我测试title参数时，发现服务端并没有过滤title参数的值就将其打印出来了</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/3.png" alt=""></p>
+<h4 id="emsp-emsp-所以我尝试构造payload来利用这个漏洞点，当我使用”-gt-lt-script-gt-alert-1-lt-script-gt-时并没有任何弹窗，所以我尝试用-lt-img-gt-标签"><a href="#emsp-emsp-所以我尝试构造payload来利用这个漏洞点，当我使用”-gt-lt-script-gt-alert-1-lt-script-gt-时并没有任何弹窗，所以我尝试用-lt-img-gt-标签" class="headerlink" title="&emsp;&emsp;所以我尝试构造payload来利用这个漏洞点，当我使用”&gt; &lt; script&gt;alert(1)&lt;/ script&gt;时并没有任何弹窗，所以我尝试用 &lt; img&gt;标签"></a>&emsp;&emsp;所以我尝试构造payload来利用这个漏洞点，当我使用”&gt; &lt; script&gt;alert(1)&lt;/ script&gt;时并没有任何弹窗，所以我尝试用 &lt; img&gt;标签</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&quot;&gt;&lt;img src=x onerror=alert(‘XSS’)&gt;</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/4.png" alt=""></p>
+<h2 id="视屏演示"><a href="#视屏演示" class="headerlink" title="视屏演示"></a>视屏演示</h2><video id="video" controls preload="none" poster="http://img5.imgtn.bdimg.com/it/u=750248180,3726006403&fm=26&gp=0.jpg"><br><source id="mp4" src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/XSS_in_alibaba.mp4" type="video/mp4"><br></video>
       
     </div>
     
@@ -327,13 +322,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2018/12/19/第一篇翻译：Change-Anyone’s-profile-picture-Exploiting-IDOR/">第一篇翻译：越权漏洞</a></p>
+        <p><span>本文标题:</span><a href="/2018/12/21/第四篇翻译：XSS漏洞/">第四篇翻译：XSS漏洞</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">TimeS0ng</a></p>
-        <p><span>发布时间:</span>2018-12-19, 10:13:22</p>
-        <p><span>最后更新:</span>2018-12-21, 12:12:45</p>
+        <p><span>发布时间:</span>2018-12-21, 16:30:09</p>
+        <p><span>最后更新:</span>2018-12-21, 16:30:41</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2018/12/19/第一篇翻译：Change-Anyone’s-profile-picture-Exploiting-IDOR/" title="第一篇翻译：越权漏洞">http://TimeS0ng.github.io/2018/12/19/第一篇翻译：Change-Anyone’s-profile-picture-Exploiting-IDOR/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2018/12/19/第一篇翻译：Change-Anyone’s-profile-picture-Exploiting-IDOR/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2018/12/21/第四篇翻译：XSS漏洞/" title="第四篇翻译：XSS漏洞">http://TimeS0ng.github.io/2018/12/21/第四篇翻译：XSS漏洞/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2018/12/21/第四篇翻译：XSS漏洞/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -345,16 +340,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2018/12/19/第二篇翻译：Developers-are-lazy-or-maybe-busy/">
-                    第二篇翻译：URL重定向
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2018/06/27/CVE-2018-8174-漏洞复现/">
-                    CVE-2018-8174 漏洞复现
+                <a href="/2018/12/20/第三篇翻译：XXE漏洞/">
+                    第三篇翻译：XXE漏洞
                 </a>
             </div>
         
@@ -366,7 +355,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#原文：Change-Anyone’s-profile-picture-Exploiting-IDOR"><span class="toc-number">1.</span> <span class="toc-text">原文：Change Anyone’s profile picture-Exploiting IDOR</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#漏洞：未授权更改用户信息"><span class="toc-number">2.</span> <span class="toc-text">漏洞：未授权更改用户信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#作者：Rupika-Luhach"><span class="toc-number">3.</span> <span class="toc-text">作者：Rupika Luhach</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#难度：低"><span class="toc-number">4.</span> <span class="toc-text">难度：低</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hello-Guys"><span class="toc-number"></span> <span class="toc-text">Hello Guys!!</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-这是我的第一篇博客文章，接下来我将给大家介绍一个在印度的Bug赏金平台官网发现的IDOR漏洞—它允许我修改任意用户的头像信息！"><span class="toc-number">1.</span> <span class="toc-text">  这是我的第一篇博客文章，接下来我将给大家介绍一个在印度的Bug赏金平台官网发现的IDOR漏洞—它允许我修改任意用户的头像信息！</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IDOR漏洞："><span class="toc-number"></span> <span class="toc-text">IDOR漏洞：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-IDOR将允许一名授权用户获取其他用户的信息，意指一个已经授权的用户通过更改访问时的一个参数，从而访问到了原本其并没有得到授权的对象。"><span class="toc-number">1.</span> <span class="toc-text">  IDOR将允许一名授权用户获取其他用户的信息，意指一个已经授权的用户通过更改访问时的一个参数，从而访问到了原本其并没有得到授权的对象。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#上面是专业解释，看完接下来的漏洞复现流程自然就懂了！"><span class="toc-number">2.</span> <span class="toc-text">[*] 上面是专业解释，看完接下来的漏洞复现流程自然就懂了！</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#漏洞复现："><span class="toc-number"></span> <span class="toc-text">漏洞复现：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-1-首先我创建了两个账号，Rupika-Luhach-作为攻击者账号，Test-User-充当受害者"><span class="toc-number">1.</span> <span class="toc-text">  1. 首先我创建了两个账号，Rupika Luhach 作为攻击者账号，Test User 充当受害者</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-2-接下来我在攻击者-Rupika-Luhach-个人首页上传一张头像，然后用burpsuit-抓包观察传递的参数信息，可以发现攻击者的ID-84。同样的方法得到受害者的ID-85"><span class="toc-number">2.</span> <span class="toc-text">  2. 接下来我在攻击者 Rupika Luhach 个人首页上传一张头像，然后用burpsuit 抓包观察传递的参数信息，可以发现攻击者的ID=84。同样的方法得到受害者的ID=85</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp"><span class="toc-number">3.</span> <span class="toc-text">  </span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-3-重新上传攻击者的头像，然后burpsuit-抓包，将ID参数的值更改为受害者的ID–85"><span class="toc-number">4.</span> <span class="toc-text">  3. 重新上传攻击者的头像，然后burpsuit 抓包，将ID参数的值更改为受害者的ID–85</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-4-最后可以看到受害者Test-User的头像被篡改了"><span class="toc-number">5.</span> <span class="toc-text">  4. 最后可以看到受害者Test User的头像被篡改了</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#初始头像"><span class="toc-number">6.</span> <span class="toc-text">[*] 初始头像</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#篡改后的头像"><span class="toc-number">7.</span> <span class="toc-text">[*] 篡改后的头像</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#视屏演示："><span class="toc-number"></span> <span class="toc-text">视屏演示：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#打赏译者"><span class="toc-number"></span> <span class="toc-text">打赏译者</span></a>
+            <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#原文：Dom-Based-XSS-in-ucweb-com"><span class="toc-number">1.</span> <span class="toc-text">原文：Dom Based XSS in ucweb.com</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#漏洞：XSS"><span class="toc-number">2.</span> <span class="toc-text">漏洞：XSS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#作者：Sudhanshu-Rajbhar"><span class="toc-number">3.</span> <span class="toc-text">作者：Sudhanshu Rajbhar</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#难度：低"><span class="toc-number">4.</span> <span class="toc-text">难度：低</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#现在开始…"><span class="toc-number"></span> <span class="toc-text">现在开始….</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb-com的子域名时，我发现了这个子域-samsung-ucweb-com-，samsung-三星？似乎有点意思，所以我尝试用浏览器去访问它"><span class="toc-number">1.</span> <span class="toc-text">  首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb.com的子域名时，我发现了这个子域 samsung.ucweb.com ，samsung 三星？似乎有点意思，所以我尝试用浏览器去访问它</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-很不幸，这是一个403-禁用的网站，如果是你碰见了下一步会怎么做？很显然，大多数人都会忽略它，然后测试其它子域。不过我曾读过一篇文章，它说如果你遇到这样的网站，尝试用Google-搜索一下相关站点信息，或许会有惊喜发现"><span class="toc-number">2.</span> <span class="toc-text">  很不幸，这是一个403 禁用的网站，如果是你碰见了下一步会怎么做？很显然，大多数人都会忽略它，然后测试其它子域。不过我曾读过一篇文章，它说如果你遇到这样的网站，尝试用Google 搜索一下相关站点信息，或许会有惊喜发现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-所以我是用谷歌语法简单的看了一下，site-samsung-ucweb-com-结果真的有惊喜"><span class="toc-number">3.</span> <span class="toc-text">  所以我是用谷歌语法简单的看了一下，site:samsung.ucweb.com  结果真的有惊喜</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-我打开了这个URL：http-samsung-ucweb-com-webstore-classify-html-dataKey-LifeStyle-amp-title-LifeStyle-并开始测试相关参数，当我测试title参数时，发现服务端并没有过滤title参数的值就将其打印出来了"><span class="toc-number">4.</span> <span class="toc-text">  我打开了这个URL：http://samsung.ucweb.com/webstore/classify.html?dataKey=LifeStyle&title=LifeStyle 并开始测试相关参数，当我测试title参数时，发现服务端并没有过滤title参数的值就将其打印出来了</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-所以我尝试构造payload来利用这个漏洞点，当我使用”-gt-lt-script-gt-alert-1-lt-script-gt-时并没有任何弹窗，所以我尝试用-lt-img-gt-标签"><span class="toc-number">5.</span> <span class="toc-text">  所以我尝试构造payload来利用这个漏洞点，当我使用”> < script>alert(1)</ script>时并没有任何弹窗，所以我尝试用 < img>标签</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#视屏演示"><span class="toc-number"></span> <span class="toc-text">视屏演示</span></a>
         
     </div>
     <style>
@@ -402,7 +391,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"第一篇翻译：越权漏洞　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"第四篇翻译：XSS漏洞　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -459,15 +448,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2018/12/19/第二篇翻译：Developers-are-lazy-or-maybe-busy/" title="上一篇: 第二篇翻译：URL重定向">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2018/06/27/CVE-2018-8174-漏洞复现/" title="下一篇: CVE-2018-8174 漏洞复现">
+            <a href="/2018/12/20/第三篇翻译：XXE漏洞/" title="下一篇: 第三篇翻译：XXE漏洞">
                 <i class="fa fa-angle-right"></i>
             </a>
         

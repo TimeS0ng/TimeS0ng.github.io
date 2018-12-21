@@ -3,6 +3,20 @@
   
     
     <entry>
+      <title><![CDATA[第四篇翻译：XSS漏洞]]></title>
+      <url>/2018/12/21/%E7%AC%AC%E5%9B%9B%E7%AF%87%E7%BF%BB%E8%AF%91%EF%BC%9AXSS%E6%BC%8F%E6%B4%9E/</url>
+      <content type="html"><![CDATA[<h4 id="原文：Dom-Based-XSS-in-ucweb-com"><a href="#原文：Dom-Based-XSS-in-ucweb-com" class="headerlink" title="原文：Dom Based XSS in ucweb.com"></a>原文：<a href="https://medium.com/@sudhanshur705/story-about-my-first-bug-bounty-9fe710be8241" target="_blank" rel="external">Dom Based XSS in ucweb.com</a></h4><h4 id="漏洞：XSS"><a href="#漏洞：XSS" class="headerlink" title="漏洞：XSS"></a>漏洞：XSS</h4><h4 id="作者：Sudhanshu-Rajbhar"><a href="#作者：Sudhanshu-Rajbhar" class="headerlink" title="作者：Sudhanshu Rajbhar"></a>作者：Sudhanshu Rajbhar</h4><h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4><a id="more"></a>
+<h2 id="现在开始…"><a href="#现在开始…" class="headerlink" title="现在开始…."></a>现在开始….</h2><h4 id="emsp-emsp-首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb-com的子域名时，我发现了这个子域-samsung-ucweb-com-，samsung-三星？似乎有点意思，所以我尝试用浏览器去访问它"><a href="#emsp-emsp-首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb-com的子域名时，我发现了这个子域-samsung-ucweb-com-，samsung-三星？似乎有点意思，所以我尝试用浏览器去访问它" class="headerlink" title="&emsp;&emsp;首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb.com的子域名时，我发现了这个子域 samsung.ucweb.com ，samsung 三星？似乎有点意思，所以我尝试用浏览器去访问它"></a>&emsp;&emsp;首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb.com的子域名时，我发现了这个子域 samsung.ucweb.com ，samsung 三星？似乎有点意思，所以我尝试用浏览器去访问它</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/1.png" alt=""></p>
+<h4 id="emsp-emsp-很不幸，这是一个403-禁用的网站，如果是你碰见了下一步会怎么做？很显然，大多数人都会忽略它，然后测试其它子域。不过我曾读过一篇文章，它说如果你遇到这样的网站，尝试用Google-搜索一下相关站点信息，或许会有惊喜发现"><a href="#emsp-emsp-很不幸，这是一个403-禁用的网站，如果是你碰见了下一步会怎么做？很显然，大多数人都会忽略它，然后测试其它子域。不过我曾读过一篇文章，它说如果你遇到这样的网站，尝试用Google-搜索一下相关站点信息，或许会有惊喜发现" class="headerlink" title="&emsp;&emsp;很不幸，这是一个403 禁用的网站，如果是你碰见了下一步会怎么做？很显然，大多数人都会忽略它，然后测试其它子域。不过我曾读过一篇文章，它说如果你遇到这样的网站，尝试用Google 搜索一下相关站点信息，或许会有惊喜发现"></a>&emsp;&emsp;很不幸，这是一个403 禁用的网站，如果是你碰见了下一步会怎么做？很显然，大多数人都会忽略它，然后测试其它子域。不过我曾读过一篇文章，它说如果你遇到这样的网站，尝试用Google 搜索一下相关站点信息，或许会有惊喜发现</h4><h4 id="emsp-emsp-所以我是用谷歌语法简单的看了一下，site-samsung-ucweb-com-结果真的有惊喜"><a href="#emsp-emsp-所以我是用谷歌语法简单的看了一下，site-samsung-ucweb-com-结果真的有惊喜" class="headerlink" title="&emsp;&emsp;所以我是用谷歌语法简单的看了一下，site:samsung.ucweb.com  结果真的有惊喜"></a>&emsp;&emsp;所以我是用谷歌语法简单的看了一下，<strong>site:samsung.ucweb.com </strong> 结果真的有惊喜</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/2.png" alt=""></p>
+<h4 id="emsp-emsp-我打开了这个URL：http-samsung-ucweb-com-webstore-classify-html-dataKey-LifeStyle-amp-title-LifeStyle-并开始测试相关参数，当我测试title参数时，发现服务端并没有过滤title参数的值就将其打印出来了"><a href="#emsp-emsp-我打开了这个URL：http-samsung-ucweb-com-webstore-classify-html-dataKey-LifeStyle-amp-title-LifeStyle-并开始测试相关参数，当我测试title参数时，发现服务端并没有过滤title参数的值就将其打印出来了" class="headerlink" title="&emsp;&emsp;我打开了这个URL：http://samsung.ucweb.com/webstore/classify.html?dataKey=LifeStyle&amp;title=LifeStyle 并开始测试相关参数，当我测试title参数时，发现服务端并没有过滤title参数的值就将其打印出来了"></a>&emsp;&emsp;我打开了这个URL：<a href="http://samsung.ucweb.com/webstore/classify.html?dataKey=LifeStyle&amp;title=LifeStyle" target="_blank" rel="external">http://samsung.ucweb.com/webstore/classify.html?dataKey=LifeStyle&amp;title=LifeStyle</a> 并开始测试相关参数，当我测试title参数时，发现服务端并没有过滤title参数的值就将其打印出来了</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/3.png" alt=""></p>
+<h4 id="emsp-emsp-所以我尝试构造payload来利用这个漏洞点，当我使用”-gt-lt-script-gt-alert-1-lt-script-gt-时并没有任何弹窗，所以我尝试用-lt-img-gt-标签"><a href="#emsp-emsp-所以我尝试构造payload来利用这个漏洞点，当我使用”-gt-lt-script-gt-alert-1-lt-script-gt-时并没有任何弹窗，所以我尝试用-lt-img-gt-标签" class="headerlink" title="&emsp;&emsp;所以我尝试构造payload来利用这个漏洞点，当我使用”&gt; &lt; script&gt;alert(1)&lt;/ script&gt;时并没有任何弹窗，所以我尝试用 &lt; img&gt;标签"></a>&emsp;&emsp;所以我尝试构造payload来利用这个漏洞点，当我使用”&gt; &lt; script&gt;alert(1)&lt;/ script&gt;时并没有任何弹窗，所以我尝试用 &lt; img&gt;标签</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&quot;&gt;&lt;img src=x onerror=alert(‘XSS’)&gt;</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/4.png" alt=""></p>
+<h2 id="视屏演示"><a href="#视屏演示" class="headerlink" title="视屏演示"></a>视屏演示</h2><video id="video" controls preload="none" poster="http://img5.imgtn.bdimg.com/it/u=750248180,3726006403&fm=26&gp=0.jpg"><br><source id="mp4" src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/XSS_in_alibaba.mp4" type="video/mp4"><br></video>]]></content>
+      
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[第三篇翻译：XXE漏洞]]></title>
       <url>/2018/12/20/%E7%AC%AC%E4%B8%89%E7%AF%87%E7%BF%BB%E8%AF%91%EF%BC%9AXXE%E6%BC%8F%E6%B4%9E/</url>
       <content type="html"><![CDATA[<h4 id="原文：From-blind-XXE-to-root-level-file-read-access"><a href="#原文：From-blind-XXE-to-root-level-file-read-access" class="headerlink" title="原文：From blind XXE to root-level file read access"></a>原文：<a href="https://www.honoki.net/2018/12/from-blind-xxe-to-root-level-file-read-access/" target="_blank" rel="external">From blind XXE to root-level file read access</a></h4><h4 id="漏洞：Blind-XXE"><a href="#漏洞：Blind-XXE" class="headerlink" title="漏洞：Blind XXE"></a>漏洞：Blind XXE</h4><h4 id="作者：Pieter"><a href="#作者：Pieter" class="headerlink" title="作者：Pieter"></a>作者：Pieter</h4><h4 id="难度：高"><a href="#难度：高" class="headerlink" title="难度：高"></a>难度：高</h4><a id="more"></a>
@@ -61,9 +75,8 @@
 <h4 id="emsp-emsp"><a href="#emsp-emsp" class="headerlink" title="&emsp;&emsp;"></a>&emsp;&emsp;</h4><h4 id="emsp-emsp-3-重新上传攻击者的头像，然后burpsuit-抓包，将ID参数的值更改为受害者的ID–85"><a href="#emsp-emsp-3-重新上传攻击者的头像，然后burpsuit-抓包，将ID参数的值更改为受害者的ID–85" class="headerlink" title="&emsp;&emsp;3. 重新上传攻击者的头像，然后burpsuit 抓包，将ID参数的值更改为受害者的ID–85"></a>&emsp;&emsp;3. 重新上传攻击者的头像，然后burpsuit 抓包，将ID参数的值更改为受害者的ID–85</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/3.png" alt=""></p>
 <h4 id="emsp-emsp-4-最后可以看到受害者Test-User的头像被篡改了"><a href="#emsp-emsp-4-最后可以看到受害者Test-User的头像被篡改了" class="headerlink" title="&emsp;&emsp;4. 最后可以看到受害者Test User的头像被篡改了"></a>&emsp;&emsp;4. 最后可以看到受害者Test User的头像被篡改了</h4><h4 id="初始头像"><a href="#初始头像" class="headerlink" title="[*] 初始头像"></a>[*] 初始头像</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/4.png" alt=""></p>
 <h4 id="篡改后的头像"><a href="#篡改后的头像" class="headerlink" title="[*] 篡改后的头像"></a>[*] 篡改后的头像</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/5.png" alt=""></p>
-<h2 id="视屏演示："><a href="#视屏演示：" class="headerlink" title="视屏演示："></a>视屏演示：</h2><video id="video" controls preload="none" poster="http://img5.imgtn.bdimg.com/it/u=750248180,3726006403&fm=26&gp=0.jpg"><br><source id="mp4" src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/videoplayback.mp4" type="video/mp4"><br></video>
-
-
+<h2 id="视屏演示："><a href="#视屏演示：" class="headerlink" title="视屏演示："></a>视屏演示：</h2><p><video id="video" controls preload="none" poster="http://img5.imgtn.bdimg.com/it/u=750248180,3726006403&fm=26&gp=0.jpg"></video></p>
+<p><source id="mp4" src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/videoplayback.mp4" type="video/mp4"><br></p>
 <h2 id="打赏译者"><a href="#打赏译者" class="headerlink" title="打赏译者"></a>打赏译者</h2><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/money.png" alt=""></p>
 ]]></content>
       
@@ -791,6 +804,37 @@
     </entry>
     
     <entry>
+      <title><![CDATA[JOBSS反序列化漏洞复现]]></title>
+      <url>/2017/12/27/JBOSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
+      <content type="html"><![CDATA[<h2 id="0x00-漏洞描述"><a href="#0x00-漏洞描述" class="headerlink" title="0x00. 漏洞描述"></a>0x00. 漏洞描述</h2><h4 id="2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。"><a href="#2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。" class="headerlink" title="2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。"></a>2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。</h4><a id="more"></a>
+<h2 id="0x01-漏洞复现"><a href="#0x01-漏洞复现" class="headerlink" title="0x01. 漏洞复现"></a>0x01. 漏洞复现</h2><h3 id="1-环境准备"><a href="#1-环境准备" class="headerlink" title="1). 环境准备"></a>1). 环境准备</h3><h4 id="1-JBOSS下载地址：http-download-jboss-org-jbossas-6-1-jboss-as-distribution-6-1-0-Final-zip"><a href="#1-JBOSS下载地址：http-download-jboss-org-jbossas-6-1-jboss-as-distribution-6-1-0-Final-zip" class="headerlink" title="1. JBOSS下载地址：http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip"></a>1. JBOSS下载地址：<a href="http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip" target="_blank" rel="external">http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</a></h4><h4 id="2-EXP下载地址：https-github-com-yunxu1-jboss-CVE-2017-12149"><a href="#2-EXP下载地址：https-github-com-yunxu1-jboss-CVE-2017-12149" class="headerlink" title="2. EXP下载地址：https://github.com/yunxu1/jboss-_CVE-2017-12149"></a>2. EXP下载地址：<a href="https://github.com/yunxu1/jboss-_CVE-2017-12149" target="_blank" rel="external">https://github.com/yunxu1/jboss-_CVE-2017-12149</a></h4><h3 id="2-环境搭建"><a href="#2-环境搭建" class="headerlink" title="2). 环境搭建"></a>2). 环境搭建</h3><h4 id="第一步：下载JBOSS环境，并解压"><a href="#第一步：下载JBOSS环境，并解压" class="headerlink" title="第一步：下载JBOSS环境，并解压"></a>第一步：下载JBOSS环境，并解压</h4><blockquote>
+<p>wget <a href="http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip" target="_blank" rel="external">http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</a> </p>
+</blockquote>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180801_LeUN0c_6293.jpeg" alt=""></p>
+<h4 id="第二步：修改配置文件，使网络中的主机都能访问JBOSS"><a href="#第二步：修改配置文件，使网络中的主机都能访问JBOSS" class="headerlink" title="第二步：修改配置文件，使网络中的主机都能访问JBOSS"></a>第二步：修改配置文件，使网络中的主机都能访问JBOSS</h4><blockquote>
+<p>vim ~/jboss-6.1.0.Final/server/default/deploy/jbossweb.sar/server.xml</p>
+</blockquote>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180817_sOlp2c_6301.jpeg" alt=""></p>
+<h4 id="第三步：启动JBOSS"><a href="#第三步：启动JBOSS" class="headerlink" title="第三步：启动JBOSS"></a>第三步：启动JBOSS</h4><blockquote>
+<p>./jboss-6.1.0.Final/bin/run.sh</p>
+</blockquote>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180832_WE4CD3_6309.jpeg" alt=""></p>
+<h4 id="第四步：下载EXP"><a href="#第四步：下载EXP" class="headerlink" title="第四步：下载EXP"></a>第四步：下载EXP</h4><blockquote>
+<p>git clone <a href="https://github.com/yunxu1/jboss-_CVE-2017-12149" target="_blank" rel="external">https://github.com/yunxu1/jboss-_CVE-2017-12149</a></p>
+</blockquote>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180843_FQh3jJ_6316.jpeg" alt=""></p>
+<h3 id="3-信息收集"><a href="#3-信息收集" class="headerlink" title="3). 信息收集"></a>3). 信息收集</h3><h4 id="第一步：利用nmap对目标主机进行常用端口扫描"><a href="#第一步：利用nmap对目标主机进行常用端口扫描" class="headerlink" title="第一步：利用nmap对目标主机进行常用端口扫描"></a>第一步：利用nmap对目标主机进行常用端口扫描</h4><blockquote>
+<p>nmap 192.168.1.111 -A </p>
+</blockquote>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180855_12YJ7L_6329.jpeg" alt=""></p>
+<h4 id="第二步：访问目标主机的8080端口，看看能否正常访问"><a href="#第二步：访问目标主机的8080端口，看看能否正常访问" class="headerlink" title="第二步：访问目标主机的8080端口，看看能否正常访问"></a>第二步：访问目标主机的8080端口，看看能否正常访问</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180912_UQjhJU_6322.jpeg" alt=""></p>
+<h3 id="4-漏洞利用"><a href="#4-漏洞利用" class="headerlink" title="4). 漏洞利用"></a>4). 漏洞利用</h3><h4 id="利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化-CVE-2017-12149-jar"><a href="#利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化-CVE-2017-12149-jar" class="headerlink" title="利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化_CVE-2017-12149.jar"></a>利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化_CVE-2017-12149.jar</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180923_jatTku_6333.jpeg" alt=""></p>
+<h2 id="0x02-总结"><a href="#0x02-总结" class="headerlink" title="0x02. 总结"></a>0x02. 总结</h2><h4 id="emsp-emsp-行千里路，不如读万卷书…"><a href="#emsp-emsp-行千里路，不如读万卷书…" class="headerlink" title="&emsp;&emsp;行千里路，不如读万卷书…"></a>&emsp;&emsp;行千里路，不如读万卷书…</h4>]]></content>
+      
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[花式钓鱼法]]></title>
       <url>/2017/12/27/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/</url>
       <content type="html"><![CDATA[<h2 id="0x00-闲谈"><a href="#0x00-闲谈" class="headerlink" title="0x00. 闲谈"></a>0x00. 闲谈</h2><h4 id="emsp-emsp-最近我们小组招新群里居然有人利用邮箱群发功能进行社工钓鱼，最奇葩的是居然还有人中招了，是可忍孰不可忍，千钧一发之际正当我准备祭出珍藏已久的Nmap打算搞死幕后黑手的时候，他她它居然把服务器关了，看来还是有准备的。如果不是没有酿成严重后果，我们绝对不会善罢甘休，光他暴露的IP就足够我们溯源追踪了，下面我也来给大家演示一下如何钓鱼和预防钓鱼陷阱。"><a href="#emsp-emsp-最近我们小组招新群里居然有人利用邮箱群发功能进行社工钓鱼，最奇葩的是居然还有人中招了，是可忍孰不可忍，千钧一发之际正当我准备祭出珍藏已久的Nmap打算搞死幕后黑手的时候，他她它居然把服务器关了，看来还是有准备的。如果不是没有酿成严重后果，我们绝对不会善罢甘休，光他暴露的IP就足够我们溯源追踪了，下面我也来给大家演示一下如何钓鱼和预防钓鱼陷阱。" class="headerlink" title="&emsp;&emsp;最近我们小组招新群里居然有人利用邮箱群发功能进行社工钓鱼，最奇葩的是居然还有人中招了，是可忍孰不可忍，千钧一发之际正当我准备祭出珍藏已久的Nmap打算搞死幕后黑手的时候，他她它居然把服务器关了，看来还是有准备的。如果不是没有酿成严重后果，我们绝对不会善罢甘休，光他暴露的IP就足够我们溯源追踪了，下面我也来给大家演示一下如何钓鱼和预防钓鱼陷阱。"></a>&emsp;&emsp;最近我们小组招新群里居然有人利用邮箱群发功能进行社工钓鱼，最奇葩的是居然还有人中招了，是可忍孰不可忍，千钧一发之际正当我准备祭出珍藏已久的Nmap打算搞死幕后黑手的时候，他她它居然把服务器关了，看来还是有准备的。如果不是没有酿成严重后果，我们绝对不会善罢甘休，光他暴露的IP就足够我们溯源追踪了，下面我也来给大家演示一下如何钓鱼和预防钓鱼陷阱。</h4><a id="more"></a>
@@ -910,37 +954,6 @@
 <p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/20171227183205_jgJnId_6529.jpeg" alt=""></p>
 <hr>
 <h2 id="0x02-防御建议"><a href="#0x02-防御建议" class="headerlink" title="0x02. 防御建议"></a>0x02. 防御建议</h2><h4 id="多了解攻击手段，以攻代防，知己知彼"><a href="#多了解攻击手段，以攻代防，知己知彼" class="headerlink" title="[*] 多了解攻击手段，以攻代防，知己知彼"></a>[*] 多了解攻击手段，以攻代防，知己知彼</h4><h4 id="不要轻易打开任何可执行文件"><a href="#不要轻易打开任何可执行文件" class="headerlink" title="[*] 不要轻易打开任何可执行文件"></a>[*] 不要轻易打开任何可执行文件</h4><h4 id="不要轻易点击陌生链接"><a href="#不要轻易点击陌生链接" class="headerlink" title="[*] 不要轻易点击陌生链接"></a>[*] 不要轻易点击陌生链接</h4><h2 id="0x03-结语"><a href="#0x03-结语" class="headerlink" title="0x03. 结语"></a>0x03. 结语</h2><h4 id="emsp-emsp-网络钓鱼的花招千奇百怪，可谓大千世界无奇不有，但也不必总是如履薄冰，多看看多学学就不会那么轻易的成为别人的肉鸡了…"><a href="#emsp-emsp-网络钓鱼的花招千奇百怪，可谓大千世界无奇不有，但也不必总是如履薄冰，多看看多学学就不会那么轻易的成为别人的肉鸡了…" class="headerlink" title="&emsp;&emsp;网络钓鱼的花招千奇百怪，可谓大千世界无奇不有，但也不必总是如履薄冰，多看看多学学就不会那么轻易的成为别人的肉鸡了…"></a>&emsp;&emsp;网络钓鱼的花招千奇百怪，可谓大千世界无奇不有，但也不必总是如履薄冰，多看看多学学就不会那么轻易的成为别人的肉鸡了…</h4>]]></content>
-      
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[JOBSS反序列化漏洞复现]]></title>
-      <url>/2017/12/27/JBOSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</url>
-      <content type="html"><![CDATA[<h2 id="0x00-漏洞描述"><a href="#0x00-漏洞描述" class="headerlink" title="0x00. 漏洞描述"></a>0x00. 漏洞描述</h2><h4 id="2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。"><a href="#2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。" class="headerlink" title="2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。"></a>2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。</h4><a id="more"></a>
-<h2 id="0x01-漏洞复现"><a href="#0x01-漏洞复现" class="headerlink" title="0x01. 漏洞复现"></a>0x01. 漏洞复现</h2><h3 id="1-环境准备"><a href="#1-环境准备" class="headerlink" title="1). 环境准备"></a>1). 环境准备</h3><h4 id="1-JBOSS下载地址：http-download-jboss-org-jbossas-6-1-jboss-as-distribution-6-1-0-Final-zip"><a href="#1-JBOSS下载地址：http-download-jboss-org-jbossas-6-1-jboss-as-distribution-6-1-0-Final-zip" class="headerlink" title="1. JBOSS下载地址：http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip"></a>1. JBOSS下载地址：<a href="http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip" target="_blank" rel="external">http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</a></h4><h4 id="2-EXP下载地址：https-github-com-yunxu1-jboss-CVE-2017-12149"><a href="#2-EXP下载地址：https-github-com-yunxu1-jboss-CVE-2017-12149" class="headerlink" title="2. EXP下载地址：https://github.com/yunxu1/jboss-_CVE-2017-12149"></a>2. EXP下载地址：<a href="https://github.com/yunxu1/jboss-_CVE-2017-12149" target="_blank" rel="external">https://github.com/yunxu1/jboss-_CVE-2017-12149</a></h4><h3 id="2-环境搭建"><a href="#2-环境搭建" class="headerlink" title="2). 环境搭建"></a>2). 环境搭建</h3><h4 id="第一步：下载JBOSS环境，并解压"><a href="#第一步：下载JBOSS环境，并解压" class="headerlink" title="第一步：下载JBOSS环境，并解压"></a>第一步：下载JBOSS环境，并解压</h4><blockquote>
-<p>wget <a href="http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip" target="_blank" rel="external">http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</a> </p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180801_LeUN0c_6293.jpeg" alt=""></p>
-<h4 id="第二步：修改配置文件，使网络中的主机都能访问JBOSS"><a href="#第二步：修改配置文件，使网络中的主机都能访问JBOSS" class="headerlink" title="第二步：修改配置文件，使网络中的主机都能访问JBOSS"></a>第二步：修改配置文件，使网络中的主机都能访问JBOSS</h4><blockquote>
-<p>vim ~/jboss-6.1.0.Final/server/default/deploy/jbossweb.sar/server.xml</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180817_sOlp2c_6301.jpeg" alt=""></p>
-<h4 id="第三步：启动JBOSS"><a href="#第三步：启动JBOSS" class="headerlink" title="第三步：启动JBOSS"></a>第三步：启动JBOSS</h4><blockquote>
-<p>./jboss-6.1.0.Final/bin/run.sh</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180832_WE4CD3_6309.jpeg" alt=""></p>
-<h4 id="第四步：下载EXP"><a href="#第四步：下载EXP" class="headerlink" title="第四步：下载EXP"></a>第四步：下载EXP</h4><blockquote>
-<p>git clone <a href="https://github.com/yunxu1/jboss-_CVE-2017-12149" target="_blank" rel="external">https://github.com/yunxu1/jboss-_CVE-2017-12149</a></p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180843_FQh3jJ_6316.jpeg" alt=""></p>
-<h3 id="3-信息收集"><a href="#3-信息收集" class="headerlink" title="3). 信息收集"></a>3). 信息收集</h3><h4 id="第一步：利用nmap对目标主机进行常用端口扫描"><a href="#第一步：利用nmap对目标主机进行常用端口扫描" class="headerlink" title="第一步：利用nmap对目标主机进行常用端口扫描"></a>第一步：利用nmap对目标主机进行常用端口扫描</h4><blockquote>
-<p>nmap 192.168.1.111 -A </p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180855_12YJ7L_6329.jpeg" alt=""></p>
-<h4 id="第二步：访问目标主机的8080端口，看看能否正常访问"><a href="#第二步：访问目标主机的8080端口，看看能否正常访问" class="headerlink" title="第二步：访问目标主机的8080端口，看看能否正常访问"></a>第二步：访问目标主机的8080端口，看看能否正常访问</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180912_UQjhJU_6322.jpeg" alt=""></p>
-<h3 id="4-漏洞利用"><a href="#4-漏洞利用" class="headerlink" title="4). 漏洞利用"></a>4). 漏洞利用</h3><h4 id="利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化-CVE-2017-12149-jar"><a href="#利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化-CVE-2017-12149-jar" class="headerlink" title="利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化_CVE-2017-12149.jar"></a>利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化_CVE-2017-12149.jar</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180923_jatTku_6333.jpeg" alt=""></p>
-<h2 id="0x02-总结"><a href="#0x02-总结" class="headerlink" title="0x02. 总结"></a>0x02. 总结</h2><h4 id="emsp-emsp-行千里路，不如读万卷书…"><a href="#emsp-emsp-行千里路，不如读万卷书…" class="headerlink" title="&emsp;&emsp;行千里路，不如读万卷书…"></a>&emsp;&emsp;行千里路，不如读万卷书…</h4>]]></content>
       
         
     </entry>

@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://TimeS0ng.github.io/"/>
-  <updated>2018-12-20T12:56:55.942Z</updated>
+  <updated>2018-12-21T08:30:41.793Z</updated>
   <id>http://TimeS0ng.github.io/</id>
   
   <author>
@@ -14,6 +14,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>第四篇翻译：XSS漏洞</title>
+    <link href="http://TimeS0ng.github.io/2018/12/21/%E7%AC%AC%E5%9B%9B%E7%AF%87%E7%BF%BB%E8%AF%91%EF%BC%9AXSS%E6%BC%8F%E6%B4%9E/"/>
+    <id>http://TimeS0ng.github.io/2018/12/21/第四篇翻译：XSS漏洞/</id>
+    <published>2018-12-21T08:30:09.000Z</published>
+    <updated>2018-12-21T08:30:41.793Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="原文：Dom-Based-XSS-in-ucweb-com"><a href="#原文：Dom-Based-XSS-in-ucweb-com" class="headerlink" title="原文：Dom Based XSS in ucweb.com"></a>原文：<a href="https://medium.com/@sudhanshur705/story-about-my-first-bug-bounty-9fe710be8241" target="_blank" rel="external">Dom Based XSS in ucweb.com</a></h4><h4 id="漏洞：XSS"><a href="#漏洞：XSS" class="headerlink" title="漏洞：XSS"></a>漏洞：XSS</h4><h4 id="作者：Sudhanshu-Rajbhar"><a href="#作者：Sudhanshu-Rajbhar" class="headerlink" title="作者：Sudhanshu Rajbhar"></a>作者：Sudhanshu Rajbhar</h4><h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4><a id="more"></a>
+<h2 id="现在开始…"><a href="#现在开始…" class="headerlink" title="现在开始…."></a>现在开始….</h2><h4 id="emsp-emsp-首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb-com的子域名时，我发现了这个子域-samsung-ucweb-com-，samsung-三星？似乎有点意思，所以我尝试用浏览器去访问它"><a href="#emsp-emsp-首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb-com的子域名时，我发现了这个子域-samsung-ucweb-com-，samsung-三星？似乎有点意思，所以我尝试用浏览器去访问它" class="headerlink" title="&emsp;&emsp;首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb.com的子域名时，我发现了这个子域 samsung.ucweb.com ，samsung 三星？似乎有点意思，所以我尝试用浏览器去访问它"></a>&emsp;&emsp;首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb.com的子域名时，我发现了这个子域 samsung.ucweb.com ，samsung 三星？似乎有点意思，所以我尝试用浏览器去访问它</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/1.png" alt=""></p>
+<h4 id="emsp-emsp-很不幸，这是一个403-禁用的网站，如果是你碰见了下一步会怎么做？很显然，大多数人都会忽略它，然后测试其它子域。不过我曾读过一篇文章，它说如果你遇到这样的网站，尝试用Google-搜索一下相关站点信息，或许会有惊喜发现"><a href="#emsp-emsp-很不幸，这是一个403-禁用的网站，如果是你碰见了下一步会怎么做？很显然，大多数人都会忽略它，然后测试其它子域。不过我曾读过一篇文章，它说如果你遇到这样的网站，尝试用Google-搜索一下相关站点信息，或许会有惊喜发现" class="headerlink" title="&emsp;&emsp;很不幸，这是一个403 禁用的网站，如果是你碰见了下一步会怎么做？很显然，大多数人都会忽略它，然后测试其它子域。不过我曾读过一篇文章，它说如果你遇到这样的网站，尝试用Google 搜索一下相关站点信息，或许会有惊喜发现"></a>&emsp;&emsp;很不幸，这是一个403 禁用的网站，如果是你碰见了下一步会怎么做？很显然，大多数人都会忽略它，然后测试其它子域。不过我曾读过一篇文章，它说如果你遇到这样的网站，尝试用Google 搜索一下相关站点信息，或许会有惊喜发现</h4><h4 id="emsp-emsp-所以我是用谷歌语法简单的看了一下，site-samsung-ucweb-com-结果真的有惊喜"><a href="#emsp-emsp-所以我是用谷歌语法简单的看了一下，site-samsung-ucweb-com-结果真的有惊喜" class="headerlink" title="&emsp;&emsp;所以我是用谷歌语法简单的看了一下，site:samsung.ucweb.com  结果真的有惊喜"></a>&emsp;&emsp;所以我是用谷歌语法简单的看了一下，<strong>site:samsung.ucweb.com </strong> 结果真的有惊喜</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/2.png" alt=""></p>
+<h4 id="emsp-emsp-我打开了这个URL：http-samsung-ucweb-com-webstore-classify-html-dataKey-LifeStyle-amp-title-LifeStyle-并开始测试相关参数，当我测试title参数时，发现服务端并没有过滤title参数的值就将其打印出来了"><a href="#emsp-emsp-我打开了这个URL：http-samsung-ucweb-com-webstore-classify-html-dataKey-LifeStyle-amp-title-LifeStyle-并开始测试相关参数，当我测试title参数时，发现服务端并没有过滤title参数的值就将其打印出来了" class="headerlink" title="&emsp;&emsp;我打开了这个URL：http://samsung.ucweb.com/webstore/classify.html?dataKey=LifeStyle&amp;title=LifeStyle 并开始测试相关参数，当我测试title参数时，发现服务端并没有过滤title参数的值就将其打印出来了"></a>&emsp;&emsp;我打开了这个URL：<a href="http://samsung.ucweb.com/webstore/classify.html?dataKey=LifeStyle&amp;title=LifeStyle" target="_blank" rel="external">http://samsung.ucweb.com/webstore/classify.html?dataKey=LifeStyle&amp;title=LifeStyle</a> 并开始测试相关参数，当我测试title参数时，发现服务端并没有过滤title参数的值就将其打印出来了</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/3.png" alt=""></p>
+<h4 id="emsp-emsp-所以我尝试构造payload来利用这个漏洞点，当我使用”-gt-lt-script-gt-alert-1-lt-script-gt-时并没有任何弹窗，所以我尝试用-lt-img-gt-标签"><a href="#emsp-emsp-所以我尝试构造payload来利用这个漏洞点，当我使用”-gt-lt-script-gt-alert-1-lt-script-gt-时并没有任何弹窗，所以我尝试用-lt-img-gt-标签" class="headerlink" title="&emsp;&emsp;所以我尝试构造payload来利用这个漏洞点，当我使用”&gt; &lt; script&gt;alert(1)&lt;/ script&gt;时并没有任何弹窗，所以我尝试用 &lt; img&gt;标签"></a>&emsp;&emsp;所以我尝试构造payload来利用这个漏洞点，当我使用”&gt; &lt; script&gt;alert(1)&lt;/ script&gt;时并没有任何弹窗，所以我尝试用 &lt; img&gt;标签</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&quot;&gt;&lt;img src=x onerror=alert(‘XSS’)&gt;</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/4.png" alt=""></p>
+<h2 id="视屏演示"><a href="#视屏演示" class="headerlink" title="视屏演示"></a>视屏演示</h2><video id="video" controls preload="none" poster="http://img5.imgtn.bdimg.com/it/u=750248180,3726006403&fm=26&gp=0.jpg"><br><source id="mp4" src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/XSS_in_alibaba.mp4" type="video/mp4"><br></video>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h4 id=&quot;原文：Dom-Based-XSS-in-ucweb-com&quot;&gt;&lt;a href=&quot;#原文：Dom-Based-XSS-in-ucweb-com&quot; class=&quot;headerlink&quot; title=&quot;原文：Dom Based XSS in ucweb.com&quot;&gt;&lt;/a&gt;原文：&lt;a href=&quot;https://medium.com/@sudhanshur705/story-about-my-first-bug-bounty-9fe710be8241&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Dom Based XSS in ucweb.com&lt;/a&gt;&lt;/h4&gt;&lt;h4 id=&quot;漏洞：XSS&quot;&gt;&lt;a href=&quot;#漏洞：XSS&quot; class=&quot;headerlink&quot; title=&quot;漏洞：XSS&quot;&gt;&lt;/a&gt;漏洞：XSS&lt;/h4&gt;&lt;h4 id=&quot;作者：Sudhanshu-Rajbhar&quot;&gt;&lt;a href=&quot;#作者：Sudhanshu-Rajbhar&quot; class=&quot;headerlink&quot; title=&quot;作者：Sudhanshu Rajbhar&quot;&gt;&lt;/a&gt;作者：Sudhanshu Rajbhar&lt;/h4&gt;&lt;h4 id=&quot;难度：低&quot;&gt;&lt;a href=&quot;#难度：低&quot; class=&quot;headerlink&quot; title=&quot;难度：低&quot;&gt;&lt;/a&gt;难度：低&lt;/h4&gt;
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>第三篇翻译：XXE漏洞</title>
@@ -90,7 +114,7 @@
     <link href="http://TimeS0ng.github.io/2018/12/19/%E7%AC%AC%E4%B8%80%E7%AF%87%E7%BF%BB%E8%AF%91%EF%BC%9AChange-Anyone%E2%80%99s-profile-picture-Exploiting-IDOR/"/>
     <id>http://TimeS0ng.github.io/2018/12/19/第一篇翻译：Change-Anyone’s-profile-picture-Exploiting-IDOR/</id>
     <published>2018-12-19T02:13:22.000Z</published>
-    <updated>2018-12-19T10:58:30.361Z</updated>
+    <updated>2018-12-21T04:12:45.688Z</updated>
     
     <content type="html"><![CDATA[<h4 id="原文：Change-Anyone’s-profile-picture-Exploiting-IDOR"><a href="#原文：Change-Anyone’s-profile-picture-Exploiting-IDOR" class="headerlink" title="原文：Change Anyone’s profile picture-Exploiting IDOR"></a>原文：<a href="https://medium.com/@rupika.luhach/change-anyones-profile-picture-exploiting-idor-41369f5acf75" target="_blank" rel="external">Change Anyone’s profile picture-Exploiting IDOR</a></h4><h4 id="漏洞：未授权更改用户信息"><a href="#漏洞：未授权更改用户信息" class="headerlink" title="漏洞：未授权更改用户信息"></a>漏洞：未授权更改用户信息</h4><h4 id="作者：Rupika-Luhach"><a href="#作者：Rupika-Luhach" class="headerlink" title="作者：Rupika Luhach"></a>作者：Rupika Luhach</h4><h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4><a id="more"></a>
 <h2 id="Hello-Guys"><a href="#Hello-Guys" class="headerlink" title="Hello Guys!!"></a>Hello Guys!!</h2><h4 id="emsp-emsp-这是我的第一篇博客文章，接下来我将给大家介绍一个在印度的Bug赏金平台官网发现的IDOR漏洞—它允许我修改任意用户的头像信息！"><a href="#emsp-emsp-这是我的第一篇博客文章，接下来我将给大家介绍一个在印度的Bug赏金平台官网发现的IDOR漏洞—它允许我修改任意用户的头像信息！" class="headerlink" title="&emsp;&emsp;这是我的第一篇博客文章，接下来我将给大家介绍一个在印度的Bug赏金平台官网发现的IDOR漏洞—它允许我修改任意用户的头像信息！"></a>&emsp;&emsp;这是我的第一篇博客文章，接下来我将给大家介绍一个在印度的Bug赏金平台官网发现的IDOR漏洞—它允许我修改任意用户的头像信息！</h4><h2 id="IDOR漏洞："><a href="#IDOR漏洞：" class="headerlink" title="IDOR漏洞："></a>IDOR漏洞：</h2><h4 id="emsp-emsp-IDOR将允许一名授权用户获取其他用户的信息，意指一个已经授权的用户通过更改访问时的一个参数，从而访问到了原本其并没有得到授权的对象。"><a href="#emsp-emsp-IDOR将允许一名授权用户获取其他用户的信息，意指一个已经授权的用户通过更改访问时的一个参数，从而访问到了原本其并没有得到授权的对象。" class="headerlink" title="&emsp;&emsp;IDOR将允许一名授权用户获取其他用户的信息，意指一个已经授权的用户通过更改访问时的一个参数，从而访问到了原本其并没有得到授权的对象。"></a>&emsp;&emsp;IDOR将允许一名授权用户获取其他用户的信息，意指一个已经授权的用户通过更改访问时的一个参数，从而访问到了原本其并没有得到授权的对象。</h4><h4 id="上面是专业解释，看完接下来的漏洞复现流程自然就懂了！"><a href="#上面是专业解释，看完接下来的漏洞复现流程自然就懂了！" class="headerlink" title="[*] 上面是专业解释，看完接下来的漏洞复现流程自然就懂了！"></a>[*] 上面是专业解释，看完接下来的漏洞复现流程自然就懂了！</h4><h2 id="漏洞复现："><a href="#漏洞复现：" class="headerlink" title="漏洞复现："></a>漏洞复现：</h2><h4 id="emsp-emsp-1-首先我创建了两个账号，Rupika-Luhach-作为攻击者账号，Test-User-充当受害者"><a href="#emsp-emsp-1-首先我创建了两个账号，Rupika-Luhach-作为攻击者账号，Test-User-充当受害者" class="headerlink" title="&emsp;&emsp;1. 首先我创建了两个账号，Rupika Luhach 作为攻击者账号，Test User 充当受害者"></a>&emsp;&emsp;1. 首先我创建了两个账号，<strong>Rupika Luhach</strong> 作为攻击者账号，<strong>Test User</strong> 充当受害者</h4><h4 id="emsp-emsp-2-接下来我在攻击者-Rupika-Luhach-个人首页上传一张头像，然后用burpsuit-抓包观察传递的参数信息，可以发现攻击者的ID-84。同样的方法得到受害者的ID-85"><a href="#emsp-emsp-2-接下来我在攻击者-Rupika-Luhach-个人首页上传一张头像，然后用burpsuit-抓包观察传递的参数信息，可以发现攻击者的ID-84。同样的方法得到受害者的ID-85" class="headerlink" title="&emsp;&emsp;2. 接下来我在攻击者 Rupika Luhach 个人首页上传一张头像，然后用burpsuit 抓包观察传递的参数信息，可以发现攻击者的ID=84。同样的方法得到受害者的ID=85"></a>&emsp;&emsp;2. 接下来我在攻击者 Rupika Luhach 个人首页上传一张头像，然后用burpsuit 抓包观察传递的参数信息，可以发现攻击者的ID=84。同样的方法得到受害者的ID=85</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/1.png" alt=""></p>
@@ -98,9 +122,8 @@
 <h4 id="emsp-emsp"><a href="#emsp-emsp" class="headerlink" title="&emsp;&emsp;"></a>&emsp;&emsp;</h4><h4 id="emsp-emsp-3-重新上传攻击者的头像，然后burpsuit-抓包，将ID参数的值更改为受害者的ID–85"><a href="#emsp-emsp-3-重新上传攻击者的头像，然后burpsuit-抓包，将ID参数的值更改为受害者的ID–85" class="headerlink" title="&emsp;&emsp;3. 重新上传攻击者的头像，然后burpsuit 抓包，将ID参数的值更改为受害者的ID–85"></a>&emsp;&emsp;3. 重新上传攻击者的头像，然后burpsuit 抓包，将ID参数的值更改为受害者的ID–85</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/3.png" alt=""></p>
 <h4 id="emsp-emsp-4-最后可以看到受害者Test-User的头像被篡改了"><a href="#emsp-emsp-4-最后可以看到受害者Test-User的头像被篡改了" class="headerlink" title="&emsp;&emsp;4. 最后可以看到受害者Test User的头像被篡改了"></a>&emsp;&emsp;4. 最后可以看到受害者Test User的头像被篡改了</h4><h4 id="初始头像"><a href="#初始头像" class="headerlink" title="[*] 初始头像"></a>[*] 初始头像</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/4.png" alt=""></p>
 <h4 id="篡改后的头像"><a href="#篡改后的头像" class="headerlink" title="[*] 篡改后的头像"></a>[*] 篡改后的头像</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/5.png" alt=""></p>
-<h2 id="视屏演示："><a href="#视屏演示：" class="headerlink" title="视屏演示："></a>视屏演示：</h2><video id="video" controls preload="none" poster="http://img5.imgtn.bdimg.com/it/u=750248180,3726006403&fm=26&gp=0.jpg"><br><source id="mp4" src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/videoplayback.mp4" type="video/mp4"><br></video>
-
-
+<h2 id="视屏演示："><a href="#视屏演示：" class="headerlink" title="视屏演示："></a>视屏演示：</h2><p><video id="video" controls preload="none" poster="http://img5.imgtn.bdimg.com/it/u=750248180,3726006403&fm=26&gp=0.jpg"></video></p>
+<p><source id="mp4" src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/videoplayback.mp4" type="video/mp4"><br></p>
 <h2 id="打赏译者"><a href="#打赏译者" class="headerlink" title="打赏译者"></a>打赏译者</h2><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/money.png" alt=""></p>
 ]]></content>
     
@@ -974,6 +997,47 @@
   </entry>
   
   <entry>
+    <title>JOBSS反序列化漏洞复现</title>
+    <link href="http://TimeS0ng.github.io/2017/12/27/JBOSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    <id>http://TimeS0ng.github.io/2017/12/27/JBOSS反序列化漏洞复现/</id>
+    <published>2017-12-27T02:39:14.000Z</published>
+    <updated>2018-12-18T15:17:49.240Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="0x00-漏洞描述"><a href="#0x00-漏洞描述" class="headerlink" title="0x00. 漏洞描述"></a>0x00. 漏洞描述</h2><h4 id="2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。"><a href="#2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。" class="headerlink" title="2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。"></a>2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。</h4><a id="more"></a>
+<h2 id="0x01-漏洞复现"><a href="#0x01-漏洞复现" class="headerlink" title="0x01. 漏洞复现"></a>0x01. 漏洞复现</h2><h3 id="1-环境准备"><a href="#1-环境准备" class="headerlink" title="1). 环境准备"></a>1). 环境准备</h3><h4 id="1-JBOSS下载地址：http-download-jboss-org-jbossas-6-1-jboss-as-distribution-6-1-0-Final-zip"><a href="#1-JBOSS下载地址：http-download-jboss-org-jbossas-6-1-jboss-as-distribution-6-1-0-Final-zip" class="headerlink" title="1. JBOSS下载地址：http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip"></a>1. JBOSS下载地址：<a href="http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip" target="_blank" rel="external">http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</a></h4><h4 id="2-EXP下载地址：https-github-com-yunxu1-jboss-CVE-2017-12149"><a href="#2-EXP下载地址：https-github-com-yunxu1-jboss-CVE-2017-12149" class="headerlink" title="2. EXP下载地址：https://github.com/yunxu1/jboss-_CVE-2017-12149"></a>2. EXP下载地址：<a href="https://github.com/yunxu1/jboss-_CVE-2017-12149" target="_blank" rel="external">https://github.com/yunxu1/jboss-_CVE-2017-12149</a></h4><h3 id="2-环境搭建"><a href="#2-环境搭建" class="headerlink" title="2). 环境搭建"></a>2). 环境搭建</h3><h4 id="第一步：下载JBOSS环境，并解压"><a href="#第一步：下载JBOSS环境，并解压" class="headerlink" title="第一步：下载JBOSS环境，并解压"></a>第一步：下载JBOSS环境，并解压</h4><blockquote>
+<p>wget <a href="http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip" target="_blank" rel="external">http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</a> </p>
+</blockquote>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180801_LeUN0c_6293.jpeg" alt=""></p>
+<h4 id="第二步：修改配置文件，使网络中的主机都能访问JBOSS"><a href="#第二步：修改配置文件，使网络中的主机都能访问JBOSS" class="headerlink" title="第二步：修改配置文件，使网络中的主机都能访问JBOSS"></a>第二步：修改配置文件，使网络中的主机都能访问JBOSS</h4><blockquote>
+<p>vim ~/jboss-6.1.0.Final/server/default/deploy/jbossweb.sar/server.xml</p>
+</blockquote>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180817_sOlp2c_6301.jpeg" alt=""></p>
+<h4 id="第三步：启动JBOSS"><a href="#第三步：启动JBOSS" class="headerlink" title="第三步：启动JBOSS"></a>第三步：启动JBOSS</h4><blockquote>
+<p>./jboss-6.1.0.Final/bin/run.sh</p>
+</blockquote>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180832_WE4CD3_6309.jpeg" alt=""></p>
+<h4 id="第四步：下载EXP"><a href="#第四步：下载EXP" class="headerlink" title="第四步：下载EXP"></a>第四步：下载EXP</h4><blockquote>
+<p>git clone <a href="https://github.com/yunxu1/jboss-_CVE-2017-12149" target="_blank" rel="external">https://github.com/yunxu1/jboss-_CVE-2017-12149</a></p>
+</blockquote>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180843_FQh3jJ_6316.jpeg" alt=""></p>
+<h3 id="3-信息收集"><a href="#3-信息收集" class="headerlink" title="3). 信息收集"></a>3). 信息收集</h3><h4 id="第一步：利用nmap对目标主机进行常用端口扫描"><a href="#第一步：利用nmap对目标主机进行常用端口扫描" class="headerlink" title="第一步：利用nmap对目标主机进行常用端口扫描"></a>第一步：利用nmap对目标主机进行常用端口扫描</h4><blockquote>
+<p>nmap 192.168.1.111 -A </p>
+</blockquote>
+<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180855_12YJ7L_6329.jpeg" alt=""></p>
+<h4 id="第二步：访问目标主机的8080端口，看看能否正常访问"><a href="#第二步：访问目标主机的8080端口，看看能否正常访问" class="headerlink" title="第二步：访问目标主机的8080端口，看看能否正常访问"></a>第二步：访问目标主机的8080端口，看看能否正常访问</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180912_UQjhJU_6322.jpeg" alt=""></p>
+<h3 id="4-漏洞利用"><a href="#4-漏洞利用" class="headerlink" title="4). 漏洞利用"></a>4). 漏洞利用</h3><h4 id="利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化-CVE-2017-12149-jar"><a href="#利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化-CVE-2017-12149-jar" class="headerlink" title="利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化_CVE-2017-12149.jar"></a>利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化_CVE-2017-12149.jar</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180923_jatTku_6333.jpeg" alt=""></p>
+<h2 id="0x02-总结"><a href="#0x02-总结" class="headerlink" title="0x02. 总结"></a>0x02. 总结</h2><h4 id="emsp-emsp-行千里路，不如读万卷书…"><a href="#emsp-emsp-行千里路，不如读万卷书…" class="headerlink" title="&emsp;&emsp;行千里路，不如读万卷书…"></a>&emsp;&emsp;行千里路，不如读万卷书…</h4>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;0x00-漏洞描述&quot;&gt;&lt;a href=&quot;#0x00-漏洞描述&quot; class=&quot;headerlink&quot; title=&quot;0x00. 漏洞描述&quot;&gt;&lt;/a&gt;0x00. 漏洞描述&lt;/h2&gt;&lt;h4 id=&quot;2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。&quot;&gt;&lt;a href=&quot;#2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。&quot; class=&quot;headerlink&quot; title=&quot;2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。&quot;&gt;&lt;/a&gt;2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。&lt;/h4&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>花式钓鱼法</title>
     <link href="http://TimeS0ng.github.io/2017/12/27/%E8%8A%B1%E5%BC%8F%E9%92%93%E9%B1%BC%E6%B3%95/"/>
     <id>http://TimeS0ng.github.io/2017/12/27/花式钓鱼法/</id>
@@ -1101,88 +1165,6 @@
     <summary type="html">
     
       &lt;h2 id=&quot;0x00-闲谈&quot;&gt;&lt;a href=&quot;#0x00-闲谈&quot; class=&quot;headerlink&quot; title=&quot;0x00. 闲谈&quot;&gt;&lt;/a&gt;0x00. 闲谈&lt;/h2&gt;&lt;h4 id=&quot;emsp-emsp-最近我们小组招新群里居然有人利用邮箱群发功能进行社工钓鱼，最奇葩的是居然还有人中招了，是可忍孰不可忍，千钧一发之际正当我准备祭出珍藏已久的Nmap打算搞死幕后黑手的时候，他她它居然把服务器关了，看来还是有准备的。如果不是没有酿成严重后果，我们绝对不会善罢甘休，光他暴露的IP就足够我们溯源追踪了，下面我也来给大家演示一下如何钓鱼和预防钓鱼陷阱。&quot;&gt;&lt;a href=&quot;#emsp-emsp-最近我们小组招新群里居然有人利用邮箱群发功能进行社工钓鱼，最奇葩的是居然还有人中招了，是可忍孰不可忍，千钧一发之际正当我准备祭出珍藏已久的Nmap打算搞死幕后黑手的时候，他她它居然把服务器关了，看来还是有准备的。如果不是没有酿成严重后果，我们绝对不会善罢甘休，光他暴露的IP就足够我们溯源追踪了，下面我也来给大家演示一下如何钓鱼和预防钓鱼陷阱。&quot; class=&quot;headerlink&quot; title=&quot;&amp;emsp;&amp;emsp;最近我们小组招新群里居然有人利用邮箱群发功能进行社工钓鱼，最奇葩的是居然还有人中招了，是可忍孰不可忍，千钧一发之际正当我准备祭出珍藏已久的Nmap打算搞死幕后黑手的时候，他她它居然把服务器关了，看来还是有准备的。如果不是没有酿成严重后果，我们绝对不会善罢甘休，光他暴露的IP就足够我们溯源追踪了，下面我也来给大家演示一下如何钓鱼和预防钓鱼陷阱。&quot;&gt;&lt;/a&gt;&amp;emsp;&amp;emsp;最近我们小组招新群里居然有人利用邮箱群发功能进行社工钓鱼，最奇葩的是居然还有人中招了，是可忍孰不可忍，千钧一发之际正当我准备祭出珍藏已久的Nmap打算搞死幕后黑手的时候，他她它居然把服务器关了，看来还是有准备的。如果不是没有酿成严重后果，我们绝对不会善罢甘休，光他暴露的IP就足够我们溯源追踪了，下面我也来给大家演示一下如何钓鱼和预防钓鱼陷阱。&lt;/h4&gt;
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>JOBSS反序列化漏洞复现</title>
-    <link href="http://TimeS0ng.github.io/2017/12/27/JBOSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    <id>http://TimeS0ng.github.io/2017/12/27/JBOSS反序列化漏洞复现/</id>
-    <published>2017-12-27T02:39:14.000Z</published>
-    <updated>2018-12-18T15:17:49.240Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="0x00-漏洞描述"><a href="#0x00-漏洞描述" class="headerlink" title="0x00. 漏洞描述"></a>0x00. 漏洞描述</h2><h4 id="2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。"><a href="#2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。" class="headerlink" title="2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。"></a>2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。</h4><a id="more"></a>
-<h2 id="0x01-漏洞复现"><a href="#0x01-漏洞复现" class="headerlink" title="0x01. 漏洞复现"></a>0x01. 漏洞复现</h2><h3 id="1-环境准备"><a href="#1-环境准备" class="headerlink" title="1). 环境准备"></a>1). 环境准备</h3><h4 id="1-JBOSS下载地址：http-download-jboss-org-jbossas-6-1-jboss-as-distribution-6-1-0-Final-zip"><a href="#1-JBOSS下载地址：http-download-jboss-org-jbossas-6-1-jboss-as-distribution-6-1-0-Final-zip" class="headerlink" title="1. JBOSS下载地址：http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip"></a>1. JBOSS下载地址：<a href="http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip" target="_blank" rel="external">http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</a></h4><h4 id="2-EXP下载地址：https-github-com-yunxu1-jboss-CVE-2017-12149"><a href="#2-EXP下载地址：https-github-com-yunxu1-jboss-CVE-2017-12149" class="headerlink" title="2. EXP下载地址：https://github.com/yunxu1/jboss-_CVE-2017-12149"></a>2. EXP下载地址：<a href="https://github.com/yunxu1/jboss-_CVE-2017-12149" target="_blank" rel="external">https://github.com/yunxu1/jboss-_CVE-2017-12149</a></h4><h3 id="2-环境搭建"><a href="#2-环境搭建" class="headerlink" title="2). 环境搭建"></a>2). 环境搭建</h3><h4 id="第一步：下载JBOSS环境，并解压"><a href="#第一步：下载JBOSS环境，并解压" class="headerlink" title="第一步：下载JBOSS环境，并解压"></a>第一步：下载JBOSS环境，并解压</h4><blockquote>
-<p>wget <a href="http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip" target="_blank" rel="external">http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</a> </p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180801_LeUN0c_6293.jpeg" alt=""></p>
-<h4 id="第二步：修改配置文件，使网络中的主机都能访问JBOSS"><a href="#第二步：修改配置文件，使网络中的主机都能访问JBOSS" class="headerlink" title="第二步：修改配置文件，使网络中的主机都能访问JBOSS"></a>第二步：修改配置文件，使网络中的主机都能访问JBOSS</h4><blockquote>
-<p>vim ~/jboss-6.1.0.Final/server/default/deploy/jbossweb.sar/server.xml</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180817_sOlp2c_6301.jpeg" alt=""></p>
-<h4 id="第三步：启动JBOSS"><a href="#第三步：启动JBOSS" class="headerlink" title="第三步：启动JBOSS"></a>第三步：启动JBOSS</h4><blockquote>
-<p>./jboss-6.1.0.Final/bin/run.sh</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180832_WE4CD3_6309.jpeg" alt=""></p>
-<h4 id="第四步：下载EXP"><a href="#第四步：下载EXP" class="headerlink" title="第四步：下载EXP"></a>第四步：下载EXP</h4><blockquote>
-<p>git clone <a href="https://github.com/yunxu1/jboss-_CVE-2017-12149" target="_blank" rel="external">https://github.com/yunxu1/jboss-_CVE-2017-12149</a></p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180843_FQh3jJ_6316.jpeg" alt=""></p>
-<h3 id="3-信息收集"><a href="#3-信息收集" class="headerlink" title="3). 信息收集"></a>3). 信息收集</h3><h4 id="第一步：利用nmap对目标主机进行常用端口扫描"><a href="#第一步：利用nmap对目标主机进行常用端口扫描" class="headerlink" title="第一步：利用nmap对目标主机进行常用端口扫描"></a>第一步：利用nmap对目标主机进行常用端口扫描</h4><blockquote>
-<p>nmap 192.168.1.111 -A </p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180855_12YJ7L_6329.jpeg" alt=""></p>
-<h4 id="第二步：访问目标主机的8080端口，看看能否正常访问"><a href="#第二步：访问目标主机的8080端口，看看能否正常访问" class="headerlink" title="第二步：访问目标主机的8080端口，看看能否正常访问"></a>第二步：访问目标主机的8080端口，看看能否正常访问</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180912_UQjhJU_6322.jpeg" alt=""></p>
-<h3 id="4-漏洞利用"><a href="#4-漏洞利用" class="headerlink" title="4). 漏洞利用"></a>4). 漏洞利用</h3><h4 id="利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化-CVE-2017-12149-jar"><a href="#利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化-CVE-2017-12149-jar" class="headerlink" title="利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化_CVE-2017-12149.jar"></a>利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化_CVE-2017-12149.jar</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180923_jatTku_6333.jpeg" alt=""></p>
-<h2 id="0x02-总结"><a href="#0x02-总结" class="headerlink" title="0x02. 总结"></a>0x02. 总结</h2><h4 id="emsp-emsp-行千里路，不如读万卷书…"><a href="#emsp-emsp-行千里路，不如读万卷书…" class="headerlink" title="&emsp;&emsp;行千里路，不如读万卷书…"></a>&emsp;&emsp;行千里路，不如读万卷书…</h4>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;0x00-漏洞描述&quot;&gt;&lt;a href=&quot;#0x00-漏洞描述&quot; class=&quot;headerlink&quot; title=&quot;0x00. 漏洞描述&quot;&gt;&lt;/a&gt;0x00. 漏洞描述&lt;/h2&gt;&lt;h4 id=&quot;2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。&quot;&gt;&lt;a href=&quot;#2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。&quot; class=&quot;headerlink&quot; title=&quot;2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。&quot;&gt;&lt;/a&gt;2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。&lt;/h4&gt;
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>RINET 的妙用</title>
-    <link href="http://TimeS0ng.github.io/2017/12/23/RINETD%E7%9A%84%E5%A6%99%E7%94%A8/"/>
-    <id>http://TimeS0ng.github.io/2017/12/23/RINETD的妙用/</id>
-    <published>2017-12-23T02:07:44.000Z</published>
-    <updated>2018-12-18T15:32:18.788Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="0x00-闲言"><a href="#0x00-闲言" class="headerlink" title="0x00. 闲言"></a>0x00. 闲言</h2><h4 id="emsp-emsp-最近期末考试的时候，考试室内网络完全被屏蔽，根本访问不了外网，就连同是校园网的网络都访问不了，只能访问学校指定的考试网页，但是页面使用的是域名访问而不是IP，也就是说DNS服务的53端口的流量应该能出去，这样就能开始我们的骚操作了，下面纯属“猜测”，毕竟考试的时候不敢这么做。"><a href="#emsp-emsp-最近期末考试的时候，考试室内网络完全被屏蔽，根本访问不了外网，就连同是校园网的网络都访问不了，只能访问学校指定的考试网页，但是页面使用的是域名访问而不是IP，也就是说DNS服务的53端口的流量应该能出去，这样就能开始我们的骚操作了，下面纯属“猜测”，毕竟考试的时候不敢这么做。" class="headerlink" title="&emsp;&emsp;最近期末考试的时候，考试室内网络完全被屏蔽，根本访问不了外网，就连同是校园网的网络都访问不了，只能访问学校指定的考试网页，但是页面使用的是域名访问而不是IP，也就是说DNS服务的53端口的流量应该能出去，这样就能开始我们的骚操作了，下面纯属“猜测”，毕竟考试的时候不敢这么做。"></a>&emsp;&emsp;最近期末考试的时候，考试室内网络完全被屏蔽，根本访问不了外网，就连同是校园网的网络都访问不了，只能访问学校指定的考试网页，但是页面使用的是域名访问而不是IP，也就是说DNS服务的53端口的流量应该能出去，这样就能开始我们的骚操作了，下面纯属“猜测”，毕竟考试的时候不敢这么做。</h4><a id="more"></a>
-<h2 id="0x01-环境搭建"><a href="#0x01-环境搭建" class="headerlink" title="0x01. 环境搭建"></a>0x01. 环境搭建</h2><h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备:"></a><strong>环境准备:</strong></h3><h4 id="emsp-emsp-1-kali-linux-（-工具：rinetd-IP-192-168-1-104"><a href="#emsp-emsp-1-kali-linux-（-工具：rinetd-IP-192-168-1-104" class="headerlink" title="&emsp;&emsp;1. kali linux （ 工具：rinetd )  IP = 192.168.1.104"></a>&emsp;&emsp;1. kali linux （ 工具：rinetd )  IP = 192.168.1.104</h4><h4 id="emsp-emsp-2-win-xp-emsp-IP-1-1-1-103"><a href="#emsp-emsp-2-win-xp-emsp-IP-1-1-1-103" class="headerlink" title="&emsp;&emsp;2. win xp &emsp; IP = 1.1.1.103"></a>&emsp;&emsp;2. win xp &emsp; IP = 1.1.1.103</h4><h4 id="emsp-emsp-3-win-xp-emsp-IP-192-168-1-109"><a href="#emsp-emsp-3-win-xp-emsp-IP-192-168-1-109" class="headerlink" title="&emsp;&emsp;3. win xp &emsp; IP = 192.168.1.109"></a>&emsp;&emsp;3. win xp &emsp; IP = 192.168.1.109</h4><h4 id="emsp-emsp-4-monowall-emsp-LAN-IP-1-1-1-1-emsp-WAN-IP-192-168-1-112"><a href="#emsp-emsp-4-monowall-emsp-LAN-IP-1-1-1-1-emsp-WAN-IP-192-168-1-112" class="headerlink" title="&emsp;&emsp;4. monowall &emsp; LAN IP = 1.1.1.1 &emsp; WAN IP = 192.168.1.112"></a>&emsp;&emsp;4. monowall &emsp; LAN IP = 1.1.1.1 &emsp; WAN IP = 192.168.1.112</h4><blockquote>
-<p>[*]这里有monowall的简单<a href="http://www.heminjie.com/network/567.html" target="_blank" rel="external">配置方法</a></p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/RINET%E7%9A%84%E5%A6%99%E7%94%A8/20171227181026_6raRvt_6724.jpeg" alt=""></p>
-<h3 id="配置路由表"><a href="#配置路由表" class="headerlink" title="配置路由表:"></a><strong>配置路由表:</strong></h3><h4 id="emsp-emsp-在xp中访问1-1-1-1进入防火墙配置页面，账号admin-密码mono，添加一条路由规则仅允许内网主机的流量通过DNS的53端口出外网（通过这条路由规则模拟学校限制网络之后的网络环境）"><a href="#emsp-emsp-在xp中访问1-1-1-1进入防火墙配置页面，账号admin-密码mono，添加一条路由规则仅允许内网主机的流量通过DNS的53端口出外网（通过这条路由规则模拟学校限制网络之后的网络环境）" class="headerlink" title="&emsp;&emsp;在xp中访问1.1.1.1进入防火墙配置页面，账号admin 密码mono，添加一条路由规则仅允许内网主机的流量通过DNS的53端口出外网（通过这条路由规则模拟学校限制网络之后的网络环境）"></a>&emsp;&emsp;在xp中访问1.1.1.1进入防火墙配置页面，账号admin 密码mono，添加一条路由规则仅允许内网主机的流量通过DNS的53端口出外网（通过这条路由规则模拟学校限制网络之后的网络环境）</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/RINET%E7%9A%84%E5%A6%99%E7%94%A8/20171227181041_6P6SB8_6728.jpeg" alt=""></p>
-<h2 id="0x02-实验步骤"><a href="#0x02-实验步骤" class="headerlink" title="0x02. 实验步骤"></a>0x02. 实验步骤</h2><h4 id="emsp-emsp-上面搭建的环境已经基本相似于学校考试室的网络环境，下面我们来实现仅通过53端口进行远程桌面连接外网192-168-1-109的xp。"><a href="#emsp-emsp-上面搭建的环境已经基本相似于学校考试室的网络环境，下面我们来实现仅通过53端口进行远程桌面连接外网192-168-1-109的xp。" class="headerlink" title="&emsp;&emsp;上面搭建的环境已经基本相似于学校考试室的网络环境，下面我们来实现仅通过53端口进行远程桌面连接外网192.168.1.109的xp。"></a>&emsp;&emsp;上面搭建的环境已经基本相似于学校考试室的网络环境，下面我们来实现仅通过53端口进行远程桌面连接外网192.168.1.109的xp。</h4><h4 id="1-首先，在kali中下载安装-rinetd-用于转发流量"><a href="#1-首先，在kali中下载安装-rinetd-用于转发流量" class="headerlink" title="1. 首先，在kali中下载安装 rinetd 用于转发流量"></a>1. 首先，在kali中下载安装 rinetd 用于转发流量</h4><blockquote>
-<p>apt-get install rinetd </p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/RINET%E7%9A%84%E5%A6%99%E7%94%A8/20171227181054_YeYibU_6744.jpeg" alt=""></p>
-<h4 id="2-然后，修改-rinetd-的配置文件，指定转发规则"><a href="#2-然后，修改-rinetd-的配置文件，指定转发规则" class="headerlink" title="2. 然后，修改 rinetd 的配置文件，指定转发规则"></a>2. 然后，修改 rinetd 的配置文件，指定转发规则</h4><blockquote>
-<p>vim /etc/rinetd.conf</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/RINET%E7%9A%84%E5%A6%99%E7%94%A8/20171227181106_543GvN_6763.jpeg" alt=""></p>
-<h4 id="3-启动rinetd"><a href="#3-启动rinetd" class="headerlink" title="3. 启动rinetd"></a>3. 启动rinetd</h4><blockquote>
-<p>rinetd</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/RINET%E7%9A%84%E5%A6%99%E7%94%A8/20171227181117_VhwPW6_6758.jpeg" alt=""></p>
-<h4 id="4-启动远程桌面连接xp"><a href="#4-启动远程桌面连接xp" class="headerlink" title="4. 启动远程桌面连接xp"></a>4. 启动远程桌面连接xp</h4><blockquote>
-<p>mstsc</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/RINET%E7%9A%84%E5%A6%99%E7%94%A8/20171227181129_87n6je_6771.jpeg" alt=""></p>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/RINET%E7%9A%84%E5%A6%99%E7%94%A8/20171227181142_MFoUyV_6773.jpeg" alt=""></p>
-<h2 id="0x03-结语"><a href="#0x03-结语" class="headerlink" title="0x03. 结语"></a>0x03. 结语</h2><h4 id="emsp-emsp-现在我们已经成功突破学校的路由限制控制了外网的XP，不知道这种姿势能否帮助大家更好的理解网络环境-o"><a href="#emsp-emsp-现在我们已经成功突破学校的路由限制控制了外网的XP，不知道这种姿势能否帮助大家更好的理解网络环境-o" class="headerlink" title="&emsp;&emsp;现在我们已经成功突破学校的路由限制控制了外网的XP，不知道这种姿势能否帮助大家更好的理解网络环境\^o^"></a>&emsp;&emsp;现在我们已经成功突破学校的路由限制控制了外网的XP，不知道这种姿势能否帮助大家更好的理解网络环境\^o^</h4>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;0x00-闲言&quot;&gt;&lt;a href=&quot;#0x00-闲言&quot; class=&quot;headerlink&quot; title=&quot;0x00. 闲言&quot;&gt;&lt;/a&gt;0x00. 闲言&lt;/h2&gt;&lt;h4 id=&quot;emsp-emsp-最近期末考试的时候，考试室内网络完全被屏蔽，根本访问不了外网，就连同是校园网的网络都访问不了，只能访问学校指定的考试网页，但是页面使用的是域名访问而不是IP，也就是说DNS服务的53端口的流量应该能出去，这样就能开始我们的骚操作了，下面纯属“猜测”，毕竟考试的时候不敢这么做。&quot;&gt;&lt;a href=&quot;#emsp-emsp-最近期末考试的时候，考试室内网络完全被屏蔽，根本访问不了外网，就连同是校园网的网络都访问不了，只能访问学校指定的考试网页，但是页面使用的是域名访问而不是IP，也就是说DNS服务的53端口的流量应该能出去，这样就能开始我们的骚操作了，下面纯属“猜测”，毕竟考试的时候不敢这么做。&quot; class=&quot;headerlink&quot; title=&quot;&amp;emsp;&amp;emsp;最近期末考试的时候，考试室内网络完全被屏蔽，根本访问不了外网，就连同是校园网的网络都访问不了，只能访问学校指定的考试网页，但是页面使用的是域名访问而不是IP，也就是说DNS服务的53端口的流量应该能出去，这样就能开始我们的骚操作了，下面纯属“猜测”，毕竟考试的时候不敢这么做。&quot;&gt;&lt;/a&gt;&amp;emsp;&amp;emsp;最近期末考试的时候，考试室内网络完全被屏蔽，根本访问不了外网，就连同是校园网的网络都访问不了，只能访问学校指定的考试网页，但是页面使用的是域名访问而不是IP，也就是说DNS服务的53端口的流量应该能出去，这样就能开始我们的骚操作了，下面纯属“猜测”，毕竟考试的时候不敢这么做。&lt;/h4&gt;
     
     </summary>
     
