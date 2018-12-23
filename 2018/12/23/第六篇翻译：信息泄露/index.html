@@ -15,23 +15,22 @@
 
 
 
-<meta name="description" content="原文：Dom Based XSS in ucweb.com漏洞：XSS作者：Sudhanshu Rajbhar难度：低">
+<meta name="description" content="原文：How Misconfigured API leaked user private information?漏洞：API接口配置不当导致信息泄露作者：Yeasir Arafat难度：低">
 <meta property="og:type" content="article">
-<meta property="og:title" content="第四篇翻译：XSS漏洞">
-<meta property="og:url" content="http://TimeS0ng.github.io/2018/12/21/第四篇翻译：XSS漏洞/index.html">
+<meta property="og:title" content="第六篇翻译：信息泄露">
+<meta property="og:url" content="http://TimeS0ng.github.io/2018/12/23/第六篇翻译：信息泄露/index.html">
 <meta property="og:site_name" content="TimeS0ng&#39;s blog">
-<meta property="og:description" content="原文：Dom Based XSS in ucweb.com漏洞：XSS作者：Sudhanshu Rajbhar难度：低">
+<meta property="og:description" content="原文：How Misconfigured API leaked user private information?漏洞：API接口配置不当导致信息泄露作者：Yeasir Arafat难度：低">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/1.png">
-<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/2.png">
-<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/3.png">
-<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/4.png">
-<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_1/money.png">
-<meta property="og:updated_time" content="2018-12-23T03:53:05.490Z">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_6/1.jpg">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_6/2.jpg">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_6/3.jpg">
+<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/translate_1/money.png">
+<meta property="og:updated_time" content="2018-12-23T04:37:50.285Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="第四篇翻译：XSS漏洞">
-<meta name="twitter:description" content="原文：Dom Based XSS in ucweb.com漏洞：XSS作者：Sudhanshu Rajbhar难度：低">
-<meta name="twitter:image" content="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/1.png">
+<meta name="twitter:title" content="第六篇翻译：信息泄露">
+<meta name="twitter:description" content="原文：How Misconfigured API leaked user private information?漏洞：API接口配置不当导致信息泄露作者：Yeasir Arafat难度：低">
+<meta name="twitter:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_6/1.jpg">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -63,7 +62,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>第四篇翻译：XSS漏洞 | TimeS0ng&#39;s blog</title>
+<title>第六篇翻译：信息泄露 | TimeS0ng&#39;s blog</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -264,20 +263,20 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-第四篇翻译：XSS漏洞" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-第六篇翻译：信息泄露" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2018/12/21/第四篇翻译：XSS漏洞/" class="article-date">
-      <time datetime="2018-12-21T08:30:09.000Z" itemprop="datePublished">2018-12-21</time>
+      <a href="/2018/12/23/第六篇翻译：信息泄露/" class="article-date">
+      <time datetime="2018-12-23T04:37:31.000Z" itemprop="datePublished">2018-12-23</time>
 </a>
 
  
-    <a href="/2018/12/21/第四篇翻译：XSS漏洞/#comments" title="查看评论">
+    <a href="/2018/12/23/第六篇翻译：信息泄露/#comments" title="查看评论">
         <i class="fa fa-comments-o" aria-hidden="true"></i>
         <span class="count-comment"></span>
         
         
-            <span class="disqus-comment-count" data-disqus-identifier="2018/12/21/第四篇翻译：XSS漏洞/"></span>
+            <span class="disqus-comment-count" data-disqus-identifier="2018/12/23/第六篇翻译：信息泄露/"></span>
         
     </a>
 
@@ -292,7 +291,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      第四篇翻译：XSS漏洞
+      第六篇翻译：信息泄露
     </h1>
   
 
@@ -309,17 +308,13 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h4 id="原文：Dom-Based-XSS-in-ucweb-com"><a href="#原文：Dom-Based-XSS-in-ucweb-com" class="headerlink" title="原文：Dom Based XSS in ucweb.com"></a>原文：<a href="https://medium.com/@sudhanshur705/story-about-my-first-bug-bounty-9fe710be8241" target="_blank" rel="external">Dom Based XSS in ucweb.com</a></h4><h4 id="漏洞：XSS"><a href="#漏洞：XSS" class="headerlink" title="漏洞：XSS"></a>漏洞：XSS</h4><h4 id="作者：Sudhanshu-Rajbhar"><a href="#作者：Sudhanshu-Rajbhar" class="headerlink" title="作者：Sudhanshu Rajbhar"></a>作者：Sudhanshu Rajbhar</h4><h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4><a id="more"></a>
-<h2 id="现在开始…"><a href="#现在开始…" class="headerlink" title="现在开始…."></a>现在开始….</h2><h4 id="emsp-emsp-首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb-com的子域名时，我发现了这个子域-samsung-ucweb-com-，samsung-三星？似乎有点意思，所以我尝试用浏览器去访问它"><a href="#emsp-emsp-首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb-com的子域名时，我发现了这个子域-samsung-ucweb-com-，samsung-三星？似乎有点意思，所以我尝试用浏览器去访问它" class="headerlink" title="&emsp;&emsp;首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb.com的子域名时，我发现了这个子域 samsung.ucweb.com ，samsung 三星？似乎有点意思，所以我尝试用浏览器去访问它"></a>&emsp;&emsp;首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb.com的子域名时，我发现了这个子域 samsung.ucweb.com ，samsung 三星？似乎有点意思，所以我尝试用浏览器去访问它</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/1.png" alt=""></p>
-<h4 id="emsp-emsp-很不幸，这是一个403-禁用的网站，如果是你碰见了下一步会怎么做？很显然，大多数人都会忽略它，然后测试其它子域。不过我曾读过一篇文章，它说如果你遇到这样的网站，尝试用Google-搜索一下相关站点信息，或许会有惊喜发现"><a href="#emsp-emsp-很不幸，这是一个403-禁用的网站，如果是你碰见了下一步会怎么做？很显然，大多数人都会忽略它，然后测试其它子域。不过我曾读过一篇文章，它说如果你遇到这样的网站，尝试用Google-搜索一下相关站点信息，或许会有惊喜发现" class="headerlink" title="&emsp;&emsp;很不幸，这是一个403 禁用的网站，如果是你碰见了下一步会怎么做？很显然，大多数人都会忽略它，然后测试其它子域。不过我曾读过一篇文章，它说如果你遇到这样的网站，尝试用Google 搜索一下相关站点信息，或许会有惊喜发现"></a>&emsp;&emsp;很不幸，这是一个403 禁用的网站，如果是你碰见了下一步会怎么做？很显然，大多数人都会忽略它，然后测试其它子域。不过我曾读过一篇文章，它说如果你遇到这样的网站，尝试用Google 搜索一下相关站点信息，或许会有惊喜发现</h4><h4 id="emsp-emsp-所以我是用谷歌语法简单的看了一下，site-samsung-ucweb-com-结果真的有惊喜"><a href="#emsp-emsp-所以我是用谷歌语法简单的看了一下，site-samsung-ucweb-com-结果真的有惊喜" class="headerlink" title="&emsp;&emsp;所以我是用谷歌语法简单的看了一下，site:samsung.ucweb.com  结果真的有惊喜"></a>&emsp;&emsp;所以我是用谷歌语法简单的看了一下，<strong>site:samsung.ucweb.com </strong> 结果真的有惊喜</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/2.png" alt=""></p>
-<h4 id="emsp-emsp-我打开了这个URL：http-samsung-ucweb-com-webstore-classify-html-dataKey-LifeStyle-amp-title-LifeStyle-并开始测试相关参数，当我测试title参数时，发现服务端并没有过滤title参数的值就将其打印出来了"><a href="#emsp-emsp-我打开了这个URL：http-samsung-ucweb-com-webstore-classify-html-dataKey-LifeStyle-amp-title-LifeStyle-并开始测试相关参数，当我测试title参数时，发现服务端并没有过滤title参数的值就将其打印出来了" class="headerlink" title="&emsp;&emsp;我打开了这个URL：http://samsung.ucweb.com/webstore/classify.html?dataKey=LifeStyle&amp;title=LifeStyle 并开始测试相关参数，当我测试title参数时，发现服务端并没有过滤title参数的值就将其打印出来了"></a>&emsp;&emsp;我打开了这个URL：<a href="http://samsung.ucweb.com/webstore/classify.html?dataKey=LifeStyle&amp;title=LifeStyle" target="_blank" rel="external">http://samsung.ucweb.com/webstore/classify.html?dataKey=LifeStyle&amp;title=LifeStyle</a> 并开始测试相关参数，当我测试title参数时，发现服务端并没有过滤title参数的值就将其打印出来了</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/3.png" alt=""></p>
-<h4 id="emsp-emsp-所以我尝试构造payload来利用这个漏洞点，当我使用”-gt-lt-script-gt-alert-1-lt-script-gt-时并没有任何弹窗，所以我尝试用-lt-img-gt-标签"><a href="#emsp-emsp-所以我尝试构造payload来利用这个漏洞点，当我使用”-gt-lt-script-gt-alert-1-lt-script-gt-时并没有任何弹窗，所以我尝试用-lt-img-gt-标签" class="headerlink" title="&emsp;&emsp;所以我尝试构造payload来利用这个漏洞点，当我使用”&gt; &lt; script&gt;alert(1)&lt;/ script&gt;时并没有任何弹窗，所以我尝试用 &lt; img&gt;标签"></a>&emsp;&emsp;所以我尝试构造payload来利用这个漏洞点，当我使用”&gt; &lt; script&gt;alert(1)&lt;/ script&gt;时并没有任何弹窗，所以我尝试用 &lt; img&gt;标签</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&quot;&gt;&lt;img src=x onerror=alert(‘XSS’)&gt;</div></pre></td></tr></table></figure>
-<p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/4.png" alt=""></p>
-<h2 id="视屏演示"><a href="#视屏演示" class="headerlink" title="视屏演示"></a>视屏演示</h2><video id="video" controls preload="none" poster="http://img5.imgtn.bdimg.com/it/u=750248180,3726006403&fm=26&gp=0.jpg"><br><source id="mp4" src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/XSS_in_alibaba.mp4" type="video/mp4"><br></video>
-
-
-
-<h2 id="打赏译者"><a href="#打赏译者" class="headerlink" title="打赏译者"></a>打赏译者</h2><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_1/money.png" alt=""></p>
+        <h4 id="原文：How-Misconfigured-API-leaked-user-private-information"><a href="#原文：How-Misconfigured-API-leaked-user-private-information" class="headerlink" title="原文：How Misconfigured API leaked user private information?"></a>原文：<a href="https://medium.com/@Skylinearafat/how-misconfigured-api-leaked-user-private-information-e3e8c13e52e4" target="_blank" rel="external">How Misconfigured API leaked user private information?</a></h4><h4 id="漏洞：API接口配置不当导致信息泄露"><a href="#漏洞：API接口配置不当导致信息泄露" class="headerlink" title="漏洞：API接口配置不当导致信息泄露"></a>漏洞：API接口配置不当导致信息泄露</h4><h4 id="作者：Yeasir-Arafat"><a href="#作者：Yeasir-Arafat" class="headerlink" title="作者：Yeasir Arafat"></a>作者：<a href="https://medium.com/@Skylinearafat?source=user_popover" target="_blank" rel="external">Yeasir Arafat</a></h4><h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4><a id="more"></a>
+<h4 id="emsp-emsp-接下来我将分享最近在私有BUG赏金平台上发现的API接口漏洞，这些漏洞真的特别有意思！"><a href="#emsp-emsp-接下来我将分享最近在私有BUG赏金平台上发现的API接口漏洞，这些漏洞真的特别有意思！" class="headerlink" title="&emsp;&emsp;接下来我将分享最近在私有BUG赏金平台上发现的API接口漏洞，这些漏洞真的特别有意思！"></a>&emsp;&emsp;接下来我将分享最近在私有BUG赏金平台上发现的API接口漏洞，这些漏洞真的特别有意思！</h4><h4 id="emsp-emsp-首先咱们假设漏洞站点的域名是redact-io-，该站点使用API从服务器上获取用户的数据，例如：http-api-redact-io"><a href="#emsp-emsp-首先咱们假设漏洞站点的域名是redact-io-，该站点使用API从服务器上获取用户的数据，例如：http-api-redact-io" class="headerlink" title="&emsp;&emsp;首先咱们假设漏洞站点的域名是redact.io ，该站点使用API从服务器上获取用户的数据，例如：http://api.redact.io"></a>&emsp;&emsp;首先咱们假设漏洞站点的域名是redact.io ，该站点使用API从服务器上获取用户的数据，例如：<a href="http://api.redact.io" target="_blank" rel="external">http://api.redact.io</a></h4><h4 id="emsp-emsp-在开始渗透之前，我通常会先去了解该站点的API的工作原理，我在http-docs-redact-io-上面阅读了完整的相关文档。了解你的目标网站的工作方式是非常重要的，知己知彼百战不殆，当你收集到足够多的信息之后，就能很轻松的制定攻击步骤！"><a href="#emsp-emsp-在开始渗透之前，我通常会先去了解该站点的API的工作原理，我在http-docs-redact-io-上面阅读了完整的相关文档。了解你的目标网站的工作方式是非常重要的，知己知彼百战不殆，当你收集到足够多的信息之后，就能很轻松的制定攻击步骤！" class="headerlink" title="&emsp;&emsp;在开始渗透之前，我通常会先去了解该站点的API的工作原理，我在http://docs.redact.io 上面阅读了完整的相关文档。了解你的目标网站的工作方式是非常重要的，知己知彼百战不殆，当你收集到足够多的信息之后，就能很轻松的制定攻击步骤！"></a>&emsp;&emsp;在开始渗透之前，我通常会先去了解该站点的API的工作原理，我在<a href="http://docs.redact.io" target="_blank" rel="external">http://docs.redact.io</a> 上面阅读了完整的相关文档。了解你的目标网站的工作方式是非常重要的，知己知彼百战不殆，当你收集到足够多的信息之后，就能很轻松的制定攻击步骤！</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_6/1.jpg" alt=""></p>
+<h4 id="emsp-emsp-我发现目标域redact-io-正在使用https-api-redact-io-service-lt-userID-gt-来获取用户数据，这里的userID是该站点用户的唯一用户ID"><a href="#emsp-emsp-我发现目标域redact-io-正在使用https-api-redact-io-service-lt-userID-gt-来获取用户数据，这里的userID是该站点用户的唯一用户ID" class="headerlink" title="&emsp;&emsp;我发现目标域redact.io 正在使用https://api.redact.io/service/&lt; userID&gt; 来获取用户数据，这里的userID是该站点用户的唯一用户ID"></a>&emsp;&emsp;我发现目标域redact.io 正在使用<a href="https://api.redact.io/service/" target="_blank" rel="external">https://api.redact.io/service/</a>&lt; userID&gt; 来获取用户数据，这里的userID是该站点用户的唯一用户ID</h4><h4 id="emsp-emsp-所以我尝试去修改这里的userID，看看在未授权的情况下能否从这里提取数据，但是网站只是返回一个404错误给我"><a href="#emsp-emsp-所以我尝试去修改这里的userID，看看在未授权的情况下能否从这里提取数据，但是网站只是返回一个404错误给我" class="headerlink" title="&emsp;&emsp;所以我尝试去修改这里的userID，看看在未授权的情况下能否从这里提取数据，但是网站只是返回一个404错误给我"></a>&emsp;&emsp;所以我尝试去修改这里的userID，看看在未授权的情况下能否从这里提取数据，但是网站只是返回一个404错误给我</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">https://api.redact.io/service/05c0dc81753821cbdf9ab1cd5e366d21</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_6/2.jpg" alt=""></p>
+<h4 id="emsp-emsp-呃？那接下来该咋整？看来该网站的API接口工作正常不像有漏洞啊。但从我过去的经验来看，我总结了一些针对API接口的小技巧，我们可以尝试利用其它参数来替代userID，例如：Email，userName，scope等"><a href="#emsp-emsp-呃？那接下来该咋整？看来该网站的API接口工作正常不像有漏洞啊。但从我过去的经验来看，我总结了一些针对API接口的小技巧，我们可以尝试利用其它参数来替代userID，例如：Email，userName，scope等" class="headerlink" title="&emsp;&emsp;呃？那接下来该咋整？看来该网站的API接口工作正常不像有漏洞啊。但从我过去的经验来看，我总结了一些针对API接口的小技巧，我们可以尝试利用其它参数来替代userID，例如：Email，userName，scope等"></a>&emsp;&emsp;呃？那接下来该咋整？看来该网站的API接口工作正常不像有漏洞啊。但从我过去的经验来看，我总结了一些针对API接口的小技巧，我们可以尝试利用其它参数来替代userID，例如：Email，userName，scope等</h4><h4 id="emsp-emsp-下面我使用userName来替换userID，可以看到越权成功，并且成功获取到其它用户的数据"><a href="#emsp-emsp-下面我使用userName来替换userID，可以看到越权成功，并且成功获取到其它用户的数据" class="headerlink" title="&emsp;&emsp;下面我使用userName来替换userID，可以看到越权成功，并且成功获取到其它用户的数据"></a>&emsp;&emsp;下面我使用userName来替换userID，可以看到越权成功，并且成功获取到其它用户的数据</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">https://api.redact.io/service/bugtester</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_6/3.jpg" alt=""></p>
+<h2 id="打赏译者"><a href="#打赏译者" class="headerlink" title="打赏译者"></a>打赏译者</h2><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/money.png" alt=""></p>
 
       
     </div>
@@ -328,13 +323,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2018/12/21/第四篇翻译：XSS漏洞/">第四篇翻译：XSS漏洞</a></p>
+        <p><span>本文标题:</span><a href="/2018/12/23/第六篇翻译：信息泄露/">第六篇翻译：信息泄露</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">TimeS0ng</a></p>
-        <p><span>发布时间:</span>2018-12-21, 16:30:09</p>
-        <p><span>最后更新:</span>2018-12-23, 11:53:05</p>
+        <p><span>发布时间:</span>2018-12-23, 12:37:31</p>
+        <p><span>最后更新:</span>2018-12-23, 12:37:50</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2018/12/21/第四篇翻译：XSS漏洞/" title="第四篇翻译：XSS漏洞">http://TimeS0ng.github.io/2018/12/21/第四篇翻译：XSS漏洞/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2018/12/21/第四篇翻译：XSS漏洞/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2018/12/23/第六篇翻译：信息泄露/" title="第六篇翻译：信息泄露">http://TimeS0ng.github.io/2018/12/23/第六篇翻译：信息泄露/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2018/12/23/第六篇翻译：信息泄露/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -346,16 +341,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2018/12/23/第五篇翻译：SSRF-to-XSS/">
-                    第五篇翻译：SSRF to XSS
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2018/12/20/第三篇翻译：XXE漏洞/">
-                    第三篇翻译：XXE漏洞
+                <a href="/2018/12/23/第五篇翻译：SSRF-to-XSS/">
+                    第五篇翻译：SSRF to XSS
                 </a>
             </div>
         
@@ -367,7 +356,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#原文：Dom-Based-XSS-in-ucweb-com"><span class="toc-number">1.</span> <span class="toc-text">原文：Dom Based XSS in ucweb.com</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#漏洞：XSS"><span class="toc-number">2.</span> <span class="toc-text">漏洞：XSS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#作者：Sudhanshu-Rajbhar"><span class="toc-number">3.</span> <span class="toc-text">作者：Sudhanshu Rajbhar</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#难度：低"><span class="toc-number">4.</span> <span class="toc-text">难度：低</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#现在开始…"><span class="toc-number"></span> <span class="toc-text">现在开始….</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb-com的子域名时，我发现了这个子域-samsung-ucweb-com-，samsung-三星？似乎有点意思，所以我尝试用浏览器去访问它"><span class="toc-number">1.</span> <span class="toc-text">  首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb.com的子域名时，我发现了这个子域 samsung.ucweb.com ，samsung 三星？似乎有点意思，所以我尝试用浏览器去访问它</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-很不幸，这是一个403-禁用的网站，如果是你碰见了下一步会怎么做？很显然，大多数人都会忽略它，然后测试其它子域。不过我曾读过一篇文章，它说如果你遇到这样的网站，尝试用Google-搜索一下相关站点信息，或许会有惊喜发现"><span class="toc-number">2.</span> <span class="toc-text">  很不幸，这是一个403 禁用的网站，如果是你碰见了下一步会怎么做？很显然，大多数人都会忽略它，然后测试其它子域。不过我曾读过一篇文章，它说如果你遇到这样的网站，尝试用Google 搜索一下相关站点信息，或许会有惊喜发现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-所以我是用谷歌语法简单的看了一下，site-samsung-ucweb-com-结果真的有惊喜"><span class="toc-number">3.</span> <span class="toc-text">  所以我是用谷歌语法简单的看了一下，site:samsung.ucweb.com  结果真的有惊喜</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-我打开了这个URL：http-samsung-ucweb-com-webstore-classify-html-dataKey-LifeStyle-amp-title-LifeStyle-并开始测试相关参数，当我测试title参数时，发现服务端并没有过滤title参数的值就将其打印出来了"><span class="toc-number">4.</span> <span class="toc-text">  我打开了这个URL：http://samsung.ucweb.com/webstore/classify.html?dataKey=LifeStyle&title=LifeStyle 并开始测试相关参数，当我测试title参数时，发现服务端并没有过滤title参数的值就将其打印出来了</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-所以我尝试构造payload来利用这个漏洞点，当我使用”-gt-lt-script-gt-alert-1-lt-script-gt-时并没有任何弹窗，所以我尝试用-lt-img-gt-标签"><span class="toc-number">5.</span> <span class="toc-text">  所以我尝试构造payload来利用这个漏洞点，当我使用”> < script>alert(1)</ script>时并没有任何弹窗，所以我尝试用 < img>标签</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#视屏演示"><span class="toc-number"></span> <span class="toc-text">视屏演示</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#打赏译者"><span class="toc-number"></span> <span class="toc-text">打赏译者</span></a>
+            <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#原文：How-Misconfigured-API-leaked-user-private-information"><span class="toc-number">1.</span> <span class="toc-text">原文：How Misconfigured API leaked user private information?</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#漏洞：API接口配置不当导致信息泄露"><span class="toc-number">2.</span> <span class="toc-text">漏洞：API接口配置不当导致信息泄露</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#作者：Yeasir-Arafat"><span class="toc-number">3.</span> <span class="toc-text">作者：Yeasir Arafat</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#难度：低"><span class="toc-number">4.</span> <span class="toc-text">难度：低</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-接下来我将分享最近在私有BUG赏金平台上发现的API接口漏洞，这些漏洞真的特别有意思！"><span class="toc-number">5.</span> <span class="toc-text">  接下来我将分享最近在私有BUG赏金平台上发现的API接口漏洞，这些漏洞真的特别有意思！</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-首先咱们假设漏洞站点的域名是redact-io-，该站点使用API从服务器上获取用户的数据，例如：http-api-redact-io"><span class="toc-number">6.</span> <span class="toc-text">  首先咱们假设漏洞站点的域名是redact.io ，该站点使用API从服务器上获取用户的数据，例如：http://api.redact.io</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-在开始渗透之前，我通常会先去了解该站点的API的工作原理，我在http-docs-redact-io-上面阅读了完整的相关文档。了解你的目标网站的工作方式是非常重要的，知己知彼百战不殆，当你收集到足够多的信息之后，就能很轻松的制定攻击步骤！"><span class="toc-number">7.</span> <span class="toc-text">  在开始渗透之前，我通常会先去了解该站点的API的工作原理，我在http://docs.redact.io 上面阅读了完整的相关文档。了解你的目标网站的工作方式是非常重要的，知己知彼百战不殆，当你收集到足够多的信息之后，就能很轻松的制定攻击步骤！</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-我发现目标域redact-io-正在使用https-api-redact-io-service-lt-userID-gt-来获取用户数据，这里的userID是该站点用户的唯一用户ID"><span class="toc-number">8.</span> <span class="toc-text">  我发现目标域redact.io 正在使用https://api.redact.io/service/< userID> 来获取用户数据，这里的userID是该站点用户的唯一用户ID</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-所以我尝试去修改这里的userID，看看在未授权的情况下能否从这里提取数据，但是网站只是返回一个404错误给我"><span class="toc-number">9.</span> <span class="toc-text">  所以我尝试去修改这里的userID，看看在未授权的情况下能否从这里提取数据，但是网站只是返回一个404错误给我</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-呃？那接下来该咋整？看来该网站的API接口工作正常不像有漏洞啊。但从我过去的经验来看，我总结了一些针对API接口的小技巧，我们可以尝试利用其它参数来替代userID，例如：Email，userName，scope等"><span class="toc-number">10.</span> <span class="toc-text">  呃？那接下来该咋整？看来该网站的API接口工作正常不像有漏洞啊。但从我过去的经验来看，我总结了一些针对API接口的小技巧，我们可以尝试利用其它参数来替代userID，例如：Email，userName，scope等</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-下面我使用userName来替换userID，可以看到越权成功，并且成功获取到其它用户的数据"><span class="toc-number">11.</span> <span class="toc-text">  下面我使用userName来替换userID，可以看到越权成功，并且成功获取到其它用户的数据</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#打赏译者"><span class="toc-number"></span> <span class="toc-text">打赏译者</span></a>
         
     </div>
     <style>
@@ -403,7 +392,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"第四篇翻译：XSS漏洞　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"第六篇翻译：信息泄露　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -460,15 +449,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2018/12/23/第五篇翻译：SSRF-to-XSS/" title="上一篇: 第五篇翻译：SSRF to XSS">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2018/12/20/第三篇翻译：XXE漏洞/" title="下一篇: 第三篇翻译：XXE漏洞">
+            <a href="/2018/12/23/第五篇翻译：SSRF-to-XSS/" title="下一篇: 第五篇翻译：SSRF to XSS">
                 <i class="fa fa-angle-right"></i>
             </a>
         
