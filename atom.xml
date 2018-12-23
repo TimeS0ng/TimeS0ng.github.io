@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://TimeS0ng.github.io/"/>
-  <updated>2018-12-23T07:51:13.292Z</updated>
+  <updated>2018-12-23T07:53:02.253Z</updated>
   <id>http://TimeS0ng.github.io/</id>
   
   <author>
@@ -20,10 +20,10 @@
     <link href="http://TimeS0ng.github.io/2018/12/23/%E7%AC%AC%E5%85%AB%E7%AF%87%E7%BF%BB%E8%AF%91%EF%BC%9A%E7%BB%95%E8%BF%87XSS%E9%98%B2%E6%8A%A4/"/>
     <id>http://TimeS0ng.github.io/2018/12/23/第八篇翻译：绕过XSS防护/</id>
     <published>2018-12-23T07:50:57.000Z</published>
-    <updated>2018-12-23T07:51:13.292Z</updated>
+    <updated>2018-12-23T07:53:02.253Z</updated>
     
     <content type="html"><![CDATA[<h4 id="原文：The-story-behined-the-Strong-XSS-filter-bypass"><a href="#原文：The-story-behined-the-Strong-XSS-filter-bypass" class="headerlink" title="原文：The story behined the Strong XSS filter bypass!"></a>原文：<a href="https://medium.com/@Skylinearafat/the-story-behined-the-namecheap-xss-filter-bypass-be79624fd0c3" target="_blank" rel="external">The story behined the Strong XSS filter bypass!</a></h4><h4 id="漏洞：编码绕过XSS防火墙"><a href="#漏洞：编码绕过XSS防火墙" class="headerlink" title="漏洞：编码绕过XSS防火墙"></a>漏洞：编码绕过XSS防火墙</h4><h4 id="作者：Yeasir-Arafat"><a href="#作者：Yeasir-Arafat" class="headerlink" title="作者：Yeasir Arafat"></a>作者：<a href="https://medium.com/@Skylinearafat?source=post_header_lockup" target="_blank" rel="external">Yeasir Arafat</a></h4><h4 id="难度：中"><a href="#难度：中" class="headerlink" title="难度：中"></a>难度：中</h4><a id="more"></a>
-<h4 id="emsp-emsp-今天的主题是关于如何绕过XSS过滤。我已经观察目标网站很久了，并且一直在尝试利用谷歌语法试图发现网站的子域名，大家也可以尝试一下"><a href="#emsp-emsp-今天的主题是关于如何绕过XSS过滤。我已经观察目标网站很久了，并且一直在尝试利用谷歌语法试图发现网站的子域名，大家也可以尝试一下" class="headerlink" title="&emsp;&emsp;今天的主题是关于如何绕过XSS过滤。我已经观察目标网站很久了，并且一直在尝试利用谷歌语法试图发现网站的子域名，大家也可以尝试一下"></a>&emsp;&emsp;今天的主题是关于如何绕过XSS过滤。我已经观察目标网站很久了，并且一直在尝试利用谷歌语法试图发现网站的子域名，大家也可以尝试一下</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">site:*.*.namecheap.com” &amp; site:*.namecheap.com</div></pre></td></tr></table></figure>
+<h4 id="emsp-emsp-今天的主题是关于如何绕过XSS过滤。我已经观察目标网站很久了，并且一直在尝试利用谷歌语法试图发现网站的子域名，大家也可以尝试一下"><a href="#emsp-emsp-今天的主题是关于如何绕过XSS过滤。我已经观察目标网站很久了，并且一直在尝试利用谷歌语法试图发现网站的子域名，大家也可以尝试一下" class="headerlink" title="&emsp;&emsp;今天的主题是关于如何绕过XSS过滤。我已经观察目标网站很久了，并且一直在尝试利用谷歌语法试图发现网站的子域名，大家也可以尝试一下"></a>&emsp;&emsp;今天的主题是关于如何绕过XSS过滤。我已经观察目标网站很久了，并且一直在尝试利用谷歌语法试图发现网站的子域名，大家也可以尝试一下</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">site:*.*.namecheap.com &amp; site:*.namecheap.com</div></pre></td></tr></table></figure>
 <h4 id="emsp-emsp-好不容易找到几个子域，正当我尝试XSS注入的时候，却被防火墙各种蹂躏"><a href="#emsp-emsp-好不容易找到几个子域，正当我尝试XSS注入的时候，却被防火墙各种蹂躏" class="headerlink" title="&emsp;&emsp;好不容易找到几个子域，正当我尝试XSS注入的时候，却被防火墙各种蹂躏"></a>&emsp;&emsp;好不容易找到几个子域，正当我尝试XSS注入的时候，却被防火墙各种蹂躏</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_8/1.png" alt=""></p>
 <h4 id="emsp-emsp-虽然痛不欲生，但我是那种会放弃的人吗？经过多方面的尝试之后，终于发现了一种莫名其妙的编码方式能够绕过防火墙了"><a href="#emsp-emsp-虽然痛不欲生，但我是那种会放弃的人吗？经过多方面的尝试之后，终于发现了一种莫名其妙的编码方式能够绕过防火墙了" class="headerlink" title="&emsp;&emsp;虽然痛不欲生，但我是那种会放弃的人吗？经过多方面的尝试之后，终于发现了一种莫名其妙的编码方式能够绕过防火墙了"></a>&emsp;&emsp;虽然痛不欲生，但我是那种会放弃的人吗？经过多方面的尝试之后，终于发现了一种莫名其妙的编码方式能够绕过防火墙了</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;a href=&quot;javascript&amp;colon;alert&amp;lpar;document&amp;period;domain&amp;rpar;&quot;&gt;Click Here&lt;/a&gt;</div><div class="line">&quot;&gt;&lt;iframe/src=javascript&amp;colon;[document&amp;period;domain].find(alert(1))&gt;</div></pre></td></tr></table></figure>
 <h2 id="视屏"><a href="#视屏" class="headerlink" title="视屏"></a>视屏</h2><p>[*]xss-1</p>
