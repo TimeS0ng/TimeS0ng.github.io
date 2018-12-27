@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://TimeS0ng.github.io/"/>
-  <updated>2018-12-27T07:43:31.103Z</updated>
+  <updated>2018-12-27T08:57:15.975Z</updated>
   <id>http://TimeS0ng.github.io/</id>
   
   <author>
@@ -14,6 +14,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>第十二篇翻译：反射型XSS</title>
+    <link href="http://TimeS0ng.github.io/2018/12/27/%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AF%87%E7%BF%BB%E8%AF%91%EF%BC%9A%E5%8F%8D%E5%B0%84%E5%9E%8BXSS/"/>
+    <id>http://TimeS0ng.github.io/2018/12/27/第十二篇翻译：反射型XSS/</id>
+    <published>2018-12-27T08:55:58.000Z</published>
+    <updated>2018-12-27T08:57:15.975Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="原文：My-First-0day-Exploit-Reflected-XSS"><a href="#原文：My-First-0day-Exploit-Reflected-XSS" class="headerlink" title="原文：My First 0day Exploit (Reflected XSS)"></a>原文：<a href="https://medium.com/@alicanact60/my-first-0day-exploit-csp-bypass-reflected-xss-bugbounty-c7efa4bed3d7" target="_blank" rel="external">My First 0day Exploit (Reflected XSS)</a></h4><h4 id="漏洞：javascrip-XSS"><a href="#漏洞：javascrip-XSS" class="headerlink" title="漏洞：javascrip XSS"></a>漏洞：javascrip XSS</h4><h4 id="作者：Ali-TUTUNCU"><a href="#作者：Ali-TUTUNCU" class="headerlink" title="作者：Ali TÜTÜNCÜ"></a>作者：<a href="https://medium.com/@alicanact60?source=post_header_lockup" target="_blank" rel="external">Ali TÜTÜNCÜ</a></h4><h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4><a id="more"></a>
+<h2 id="步骤："><a href="#步骤：" class="headerlink" title="步骤："></a>步骤：</h2><h4 id="emsp-emsp-1-当我访问网址https-xxx-com-amp-iframe-redirect-scheme-redirect-amp-redirect-strategy-0-时，查看源码看到下面的JS代码"><a href="#emsp-emsp-1-当我访问网址https-xxx-com-amp-iframe-redirect-scheme-redirect-amp-redirect-strategy-0-时，查看源码看到下面的JS代码" class="headerlink" title="&emsp;&emsp;1. 当我访问网址https://xxx.com/amp-iframe-redirect?scheme_redirect=&amp;redirect_strategy=0 时，查看源码看到下面的JS代码"></a>&emsp;&emsp;1. 当我访问网址<a href="https://xxx.com/amp-iframe-redirect?scheme_redirect=&amp;redirect_strategy=0" target="_blank" rel="external">https://xxx.com/amp-iframe-redirect?scheme_redirect=&amp;redirect_strategy=0</a> 时，查看源码看到下面的JS代码</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_12/1.png" alt=""></p>
+<h4 id="emsp-emsp-2-然后我开始测试URL参数是否可控，可以看到redirect-strategy参数中的值被嵌入了JS代码中，但是特殊符号被HTML编码了"><a href="#emsp-emsp-2-然后我开始测试URL参数是否可控，可以看到redirect-strategy参数中的值被嵌入了JS代码中，但是特殊符号被HTML编码了" class="headerlink" title="&emsp;&emsp;2. 然后我开始测试URL参数是否可控，可以看到redirect_strategy参数中的值被嵌入了JS代码中，但是特殊符号被HTML编码了"></a>&emsp;&emsp;2. 然后我开始测试URL参数是否可控，可以看到redirect_strategy参数中的值被嵌入了JS代码中，但是特殊符号被HTML编码了</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">https://xxx.com/amp-iframe-redirect?scheme_redirect=&amp;redirect_strategy=&quot;&apos;&lt;&gt;/();</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_12/2.png" alt=""></p>
+<h4 id="emsp-emsp-3-因为正常的XSS语句不能直接使用，所以我只能通过控制JS代码来嵌入XSS语句"><a href="#emsp-emsp-3-因为正常的XSS语句不能直接使用，所以我只能通过控制JS代码来嵌入XSS语句" class="headerlink" title="&emsp;&emsp;3. 因为正常的XSS语句不能直接使用，所以我只能通过控制JS代码来嵌入XSS语句"></a>&emsp;&emsp;3. 因为正常的XSS语句不能直接使用，所以我只能通过控制JS代码来嵌入XSS语句</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">https://xxx.com/amp-iframe-redirect?scheme_redirect=&amp;redirect_strategy=); alert(document.domain); if(1</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_12/3.png" alt=""></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h4 id=&quot;原文：My-First-0day-Exploit-Reflected-XSS&quot;&gt;&lt;a href=&quot;#原文：My-First-0day-Exploit-Reflected-XSS&quot; class=&quot;headerlink&quot; title=&quot;原文：My First 0day Exploit (Reflected XSS)&quot;&gt;&lt;/a&gt;原文：&lt;a href=&quot;https://medium.com/@alicanact60/my-first-0day-exploit-csp-bypass-reflected-xss-bugbounty-c7efa4bed3d7&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;My First 0day Exploit (Reflected XSS)&lt;/a&gt;&lt;/h4&gt;&lt;h4 id=&quot;漏洞：javascrip-XSS&quot;&gt;&lt;a href=&quot;#漏洞：javascrip-XSS&quot; class=&quot;headerlink&quot; title=&quot;漏洞：javascrip XSS&quot;&gt;&lt;/a&gt;漏洞：javascrip XSS&lt;/h4&gt;&lt;h4 id=&quot;作者：Ali-TUTUNCU&quot;&gt;&lt;a href=&quot;#作者：Ali-TUTUNCU&quot; class=&quot;headerlink&quot; title=&quot;作者：Ali TÜTÜNCÜ&quot;&gt;&lt;/a&gt;作者：&lt;a href=&quot;https://medium.com/@alicanact60?source=post_header_lockup&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Ali TÜTÜNCÜ&lt;/a&gt;&lt;/h4&gt;&lt;h4 id=&quot;难度：低&quot;&gt;&lt;a href=&quot;#难度：低&quot; class=&quot;headerlink&quot; title=&quot;难度：低&quot;&gt;&lt;/a&gt;难度：低&lt;/h4&gt;
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>第十一篇翻译：CSRF漏洞</title>
@@ -755,44 +779,6 @@
     <summary type="html">
     
       &lt;h2 id=&quot;0x00-序言&quot;&gt;&lt;a href=&quot;#0x00-序言&quot; class=&quot;headerlink&quot; title=&quot;0x00. 序言&quot;&gt;&lt;/a&gt;0x00. 序言&lt;/h2&gt;&lt;h4 id=&quot;emsp-emsp-最近和朋友合租了一台vps-，我搭好ss-bbr-之后居然不知道如何给kali-配置代理，真是可耻，果然Mac-用惯了之后人都会变懒！找了很久发现好多关于kali-代理的文章都失效，不过我还是在网上找到了这篇文章，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！&quot;&gt;&lt;a href=&quot;#emsp-emsp-最近和朋友合租了一台vps-，我搭好ss-bbr-之后居然不知道如何给kali-配置代理，真是可耻，果然Mac-用惯了之后人都会变懒！找了很久发现好多关于kali-代理的文章都失效，不过我还是在网上找到了这篇文章，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！&quot; class=&quot;headerlink&quot; title=&quot;&amp;emsp;&amp;emsp;最近和朋友合租了一台vps ，我搭好ss + bbr 之后居然不知道如何给kali 配置代理，真是可耻，果然Mac 用惯了之后人都会变懒！找了很久发现好多关于kali 代理的文章都失效，不过我还是在网上找到了这篇文章，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！&quot;&gt;&lt;/a&gt;&amp;emsp;&amp;emsp;最近和朋友合租了一台vps ，我搭好ss + bbr 之后居然不知道如何给kali 配置代理，真是可耻，果然Mac 用惯了之后人都会变懒！找了很久发现好多关于kali 代理的文章都失效，不过我还是在网上找到了&lt;a href=&quot;https://blog.csdn.net/qq_27766969/article/details/71593611&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;这篇文章&lt;/a&gt;，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！&lt;/h4&gt;
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>bash 伪多进程</title>
-    <link href="http://TimeS0ng.github.io/2018/03/28/bash-%E4%BC%AA%E5%A4%9A%E8%BF%9B%E7%A8%8B/"/>
-    <id>http://TimeS0ng.github.io/2018/03/28/bash-伪多进程/</id>
-    <published>2018-03-28T13:57:03.000Z</published>
-    <updated>2018-03-28T13:59:37.072Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="0x00-序言"><a href="#0x00-序言" class="headerlink" title="0x00. 序言"></a>0x00. 序言</h2><h4 id="emsp-emsp-最近研究ident-user-enum-这个工具的时候我不知道如何配置实验环境，所以打算在公网上找开着113-端口的主机，然而互联网实在是太大了，但是开着113-端口的主机是真的少之又少，如果用单进程一个一个试的话无疑大海捞针，所以今天打算将自己写脚本的心得总结一下，其实也很简单！"><a href="#emsp-emsp-最近研究ident-user-enum-这个工具的时候我不知道如何配置实验环境，所以打算在公网上找开着113-端口的主机，然而互联网实在是太大了，但是开着113-端口的主机是真的少之又少，如果用单进程一个一个试的话无疑大海捞针，所以今天打算将自己写脚本的心得总结一下，其实也很简单！" class="headerlink" title="&emsp;&emsp;最近研究ident-user-enum 这个工具的时候我不知道如何配置实验环境，所以打算在公网上找开着113 端口的主机，然而互联网实在是太大了，但是开着113 端口的主机是真的少之又少，如果用单进程一个一个试的话无疑大海捞针，所以今天打算将自己写脚本的心得总结一下，其实也很简单！"></a>&emsp;&emsp;最近研究ident-user-enum 这个工具的时候我不知道如何配置实验环境，所以打算在公网上找开着113 端口的主机，然而互联网实在是太大了，但是开着113 端口的主机是真的少之又少，如果用单进程一个一个试的话无疑大海捞针，所以今天打算将自己写脚本的心得总结一下，其实也很简单！</h4><a id="more"></a>
-<h2 id="0x01-脚本分析"><a href="#0x01-脚本分析" class="headerlink" title="0x01. 脚本分析"></a>0x01. 脚本分析</h2><blockquote>
-<ol>
-<li>首先我用了两个for 循环进行嵌套，然后用了&amp;&emsp;wait 来开设伪进程，就相当于里层循环正常执行，但是外层循环会被置于后台，这样我们相当于同时开了三个进程来进行里层循环，所以总共需要9 s 来运行整个脚本，而不是27 s 当然你也可以将里层循环也开启伪进程，不过后面扫公网时我不希望自己开的进程达到数万个，所以我这里没有加</li>
-</ol>
-</blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180314170109_LlEaRr_Screenshot.jpeg" alt=""></p>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180314170326_OXxGMH_Screenshot.jpeg" alt=""></p>
-<blockquote>
-<ol>
-<li>理论分析完了，现在来看看我扫描公网时用的脚本，相当于我开了100 个进程，然后随即扫描公网中开放113 端口的主机</li>
-</ol>
-</blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180314171237_IoEvHX_Screenshot.jpeg" alt=""></p>
-<blockquote>
-<ol>
-<li>当启动脚本后，CPU 瞬间爆炸，后台也全是nmap 进程，我总共扫了1 w 个随机 IP ，结果只有8 个IP 开放了113 端口，不过只花费了4 min </li>
-</ol>
-</blockquote>
-<p><img src="http://p1m5hqy4k.bkt.clouddn.com//kali安装kvm入坑笔记/20180314171711_pAgsuO_Screenshot.jpeg" alt=""></p>
-<h2 id="0x02-结语"><a href="#0x02-结语" class="headerlink" title="0x02. 结语"></a>0x02. 结语</h2><h4 id="emsp-emsp-大家可以点击这里在bilibili-查看我的视屏演示"><a href="#emsp-emsp-大家可以点击这里在bilibili-查看我的视屏演示" class="headerlink" title="&emsp;&emsp;大家可以点击这里在bilibili 查看我的视屏演示"></a>&emsp;&emsp;大家可以点击这里在bilibili 查看我的<a href="https://www.bilibili.com/video/av20765871/" target="_blank" rel="external">视屏演示</a></h4>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;0x00-序言&quot;&gt;&lt;a href=&quot;#0x00-序言&quot; class=&quot;headerlink&quot; title=&quot;0x00. 序言&quot;&gt;&lt;/a&gt;0x00. 序言&lt;/h2&gt;&lt;h4 id=&quot;emsp-emsp-最近研究ident-user-enum-这个工具的时候我不知道如何配置实验环境，所以打算在公网上找开着113-端口的主机，然而互联网实在是太大了，但是开着113-端口的主机是真的少之又少，如果用单进程一个一个试的话无疑大海捞针，所以今天打算将自己写脚本的心得总结一下，其实也很简单！&quot;&gt;&lt;a href=&quot;#emsp-emsp-最近研究ident-user-enum-这个工具的时候我不知道如何配置实验环境，所以打算在公网上找开着113-端口的主机，然而互联网实在是太大了，但是开着113-端口的主机是真的少之又少，如果用单进程一个一个试的话无疑大海捞针，所以今天打算将自己写脚本的心得总结一下，其实也很简单！&quot; class=&quot;headerlink&quot; title=&quot;&amp;emsp;&amp;emsp;最近研究ident-user-enum 这个工具的时候我不知道如何配置实验环境，所以打算在公网上找开着113 端口的主机，然而互联网实在是太大了，但是开着113 端口的主机是真的少之又少，如果用单进程一个一个试的话无疑大海捞针，所以今天打算将自己写脚本的心得总结一下，其实也很简单！&quot;&gt;&lt;/a&gt;&amp;emsp;&amp;emsp;最近研究ident-user-enum 这个工具的时候我不知道如何配置实验环境，所以打算在公网上找开着113 端口的主机，然而互联网实在是太大了，但是开着113 端口的主机是真的少之又少，如果用单进程一个一个试的话无疑大海捞针，所以今天打算将自己写脚本的心得总结一下，其实也很简单！&lt;/h4&gt;
     
     </summary>
     

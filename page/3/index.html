@@ -261,6 +261,75 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-bash-伪多进程" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/03/28/bash-伪多进程/" class="article-date">
+      <time datetime="2018-03-28T13:57:03.000Z" itemprop="datePublished">2018-03-28</time>
+</a>
+
+ 
+    <a href="/2018/03/28/bash-伪多进程/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2018/03/28/bash-伪多进程/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/28/bash-伪多进程/">bash 伪多进程</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h2 id="0x00-序言"><a href="#0x00-序言" class="headerlink" title="0x00. 序言"></a>0x00. 序言</h2><h4 id="emsp-emsp-最近研究ident-user-enum-这个工具的时候我不知道如何配置实验环境，所以打算在公网上找开着113-端口的主机，然而互联网实在是太大了，但是开着113-端口的主机是真的少之又少，如果用单进程一个一个试的话无疑大海捞针，所以今天打算将自己写脚本的心得总结一下，其实也很简单！"><a href="#emsp-emsp-最近研究ident-user-enum-这个工具的时候我不知道如何配置实验环境，所以打算在公网上找开着113-端口的主机，然而互联网实在是太大了，但是开着113-端口的主机是真的少之又少，如果用单进程一个一个试的话无疑大海捞针，所以今天打算将自己写脚本的心得总结一下，其实也很简单！" class="headerlink" title="&emsp;&emsp;最近研究ident-user-enum 这个工具的时候我不知道如何配置实验环境，所以打算在公网上找开着113 端口的主机，然而互联网实在是太大了，但是开着113 端口的主机是真的少之又少，如果用单进程一个一个试的话无疑大海捞针，所以今天打算将自己写脚本的心得总结一下，其实也很简单！"></a>&emsp;&emsp;最近研究ident-user-enum 这个工具的时候我不知道如何配置实验环境，所以打算在公网上找开着113 端口的主机，然而互联网实在是太大了，但是开着113 端口的主机是真的少之又少，如果用单进程一个一个试的话无疑大海捞针，所以今天打算将自己写脚本的心得总结一下，其实也很简单！</h4>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+      
+        <p class="article-more-link">
+          <a href="/2018/03/28/bash-伪多进程/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Firewalk-原理" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -606,75 +675,6 @@
 
 
   
-    <article id="post-JBOSS反序列化漏洞复现" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/12/27/JBOSS反序列化漏洞复现/" class="article-date">
-      <time datetime="2017-12-27T02:39:14.000Z" itemprop="datePublished">2017-12-27</time>
-</a>
-
- 
-    <a href="/2017/12/27/JBOSS反序列化漏洞复现/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/12/27/JBOSS反序列化漏洞复现/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/12/27/JBOSS反序列化漏洞复现/">JOBSS反序列化漏洞复现</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h2 id="0x00-漏洞描述"><a href="#0x00-漏洞描述" class="headerlink" title="0x00. 漏洞描述"></a>0x00. 漏洞描述</h2><h4 id="2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。"><a href="#2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。" class="headerlink" title="2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。"></a>2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。</h4>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-      
-        <p class="article-more-link">
-          <a href="/2017/12/27/JBOSS反序列化漏洞复现/#more">阅读全文 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
     <article id="post-花式钓鱼法" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -726,6 +726,75 @@
       
         <p class="article-more-link">
           <a href="/2017/12/27/花式钓鱼法/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-JBOSS反序列化漏洞复现" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/12/27/JBOSS反序列化漏洞复现/" class="article-date">
+      <time datetime="2017-12-27T02:39:14.000Z" itemprop="datePublished">2017-12-27</time>
+</a>
+
+ 
+    <a href="/2017/12/27/JBOSS反序列化漏洞复现/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/12/27/JBOSS反序列化漏洞复现/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/27/JBOSS反序列化漏洞复现/">JOBSS反序列化漏洞复现</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h2 id="0x00-漏洞描述"><a href="#0x00-漏洞描述" class="headerlink" title="0x00. 漏洞描述"></a>0x00. 漏洞描述</h2><h4 id="2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。"><a href="#2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS-Application-Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。" class="headerlink" title="2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。"></a>2017年9月14日，国家信息安全漏洞共享平台（CNVD）收录了JBOSS Application Server反序列化命令执行漏洞（CNVD-2017-33724，对应CVE-2017-12149），远程攻击者利用漏洞可在未经任何身份验证的服务器主机上执行任意代码。漏洞细节和验证代码已公开，近期被不法分子利用出现大规模攻击尝试的可能性较大。</h4>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+      
+        <p class="article-more-link">
+          <a href="/2017/12/27/JBOSS反序列化漏洞复现/#more">阅读全文 >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -864,75 +933,6 @@
       
         <p class="article-more-link">
           <a href="/2017/10/27/HTTPS攻击/#more">阅读全文 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-The-Backdoor-Factory" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/10/13/The-Backdoor-Factory/" class="article-date">
-      <time datetime="2017-10-13T14:00:26.000Z" itemprop="datePublished">2017-10-13</time>
-</a>
-
- 
-    <a href="/2017/10/13/The-Backdoor-Factory/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/10/13/The-Backdoor-Factory/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/13/The-Backdoor-Factory/">The-Backdoor-Factory</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h2 id="0x00-BDF简介"><a href="#0x00-BDF简介" class="headerlink" title="0x00. BDF简介"></a>0x00. BDF简介</h2><h4 id="emsp-emsp-BDF是一款史诗级免杀神器，在它最巅峰时期遇神杀神、遇佛杀佛，blackhat上也出现过它的身影，虽然由于各大安全厂商越来越重视这款工具，导致它的免杀效果有所下降，不过它仍不失为一款杰出的神器，而且他利用的原理也是那么有创意！"><a href="#emsp-emsp-BDF是一款史诗级免杀神器，在它最巅峰时期遇神杀神、遇佛杀佛，blackhat上也出现过它的身影，虽然由于各大安全厂商越来越重视这款工具，导致它的免杀效果有所下降，不过它仍不失为一款杰出的神器，而且他利用的原理也是那么有创意！" class="headerlink" title="&emsp;&emsp;BDF是一款史诗级免杀神器，在它最巅峰时期遇神杀神、遇佛杀佛，blackhat上也出现过它的身影，虽然由于各大安全厂商越来越重视这款工具，导致它的免杀效果有所下降，不过它仍不失为一款杰出的神器，而且他利用的原理也是那么有创意！"></a>&emsp;&emsp;BDF是一款史诗级免杀神器，在它最巅峰时期遇神杀神、遇佛杀佛，blackhat上也出现过它的身影，虽然由于各大安全厂商越来越重视这款工具，导致它的免杀效果有所下降，不过它仍不失为一款杰出的神器，而且他利用的原理也是那么有创意！</h4>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-      
-        <p class="article-more-link">
-          <a href="/2017/10/13/The-Backdoor-Factory/#more">阅读全文 >></a>
         </p>
       
       <div class="clearfix"></div>

