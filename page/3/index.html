@@ -261,6 +261,75 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-第一篇翻译：Change-Anyone’s-profile-picture-Exploiting-IDOR" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/12/19/第一篇翻译：Change-Anyone’s-profile-picture-Exploiting-IDOR/" class="article-date">
+      <time datetime="2018-12-19T02:13:22.000Z" itemprop="datePublished">2018-12-19</time>
+</a>
+
+ 
+    <a href="/2018/12/19/第一篇翻译：Change-Anyone’s-profile-picture-Exploiting-IDOR/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2018/12/19/第一篇翻译：Change-Anyone’s-profile-picture-Exploiting-IDOR/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/19/第一篇翻译：Change-Anyone’s-profile-picture-Exploiting-IDOR/">第一篇翻译：越权漏洞</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h4 id="原文：Change-Anyone’s-profile-picture-Exploiting-IDOR"><a href="#原文：Change-Anyone’s-profile-picture-Exploiting-IDOR" class="headerlink" title="原文：Change Anyone’s profile picture-Exploiting IDOR"></a>原文：<a href="https://medium.com/@rupika.luhach/change-anyones-profile-picture-exploiting-idor-41369f5acf75" target="_blank" rel="external">Change Anyone’s profile picture-Exploiting IDOR</a></h4><h4 id="漏洞：未授权更改用户信息"><a href="#漏洞：未授权更改用户信息" class="headerlink" title="漏洞：未授权更改用户信息"></a>漏洞：未授权更改用户信息</h4><h4 id="作者：Rupika-Luhach"><a href="#作者：Rupika-Luhach" class="headerlink" title="作者：Rupika Luhach"></a>作者：Rupika Luhach</h4><h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+      
+        <p class="article-more-link">
+          <a href="/2018/12/19/第一篇翻译：Change-Anyone’s-profile-picture-Exploiting-IDOR/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-CVE-2018-8174-漏洞复现" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -882,78 +951,9 @@
 
 
   
-    <article id="post-Firewalk-原理" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2018/03/10/Firewalk-原理/" class="article-date">
-      <time datetime="2018-03-10T11:42:44.000Z" itemprop="datePublished">2018-03-10</time>
-</a>
-
- 
-    <a href="/2018/03/10/Firewalk-原理/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2018/03/10/Firewalk-原理/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/10/Firewalk-原理/">Firewalk 原理</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h2 id="0x00-序言"><a href="#0x00-序言" class="headerlink" title="0x00. 序言"></a>0x00. 序言</h2><h4 id="emsp-emsp-每次写文章我就最喜欢写这部分内容，反正瞎逼逼又不犯法对吧！本来昨天就该开始筹备这篇文章的，但世事难料，居然一时被天涯明月刀迷住了，幸好只是一时兴起及早退坑，不然kali-系列文章可能就要夭折了-o"><a href="#emsp-emsp-每次写文章我就最喜欢写这部分内容，反正瞎逼逼又不犯法对吧！本来昨天就该开始筹备这篇文章的，但世事难料，居然一时被天涯明月刀迷住了，幸好只是一时兴起及早退坑，不然kali-系列文章可能就要夭折了-o" class="headerlink" title="&emsp;&emsp;每次写文章我就最喜欢写这部分内容，反正瞎逼逼又不犯法对吧！本来昨天就该开始筹备这篇文章的，但世事难料，居然一时被天涯明月刀迷住了，幸好只是一时兴起及早退坑，不然kali 系列文章可能就要夭折了 \^o^"></a>&emsp;&emsp;每次写文章我就最喜欢写这部分内容，反正瞎逼逼又不犯法对吧！本来昨天就该开始筹备这篇文章的，但世事难料，居然一时被天涯明月刀迷住了，幸好只是一时兴起及早退坑，不然kali 系列文章可能就要夭折了 \^o^</h4>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-      
-        <p class="article-more-link">
-          <a href="/2018/03/10/Firewalk-原理/#more">阅读全文 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
     </nav>
   
 </div>
