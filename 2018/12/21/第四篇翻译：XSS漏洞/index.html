@@ -27,7 +27,7 @@
 <meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/3.png">
 <meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/4.png">
 <meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/translate_1/money.png">
-<meta property="og:updated_time" content="2019-02-15T05:06:50.539Z">
+<meta property="og:updated_time" content="2019-03-08T09:48:03.602Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="第四篇翻译：XSS漏洞">
 <meta name="twitter:description" content="原文：Dom Based XSS in ucweb.com漏洞：XSS作者：Sudhanshu Rajbhar难度：低">
@@ -307,11 +307,13 @@
           
         <h4 id="原文：Dom-Based-XSS-in-ucweb-com"><a href="#原文：Dom-Based-XSS-in-ucweb-com" class="headerlink" title="原文：Dom Based XSS in ucweb.com"></a>原文：<a href="https://medium.com/@sudhanshur705/story-about-my-first-bug-bounty-9fe710be8241" target="_blank" rel="external">Dom Based XSS in ucweb.com</a></h4><h4 id="漏洞：XSS"><a href="#漏洞：XSS" class="headerlink" title="漏洞：XSS"></a>漏洞：XSS</h4><h4 id="作者：Sudhanshu-Rajbhar"><a href="#作者：Sudhanshu-Rajbhar" class="headerlink" title="作者：Sudhanshu Rajbhar"></a>作者：Sudhanshu Rajbhar</h4><h4 id="难度：低"><a href="#难度：低" class="headerlink" title="难度：低"></a>难度：低</h4><a id="more"></a>
 <h2 id="现在开始…"><a href="#现在开始…" class="headerlink" title="现在开始…."></a>现在开始….</h2><h4 id="emsp-emsp-首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb-com的子域名时，我发现了这个子域-samsung-ucweb-com-，samsung-三星？似乎有点意思，所以我尝试用浏览器去访问它"><a href="#emsp-emsp-首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb-com的子域名时，我发现了这个子域-samsung-ucweb-com-，samsung-三星？似乎有点意思，所以我尝试用浏览器去访问它" class="headerlink" title="&emsp;&emsp;首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb.com的子域名时，我发现了这个子域 samsung.ucweb.com ，samsung 三星？似乎有点意思，所以我尝试用浏览器去访问它"></a>&emsp;&emsp;首先，我检查了可用的子域名，但是最开始我并没有发现什么有趣的东西。直到当我开始测试ucweb.com的子域名时，我发现了这个子域 samsung.ucweb.com ，samsung 三星？似乎有点意思，所以我尝试用浏览器去访问它</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/1.png" alt=""></p>
+<video id="video" controls preload="none" poster="https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=885582068,2021597601&fm=26&gp=0.jpg"><br><source id="mp4" src="http://tu.027cgb.com/612577/times0ng_blog/translate_11/CSRF.mp4" type="video/mp4"><br></video>
+
 <h4 id="emsp-emsp-很不幸，这是一个403-禁用的网站，如果是你碰见了下一步会怎么做？很显然，大多数人都会忽略它，然后测试其它子域。不过我曾读过一篇文章，它说如果你遇到这样的网站，尝试用Google-搜索一下相关站点信息，或许会有惊喜发现"><a href="#emsp-emsp-很不幸，这是一个403-禁用的网站，如果是你碰见了下一步会怎么做？很显然，大多数人都会忽略它，然后测试其它子域。不过我曾读过一篇文章，它说如果你遇到这样的网站，尝试用Google-搜索一下相关站点信息，或许会有惊喜发现" class="headerlink" title="&emsp;&emsp;很不幸，这是一个403 禁用的网站，如果是你碰见了下一步会怎么做？很显然，大多数人都会忽略它，然后测试其它子域。不过我曾读过一篇文章，它说如果你遇到这样的网站，尝试用Google 搜索一下相关站点信息，或许会有惊喜发现"></a>&emsp;&emsp;很不幸，这是一个403 禁用的网站，如果是你碰见了下一步会怎么做？很显然，大多数人都会忽略它，然后测试其它子域。不过我曾读过一篇文章，它说如果你遇到这样的网站，尝试用Google 搜索一下相关站点信息，或许会有惊喜发现</h4><h4 id="emsp-emsp-所以我是用谷歌语法简单的看了一下，site-samsung-ucweb-com-结果真的有惊喜"><a href="#emsp-emsp-所以我是用谷歌语法简单的看了一下，site-samsung-ucweb-com-结果真的有惊喜" class="headerlink" title="&emsp;&emsp;所以我是用谷歌语法简单的看了一下，site:samsung.ucweb.com  结果真的有惊喜"></a>&emsp;&emsp;所以我是用谷歌语法简单的看了一下，<strong>site:samsung.ucweb.com </strong> 结果真的有惊喜</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/2.png" alt=""></p>
 <h4 id="emsp-emsp-我打开了这个URL：http-samsung-ucweb-com-webstore-classify-html-dataKey-LifeStyle-amp-title-LifeStyle-并开始测试相关参数，当我测试title参数时，发现服务端并没有过滤title参数的值就将其打印出来了"><a href="#emsp-emsp-我打开了这个URL：http-samsung-ucweb-com-webstore-classify-html-dataKey-LifeStyle-amp-title-LifeStyle-并开始测试相关参数，当我测试title参数时，发现服务端并没有过滤title参数的值就将其打印出来了" class="headerlink" title="&emsp;&emsp;我打开了这个URL：http://samsung.ucweb.com/webstore/classify.html?dataKey=LifeStyle&amp;title=LifeStyle 并开始测试相关参数，当我测试title参数时，发现服务端并没有过滤title参数的值就将其打印出来了"></a>&emsp;&emsp;我打开了这个URL：<a href="http://samsung.ucweb.com/webstore/classify.html?dataKey=LifeStyle&amp;title=LifeStyle" target="_blank" rel="external">http://samsung.ucweb.com/webstore/classify.html?dataKey=LifeStyle&amp;title=LifeStyle</a> 并开始测试相关参数，当我测试title参数时，发现服务端并没有过滤title参数的值就将其打印出来了</h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/3.png" alt=""></p>
 <h4 id="emsp-emsp-所以我尝试构造payload来利用这个漏洞点，当我使用”-gt-lt-script-gt-alert-1-lt-script-gt-时并没有任何弹窗，所以我尝试用-lt-img-gt-标签"><a href="#emsp-emsp-所以我尝试构造payload来利用这个漏洞点，当我使用”-gt-lt-script-gt-alert-1-lt-script-gt-时并没有任何弹窗，所以我尝试用-lt-img-gt-标签" class="headerlink" title="&emsp;&emsp;所以我尝试构造payload来利用这个漏洞点，当我使用”&gt; &lt; script&gt;alert(1)&lt;/ script&gt;时并没有任何弹窗，所以我尝试用 &lt; img&gt;标签"></a>&emsp;&emsp;所以我尝试构造payload来利用这个漏洞点，当我使用”&gt; &lt; script&gt;alert(1)&lt;/ script&gt;时并没有任何弹窗，所以我尝试用 &lt; img&gt;标签</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&quot;&gt;&lt;img src=x onerror=alert(‘XSS’)&gt;</div></pre></td></tr></table></figure>
 <p><img src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/4.png" alt=""></p>
-<h2 id="视屏演示"><a href="#视屏演示" class="headerlink" title="视屏演示"></a>视屏演示</h2><video id="video" controls preload="none" poster="https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=885582068,2021597601&fm=26&gp=0.jpg"><br><source id="mp4" src="http://img.027cgb.com/612577/times0ng_blog/tanslate_4/XSS_in_alibaba.mp4" type="video/mp4"><br></video>
+<h2 id="视屏演示"><a href="#视屏演示" class="headerlink" title="视屏演示"></a>视屏演示</h2><video id="video" controls preload="none" poster="https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=885582068,2021597601&fm=26&gp=0.jpg"><br><source id="mp4" src="http://tu.027cgb.com/612577/times0ng_blog/tanslate_4/XSS_in_alibaba.mp4" type="video/mp4"><br></video>
 
 
 
@@ -328,7 +330,7 @@
         <p><span>本文标题:</span><a href="/2018/12/21/第四篇翻译：XSS漏洞/">第四篇翻译：XSS漏洞</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">TimeS0ng</a></p>
         <p><span>发布时间:</span>2018-12-21, 16:30:09</p>
-        <p><span>最后更新:</span>2019-02-15, 13:06:50</p>
+        <p><span>最后更新:</span>2019-03-08, 17:48:03</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2018/12/21/第四篇翻译：XSS漏洞/" title="第四篇翻译：XSS漏洞">http://TimeS0ng.github.io/2018/12/21/第四篇翻译：XSS漏洞/</a>
             <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2018/12/21/第四篇翻译：XSS漏洞/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
